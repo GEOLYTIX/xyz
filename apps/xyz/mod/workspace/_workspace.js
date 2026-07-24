@@ -31,6 +31,9 @@ The workspace object defines the mapp resources available in an XYZ instance.
 @property {template} templates Each property in the templates object is a global template typedef.
 */
 
+// It must not be possible to modify object prototypes
+Object.freeze(Object.prototype);
+
 import { createHash } from 'node:crypto';
 import logger from '../utils/logger.js';
 import * as Roles from '../utils/roles.js';

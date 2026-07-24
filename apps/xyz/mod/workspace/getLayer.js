@@ -44,7 +44,7 @@ Template properties will be removed as these are not required by the MAPP API bu
 @param {Object} params
 @param {locale} [locale] An optional workspace locale can be provided to prevent a roundtrip to the getLocale method.
 @property {string} [params.locale] Locale key.
-@property {string} [params.layer] Layer key.
+@property {string} params.layer Layer key.
 @property {Object} [params.user] Requesting user.
 @property {Boolean} [params.ignoreRoles] Whether role check should be performed.
 @property {Array} [user.roles] User roles.
@@ -52,6 +52,18 @@ Template properties will be removed as these are not required by the MAPP API bu
 @returns {Promise<Object|Error>} JSON Layer.
 */
 export default async function getLayer(params, locale) {
+  if (typeof params.layer !== 'string') {
+    return new Error(
+      'The layer [key] params must be provided as a string property.',
+    );
+  }
+
+  if (/[^a-zA-Z0-9 :_-]/.exec(params.layer)) {
+    return new Error(
+      'The layer [key] property may only contain whitelisted character [^a-zA-Z0-9 :_-]',
+    );
+  }
+
   if (!locale) {
     locale = await getLocale(params);
   }

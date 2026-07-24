@@ -14,7 +14,7 @@ The MAPP library requires Openlayers. The mapp module will check whether the Ope
 @requires /dictionary
 @requires /dictionaries
 
-@module mapp
+@module /
 */
 
 import { dictionaries, dictionary } from './dictionary.mjs';
@@ -52,5 +52,5 @@ globalThis.mapp = {
   Mapview,
   plugins,
   utils,
-  version: '4.23.2',
+  version: '4.23.4',
 };

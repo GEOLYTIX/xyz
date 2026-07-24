@@ -12,7 +12,6 @@ Roles utility module exports methods to inspect roles in object, checking object
 @property {Object} roles - roles configuration object
 @property {boolean} [roles.*] - Wildcard role indicating unrestricted access
 @property {Object} [roles.key] - Role-specific properties to merge
-@property {Object} [roles.'!key'] - Negated role properties (applied when user doesn't have the role)
 */
 
 import merge from './merge.js';
@@ -29,10 +28,6 @@ check({ roles: { '*': true }, data: 'content' }, ['user']) // returns object
 // Object with role restriction
 check({ roles: { admin: true }, data: 'content' }, ['user']) // returns false
 check({ roles: { admin: true }, data: 'content' }, ['admin']) // returns object
-
-// Object with negated roles
-check({ roles: { '!guest': true }, data: 'content' }, ['guest']) // returns false
-check({ roles: { '!guest': true }, data: 'content' }, ['user']) // returns object
 ```
 
 The check is also passed if the obj does not have a roles property.
@@ -65,18 +60,6 @@ export function check(obj, user_roles) {
     rolesArr.push(role.split('.').pop()),
   );
 
-  // Some negated role is included in user_roles[]
-  const someNegatedRole = rolesArr.some(
-    (role) => /^!/.exec(role) && user_roles.includes(role.replace(/^!/, '')),
-  );
-
-  if (someNegatedRole) return false;
-
-  // Check whether every role is negated.
-  const everyNegatedRoles = rolesArr.every((role) => /^!/.exec(role));
-
-  if (everyNegatedRoles) return true;
-
   // Some positive role is included in user_roles[]
   const somePositiveRole = rolesArr.some((role) => user_roles.includes(role));
 
@@ -90,31 +73,24 @@ export function check(obj, user_roles) {
 @function objMerge
 
 @description
-Recursively merges role-specific object properties based on user roles.
-The function handles several special cases:
-- Recursively processes nested objects
-- Handles arrays by mapping over their elements
-- Processes negated roles (prefixed with '!')
-- Preserves the original object if conditions aren't met
-- Skip null or undefined values
+The objMerge method recursively merges roles object properties with the object.
 
-```js
-const obj = {
-  name: 'layer',
-  roles: {
-    admin: { secretField: 'sensitive' },
-    user: { publicField: 'visible' }
-  }
-};
+The method will short circuit if the obj param is not an object or if the user_roles param is not an array.
 
-// With admin role
-objMerge(obj, ['admin']);
-// Returns: { name: 'layer', secretField: 'sensitive', roles: {...} }
+The roles object role property must be an object and not an array.
 
-// With user role
-objMerge(obj, ['user']);
-// Returns: { name: 'layer', publicField: 'visible', roles: {...} }
+In the following example, the display true property will be merged into the object containing the roles object if the 'display' role is provided in the user_roles array param.
+
 ```
+roles: {
+  display: {
+    display: true
+  }
+}
+```
+
+Only structured clones of objects are merged and returned. Workspace templates must not be modified to acknlowledge user roles associated with a request.
+
 @param {Object} obj The object to process
 @param {Array<string>} user_roles Array of roles assigned to the user
 @property {roles} obj.roles Role configuration object
@@ -140,36 +116,25 @@ export function objMerge(obj, user_roles) {
 
   if (!obj.roles) return obj;
 
-  if (typeof obj.roles !== 'object') return obj;
-
   if (Array.isArray(obj.roles)) return obj;
 
-  if (typeof obj.roles === 'function') return obj;
+  if (typeof obj.roles !== 'object') return obj;
 
   const clone = structuredClone(obj);
 
-  Object.keys(clone.roles)
-    .filter((role) => clone.roles[role] !== true)
-    .filter((role) => clone.roles[role] !== null)
-    .filter((role) => typeof clone.roles[role] === 'object')
-    .filter((role) => !Array.isArray(clone.roles[role]))
-    .filter((role) => {
-      // Get last role from a dot tree role string.
-      const popRole = role.split('.').pop();
+  for (const role in clone.roles) {
+    if (clone.roles[role] === true) continue;
+    if (clone.roles[role] === null) continue;
+    if (Array.isArray(clone.roles[role])) continue;
+    if (typeof clone.roles[role] !== 'object') continue;
 
-      // A negated role starts with an exclamation mark.
-      const negatedRole = popRole.match(/(?<=^!)(.*)/g)?.[0];
+    // Get last role from a dot tree role string.
+    const popRole = role.split('.').pop();
 
-      if (negatedRole) {
-        // True if the user_roles NOT includes the negated role.
-        return !user_roles.includes(negatedRole);
-      }
+    if (!user_roles.includes(popRole)) continue;
 
-      return user_roles.includes(popRole);
-    })
-    .forEach((role) => {
-      merge(clone, clone.roles[role]);
-    });
+    merge(clone, clone.roles[role]);
+  }
 
   return clone;
 }
@@ -194,22 +159,21 @@ Access roles defined as the role string property will also be added to the roles
 @property {string} [obj.role] Any [template] access role will be added to the rolesSet.
 */
 export function setInObj(rolesSet, obj) {
-  // Iterate through the object tree.
   Object.keys(obj).forEach((key) => {
     if (obj[key] && typeof obj[key] === 'object') {
       if (key === 'roles') {
         Object.keys(obj[key]).forEach((role) => {
-          // Add role without negation ! to roles set.
           // The same role can not be added multiple times to the rolesSet.
-          rolesSet.add(role.replace(/^!/, ''));
+          rolesSet.add(role);
         });
       }
 
       // Call method recursively for object properties of the object param.
       setInObj(rolesSet, obj[key]);
+
+      // Add string type obj.role property to the rolesSet.
     } else if (key === 'role' && typeof obj[key] === 'string') {
-      // Also extract single role string properties
-      rolesSet.add(obj[key].replace(/^!/, ''));
+      rolesSet.add(obj[key]);
     }
   });
 }

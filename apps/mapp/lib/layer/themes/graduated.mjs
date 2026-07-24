@@ -28,14 +28,14 @@ export default function graduated(theme, feature) {
   // The graduated theme requires feature.properties.
   if (!feature.properties) return;
 
+  // If the feature has an array of features, only process if there is one feature.
+  if (feature.properties.features?.length > 1) {
+    return;
+  }
+
   const catValue = Array.isArray(feature.properties.features)
-    ? // Reduce array of features to sum catValue
-      feature.properties.features.reduce(
-        (total, F) => total + Number(F.getProperties()[theme.field]),
-        0,
-      )
-    : // Get catValue from cat or field property.
-      Number.parseFloat(feature.properties[theme.field]);
+    ? feature.properties.features[0].getProperties()[theme.field]
+    : Number.parseFloat(feature.properties[theme.field]);
 
   if (!Number.isNaN(Number(catValue)) && catValue !== null) {
     const index = theme.categories.findIndex(

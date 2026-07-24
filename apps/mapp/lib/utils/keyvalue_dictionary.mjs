@@ -52,6 +52,7 @@ Parses an object and replaces its string values with dictionary entries.
 function parseObject(obj, dictionary) {
   for (const [key, value] of Object.entries(obj)) {
     if (key === 'mapview') continue;
+    if (key === 'layer') continue;
     if (isArrayObject(value, dictionary)) continue;
     if (typeof value === 'string') replaceKeyValue(obj, key, value, dictionary);
   }

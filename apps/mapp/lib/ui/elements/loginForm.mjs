@@ -1,5 +1,6 @@
 /**
-@module ui/elements/loginForm
+### /ui/elements/loginForm
+@module /ui/elements/loginForm
 */
 
 /**
