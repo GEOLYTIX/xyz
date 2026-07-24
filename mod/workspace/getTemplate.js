@@ -97,13 +97,14 @@ export default async function getTemplate(template) {
     return new Error(`Unknown getFrom method: ${template.src}`);
   }
 
+  // module templates must be returned as string.
   const response = await getFrom[method](template.src);
 
   if (response instanceof Error) {
     return new Error(`Unable to getFrom src: ${template.src}`);
   }
 
-  if (template.module) {
+  if (template.module && typeof response === 'string') {
     // Module templates must not be cached.
     return await moduleTemplate(template, response);
   }

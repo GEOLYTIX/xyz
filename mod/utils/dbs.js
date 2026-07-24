@@ -52,9 +52,7 @@ Object.keys(xyzEnv)
       console.error(err);
     });
 
-    // Assigning clientQuery method to dbs property.
-    dbs[id] = async (query, variables, timeout) =>
-      await clientQuery(pool, query, variables, timeout);
+    dbs[id] = clientQuery.bind(pool);
   });
 
 // Export dbs constant
@@ -64,25 +62,24 @@ export default dbs;
 @function clientQuery
 @async
 
-
 @description
 The clientQuery method creates a client connection from the provided Pool and executes a query on this pool.
 
-@param {Pool} pool The node-postgres connection Pool for a Client connection.
+@this {Pool} The connection pool to use for the query.
 @param {string} query SQL query to execute
 @param {Array} [variables] Parameters for the SQL query
 @param {number} [timeout] Statement timeout in milliseconds
 @returns {Promise<Array|Error>} Query results or error object
 @throws {Error} Database connection or query errors
 */
-async function clientQuery(pool, query, variables, timeout) {
+async function clientQuery(query, variables, timeout) {
   let retryCount = 0;
   let lastError;
   let client;
 
   while (retryCount < RETRY_LIMIT) {
     try {
-      client = await pool.connect();
+      client = await this.connect();
 
       timeout ??= xyzEnv.STATEMENT_TIMEOUT;
 
