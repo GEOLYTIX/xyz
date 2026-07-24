@@ -99,7 +99,9 @@ export default async function cookie(req, res) {
       const user = rows[0];
 
       // Admin rights should not be added if not provided from a token.
-      user.admin = payload.admin;
+      if (payload.from_token) {
+        delete user.admin;
+      }
 
       // Assign title identifier to user object.
       user.title = xyzEnv.TITLE;

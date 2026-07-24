@@ -99,11 +99,6 @@ export default function api(req, res) {
     return res.status(302).send();
   }
 
-  // SAML request.
-  if (req.url.match(/\/saml/)) {
-    return saml(req, res);
-  }
-
   req.params = validateRequestParams(req);
 
   if (req.params instanceof Error) {
@@ -111,6 +106,11 @@ export default function api(req, res) {
       .status(400)
       .setHeader('Content-Type', 'text/plain')
       .send(req.params.message);
+  }
+
+  // SAML request. Key/token params should be authenticated and routed normally.
+  if (req.url.match(/\/saml/) && !hasKeyOrToken(req)) {
+    return saml(req, res);
   }
 
   if (req.params.logout) {
@@ -171,12 +171,9 @@ async function validateRequestAuth(req, res) {
   //Call request router if signature authentication was used.
   if (user?.signature_auth) return requestRouter(req, res);
 
-  // Remove token from params object.
-  delete req.params.token;
-
   // The authentication method returns an error.
   if (user && user instanceof Error) {
-    if (req.headers.authorization) {
+    if (req.headers.authorization || hasKeyOrToken(req)) {
       // Request with failed authorization headers are not passed to login.
       return res.status(401).send(user.message);
     }
@@ -206,6 +203,10 @@ async function validateRequestAuth(req, res) {
 
   // PRIVATE instances require user auth for all requests.
   if (!req.params.user && xyzEnv.PRIVATE) {
+    if (hasKeyOrToken(req)) {
+      return requestRouter(req, res);
+    }
+
     // Redirect to the SAML login.
     if (xyzEnv.SAML_LOGIN) {
       // The redirect for a successful login.
@@ -219,6 +220,10 @@ async function validateRequestAuth(req, res) {
   }
 
   requestRouter(req, res);
+}
+
+function hasKeyOrToken(req) {
+  return req.query?.key || req.query?.token;
 }
 
 /**
