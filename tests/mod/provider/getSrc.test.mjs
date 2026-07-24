@@ -170,15 +170,6 @@ describe('getSrc: source map', () => {
     expect(response.message).toBe('Unable to load src: file:./undefined.json');
   });
 
-  it('bypasses the source map with cache being false', async () => {
-    mockFileFn.mockImplementation(async () => 'fresh');
-
-    await getSrc({ src: 'file:./fresh.json', cache: false });
-    await getSrc({ src: 'file:./fresh.json', cache: false });
-
-    expect(mockFileFn).toHaveBeenCalledTimes(2);
-  });
-
   it('flushes the source map with the clear param', async () => {
     mockFileFn.mockImplementation(async () => 'source');
 

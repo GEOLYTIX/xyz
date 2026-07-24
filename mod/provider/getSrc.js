@@ -69,11 +69,6 @@ export async function getSrc(params) {
     return new Error(`No provider found for src: ${params.src}`);
   }
 
-  if (params.cache === false) {
-    // A fresh provider response is required, eg. for a workspace rebuild.
-    return providerPromise(params.src);
-  }
-
   const response = await getSrcPromise(params.src);
 
   if (response instanceof Error) {

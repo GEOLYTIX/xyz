@@ -77,16 +77,14 @@ The workspace is assigned to the module scope cache variable and the timestamp i
 @returns {workspace} JSON Workspace.
 */
 async function cacheWorkspace() {
-  // The workspace must be fetched fresh on cache invalidation and bypasses the source map.
-  const workspace = await getSrc({ src: xyzEnv.WORKSPACE, cache: false });
+  clearSrcMap();
+
+  // The workspace must be fetched fresh on cache invalidation.
+  const workspace = await getSrc({ src: xyzEnv.WORKSPACE });
 
   if (workspace instanceof Error) {
     throw workspace;
   }
-
-  const custom_templates =
-    xyzEnv.CUSTOM_TEMPLATES &&
-    (await getSrc({ src: xyzEnv.CUSTOM_TEMPLATES, cache: false }));
 
   const workspace_templates = structuredClone(workspace.templates);
 
@@ -96,7 +94,12 @@ async function cacheWorkspace() {
   assign_workspace_templates(workspace.templates, mail_templates);
   assign_workspace_templates(workspace.templates, msg_templates);
   assign_workspace_templates(workspace.templates, query_templates);
-  assign_workspace_templates(workspace.templates, custom_templates, 'custom');
+
+  if (xyzEnv.CUSTOM_TEMPLATES) {
+    const custom_templates = await getSrc({ src: xyzEnv.CUSTOM_TEMPLATES });
+    assign_workspace_templates(workspace.templates, custom_templates, 'custom');
+  }
+
   assign_workspace_templates(
     workspace.templates,
     workspace_templates,
@@ -126,9 +129,6 @@ async function cacheWorkspace() {
   timestamp = Date.now();
 
   cache = workspace;
-
-  // Cached source responses may be stale after the workspace is rebuilt.
-  clearSrcMap();
 
   cacheSources(cache).then((result) => {
     if (result instanceof Error) {
