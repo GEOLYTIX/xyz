@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@11.17.0",
   "pnpm": {
     "neverBuiltDependencies": []
   },
