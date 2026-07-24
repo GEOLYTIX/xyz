@@ -6,10 +6,6 @@
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
-  "packageManager": "pnpm@10.10.0",
-  "pnpm": {
-    "neverBuiltDependencies": []
-  },
   "scripts": {
     "dev": "node --inspect express.js",
     "test": "vitest run",
