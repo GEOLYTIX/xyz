@@ -52,13 +52,8 @@ Template properties will be removed as these are not required by the MAPP API bu
 @returns {Promise<Object|Error>} JSON Layer.
 */
 export default async function getLayer(params, locale) {
-  if (typeof params.layer !== 'string') {
-    return new Error(
-      'The layer [key] params must be provided as a string property.',
-    );
-  }
-
   if (/[^a-zA-Z0-9 :_-]/.exec(params.layer)) {
+    // TODO this is not covered in tests
     return new Error(
       'The layer [key] property may only contain whitelisted character [^a-zA-Z0-9 :_-]',
     );
@@ -116,6 +111,7 @@ export default async function getLayer(params, locale) {
   }
 
   if (Array.isArray(layer.plugins)) {
+    // TODO not covered in tests.
     layer.plugins = layer.plugins.map((plugin) => envReplace(plugin));
   }
 

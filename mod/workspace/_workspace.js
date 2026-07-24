@@ -385,6 +385,7 @@ A flat array of template.err will be returned from the workspace/test method.
 @property {Object} params.user The user requesting the test method.
 @property {Boolean} user.admin The user is required to have admin privileges.
 */
+// TODO write tests for the workspace/test method. The tests should check that the method returns an array of errors when there are errors in the workspace.templates and that the method returns the cached workspace when the detail param is true.
 async function test(req, res) {
   if (!req.params.user?.admin) {
     res
@@ -393,18 +394,10 @@ async function test(req, res) {
     return;
   }
 
-  // TODO deprecate cacheTemplates method.
-  // let cache;
-  // if (req.params.force) {
-  //   cache = await cacheTemplates({
-  //     user: req.params.user,
-  //     force: req.params.force,
-  //   });
-  // } else {
-  //   cache = workspace;
-  // }
-
   const cachedWorkspace = await workspaceCache(true);
+
+  // TODO handle src errors in the workspace templates. The cacheSources method will return an array of errors if any src references fail to load.
+  const srcErrors = await cacheSources(cachedWorkspace);
 
   const testConfig = {
     errArr: [],

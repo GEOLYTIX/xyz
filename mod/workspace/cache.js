@@ -45,6 +45,7 @@ export default function checkWorkspaceCache(force) {
 
   // cacheWorkspace will set the current timestamp
   // and cache workspace outside export closure prior to returning workspace.
+  // TODO write test with WORKSPACE_AGE 0
   if (Date.now() - timestamp > +xyzEnv.WORKSPACE_AGE) {
     // current time minus cached timestamp exceeds WORKSPACE_AGE
     cache = null;
@@ -95,6 +96,7 @@ async function cacheWorkspace() {
   assign_workspace_templates(workspace.templates, msg_templates);
   assign_workspace_templates(workspace.templates, query_templates);
 
+  // TODO test CUSTOM_TEMPLATES
   if (xyzEnv.CUSTOM_TEMPLATES) {
     const custom_templates = await getSrc({ src: xyzEnv.CUSTOM_TEMPLATES });
     assign_workspace_templates(workspace.templates, custom_templates, 'custom');
@@ -115,12 +117,6 @@ async function cacheWorkspace() {
   workspace.locales ??= {
     locale: workspace.locale,
   };
-
-  if (workspace.plugins) {
-    console.warn(
-      `Default plugins should be defined in the default workspace.locale{}`,
-    );
-  }
 
   workspace.key ??= xyzEnv.TITLE;
 

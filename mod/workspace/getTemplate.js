@@ -106,9 +106,6 @@ export default async function getTemplate(template) {
     template.template = response;
   }
 
-  // TODO: decide whether key should be used for scoping.
-  template.key ??= template.src.match(/([^\/]+$)/)[0];
-
   if (templateKey) {
     // Load the assembled template into the workspace.templates{} object so repeat requests do not read the source again.
     workspace.templates[templateKey] = structuredClone({
