@@ -275,7 +275,7 @@ async function scopes(req, res) {
     }
   });
 
-  // TODO test workspace without locales property. Should the scopes method still return the scopes of the templates in the workspace.templates object?
+  // The nestedLocales method will be called for each locale in the cached workspace to ensure that all nested locales are loaded and checked for user access.
   for (const localeKey of Object.keys(cachedWorkspace.locales)) {
     const locale = await getLocale({
       locale: localeKey,
@@ -352,7 +352,6 @@ async function nestedLocales(locale, user) {
 
   const keys = locale.keys ?? [locale.key];
   for (const localeKey of locale.locales) {
-    // TODO it should be possible to provide the locale as parentLocale to avoid re-composing the parent locale for each nested locale. This would require a change to the getLocale method to accept a parentLocale parameter.
     const nestedLocale = await getLocale({
       locale: [...keys, localeKey],
       layers: true,

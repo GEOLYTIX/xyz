@@ -100,6 +100,33 @@ describe('getKeyMethod', () => {
   });
 });
 
+describe('workspace: locale only', () => {
+  beforeAll(async () => {
+    globalThis.xyzEnv = {
+      WORKSPACE: 'file:./tests/assets/workspace_locale.json',
+    };
+
+    await checkWorkspaceCache(true);
+  });
+
+  it('empty roles array', async () => {
+    const { req, res } = createMocks({
+      params: {
+        key: 'scopes',
+        user: {
+          admin: true,
+        },
+      },
+    });
+
+    await getKeyMethod(req, res);
+
+    const roles = res._getData();
+
+    expect(roles.length).toEqual(0);
+  });
+});
+
 describe('workspace: roles_object_workspace', () => {
   beforeAll(async () => {
     globalThis.xyzEnv = {
@@ -237,11 +264,45 @@ describe('workspace: nested_roles/workspace', () => {
       },
     });
 
+    const expectedRolesTree = {
+      germany: {
+        TEMPLATE_ROLE: {},
+        another_role: {},
+        globalvista: {
+          OBJ_ROLE: {},
+          TEMPLATE_ROLE: {},
+        },
+      },
+      uk: {
+        globalvista: {
+          OBJ_ROLE: {},
+          TEMPLATE_ROLE: {},
+        },
+        coremarkets: {
+          OBJ_ROLE: {},
+          TEMPLATE_ROLE: {},
+          brand_a: {
+            OBJ_ROLE: {},
+            TEMPLATE_ROLE: {},
+          },
+          brand_b: {
+            OBJ_ROLE: {},
+            TEMPLATE_ROLE: {},
+          },
+        },
+        OBJ_ROLE: {},
+        TEMPLATE_ROLE: {},
+        test: {},
+      },
+      OBJ_ROLE: {},
+      TEMPLATE_ROLE: {},
+    };
+
     await getKeyMethod(req, res);
 
     const scopesTree = res._getData();
 
-    expect(scopesTree.uk.globalvista.OBJ_ROLE).toBeTruthy();
+    expect(JSON.stringify(scopesTree)).toBe(JSON.stringify(expectedRolesTree));
   });
 
   it('locale: anonymous access denied for restricted locale', async () => {
