@@ -245,6 +245,52 @@ describe('getSrc: cache workspace sources', () => {
     expect(mockFileFn).toHaveBeenCalledTimes(2);
   });
 
+  it('resolves environment variables in workspace sources', async () => {
+    const originalSrcDir = xyzEnv.SRC_DIR;
+
+    xyzEnv.SRC_DIR = './resolved';
+
+    const workspace = {
+      templates: {
+        env: { src: 'file:${DIR}/env.json' },
+      },
+    };
+
+    mockFileFn.mockImplementation(async () => ({ loaded: true }));
+
+    try {
+      const errors = await cacheSources(workspace);
+
+      expect(errors).toEqual([]);
+      expect(mockFileFn).toHaveBeenCalledWith('./resolved/env.json');
+    } finally {
+      xyzEnv.SRC_DIR = originalSrcDir;
+    }
+  });
+
+  it('resolves an environment variable provider prefix in workspace sources', async () => {
+    const originalSrcAssets = xyzEnv.SRC_ASSETS;
+
+    xyzEnv.SRC_ASSETS = 'file:./resolved';
+
+    const workspace = {
+      templates: {
+        env: { src: '${ASSETS}/env.json' },
+      },
+    };
+
+    mockFileFn.mockImplementation(async () => ({ loaded: true }));
+
+    try {
+      const errors = await cacheSources(workspace);
+
+      expect(errors).toEqual([]);
+      expect(mockFileFn).toHaveBeenCalledWith('./resolved/env.json');
+    } finally {
+      xyzEnv.SRC_ASSETS = originalSrcAssets;
+    }
+  });
+
   it('returns an error joining failed sources', async () => {
     const workspace = {
       templates: {

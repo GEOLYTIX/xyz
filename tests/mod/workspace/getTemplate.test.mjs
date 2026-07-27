@@ -186,4 +186,60 @@ describe('getTemplate', async () => {
       mockFileFn.mockReset();
     }
   });
+
+  it('returns a template without nested references to the cached template', async () => {
+    const workspace = await checkWorkspaceCache();
+
+    // A template definition without a src is not assembled from a source response.
+    workspace.templates.nested_template = {
+      nested: { format: 'geojson' },
+    };
+
+    try {
+      const first = await getTemplate('nested_template');
+
+      first.nested.format = 'mutated';
+
+      const second = await getTemplate('nested_template');
+
+      // Modification of a requested template must not affect the cached template.
+      expect(second.nested.format).toBe('geojson');
+    } finally {
+      delete workspace.templates.nested_template;
+    }
+  });
+
+  it('composing a template does not strip roles from the cached template', async () => {
+    const { default: composeObj } = await import(
+      '../../../mod/workspace/composeObj.js'
+    );
+
+    const workspace = await checkWorkspaceCache();
+
+    workspace.templates.nested_roles_template = {
+      nested: {
+        keep: true,
+        roles: {
+          restricted: { merged: true },
+        },
+      },
+    };
+
+    try {
+      const first = await getTemplate('nested_roles_template');
+
+      // The roles object is merged for a user holding the restricted role.
+      const composed = await composeObj(first, ['restricted']);
+
+      expect(composed.nested).toMatchObject({ keep: true, merged: true });
+
+      const second = await getTemplate('nested_roles_template');
+
+      // The role restriction must remain on the cached template for the next request.
+      expect(second.nested.roles).toEqual({ restricted: { merged: true } });
+      expect(second.nested.merged).toBeUndefined();
+    } finally {
+      delete workspace.templates.nested_roles_template;
+    }
+  });
 });

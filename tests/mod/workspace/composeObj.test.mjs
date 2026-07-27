@@ -222,4 +222,37 @@ describe('composeObj', async () => {
     expect(layer.draw?.circle).toBeTruthy();
     expect(layer.name === 'Nested Draw Point').toBeTruthy();
   });
+
+  it('roles object with roles which do not match the accessRoles', async () => {
+    const obj = {
+      root: true,
+      restricted: 'restricted value',
+      roles: {
+        admin: true,
+      },
+    };
+
+    // The user holds a role but not one of the accessRoles in the roles object.
+    const response = await composeObj(obj, ['some_other_role']);
+
+    expect(response instanceof Error).toBeTruthy();
+  });
+
+  it('nested roles object with roles which do not match the accessRoles', async () => {
+    const obj = {
+      root: true,
+      nested: {
+        restricted: 'restricted value',
+        roles: {
+          admin: true,
+        },
+      },
+    };
+
+    // The user holds a role but not one of the accessRoles in the nested roles object.
+    const response = await composeObj(obj, ['some_other_role']);
+
+    expect(response.root).toBeTruthy();
+    expect(response.nested).toBeFalsy();
+  });
 });
