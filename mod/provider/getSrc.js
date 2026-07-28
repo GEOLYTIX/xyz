@@ -124,6 +124,7 @@ export async function cacheSources(workspace) {
     const responses = Array.from(sources)
       .filter((src) => !inspectedSrcs.has(src))
       .map((src) => {
+        src = envReplace(src);
         inspectedSrcs.add(src);
         return [src, getSrcPromise(src)];
       });
