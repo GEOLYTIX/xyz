@@ -56,23 +56,27 @@ export default async function getTemplate(template) {
   if (typeof template === 'string') {
     templateKey = String(template);
     // Protect from user provided input.
-    if (/[^a-zA-Z0-9 :_-]/.exec(template)) {
+    if (/[^a-zA-Z0-9 :_-]/.exec(templateKey)) {
       return new Error('Template key may only include whitelisted character.');
     }
 
-    if (!Object.hasOwn(workspace.templates, template)) {
-      return new Error(`Template: ${template} not found.`);
+    if (!Object.hasOwn(workspace.templates, templateKey)) {
+      return new Error(`Template: ${templateKey} not found.`);
     }
 
     // Must be spread to prevent crash on cloning methods of the template object.
-    template = { ...workspace.templates[template] };
+    template = workspace.templates[templateKey];
     template.key = templateKey;
-  } else {
+  }
+
+  try {
+    template = structuredClone(template);
+  } catch (err) {
     template = { ...template };
   }
 
   if (!template.src) {
-    return structuredClone(template);
+    return template;
   }
 
   if (template.srcLoaded) {
