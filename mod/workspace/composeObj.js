@@ -361,6 +361,10 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
   // At least one of the accessRoles must be included in the roles array provided by the user. If not, access to the obj will be denied.
   if (accessRoles.some((role) => roles.includes(role))) {
     return true;
+  } else {
+    return new Error(
+      `Access to the object with the roles property is denied. User does not have any of the required accessRoles: ${accessRoles.join(', ')}`,
+    );
   }
 }
 

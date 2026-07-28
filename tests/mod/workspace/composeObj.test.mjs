@@ -228,7 +228,7 @@ describe('composeObj', async () => {
       root: true,
       restricted: 'restricted value',
       roles: {
-        admin: true,
+        access_role: true,
       },
     };
 
