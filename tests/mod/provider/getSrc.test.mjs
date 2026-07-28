@@ -229,14 +229,26 @@ describe('getSrc: cache workspace sources', () => {
   });
 
   it('resolves circular source references without fetching twice', async () => {
-    const workspace = { template: { src: 'file:./circular-first.json' } };
+    const workspace = {
+      template: {
+        src: 'file:./circular-first.json',
+      },
+    };
 
     mockFileFn.mockImplementation(async (ref) => {
       if (ref === './circular-first.json') {
-        return { nested: { src: 'file:./circular-second.json' } };
+        return {
+          nested: {
+            src: 'file:./circular-second.json',
+          },
+        };
       }
 
-      return { nested: { src: 'file:./circular-first.json' } };
+      return {
+        nested: {
+          src: 'file:./circular-first.json',
+        },
+      };
     });
 
     const errors = await cacheSources(workspace);

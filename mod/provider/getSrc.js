@@ -120,18 +120,20 @@ export async function cacheSources(workspace) {
 
     queue.forEach((value) => collectSrcs(value, sources, inspectedObjects));
 
-    // Calling getSrcPromise for the whole breadth starts every new request before any response is awaited.
-    const responses = Array.from(sources)
-      .filter((src) => !inspectedSrcs.has(src))
-      .map((src) => {
-        src = envReplace(src);
-        inspectedSrcs.add(src);
-        return [src, getSrcPromise(src)];
-      });
+    const promises = [];
+
+    for (let src of Array.from(sources)) {
+      src = envReplace(src);
+      if (inspectedSrcs.has(src)) continue;
+      inspectedSrcs.add(src);
+      // Calling getSrcPromise for the whole breadth starts every new request before any response is awaited.
+      const promise = getSrcPromise(src);
+      promises.push([src, promise]);
+    }
 
     queue = [];
 
-    for (const [src, responsePromise] of responses) {
+    for (const [src, responsePromise] of promises) {
       const response = await responsePromise;
 
       if (response instanceof Error || response === undefined) {
@@ -213,9 +215,9 @@ function collectSrcs(value, sources, inspectedObjects) {
     sources.add(value.src);
   }
 
-  Object.values(value).forEach((item) =>
-    collectSrcs(item, sources, inspectedObjects),
-  );
+  for (const item of Object.values(value)) {
+    collectSrcs(item, sources, inspectedObjects);
+  }
 }
 
 /**
