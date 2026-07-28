@@ -21,7 +21,7 @@ if (!globalThis.xyzEnv.WORKSPACE) {
   throw new Error('WORKSPACE must be provided by env or --workspace.');
 }
 
-const [{ default: workspaceCache }, { default: getSrc }] = await Promise.all([
+const [{ default: workspaceCache }, { getSrc }] = await Promise.all([
   import('../mod/workspace/cache.js'),
   import('../mod/provider/getSrc.js'),
 ]);

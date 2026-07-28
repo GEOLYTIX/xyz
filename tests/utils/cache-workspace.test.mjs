@@ -17,6 +17,8 @@ describe('utils/cache-workspace', () => {
   });
 
   it('generates a workspace with the template sources assembled', async () => {
+    process.xyzEnv = {};
+
     dir = await mkdtemp(join(tmpdir(), 'xyz-cache-workspace-'));
 
     const output = join(dir, 'workspace.generated.json');
