@@ -1,22 +1,9 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import checkWorkspaceCache from '../../../mod/workspace/cache.js';
+import { mockConsole } from '../../scaffold.mjs';
 
-//Assigning console.error to a property to restore original function with.
-const originalConsole = console.error;
-
-//erros from test so we can assert on them and not get polute the console.
-const mockErrors = [];
-
-beforeAll(() => {
-  //Changing the console.error function to push to our local collection of messages.
-  console.error = (message) => {
-    mockErrors.push(message);
-  };
-});
-
-afterAll(() => {
-  console.error = originalConsole;
-});
+//Errors from test so we can assert on them and not pollute the console.
+mockConsole('error');
 
 describe('getTemplate', async () => {
   globalThis.xyzEnv = {

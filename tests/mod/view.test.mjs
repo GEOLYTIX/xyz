@@ -1,5 +1,6 @@
 import { createMocks } from 'node-mocks-http';
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { mockConsole } from '../scaffold.mjs';
 
 /**
  * ## View Tests
@@ -17,22 +18,16 @@ const { default: checkWorkspaceCache } = await import(
 );
 
 // Suppress console.error from getTemplate for missing template tests.
-const originalConsoleError = console.error;
+mockConsole('error');
 
 describe('View: Testing View API', () => {
   beforeAll(async () => {
-    console.error = () => {};
-
     globalThis.xyzEnv = {
       TITLE: 'VIEW TEST',
       WORKSPACE: 'file:./tests/assets/view.json',
     };
 
     await checkWorkspaceCache(true);
-  });
-
-  afterAll(() => {
-    console.error = originalConsoleError;
   });
 
   describe('Default view', () => {

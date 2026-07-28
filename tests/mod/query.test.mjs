@@ -1,13 +1,6 @@
 import { createMocks } from 'node-mocks-http';
-import {
-  afterAll,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { mockConsole } from '../scaffold.mjs';
 
 /**
  * ## Query Tests
@@ -95,22 +88,16 @@ const { default: getTemplate } = await import(
 const Roles = await import('../../mod/utils/roles.js');
 
 // Suppress console.error from getTemplate for missing template tests.
-const originalConsoleError = console.error;
+mockConsole('error');
 
 describe('Query: Testing Query API', () => {
   beforeAll(async () => {
-    console.error = () => {};
-
     globalThis.xyzEnv = {
       TITLE: 'QUERY TEST',
       WORKSPACE: 'file:./tests/assets/query_workspace.json',
     };
 
     await checkWorkspaceCache(true);
-  });
-
-  afterAll(() => {
-    console.error = originalConsoleError;
   });
 
   beforeEach(() => {
