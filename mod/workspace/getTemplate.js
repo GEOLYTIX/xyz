@@ -72,7 +72,7 @@ export default async function getTemplate(template) {
   }
 
   if (!template.src) {
-    return { ...template };
+    return structuredClone(template);
   }
 
   if (template.srcLoaded) {
