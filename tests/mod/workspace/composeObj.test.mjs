@@ -107,7 +107,7 @@ describe('composeObj', async () => {
 
     const response = await composeObj(obj);
 
-    expect(response.err?.length === 1).toBeTruthy();
+    expect(response.warn?.length === 1).toBeTruthy();
   });
 
   it('nested roles object without roles', async () => {
@@ -125,7 +125,7 @@ describe('composeObj', async () => {
 
     expect(response.root).toBeTruthy();
     expect(response.nested).toBeFalsy();
-    expect(Array.isArray(response.err)).toBeTruthy();
+    expect(Array.isArray(response.warn)).toBeTruthy();
   });
 
   it('array with roles object without roles', async () => {
@@ -197,7 +197,7 @@ describe('composeObj', async () => {
 
     expect(layer.draw?.point).toBeTruthy();
     expect(layer.draw?.circle).toBeTruthy();
-    expect(layer.err?.length === 3).toBeTruthy();
+    expect(layer.warn?.length === 3).toBeTruthy();
   });
 
   it('templates with 4 levels of nesting with roles', async () => {
