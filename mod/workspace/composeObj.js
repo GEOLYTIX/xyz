@@ -83,8 +83,8 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   template = await getTemplate(template);
 
   if (template instanceof Error) {
-    obj.err ??= [];
-    obj.err.push(template.message);
+    obj.warn ??= [];
+    obj.warn.push(template.message);
     return;
   }
 
@@ -98,8 +98,8 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   workspace.scopes.add(templateScope);
 
   if (!checkScope(templateScope, roles)) {
-    obj.err ??= [];
-    obj.err.push(
+    obj.warn ??= [];
+    obj.warn.push(
       `Access denied to template with scope: ${templateScope.join('.')}`,
     );
     return;
@@ -108,8 +108,8 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   const rolesCheck = await parseTemplates(template, roles, templateScope);
 
   if (rolesCheck instanceof Error) {
-    obj.err ??= [];
-    obj.err.push(rolesCheck.message);
+    obj.warn ??= [];
+    obj.warn.push(rolesCheck.message);
   }
 
   // key and role properties must not overwrite in obj.
@@ -214,8 +214,8 @@ async function parseTemplates(obj, roles, templateScope) {
     const parseTemplatesCheck = await parseTemplates(val, roles, templateScope);
     if (parseTemplatesCheck instanceof Error) {
       delete obj[key];
-      obj.err ??= [];
-      obj.err.push(parseTemplatesCheck.message);
+      obj.warn ??= [];
+      obj.warn.push(parseTemplatesCheck.message);
     }
   }
 }
@@ -245,19 +245,27 @@ function queryTemplate(key, val, obj, roles, templateScope) {
   }
 
   if (typeof val.role === 'string' && !val.key) {
-    val.warn = `Prototype template with access role [${val.role}] may only be used in a layer or locale object, not nested in a template.`;
+    val.warn ??= [];
+    val.warn.push(
+      `Prototype template with access role [${val.role}] may only be used in a layer or locale object, not nested in a template.`,
+    );
     return true;
   }
 
   if (!val.key) {
-    val.warn =
-      'Prototype template may only be used in a layer or locale object, not nested in a template.';
+    val.warn ??= [];
+    val.warn.push(
+      'Prototype template may only be used in a layer or locale object, not nested in a template.',
+    );
     return true;
   }
 
   // A query template object must be referenced by it's key in the obj properties values.
   if (val.key && !Object.values(obj).some((v) => v === val.key)) {
-    val.warn = `Prototype template [${val.key}] may only be used in layer or locale object, not nested in a template.`;
+    val.warn ??= [];
+    val.warn.push(
+      `Prototype template [${val.key}] may only be used in layer or locale object, not nested in a template.`,
+    );
     return true;
   }
 
