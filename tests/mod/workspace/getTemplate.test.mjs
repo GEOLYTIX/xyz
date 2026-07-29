@@ -52,6 +52,18 @@ describe('getTemplate', async () => {
     expect(result instanceof Error).toBeTruthy();
   });
 
+  it('query module is the name of a function', async () => {
+    const template = 'toString';
+
+    const { default: getTemplate } = await import(
+      '../../../mod/workspace/getTemplate.js'
+    );
+
+    const result = await getTemplate(template);
+
+    expect(result instanceof Error).toBeFalsy();
+  });
+
   it('query module render string', async () => {
     const template = 'mod_query_no_default';
 
