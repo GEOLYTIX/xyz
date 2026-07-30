@@ -120,6 +120,8 @@ async function cacheWorkspace() {
 
   workspace.key ??= xyzEnv.TITLE;
 
+  workspace.scopes = new Set();
+
   logger(`Workspace cached;`, 'workspace');
 
   timestamp = Date.now();
