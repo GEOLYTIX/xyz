@@ -103,6 +103,7 @@ Key points:
 
 - Only `tests/mod/**` and `tests/plugins/**` are included. Browser tests (`tests/lib/**`, `tests/browser/**`) are excluded — they use Codi and run in the browser.
 - `tests/setup.mjs` ensures `globalThis.xyzEnv` exists before any test module loads.
+- `tests/scaffold.mjs` provides shared setup helpers which test modules import explicitly, eg. `mockConsole`.
 - Tests run in parallel across files with a 10-second timeout per test.
 
 ### CI Pipeline
@@ -290,6 +291,38 @@ describe('HTTP Mock', () => {
 });
 ```
 
+#### Console mocks
+
+XYZ modules log warnings and errors to the console. Tests which trigger these paths would otherwise pollute the test output, and tests which assert on the logged message need to capture it.
+
+The `mockConsole` helper in `tests/scaffold.mjs` replaces a console method for the duration of the test file and restores the original in an `afterAll` hook. Messages are collected in the returned array so they can be asserted on.
+
+```javascript
+import { describe, it, expect } from 'vitest';
+import { mockConsole } from '../../scaffold.mjs';
+
+const mockWarnings = mockConsole('warn');
+
+describe('sql_table_insert', () => {
+  it('warns about a potential SQL injection', () => {
+    sql_table_insert(req);
+
+    expect(mockWarnings[0]).toEqual(
+      'Potential SQL Injection in sql_table_insert request body.',
+    );
+  });
+});
+```
+
+The method defaults to `error`. The return value can be ignored when the intent is only to suppress output.
+
+```javascript
+// Suppress console.error from getTemplate for missing template tests.
+mockConsole('error');
+```
+
+`mockConsole` registers its own `beforeAll` / `afterAll` hooks, so it must be called at the top level of a test module or inside a `describe` body -- not inside an `it` test.
+
 ### Available Assertions
 
 Vitest provides a rich set of assertions via the `expect()` API:
@@ -316,6 +349,7 @@ For the full list, see the [Vitest expect API](https://vitest.dev/api/expect).
 - Keep tests focused and isolated
 - Use `beforeAll` / `afterAll` for async setup and teardown (e.g. loading workspace caches)
 - Avoid putting async setup directly in `describe` bodies -- use `beforeAll` instead
+- Import shared setup from `tests/scaffold.mjs` rather than repeating the same boilerplate in every test module
 
 ### Test Discovery
 
