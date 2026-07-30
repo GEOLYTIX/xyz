@@ -505,7 +505,7 @@ describe('workspace: errs', () => {
     await checkWorkspaceCache(true);
   });
 
-  it('test: list template errors and use', async () => {
+  it('test: template errors and composition warnings', async () => {
     const { req, res } = createMocks({
       params: {
         key: 'test',
@@ -532,5 +532,22 @@ describe('workspace: errs', () => {
     ];
 
     expect(testResult.warnings).toEqual(warnings);
+  });
+
+  it('compose workspace locales', async () => {
+    const { req, res } = createMocks({
+      params: {
+        key: 'compose',
+        user: {
+          admin: true,
+        },
+      },
+    });
+
+    await getKeyMethod(req, res);
+
+    const composedWorkspace = res._getData();
+
+    expect(Object.keys(composedWorkspace.locales).length).toEqual(2);
   });
 });

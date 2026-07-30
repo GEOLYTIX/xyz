@@ -22,9 +22,9 @@ The workspace object defines the mapp resources available in an XYZ instance.
 @property {template} templates Each property in the templates object is a global template typedef.
 */
 
-// It should not be possible to modify object prototypes
-// This has been commented out because it causes issues with the vitest extension in VSCode. The extension uses Object.prototype to add a method to the object prototype which is then used in the test suite. This is not a problem in production because the extension is not used in production.
-// Object.freeze(Object.prototype);
+// It should not be possible to modify object prototypes.
+// Keep this hardening enabled outside Vitest environments.
+if (!process.env.VITEST) Object.freeze(Object.prototype);
 
 import { createHash } from 'node:crypto';
 import { cacheSources } from '../provider/getSrc.js';
@@ -40,6 +40,7 @@ const keyMethods = {
   scopes,
   roles: scopes, // for backwards compatibility with the workspace/roles endpoint
   test,
+  compose,
 };
 
 let workspace;
@@ -337,25 +338,6 @@ function scopesArrayToTree(res, scopesStringsSet) {
   res.send(scopesTree);
 }
 
-async function composeWorkspace() {
-  const cachedWorkspace = await workspaceCache(true);
-
-  cachedWorkspace.err = await cacheSources(cachedWorkspace);
-
-  // The nestedLocales method will be called for each locale in the cached workspace to ensure that all nested locales are loaded and checked for user access.
-  for (const localeKey of Object.keys(cachedWorkspace.locales)) {
-    const locale = await getLocale({
-      locale: localeKey,
-      layers: true,
-      user: { roles: true },
-    });
-
-    cachedWorkspace.locales[localeKey] = locale;
-    await nestedLocales(cachedWorkspace, locale, { roles: true });
-  }
-  return cachedWorkspace;
-}
-
 /**
 @function nestedLocales
 @async
@@ -457,6 +439,71 @@ function parseWarnings(warnings, obj) {
       continue;
     }
   }
+}
+
+/**
+@function compose
+
+@description
+The compose method returns a fully composed workspace object with all templates, locales, and layers resolved.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+
+@property {Object} req.params HTTP request params.
+@property {Object} params.user User requesting the compose method.
+@property {boolean} params.user.admin Whether user has admin privileges (required).
+*/
+async function compose(req, res) {
+  if (!req.params.user?.admin) {
+    res
+      .status(403)
+      .send(`Admin credentials are required to compose the workspace.`);
+    return;
+  }
+
+  const composedWorkspace = await composeWorkspace();
+
+  delete composedWorkspace.templates;
+  delete composedWorkspace.scopes;
+
+  assignChecksum(composedWorkspace);
+
+  res.setHeader('content-type', 'application/json');
+
+  res.send(composedWorkspace);
+}
+
+/**
+@function composeWorkspace
+@async
+
+@description
+The composeWorkspace method returns a fully composed workspace object with all templates, locales, and layers resolved.
+
+The workspaceCache() is called to retrieve the cached workspace. The cacheSources() method is called to ensure that all sources are cached and any errors are logged.
+
+The nestedLocales() method is called for each locale in the cached workspace to ensure that all nested locales are loaded and checked for user access.
+
+@returns {Promise<Object>} The fully composed workspace object.
+*/
+async function composeWorkspace() {
+  const cachedWorkspace = await workspaceCache(true);
+
+  cachedWorkspace.err = await cacheSources(cachedWorkspace);
+
+  // The nestedLocales method will be called for each locale in the cached workspace to ensure that all nested locales are loaded and checked for user access.
+  for (const localeKey of Object.keys(cachedWorkspace.locales)) {
+    const locale = await getLocale({
+      locale: localeKey,
+      layers: true,
+      user: { roles: true },
+    });
+
+    cachedWorkspace.locales[localeKey] = locale;
+    await nestedLocales(cachedWorkspace, locale, { roles: true });
+  }
+  return cachedWorkspace;
 }
 
 /**
