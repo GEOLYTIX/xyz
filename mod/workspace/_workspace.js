@@ -267,6 +267,9 @@ async function scopes(req, res) {
     return;
   }
 
+  // TODO check why the scopes array is different from composedWorkspace
+  // const cachedWorkspace = await composeWorkspace();
+
   const cachedWorkspace = await workspaceCache(true);
 
   await cacheSources(cachedWorkspace).then((errors) => {
@@ -282,7 +285,7 @@ async function scopes(req, res) {
       layers: true,
       user: { roles: true },
     });
-    await nestedLocales(locale, { roles: true });
+    await nestedLocales({ locales: {} }, locale, { roles: true });
   }
 
   const scopesStringsSet = new Set();
@@ -334,6 +337,25 @@ function scopesArrayToTree(res, scopesStringsSet) {
   res.send(scopesTree);
 }
 
+async function composeWorkspace() {
+  const cachedWorkspace = await workspaceCache(true);
+
+  cachedWorkspace.err = await cacheSources(cachedWorkspace);
+
+  // The nestedLocales method will be called for each locale in the cached workspace to ensure that all nested locales are loaded and checked for user access.
+  for (const localeKey of Object.keys(cachedWorkspace.locales)) {
+    const locale = await getLocale({
+      locale: localeKey,
+      layers: true,
+      user: { roles: true },
+    });
+
+    cachedWorkspace.locales[localeKey] = locale;
+    await nestedLocales(cachedWorkspace, locale, { roles: true });
+  }
+  return cachedWorkspace;
+}
+
 /**
 @function nestedLocales
 @async
@@ -347,7 +369,7 @@ The nestedLocales method is called recursively to check for further nested local
 @param {Object} user The user requesting the nested locales.
 @property {Array} [locale.locales] An array of nested locale keys.
 */
-async function nestedLocales(locale, user) {
+async function nestedLocales(cachedWorkspace, locale, user) {
   if (!Array.isArray(locale.locales)) return;
 
   const keys = locale.keys ?? [locale.key];
@@ -358,7 +380,9 @@ async function nestedLocales(locale, user) {
       user,
     });
 
-    await nestedLocales(nestedLocale, user);
+    cachedWorkspace.locales[nestedLocale.key] = nestedLocale;
+
+    await nestedLocales(cachedWorkspace, nestedLocale, user);
   }
 }
 
@@ -366,26 +390,15 @@ async function nestedLocales(locale, user) {
 @function test
 
 @description
-The workspace/test method which is only available to user with admin credentials requests all locales in workspace.
-
-The cached workspace will be flushed for the test method.
-
-Requesting all locales should add any additional templates to the workspace.
-
-The test method will iterate over all workspace.templates and get from the getTemplate method to check whether any errors are logged on a template in regards to its src parameter.
-
-A flat array of template.err will be returned from the workspace/test method.
+The test method is an admin-only endpoint that checks the workspace sources for errors and warnings.
 
 @param {req} req HTTP request.
 @param {req} res HTTP response.
 
-@property {Object} req.params HTTP request parameter.
-@property {Boolean} [params.detail] Flag to return the cached workspace.
-@property {boolean} [params.force] Whether to force refresh the workspace cache.
-@property {Object} params.user The user requesting the test method.
-@property {Boolean} user.admin The user is required to have admin privileges.
+@property {Object} req.params HTTP request params.
+@property {Object} params.user User requesting the test method.
+@property {boolean} params.user.admin Whether user has admin privileges (required).
 */
-// TODO write tests for the workspace/test method. The tests should check that the method returns an array of errors when there are errors in the workspace.templates and that the method returns the cached workspace when the detail param is true.
 async function test(req, res) {
   if (!req.params.user?.admin) {
     res
@@ -394,171 +407,56 @@ async function test(req, res) {
     return;
   }
 
-  const cachedWorkspace = await workspaceCache(true);
+  const cachedWorkspace = await composeWorkspace();
 
-  // TODO handle src errors in the workspace templates. The cacheSources method will return an array of errors if any src references fail to load.
-  const srcErrors = await cacheSources(cachedWorkspace);
+  const warnings = [];
 
-  const testConfig = {
-    errArr: [],
-    properties: new Set(['template', 'templates', 'query']),
-    results: {},
-    used_templates: [],
-    unused_templates: [],
+  parseWarnings(warnings, cachedWorkspace.locale);
+
+  parseWarnings(warnings, cachedWorkspace.locales);
+
+  const testResult = {
+    srcErr: cachedWorkspace.err,
+    warnings,
   };
-
-  testConfig.workspace_templates = new Set(
-    Object.entries(cachedWorkspace.templates)
-      .filter(([key, value]) => value._type === 'workspace')
-      .filter(([key, value]) => !value.src?.endsWith('.html'))
-      .map(([key, value]) => key),
-  );
-
-  // Create clone of workspace_templates
-  testConfig.unused_templates = new Set(testConfig.workspace_templates);
-  testConfig.overwritten_templates = new Set();
-
-  testWorkspaceLocales(testConfig);
-
-  for (const [key, template] of Object.entries(cachedWorkspace.templates)) {
-    if (template instanceof Error) {
-      testConfig.errArr.push(`${key}: ${template.message}`);
-    }
-
-    if (template.err instanceof Error) {
-      testConfig.errArr.push(`${key}: ${template.err.message}`);
-    }
-  }
-
-  const results = processTestResults(testConfig);
 
   res.setHeader('content-type', 'application/json');
 
-  const result = req.params.detail ? { ...results, ...workspace } : results;
-
-  res.send(JSON.stringify(result));
+  res.send(testResult);
 }
 
 /**
-@function testWorkspaceLocales
+@function parseWarnings
+
 @description
-Tests all locales in the workspace for errors and analyzes template usage.
+The parseWarnings method recursively iterates an object and collects any warn[] arrays into a single warnings array.
 
-@param {Object} testConfig The test configuration object.
+@param {Array} warnings The array to collect warnings.
+@param {Object} obj The object to iterate for warn[] arrays.
 */
-function testWorkspaceLocales(testConfig) {
-  for (const localeKey of Object.keys(workspace.locales)) {
-    const locale = workspace.locales[localeKey];
+function parseWarnings(warnings, obj) {
+  if (typeof obj !== 'object') return;
 
-    // If you can't get the locale, access is denied, add the error to the errArr.
-    if (locale instanceof Error) {
-      testConfig.errArr.push(`${localeKey}: ${locale.message}`);
+  if (obj === null) return;
+
+  if (obj === undefined) return;
+
+  for (const [key, val] of Object.entries(obj)) {
+    if (key === 'warn' && Array.isArray(val)) {
+      warnings.push(...val);
       continue;
     }
 
-    // If the locale has no layers, just skip it.
-    if (!locale.layers) continue;
-
-    for (const layerKey of Object.keys(locale.layers)) {
-      const layer = locale.layers[layerKey];
-
-      if (layer instanceof Error) {
-        testConfig.errArr?.push(`${layerKey}: ${layer.message}`);
-      }
+    if (Array.isArray(val)) {
+      val.forEach((item) => parseWarnings(warnings, item));
+      continue;
     }
 
-    // Test locale and all of its layers as nested object for template usage.
-    templateUse(locale, testConfig);
+    if (typeof val === 'object') {
+      parseWarnings(warnings, val);
+      continue;
+    }
   }
-}
-
-/**
-@function templateUse
-
-@description
-Iterates through all nested object properties.
-Test properties found in the test.properties Set.
-Removes template keys from test.unused_templates Set.
-Add template keys to test.used_templates Array.
-
-@param {Object} obj The object to test.
-@param {Object} test The test config object.
-@property {Set} test.properties Set of properties to test ['template', 'templates', 'query']
-@property {Set} test.workspace_templates Set of templates _type=workspace templates.
-@property {Set} test.unused_templates Set of templates not (yet) used.
-@property {Set} test.overwritten_templates Set of _type=workspace templates which have been overwritten.
-@property {Array} test.used_templates Array of template keys for each usage.
-*/
-function templateUse(obj, test) {
-  if (typeof obj !== 'object') return;
-
-  Object.entries(obj).forEach((entry) => {
-    // entry key === ['template', 'templates', 'query']
-    if (test.properties.has(entry[0])) {
-      if (Array.isArray(entry[1])) {
-        entry[1]
-          .filter((item) => typeof item === 'string')
-          .forEach((item) => {
-            test.unused_templates.delete(item);
-            test.used_templates.push(item);
-          });
-      }
-
-      if (typeof entry[1] === 'object' && Object.hasOwn(entry[1], 'key')) {
-        if (test.workspace_templates.has(entry[1].key)) {
-          test.overwritten_templates.add(entry[1].key);
-        }
-        return;
-      }
-
-      if (typeof entry[1] === 'string') {
-        test.unused_templates.delete(entry[1]);
-        test.used_templates.push(entry[1]);
-      }
-    }
-
-    // Iterate through each array, eg. infoj
-    if (Array.isArray(entry[1])) {
-      entry[1].forEach((entry) => templateUse(entry, test));
-
-      // Iterate through nested objects eg. layers
-    } else if (entry[1] instanceof Object) {
-      templateUse(entry[1], test);
-    }
-  });
-}
-
-/**
-@function processTestResults
-@description
-Processes the test configuration and returns formatted results.
-
-@param {Object} testConfig The test configuration object.
-@returns {Object} Formatted test results object.
-*/
-function processTestResults(testConfig) {
-  const results = {};
-
-  results.errors = testConfig.errArr.flat();
-  results.unused_templates = Array.from(testConfig.unused_templates);
-  results.overwritten_templates = Array.from(testConfig.overwritten_templates);
-
-  // Sort the array.
-  testConfig.used_templates.sort((a, b) => {
-    if (a > b) return 1;
-    if (a < b) return -1;
-    return 0;
-  });
-
-  // Reduce the test.used_templates array to count the occurrence of each template.
-  results.usage = Object.fromEntries(
-    testConfig.used_templates.reduce(
-      (acc, e) => acc.set(e, (acc.get(e) || 0) + 1),
-      new Map(),
-    ),
-  );
-
-  return results;
 }
 
 /**

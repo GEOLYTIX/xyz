@@ -1,0 +1,59 @@
+{
+  "templates": {
+    "unused_template": {
+      "bogus": true
+    },
+    "shared_layer": {
+      "src": "file:./tests/assets/cache_sources/shared_layer.json"
+    },
+    "nested_locale": {
+      "role": "test_role",
+      "templates": ["layers_template"]
+    },
+    "layers_template": {
+      "layers": {
+        "nested_layer": {
+          "name": "nested_layer"
+        }
+      }
+    }
+  },
+  "locale": {
+    "layers": {
+      "from_template": {
+        "template": {
+          "src": "file:./tests/assets/osm_layer.json"
+        }
+      },
+      "with_templates": {
+        "templates": [
+          "shared_layer",
+          {
+            "src": "foo:bar.json"
+          },
+          {
+            "src": "file:missing.json"
+          }
+        ]
+      }
+    }
+  },
+  "locales": {
+    "test": {
+      "layers": {
+        "locales_layer": {
+          "name": "locales_layer",
+          "template": "missing_template"
+        }
+      },
+      "query": {
+        "query": "query_template",
+        "template": {
+          "key": "query_template",
+          "src": "file:./tests/assets/queries/mod_query.js"
+        }
+      },
+      "locales": ["nested_locale"]
+    }
+  }
+}

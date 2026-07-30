@@ -125,7 +125,6 @@ describe('composeObj', async () => {
 
     expect(response.root).toBeTruthy();
     expect(response.nested).toBeFalsy();
-    expect(Array.isArray(response.warn)).toBeTruthy();
   });
 
   it('array with roles object without roles', async () => {
@@ -197,7 +196,6 @@ describe('composeObj', async () => {
 
     expect(layer.draw?.point).toBeTruthy();
     expect(layer.draw?.circle).toBeTruthy();
-    expect(layer.warn?.length === 2).toBeTruthy();
     expect(layer.err?.length === 1).toBeTruthy();
   });
 

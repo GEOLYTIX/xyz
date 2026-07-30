@@ -494,3 +494,43 @@ describe('workspace: nested_roles/workspace', () => {
     expect(code).toEqual(400);
   });
 });
+
+describe('workspace: errs', () => {
+  beforeAll(async () => {
+    globalThis.xyzEnv = {
+      TITLE: 'WORKSPACE TEST',
+      WORKSPACE: 'file:./tests/assets/test_workspace.json',
+    };
+
+    await checkWorkspaceCache(true);
+  });
+
+  it('test: list template errors and use', async () => {
+    const { req, res } = createMocks({
+      params: {
+        key: 'test',
+        user: {
+          admin: true,
+        },
+      },
+    });
+
+    await getKeyMethod(req, res);
+
+    const testResult = res._getData();
+
+    const srcErr = [
+      'foo:bar.json: Unknown getSrc provider: foo:bar.json',
+      "file:missing.json: ENOENT: no such file or directory, open 'C:\\Users\\denni\\Documents\\GitHub\\xyz_dev\\missing.json'",
+    ];
+
+    expect(testResult.srcErr).toEqual(srcErr);
+
+    const warnings = [
+      'SRC [file:./tests/assets/osm_layer.json] template caught in queryTemplate check.',
+      'SRC [file:./tests/assets/osm_layer.json] template caught in queryTemplate check.',
+    ];
+
+    expect(testResult.warnings).toEqual(warnings);
+  });
+});
