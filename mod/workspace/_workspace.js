@@ -256,7 +256,11 @@ The roles method is deprecated. Use the scopes method instead.
 @param {res} res HTTP response.
 */
 function roles(req, res) {
-  res.status(400).send(`The workspace/roles endpoint is deprecated. Use workspace/scopes instead.`);
+  res
+    .status(400)
+    .send(
+      `The workspace/roles endpoint is deprecated. Use workspace/scopes instead.`,
+    );
 }
 
 /**

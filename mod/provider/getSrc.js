@@ -165,7 +165,11 @@ function getSrcPromise(src) {
 
   if (responsePromise) return responsePromise;
 
-  responsePromise = providerPromise(src);
+  responsePromise = providerPromise(src).then((response) => {
+    // Delete the src from the map if the provider request fails so a subsequent request will retry the provider.
+    if (response instanceof Error) srcMap.delete(src);
+    return response;
+  });
 
   srcMap.set(src, responsePromise);
 
