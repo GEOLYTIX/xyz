@@ -38,7 +38,7 @@ const keyMethods = {
   locale,
   locales,
   scopes,
-  roles: scopes, // for backwards compatibility with the workspace/roles endpoint
+  roles, // deprecated, use scopes instead
   test,
   compose,
 };
@@ -244,6 +244,19 @@ async function getNestedLocales(req, res) {
   }
 
   res.send(nestedLocales);
+}
+
+/**
+@function roles
+
+@description
+The roles method is deprecated. Use the scopes method instead.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+*/
+function roles(req, res) {
+  res.status(400).send(`The workspace/roles endpoint is deprecated. Use workspace/scopes instead.`);
 }
 
 /**

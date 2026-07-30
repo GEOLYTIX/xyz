@@ -368,8 +368,6 @@ describe('workspace: nested_roles/workspace', () => {
   });
 
   it('locales: list for restricted locales; user with nested role', async () => {
-    // User has access to UK -> coremarkets -> brand_b
-    // But requests Germany
     const { req, res } = createMocks({
       params: {
         key: 'locales', // Requesting list of locales
@@ -380,6 +378,8 @@ describe('workspace: nested_roles/workspace', () => {
     });
 
     await getKeyMethod(req, res);
+
+    const locale = res._getData();
 
     const expectedLocales = [
       {
@@ -393,12 +393,10 @@ describe('workspace: nested_roles/workspace', () => {
       },
     ];
 
-    const locales = res._getData();
-
-    expect(expectedLocales).toEqual(locales);
+    expect(expectedLocales).toEqual(locale);
 
     // Germany should NOT be in the list
-    const germany = locales.find((l) => l.key === 'germany');
+    const germany = locale.find((l) => l.key === 'germany');
     expect(!germany).toBeTruthy();
   });
 
