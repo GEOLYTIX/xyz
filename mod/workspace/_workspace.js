@@ -135,6 +135,9 @@ async function locale(req, res) {
     return;
   }
 
+  delete locale.role;
+  delete locale.parentRoles;
+
   assignChecksum(locale);
 
   res.send(locale);

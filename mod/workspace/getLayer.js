@@ -111,9 +111,11 @@ export default async function getLayer(params, locale) {
   }
 
   if (Array.isArray(layer.plugins)) {
-    // TODO not covered in tests.
     layer.plugins = layer.plugins.map((plugin) => envReplace(plugin));
   }
+
+  delete layer.role;
+  delete layer.parentRoles;
 
   return layer;
 }
