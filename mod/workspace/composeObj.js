@@ -45,15 +45,13 @@ export default async function composeObj(obj, roles) {
 
   obj.parentRoles ??= [];
 
-  const templateScope = [...obj.parentRoles, obj.role];
-
-  const templateScopeString = templateScope.filter(Boolean).join('.');
+  const templateScope = [...obj.parentRoles, obj.role].filter(Boolean);
 
   workspace.scopes.add(templateScope);
 
   if (!checkScope(templateScope, roles)) {
     return new Error(
-      `User does not have access to object with template scope: ${templateScopeString}`,
+      `User does not have access to object with template scope: ${templateScope.join('.')}`,
     );
   }
 
@@ -83,8 +81,8 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   template = await getTemplate(template);
 
   if (template instanceof Error) {
-    obj.warn ??= [];
-    obj.warn.push(template.message);
+    obj.err ??= [];
+    obj.err.push(template.message);
     return;
   }
 
@@ -96,6 +94,8 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   templateScope = [...templateScope, template.role];
 
   workspace.scopes.add(templateScope);
+
+  templateScope = templateScope.filter(Boolean);
 
   if (!checkScope(templateScope, roles)) {
     obj.warn ??= [];
@@ -430,9 +430,6 @@ If the roles parameter is an array, the method will check whether the templateSc
 @returns {boolean} Returns true if the user has access based on the roles and templateScope.
 */
 function checkScope(templateScope, roles) {
-  // Remove undefined values from the templateScope array.
-  templateScope = templateScope.filter(Boolean);
-
   // The templateScope array is empty, meaning there are no access restrictions.
   if (!templateScope.length) return true;
 
@@ -448,7 +445,7 @@ function checkScope(templateScope, roles) {
   }
 
   // Filter out undefined values from the templateScope array and join the remaining values with a pipe character to create a string representation of the template scope.
-  const templateScopeString = templateScope.filter(Boolean).join('.');
+  const templateScopeString = templateScope.join('.');
 
   // Check whether the roles array includes the templateScopeString.
   if (roles.includes(templateScopeString)) {

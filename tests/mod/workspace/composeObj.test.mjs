@@ -180,7 +180,7 @@ describe('composeObj', async () => {
 
   it('obj with nested templates in template and roles', async () => {
     const obj = {
-      parentRoles: ['locale'],
+      parentRoles: ['locale', undefined],
       template: {
         src: 'file:./tests/assets/layers/template_test/nested_templates.json',
       },
@@ -197,7 +197,8 @@ describe('composeObj', async () => {
 
     expect(layer.draw?.point).toBeTruthy();
     expect(layer.draw?.circle).toBeTruthy();
-    expect(layer.warn?.length === 3).toBeTruthy();
+    expect(layer.warn?.length === 2).toBeTruthy();
+    expect(layer.err?.length === 1).toBeTruthy();
   });
 
   it('templates with 4 levels of nesting with roles', async () => {
