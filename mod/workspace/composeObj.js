@@ -95,10 +95,6 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   templateScope = templateScope.filter(Boolean);
 
   if (!checkScope(templateScope, roles)) {
-    // obj.warn ??= [];
-    // obj.warn.push(
-    //   `Access denied to template with scope: ${templateScope.join('.')}`,
-    // );
     return;
   }
 
@@ -209,8 +205,6 @@ async function parseTemplates(obj, roles, templateScope) {
     const parseTemplatesCheck = await parseTemplates(val, roles, templateScope);
     if (parseTemplatesCheck instanceof Error) {
       delete obj[key];
-      // obj.warn ??= [];
-      // obj.warn.push(parseTemplatesCheck.message);
     }
   }
 }
