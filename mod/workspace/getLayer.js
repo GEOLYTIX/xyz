@@ -53,7 +53,6 @@ Template properties will be removed as these are not required by the MAPP API bu
 */
 export default async function getLayer(params, locale) {
   if (/[^a-zA-Z0-9 :_-]/.exec(params.layer)) {
-    // TODO this is not covered in tests
     return new Error(
       'The layer [key] property may only contain whitelisted character [^a-zA-Z0-9 :_-]',
     );

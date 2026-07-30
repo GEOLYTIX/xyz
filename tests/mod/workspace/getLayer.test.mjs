@@ -10,6 +10,20 @@ describe('getLayer: ', async () => {
 
   await checkWorkspaceCache(true);
 
+  it('invalid layer name', async () => {
+    const params = {
+      locale: 'europe',
+      layer: '£$%',
+      user: {
+        roles: [
+          'europe', // locale role
+        ],
+      },
+    };
+    const layer = await getLayer(params);
+    expect(layer instanceof Error).toBeTruthy();
+  });
+
   it('locale role only', async () => {
     const params = {
       locale: 'europe',

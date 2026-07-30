@@ -43,8 +43,7 @@ export default function checkWorkspaceCache(force) {
   // cacheWorkspace is async and must be awaited.
   if (!cache) return cacheWorkspace();
 
-  // cacheWorkspace will set the current timestamp
-  // and cache workspace outside export closure prior to returning workspace.
+  // cacheWorkspace will set the current timestamp and cache workspace outside export closure prior to returning workspace.
   // TODO write test with WORKSPACE_AGE 0
   if (Date.now() - timestamp > +xyzEnv.WORKSPACE_AGE) {
     // current time minus cached timestamp exceeds WORKSPACE_AGE
@@ -63,6 +62,7 @@ import view_templates from './templates/_views.js';
 
 /**
 @function cacheWorkspace
+@async
 
 @description
 The workspace is retrived from the source defined in the WORKSPACE xyzEnvironment variable.
