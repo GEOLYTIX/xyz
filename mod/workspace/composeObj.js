@@ -383,7 +383,7 @@ The arrayProperty method processes array properties of an object. It iterates ov
 */
 async function arrayProperty(key, val, obj, roles, templateScope) {
   if (!Array.isArray(val)) return false;
-  
+
   // Do not process the layers when a locale is being composed. The layers will be processed in the getLayer method.
   if (key === 'layers') return true;
 
