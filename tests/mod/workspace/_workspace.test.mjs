@@ -517,6 +517,20 @@ describe('workspace: errs', () => {
     expect(testResult.warnings.length).toEqual(2);
   });
 
+  it('compose workspace denied', async () => {
+    const { req, res } = createMocks({
+      params: {
+        key: 'compose',
+      },
+    });
+
+    await getKeyMethod(req, res);
+
+    res._getData();
+
+    expect(res.statusCode).toEqual(403);
+  });
+
   it('compose workspace locales', async () => {
     const { req, res } = createMocks({
       params: {
