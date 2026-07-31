@@ -39,7 +39,14 @@
     }
   },
   "locales": {
+    "role_test_locale": {
+      "roles": {
+        "test_role": true,
+        "!negated_role": null
+      }
+    },
     "test": {
+      "role": "test_role",
       "layers": {
         "locales_layer": {
           "name": "locales_layer",

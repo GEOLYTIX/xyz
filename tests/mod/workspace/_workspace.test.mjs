@@ -527,6 +527,8 @@ describe('workspace: errs', () => {
 
     const testResult = res._getData();
 
+    expect(testResult.negatedRoles.length).toEqual(1);
+
     expect(testResult.srcErr.length).toEqual(3);
 
     expect(testResult.templateWarn.length).toEqual(1);
@@ -560,7 +562,7 @@ describe('workspace: errs', () => {
 
     const composedWorkspace = res._getData();
 
-    expect(Object.keys(composedWorkspace.locales).length).toEqual(2);
+    expect(Object.keys(composedWorkspace.locales).length).toEqual(3);
   });
 
   it('Gone roles', async () => {

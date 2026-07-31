@@ -414,9 +414,21 @@ async function test(req, res) {
 
   const templateWarn = Array.from(warnings).sort((a, b) => a.localeCompare(b));
 
+  const negatedRoles = new Set();
+
+  cachedWorkspace.scopes.forEach((scope) => {
+    if (!Array.isArray(scope)) return;
+    scope.filter(Boolean).forEach((role) => {
+      if (role.startsWith('!')) {
+        negatedRoles.add(role);
+      }
+    });
+  });
+
   const testResult = {
     srcErr: cachedWorkspace.err,
     templateWarn,
+    negatedRoles: Array.from(negatedRoles).sort((a, b) => a.localeCompare(b)),
   };
 
   res.setHeader('content-type', 'application/json');
