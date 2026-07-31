@@ -1496,7 +1496,8 @@ label.radio {
       }
     }
     & .label,
-    & .val {
+    & .val,
+    label {
       margin-left: 1em;
     }
     .val,
