@@ -320,7 +320,8 @@ The role as defined by the key in the roles object will be added to the accessRo
 async function rolesTemplates(key, val, obj, roles, templateScope) {
   if (key !== 'roles') return false;
 
-  if (typeof val !== 'object') return false;
+  // The roles property value must be an object. If the value is true, null, or not an object, access to the obj will be denied.
+  if (typeof val !== 'object' || val === true || !val) return false;
 
   delete obj.roles;
 
