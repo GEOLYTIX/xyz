@@ -547,4 +547,18 @@ describe('workspace: errs', () => {
 
     expect(Object.keys(composedWorkspace.locales).length).toEqual(2);
   });
+
+  it('Gone roles', async () => {
+    const { req, res } = createMocks({
+      params: {
+        key: 'roles',
+      },
+    });
+
+    await getKeyMethod(req, res);
+
+    res._getData();
+
+    expect(res.statusCode).toEqual(410);
+  });
 });

@@ -260,7 +260,7 @@ The roles method is deprecated. Use the scopes method instead.
 */
 function roles(req, res) {
   res
-    .status(400)
+    .status(410) // Gone
     .send(
       `The workspace/roles endpoint is deprecated. Use workspace/scopes instead.`,
     );
