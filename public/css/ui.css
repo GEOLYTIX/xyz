@@ -1480,14 +1480,17 @@ label.radio {
       padding-top 0.3s ease,
       padding-bottom 0.3s ease;
     &.expanded {
-      padding: 5px;
+      padding: 0 0 5px;
+      & > .header {
+        border-radius: 3px 3px 1px 1px;
+      }
     }
     & > .header {
       grid-column: 1 / 3;
       background-color: var(--color-primary);
       color: var(--color-font-contrast);
       border-radius: 3px;
-      padding: 0 0.5em;
+      padding: 0 5px;
       & > .material-symbols-outlined.caret::after {
         color: var(--color-font-contrast);
       }
@@ -1495,6 +1498,9 @@ label.radio {
     & .label,
     & .val {
       margin-left: 1em;
+    }
+    .val {
+      margin-right: 0.5em;
     }
   }
   & .layer-key {
