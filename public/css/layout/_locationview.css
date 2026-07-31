@@ -90,7 +90,8 @@
       margin-left: 1em;
     }
 
-    .val {
+    /* all values on the right side with the same margin */
+    .val, .legend-icon {
       margin-right: 0.5em;
     }
   }

@@ -1499,7 +1499,8 @@ label.radio {
     & .val {
       margin-left: 1em;
     }
-    .val {
+    .val,
+    .legend-icon {
       margin-right: 0.5em;
     }
   }
