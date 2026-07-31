@@ -28,12 +28,8 @@ The async cacheWorkspace method is assigned to the module scope workspacePromise
 @returns {Promise<workspace>} Resolves to the JSON workspace.
 */
 export default function checkWorkspaceCache(force) {
-  if (force) {
-    workspacePromise = cacheWorkspace();
-  }
-
-  if (Date.now() - timestamp > +xyzEnv.WORKSPACE_AGE) {
-    timestamp = Date.now();
+  // A WORKSPACE_AGE of 0 invalidates the cache on every check.
+  if (force || Date.now() - timestamp >= +xyzEnv.WORKSPACE_AGE) {
     workspacePromise = cacheWorkspace();
   }
 
@@ -65,6 +61,11 @@ The workspace is assigned to the module scope workspacePromise variable and the 
 @returns {Promise<workspace>} Resolves to the JSON workspace.
 */
 async function cacheWorkspace() {
+  // The timestamp is recorded before the workspace is fetched to determine the cache age.
+  timestamp = Date.now();
+
+  const cache_timestamp = timestamp;
+
   clearSrcMap();
 
   // The workspace must be fetched fresh on cache invalidation.
@@ -115,7 +116,7 @@ async function cacheWorkspace() {
 
   logger(`Workspace cached;`, 'workspace');
 
-  workspace.timestamp = timestamp;
+  workspace.timestamp = cache_timestamp;
 
   return workspace;
 }
