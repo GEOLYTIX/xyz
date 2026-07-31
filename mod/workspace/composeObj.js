@@ -165,8 +165,6 @@ async function parseTemplates(obj, roles, templateScope) {
 
   if (obj === null) return;
 
-  if (obj === undefined) return;
-
   for (const [key, val] of Object.entries(obj)) {
     if (queryTemplate(key, val, obj, roles, templateScope)) {
       continue;

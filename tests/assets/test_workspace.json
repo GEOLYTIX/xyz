@@ -51,7 +51,8 @@
       "nested": {
         "template": {
           "no_key": true
-        }
+        },
+        "null": null
       }
     },
     "test": {

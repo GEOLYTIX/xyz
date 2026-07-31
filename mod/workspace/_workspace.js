@@ -448,8 +448,6 @@ function parseWarnings(warnings, obj) {
 
   if (obj === null) return;
 
-  if (obj === undefined) return;
-
   for (const [key, val] of Object.entries(obj)) {
     if (key === 'warn' && Array.isArray(val)) {
       val.forEach((warning) => warnings.add(warning));
