@@ -210,9 +210,6 @@ in the UK locale. The name for a nested locale will be concatenated like so
 @property {Object} [params.user] User requesting the locales.
 */
 async function getNestedLocales(req, res) {
-  // The locale property is required for nested locales.
-  if (!req.params.locale) return;
-
   const locale = await getLocale(req.params);
 
   if (locale instanceof Error) {
@@ -238,10 +235,8 @@ async function getNestedLocales(req, res) {
     if (nestedLocale instanceof Error) continue;
 
     nestedLocales.push({
-      key: Array.isArray(nestedLocale.keys)
-        ? nestedLocale.keys.join(',')
-        : nestedLocale.key,
-      name: `${nestedLocale.name || key}`,
+      key: nestedLocale.keys.join(','),
+      name: nestedLocale.name,
       locales: nestedLocale.locales,
     });
   }
