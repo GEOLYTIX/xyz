@@ -60,10 +60,10 @@
     grid-template-columns: 1fr 1fr;
     grid-gap: inherit;
     padding: 0;
-    transition: 
-    height 0.3s ease, 
-    padding-top 0.3s ease, 
-    padding-bottom 0.3s ease;
+    transition:
+      height 0.3s ease,
+      padding-top 0.3s ease,
+      padding-bottom 0.3s ease;
 
     &.expanded {
       padding: 5px;
