@@ -47,6 +47,12 @@ describe('getTemplate', async () => {
   //Calling the cache method with force to reload a new workspace
   await checkWorkspaceCache('file');
 
+  it('get undefined template', async () => {
+    const result = await getTemplate();
+
+    expect(result instanceof Error).toBeTruthy();
+  });
+
   it('get template from workspace', async () => {
     const result = await getTemplate('OSM');
 
