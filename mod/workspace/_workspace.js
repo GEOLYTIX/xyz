@@ -411,15 +411,17 @@ async function test(req, res) {
 
   const cachedWorkspace = await composeWorkspace();
 
-  const warnings = [];
+  const warnings = new Set();
 
   parseWarnings(warnings, cachedWorkspace.locale);
 
   parseWarnings(warnings, cachedWorkspace.locales);
 
+  const templateWarn = Array.from(warnings).sort((a, b) => a.localeCompare(b));
+
   const testResult = {
     srcErr: cachedWorkspace.err,
-    warnings,
+    templateWarn,
   };
 
   res.setHeader('content-type', 'application/json');
@@ -445,7 +447,7 @@ function parseWarnings(warnings, obj) {
 
   for (const [key, val] of Object.entries(obj)) {
     if (key === 'warn' && Array.isArray(val)) {
-      warnings.push(...val);
+      val.forEach((warning) => warnings.add(warning));
       continue;
     }
 

@@ -47,3 +47,16 @@ describe('WORKSPACE_AGE', async () => {
     expect(a_workspace).toBe(b_workspace);
   });
 });
+
+describe('CUSTOM_TEMPLATES', async () => {
+  it('load custom templates', async () => {
+    globalThis.xyzEnv = {
+      WORKSPACE: 'file:./tests/assets/_workspace.json',
+      CUSTOM_TEMPLATES: 'file:./tests/assets/custom_templates.json',
+    };
+
+    const workspace = await checkWorkspaceCache(true);
+
+    expect(workspace.templates.user_admin_view._type).toBe('custom');
+  });
+});

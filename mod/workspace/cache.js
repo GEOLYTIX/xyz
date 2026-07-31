@@ -80,6 +80,8 @@ async function cacheWorkspace() {
     };
   }
 
+  workspace.errors = new Set();
+
   const workspace_templates = structuredClone(workspace.templates);
 
   workspace.templates = Object.create(null);
@@ -91,7 +93,16 @@ async function cacheWorkspace() {
 
   if (xyzEnv.CUSTOM_TEMPLATES) {
     const custom_templates = await getSrc({ src: xyzEnv.CUSTOM_TEMPLATES });
-    assign_workspace_templates(workspace.templates, custom_templates, 'custom');
+    if (custom_templates instanceof Error) {
+      console.error(custom_templates);
+      workspace.errors.add(`CUSTOM_TEMPLATES: ${custom_templates?.message}`);
+    } else if (typeof custom_templates === 'object') {
+      assign_workspace_templates(
+        workspace.templates,
+        custom_templates,
+        'custom',
+      );
+    }
   }
 
   assign_workspace_templates(

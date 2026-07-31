@@ -507,6 +507,7 @@ describe('workspace: errs', () => {
     globalThis.xyzEnv = {
       TITLE: 'WORKSPACE TEST',
       WORKSPACE: 'file:./tests/assets/test_workspace.json',
+      CUSTOM_TEMPLATES: 'missing_file.json',
     };
 
     await checkWorkspaceCache(true);
@@ -526,9 +527,9 @@ describe('workspace: errs', () => {
 
     const testResult = res._getData();
 
-    expect(testResult.srcErr.length).toEqual(2);
+    expect(testResult.srcErr.length).toEqual(3);
 
-    expect(testResult.warnings.length).toEqual(2);
+    expect(testResult.templateWarn.length).toEqual(1);
   });
 
   it('compose workspace denied', async () => {

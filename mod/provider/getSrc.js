@@ -110,9 +110,9 @@ Objects with the srcLoaded flag have their source response assembled in the cach
 @returns {Promise<Array<String>>} Array of error messages for failed source requests.
 */
 export async function cacheSources(workspace) {
+  workspace.errors ??= new Set();
   const inspectedSrcs = new Set();
   const inspectedObjects = new WeakSet();
-  const errors = [];
   let queue = [workspace];
 
   while (queue.length) {
@@ -137,7 +137,7 @@ export async function cacheSources(workspace) {
       const response = await responsePromise;
 
       if (response instanceof Error || response === undefined) {
-        errors.push(
+        workspace.errors.add(
           `${src}: ${response?.message || `Unable to load src: ${src}`}`,
         );
         continue;
@@ -147,7 +147,7 @@ export async function cacheSources(workspace) {
     }
   }
 
-  return errors;
+  return Array.from(workspace.errors);
 }
 
 /**
