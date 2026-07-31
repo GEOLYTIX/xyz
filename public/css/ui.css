@@ -1491,6 +1491,7 @@ label.radio {
       color: var(--color-font-contrast);
       border-radius: 3px;
       padding: 0 5px;
+      margin: -1px;
       & > .material-symbols-outlined.caret::after {
         color: var(--color-font-contrast);
       }

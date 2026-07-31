@@ -79,6 +79,7 @@
       color: var(--color-font-contrast);
       border-radius: 3px;
       padding: 0 5px;
+      margin: -1px; /* evens out the border width offset of the outer container */
 
       & > .material-symbols-outlined.caret::after {
         color: var(--color-font-contrast);
