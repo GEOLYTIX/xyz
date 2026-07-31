@@ -1,6 +1,6 @@
 /**
 ## /workspace/cache
-The module exports the cacheWorkspace method which returns a workspace from the module scope cache variable or call the cacheWorkspace method to cache the workspace.
+The module exports the default checkWorkspaceCache method which returns the async cacheWorkspace method which resolves into a JSON workspace.
 
 Default templates can be overwritten in the workspace or by providing a CUSTOM_TEMPLATES xyzEnvironment variable which references a JSON with templates to be merged into the workspace.
 
@@ -15,44 +15,31 @@ import { clearSrcMap, getSrc } from '../provider/getSrc.js';
 import logger from '../utils/logger.js';
 import merge from '../utils/merge.js';
 
-let cache = null;
-let timestamp = Infinity;
+let timestamp = 0;
+let workspacePromise = null;
 
 /**
 @function checkWorkspaceCache
 
 @description
-The method checks whether the module scope variable cache has been populated.
-
-The timestamp set by cacheWorkspace is checked against the current time. The [workspace] cache will be invalidated if the difference exceeds the WORKSPACE_AGE xyzEnvironment variable.
-
-Setting the WORKSPACE_AGE to 0 is not recommended because the source promise map is flushed whenever the workspace is rebuilt. Constantly replacing the workspace prevents source responses from being reused between requests.
-
-The cacheWorkspace method is called if the cache is invalid.
+The async cacheWorkspace method is assigned to the module scope workspacePromise variable. The variable is re-assigned if the WORKSPACE_AGE xyzEnvironment variable is exceeded or the force param is true.
 
 @param {boolean} [force] The workspace cache will be cleared with the force param flag.
-@returns {workspace} JSON Workspace.
+@returns {Promise<workspace>} Resolves to the JSON workspace.
 */
 export default function checkWorkspaceCache(force) {
   if (force) {
-    // Reset the cache with force flag.
-    cache = null;
+    workspacePromise = cacheWorkspace();
   }
 
-  // cache is null on first request for workspace.
-  // cacheWorkspace is async and must be awaited.
-  if (!cache) return cacheWorkspace();
-
-  // cacheWorkspace will set the current timestamp and cache workspace outside export closure prior to returning workspace.
-  // TODO write test with WORKSPACE_AGE 0
   if (Date.now() - timestamp > +xyzEnv.WORKSPACE_AGE) {
-    // current time minus cached timestamp exceeds WORKSPACE_AGE
-    cache = null;
-
-    return cacheWorkspace();
+    timestamp = Date.now();
+    workspacePromise = cacheWorkspace();
   }
 
-  return cache;
+  workspacePromise ??= cacheWorkspace();
+
+  return workspacePromise;
 }
 
 import mail_templates from './templates/_mails.js';
@@ -73,9 +60,9 @@ Each locale from the workspace.locale{} is merged into the workspace.locale{} te
 
 Locale objects get their key and name properties assigned if falsy.
 
-The workspace is assigned to the module scope cache variable and the timestamp is recorded.
+The workspace is assigned to the module scope workspacePromise variable and the timestamp is recorded.
 
-@returns {workspace} JSON Workspace.
+@returns {Promise<workspace>} Resolves to the JSON workspace.
 */
 async function cacheWorkspace() {
   clearSrcMap();
@@ -96,7 +83,6 @@ async function cacheWorkspace() {
   assign_workspace_templates(workspace.templates, msg_templates);
   assign_workspace_templates(workspace.templates, query_templates);
 
-  // TODO test CUSTOM_TEMPLATES
   if (xyzEnv.CUSTOM_TEMPLATES) {
     const custom_templates = await getSrc({ src: xyzEnv.CUSTOM_TEMPLATES });
     assign_workspace_templates(workspace.templates, custom_templates, 'custom');
@@ -124,9 +110,7 @@ async function cacheWorkspace() {
 
   logger(`Workspace cached;`, 'workspace');
 
-  timestamp = Date.now();
-
-  cache = workspace;
+  workspace.timestamp = timestamp;
 
   return workspace;
 }

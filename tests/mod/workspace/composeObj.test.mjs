@@ -132,9 +132,15 @@ describe('composeObj', async () => {
       root: true,
       arr: [
         {
-          arr: true,
+          arr: 'first',
           roles: {
-            foo: null,
+            first: null,
+          },
+        },
+        {
+          arr: 'second',
+          roles: {
+            second: null,
           },
         },
       ],
