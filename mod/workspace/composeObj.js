@@ -426,11 +426,6 @@ function checkScope(templateScope, roles) {
   // Admin endpoints will set the roles parameter to true to bypass role checks.
   if (roles === true) return true;
 
-  // Validate access if roles array contains every scope in the templateScope array.
-  if (templateScope.every((scope) => roles.includes(scope))) {
-    return true;
-  }
-
   // Filter out undefined values from the templateScope array and join the remaining values with a pipe character to create a string representation of the template scope.
   const templateScopeString = templateScope.join('.');
 
@@ -447,6 +442,14 @@ function checkScope(templateScope, roles) {
   }
 
   if (templateScopeString === '*') return true;
+
+  // Validate access if roles array contains every scope in the templateScope array. Must be enabled in xyzEnv.LEGACY_ROLES to allow for legacy role checks. This is a temporary solution to allow for legacy role checks until the roles are refactored to be more granular and hierarchical.
+  if (
+    xyzEnv.LEGACY_ROLES &&
+    templateScope.every((scope) => roles.includes(scope))
+  ) {
+    return true;
+  }
 
   return false;
 }

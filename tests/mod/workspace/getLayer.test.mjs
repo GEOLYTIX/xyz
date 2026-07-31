@@ -7,6 +7,7 @@ describe('getLayer: ', async () => {
     TITLE: 'WORKSPACE TEST',
     WORKSPACE: 'file:./tests/assets/_workspace.json',
     SRC_TEST: 'file:./test/',
+    LEGACY_ROLES: true,
   };
 
   await checkWorkspaceCache(true);

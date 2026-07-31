@@ -6,6 +6,7 @@ describe('getLocale', async () => {
   globalThis.xyzEnv = {
     TITLE: 'WORKSPACE TEST',
     WORKSPACE: 'file:./tests/assets/_workspace.json',
+    LEGACY_ROLES: true,
   };
 
   await checkWorkspaceCache(true);
