@@ -1475,6 +1475,10 @@ label.radio {
     grid-template-columns: 1fr 1fr;
     grid-gap: inherit;
     padding: 0;
+    transition:
+      height 0.3s ease,
+      padding-top 0.3s ease,
+      padding-bottom 0.3s ease;
     &.expanded {
       padding: 5px;
     }
@@ -1484,7 +1488,7 @@ label.radio {
       color: var(--color-font-contrast);
       border-radius: 3px;
       padding: 0 0.5em;
-      & > .caret::after {
+      & > .material-symbols-outlined.caret::after {
         color: var(--color-font-contrast);
       }
     }
