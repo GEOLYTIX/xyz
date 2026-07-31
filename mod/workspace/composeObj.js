@@ -387,15 +387,12 @@ async function arrayProperty(key, val, obj, roles, templateScope) {
   // Do not process the layers when a locale is being composed. The layers will be processed in the getLayer method.
   if (key === 'layers') return true;
 
+  const kept = [];
   for (const item of val) {
     const rolesCheck = await parseTemplates(item, roles, templateScope);
-    if (rolesCheck instanceof Error) {
-      const removeIndex = val.indexOf(item);
-      if (removeIndex > -1) {
-        val.splice(removeIndex, 1);
-      }
-    }
+    if (!(rolesCheck instanceof Error)) kept.push(item);
   }
+  obj[key] = kept;
   return true;
 }
 

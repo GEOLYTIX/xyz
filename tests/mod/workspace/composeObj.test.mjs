@@ -180,7 +180,7 @@ describe('composeObj', async () => {
     const layer = await composeObj(obj, ['foo', 'alpha']);
 
     expect(layer.name === 'Test Alpha').toBeTruthy();
-    expect(layer.infoj.length).toEqual(2);
+    expect(layer.infoj.length).toEqual(1);
   });
 
   it('obj with nested templates in template and roles', async () => {
