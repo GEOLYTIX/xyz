@@ -288,7 +288,13 @@ The method checks if the key is 'templates' and the val is an array. If so, it w
 async function templatesArray(key, val, obj, roles, templateScope) {
   if (key !== 'templates') return false;
 
-  if (!Array.isArray(val)) return false;
+  if (!Array.isArray(val)) {
+    obj.warn ??= [];
+    obj.warn.push(
+      `'templates' property has value [${val}] which is not an array.`,
+    );
+    return false;
+  }
 
   // Delete the templates property from the obj before merging the templates into the obj. This will prevent circular references when merging templates.
   delete obj.templates;

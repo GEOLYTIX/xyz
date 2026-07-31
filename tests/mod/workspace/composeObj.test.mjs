@@ -40,7 +40,7 @@ describe('composeObj', async () => {
     expect(response.nested.template).toBeTruthy();
   });
 
-  it('object with nested object template object', async () => {
+  it('object with nested object bogus template property', async () => {
     const obj = {
       nested: {
         template: {
@@ -51,7 +51,19 @@ describe('composeObj', async () => {
 
     const response = await composeObj(obj);
 
-    expect(response.nested.template.warn).toBeTruthy();
+    expect(response.nested.template.warn.length).toEqual(1);
+  });
+
+  it('object with nested object templates property not an array', async () => {
+    const obj = {
+      nested: {
+        templates: 'not an array',
+      },
+    };
+
+    const response = await composeObj(obj);
+
+    expect(response.nested.warn.length).toEqual(1);
   });
 
   it('exclude_props in layer.template', async () => {

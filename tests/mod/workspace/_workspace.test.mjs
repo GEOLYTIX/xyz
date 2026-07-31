@@ -488,6 +488,20 @@ describe('workspace: nested_roles/workspace', () => {
   });
 });
 
+it('test admin access', async () => {
+  const { req, res } = createMocks({
+    params: {
+      key: 'test',
+    },
+  });
+
+  await getKeyMethod(req, res);
+
+  res._getData();
+
+  expect(res.statusCode).toEqual(403);
+});
+
 describe('workspace: errs', () => {
   beforeAll(async () => {
     globalThis.xyzEnv = {
