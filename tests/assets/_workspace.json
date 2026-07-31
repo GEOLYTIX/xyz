@@ -110,6 +110,9 @@
       "locale_layer": true
     },
     "layers": {
+      "plugins_layer": {
+        "plugins": ["${TEST}plugin.js"]
+      },
       "OSM": {
         "template": "OSM"
       },

@@ -6,6 +6,7 @@ describe('getLayer: ', async () => {
   globalThis.xyzEnv = {
     TITLE: 'WORKSPACE TEST',
     WORKSPACE: 'file:./tests/assets/_workspace.json',
+    SRC_TEST: 'file:./test/',
   };
 
   await checkWorkspaceCache(true);
@@ -90,6 +91,16 @@ describe('getLayer: ', async () => {
     const layer = await getLayer(params);
 
     expect(layer instanceof Error).toBeTruthy();
+  });
+
+  it('layer with plugins', async () => {
+    const params = {
+      layer: 'plugins_layer',
+    };
+
+    const layer = await getLayer(params);
+
+    expect(layer.plugins).toEqual(['file:./test/plugin.js']);
   });
 
   it('locale, layer, and template role', async () => {
