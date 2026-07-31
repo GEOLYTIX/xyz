@@ -358,6 +358,9 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
     );
   }
 
+  // Access to the object is granted if the accessRoles array includes a wildcard role '*'. This allows for unrestricted access to the object regardless of the user's roles.
+  if (accessRoles.includes('*')) return true;
+
   // At least one of the accessRoles must be included in the roles array provided by the user. If not, access to the obj will be denied.
   if (accessRoles.some((role) => roles.includes(role))) {
     return true;
@@ -442,6 +445,8 @@ function checkScope(templateScope, roles) {
   ) {
     return true;
   }
+
+  if (templateScopeString === '*') return true;
 
   return false;
 }

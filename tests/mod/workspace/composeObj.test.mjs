@@ -166,6 +166,20 @@ describe('composeObj', async () => {
     expect(with_roles.check === true).toBeTruthy();
   });
 
+  it('* accessRole', async () => {
+    const obj = {
+      roles: {
+        '*': {
+          check: true,
+        },
+      },
+    };
+
+    const with_roles = await composeObj(obj, ['foo']);
+
+    expect(with_roles.check === true).toBeTruthy();
+  });
+
   it('merge roles in template', async () => {
     const obj = {
       roles: {
