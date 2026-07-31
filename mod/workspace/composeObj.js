@@ -131,18 +131,14 @@ If the template.include_props array is defined, only the properties defined in t
 function filterTemplateProperties(template) {
   if (Array.isArray(template.exclude_props)) {
     for (const prop of template.exclude_props) {
-      if (template.hasOwnProperty(prop)) {
-        delete template[prop];
-      }
+      delete template[prop];
     }
   }
   delete template.exclude_props;
   if (Array.isArray(template.include_props)) {
     const _template = {};
     for (const prop of template.include_props) {
-      if (template.hasOwnProperty(prop)) {
-        _template[prop] = template[prop];
-      }
+      _template[prop] = template[prop];
     }
     return _template;
   }
