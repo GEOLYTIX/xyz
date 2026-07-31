@@ -26,14 +26,9 @@ describe('workspace', () => {
       WORKSPACE: 'file:bar.json',
     };
 
-    let err;
-    try {
-      await checkWorkspaceCache(true);
-    } catch (e) {
-      err = e;
-    }
+    const workspace = await checkWorkspaceCache(true);
 
-    expect(err instanceof Error).toBeTruthy();
+    expect(workspace.error === true).toBeTruthy();
   });
 });
 

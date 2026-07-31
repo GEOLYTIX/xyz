@@ -71,7 +71,12 @@ async function cacheWorkspace() {
   const workspace = await getSrc({ src: xyzEnv.WORKSPACE });
 
   if (workspace instanceof Error) {
-    throw workspace;
+    console.error(workspace);
+    return {
+      error: true,
+      message: workspace.message,
+      stack: workspace.stack,
+    };
   }
 
   const workspace_templates = structuredClone(workspace.templates);
