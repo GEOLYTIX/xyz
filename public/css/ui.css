@@ -1495,13 +1495,8 @@ label.radio {
         color: var(--color-font-contrast);
       }
     }
-    & .label,
-    & .val,
-    label {
+    .contents > * {
       margin-left: 1em;
-    }
-    .val,
-    .legend-icon {
       margin-right: 0.5em;
     }
   }

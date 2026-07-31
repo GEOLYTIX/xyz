@@ -85,15 +85,8 @@
       }
     }
 
-    & .label,
-    & .val,
-    label {
+    .contents > * {
       margin-left: 1em;
-    }
-
-    /* all values on the right side with the same margin */
-    .val,
-    .legend-icon {
       margin-right: 0.5em;
     }
   }
