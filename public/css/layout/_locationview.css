@@ -59,7 +59,11 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: inherit;
-    padding: inherit;
+    padding: 0;
+
+    &.expanded {
+      padding: 5px;
+    }
 
     & > .header {
       grid-column: 1 / 3;

@@ -1474,7 +1474,10 @@ label.radio {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: inherit;
-    padding: inherit;
+    padding: 0;
+    &.expanded {
+      padding: 5px;
+    }
     & > .header {
       grid-column: 1 / 3;
       background-color: var(--color-primary);
