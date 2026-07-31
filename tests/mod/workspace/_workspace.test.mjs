@@ -527,11 +527,23 @@ describe('workspace: errs', () => {
 
     const testResult = res._getData();
 
-    expect(testResult.negatedRoles.length).toEqual(1);
+    expect(testResult.negatedRoles.length).toEqual(2);
+
+    expect(testResult.negatedRoles).toEqual(
+      testResult.negatedRoles.sort((a, b) => a.localeCompare(b)),
+    );
 
     expect(testResult.srcErr.length).toEqual(3);
 
-    expect(testResult.templateWarn.length).toEqual(1);
+    expect(testResult.srcErr).toEqual(
+      testResult.srcErr.sort((a, b) => a.localeCompare(b)),
+    );
+
+    expect(testResult.templateWarn.length).toEqual(2);
+
+    expect(testResult.templateWarn).toEqual(
+      testResult.templateWarn.sort((a, b) => a.localeCompare(b)),
+    );
   });
 
   it('compose workspace denied', async () => {

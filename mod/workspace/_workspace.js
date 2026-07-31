@@ -307,7 +307,6 @@ async function scopes(req, res) {
   const scopesStringsSet = new Set();
 
   cachedWorkspace.scopes.forEach((scope) => {
-    if (!Array.isArray(scope)) return;
     scopesStringsSet.add(scope.filter(Boolean).join('.'));
   });
 
@@ -417,7 +416,6 @@ async function test(req, res) {
   const negatedRoles = new Set();
 
   cachedWorkspace.scopes.forEach((scope) => {
-    if (!Array.isArray(scope)) return;
     scope.filter(Boolean).forEach((role) => {
       if (role.startsWith('!')) {
         negatedRoles.add(role);
@@ -426,7 +424,7 @@ async function test(req, res) {
   });
 
   const testResult = {
-    srcErr: cachedWorkspace.err,
+    srcErr: cachedWorkspace.err?.sort((a, b) => a.localeCompare(b)) ?? [],
     templateWarn,
     negatedRoles: Array.from(negatedRoles).sort((a, b) => a.localeCompare(b)),
   };

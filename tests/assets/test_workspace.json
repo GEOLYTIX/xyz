@@ -19,6 +19,7 @@
     }
   },
   "locale": {
+    "role": "!nope",
     "layers": {
       "from_template": {
         "template": {
@@ -33,6 +34,9 @@
           },
           {
             "src": "file:missing.json"
+          },
+          {
+            "no_key": true
           }
         ]
       }
@@ -43,6 +47,11 @@
       "roles": {
         "test_role": true,
         "!negated_role": null
+      },
+      "nested": {
+        "template": {
+          "no_key": true
+        }
       }
     },
     "test": {
