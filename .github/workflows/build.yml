@@ -40,12 +40,19 @@ jobs:
       - name: Install dependencies
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         run: pnpm install --ignore-scripts
+      # Coverage now spans the mapp browser project too, so its Chromium has to
+      # be present here as well.
+      - name: Install Playwright Chromium
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: pnpm exec playwright install --with-deps chromium
       - name: Test & Coverage
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-        run: pnpm test:xyz:coverage
-      - name: Verify coverage report
+        run: pnpm test:coverage
+      - name: Verify coverage reports
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
-        run: test -s coverage/lcov.info
+        run: |
+          test -s apps/xyz/coverage/lcov.info
+          test -s apps/mapp/coverage/lcov.info
       - name: SonarQube Scan
         if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602 # v6.0.0

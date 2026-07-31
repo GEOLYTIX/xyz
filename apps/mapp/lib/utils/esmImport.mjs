@@ -24,7 +24,9 @@ The promise resolves to the module to be imported.
 */
 export default async function esmImport(module) {
   promises[module] ??= new Promise((resolve) => {
-    import(`https://esm.sh/${module}`).then((esm) => {
+    // The module name is only known at runtime. The hint keeps bundlers from
+    // attempting to analyse and resolve the esm.sh URL at build time.
+    import(/* @vite-ignore */ `https://esm.sh/${module}`).then((esm) => {
       console.log(`${module} imported from esm.sh`);
       resolve(esm);
     });

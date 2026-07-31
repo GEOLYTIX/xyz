@@ -25,5 +25,25 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --ignore-scripts
 
+      # The browser project runs the UI element tests in a real Chromium.
+      # Cached on the pinned playwright version so the ~115MB download is a one
+      # off per version bump.
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-workspace.yaml') }}
+
+      - name: Install Playwright Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Playwright needs its system libraries even when the browser itself came
+      # from the cache.
+      - name: Install Playwright system dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps chromium
+
       - name: Run tests
         run: pnpm test

@@ -1,9 +1,15 @@
 /**
 ### Test plugin
 
-This plugin is used to run different kinds of tests on any instance.
-- Core
-- Integrity
+This plugin runs the integrity tests on a deployed instance.
+
+Integrity tests assert that the instance is correctly configured -- that its
+workspace resolves, its layers have reachable sources, and its database
+connections answer. That is a property of the running deployment, so it is
+checked in the browser against the live instance.
+
+The core front end tests have migrated to Vitest and run headlessly in CI with
+`pnpm test`. The `?test=core` param no longer does anything. See TESTING.md.
 
 To provide test params to the plugin you can provide a test object to a locale.
 
@@ -13,27 +19,25 @@ To provide test params to the plugin you can provide a test object to a locale.
   "showSummary": true, <-- will show a summary (Default to false)
 },
 ```
-To run the different tests you can provide the `test` param as part of the url params.
+
+To run the integrity tests provide the `test` param as part of the url params.
 
 eg.
 
-`/?test=core` - run the core front end tests
 `/?test=integrity` - run the integrity tests
-
-TODO: The current core & integrity tests are going to be restructured and reinvisioned in the next iteration.
 
 @module /plugins/test
 */
 
 /**
-Adds the core & integrity tests to the mapp.plugins object to be run on a workspace.
+Adds the integrity tests to the mapp.plugins object to be run on a workspace.
 @function test
 @param {Object} plugin - The plugin configuration object.
 @param {Object} mapview - The mapview object.
 @returns {void}
 */
 export async function test(plugin, mapview) {
-  if (!mapp.hooks.current.test) return;
+  if (mapp.hooks.current.test !== 'integrity') return;
 
   plugin = Object.assign({}, plugin, {
     quiet: plugin?.quiet ?? false,
@@ -51,7 +55,12 @@ export async function test(plugin, mapview) {
     await mapp.utils.esmImport('codi-test-framework@1.0.37');
 
     if (!globalThis._mappTest) {
-      await import(`${mapp.host}/public/js/tests/_mapp.test.js`);
+      // The integrity entry of the mapp Vite build, see vite.config.mjs. The
+      // host is only known at runtime, so the hint keeps bundlers from
+      // attempting to analyse and resolve the URL at build time.
+      await import(
+        /* @vite-ignore */ `${mapp.host}/public/js/lib/integrity.js`
+      );
     }
   } catch (error) {
     console.log(error);
@@ -59,16 +68,10 @@ export async function test(plugin, mapview) {
 
   if (!codi) return;
 
-  if (mapp.hooks.current.test === 'integrity') {
-    mapview.Map.once('loadend', async () => {
-      await codi.runWebTestFunction(
-        () => _mappTest.integrityTests(mapview),
-        plugin,
-      );
-    });
-  }
-
-  if (mapp.hooks.current.test === 'core') {
-    await codi.runWebTestFunction(() => _mappTest.coreTest(mapview), plugin);
-  }
+  mapview.Map.once('loadend', async () => {
+    await codi.runWebTestFunction(
+      () => _mappTest.integrityTests(mapview),
+      plugin,
+    );
+  });
 }

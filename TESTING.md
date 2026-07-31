@@ -3,8 +3,10 @@
 XYZ/MAPP testing is split into 3 sections:
 
 - CLI [Command Line Interface] tests for endpoints of the XYZ API.
-- Browser based testing of modules bundled into the Mapp library.
+- Front-end tests for the modules bundled into the MAPP library.
 - Integrity tests for workspaces and XYZ process environments.
+
+The first two run on Vitest under `pnpm test`. Only the integrity tests still run in a browser against a deployed instance.
 
 ## Migrating from Codi to Vitest
 
@@ -19,7 +21,7 @@ Codi was originally used for both browser and server-side tests. It provided `de
 
 Vitest solves all of these problems. It is a Vite-native test framework with built-in mocking (`vi.mock`, `vi.fn`), snapshot testing, code coverage (v8 provider), watch mode, parallel execution, and first-class ESM support — which is important since the XYZ codebase is `"type": "module"` throughout.
 
-> [!NOTE] Browser tests (`tests/lib/` and `tests/browser/`) still use Codi because they run inside the application in a real browser with access to the DOM, OpenLayers map, and the `mapp` global. These are loaded by the [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs) and are not part of the Vitest pipeline.
+> [!NOTE] The front-end suite has since migrated too, and now runs on Vitest in `@geolytix/mapp` -- see [Front-end tests for the MAPP library](#front-end-tests-for-the-mapp-library). Codi is retained for the integrity tests alone, which assert that a deployed instance is correctly configured and so have to run in a browser against the live application. Those are loaded by the [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/apps/mapp/lib/plugins/test.mjs).
 
 ### What changed
 
@@ -48,7 +50,7 @@ Run the full test suite:
 pnpm test
 ```
 
-This runs `varlock run -- vitest run` as defined in the package.json `test` script.
+This runs `turbo run test`, which runs the `test` script of every package in the workspace -- `varlock run -- vitest run` for `@geolytix/xyz-app`, and the `lib` and `browser` projects for `@geolytix/mapp`.
 
 Watch mode re-runs affected tests on file changes:
 
@@ -101,7 +103,7 @@ export default defineConfig({
 
 Key points:
 
-- Only `tests/mod/**` and `tests/plugins/**` are included. Browser tests (`tests/lib/**`, `tests/browser/**`) are excluded — they use Codi and run in the browser.
+- Only `tests/mod/**` and `tests/plugins/**` are included. The MAPP library has its own suites in the `@geolytix/mapp` package — see [Front-end tests for the MAPP library](#front-end-tests-for-the-mapp-library).
 - `tests/setup.mjs` ensures `globalThis.xyzEnv` exists before any test module loads.
 - Tests run in parallel across files with a 10-second timeout per test.
 
@@ -111,10 +113,15 @@ Tests run automatically on every push and pull request to `main`, `major`, `mino
 
 ```yaml
 - name: Install Dependencies
-  run: pnpm install
+  run: pnpm install --ignore-scripts
+
+# The browser project needs a real Chromium. Cached on the resolved
+# playwright version, so the download is a one off per version bump.
+- name: Install Playwright Chromium
+  run: pnpm exec playwright install --with-deps chromium
 
 - name: Run tests
-  run: node --run test
+  run: pnpm test
 ```
 
 ### Debugging tests
@@ -377,146 +384,205 @@ The 28 query template files under `mod/workspace/templates/` are almost entirely
 
 Templates at 0%: `cluster`, `cluster_hex`, `geojson`, `mvt`, `mvt_geom`, `wkt`, `location_get`, `location_new`, `location_update`, `location_delete`, `locations_delete`, `location_field_value`, `location_count`, `histogram`, `infotip`, `get_nnearest`, `get_random_location`, `distinct_values`, `distinct_values_json`, `field_max`, `field_min`, `field_minmax`, `field_stats`, `gaz_query`, `st_distance_ab`, `st_distance_ab_multiple`, `st_intersects_ab`, `st_intersects_count`.
 
-## Browser tests for Mapp library modules
+## Front-end tests for the MAPP library
 
-Browser tests are designed for the browser environment with full access to:
+The front-end suite has migrated from Codi to Vitest. It runs headlessly in CI as part of `pnpm test`, and no longer needs a running instance or a browser you drive by hand.
 
-- DOM
-- Mapp library
-- Mapview for loaded application
-- No mocking required for module imports
+The suites live in the `@geolytix/mapp` package, next to the library they cover, and are configured by `apps/mapp/vitest.config.mjs`.
 
-Browser tests still use [Codi](https://www.npmjs.com/package/codi-test-framework), which is loaded at runtime via ESM in the [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs). Codi provides `describe`, `it`, `assertTrue`, `assertEqual`, and related assertion functions designed for in-browser execution.
+`apps/mapp/lib/**` is harder to test than `apps/xyz/mod/**` for three reasons, and the setup exists to deal with them:
 
-### Running Browser Tests
+1. **Global coupling.** 151 of the 184 modules reach their dependencies through the `mapp` global rather than importing them. A test cannot import a module in isolation and expect it to work -- the namespace has to exist first.
+2. **OpenLayers.** 30 modules touch the `ol` global, which needs a real canvas to do anything meaningful.
+3. **CDN imports at runtime.** `mapp.utils.esmImport()` and `mapp.utils.scriptElement()` both reach the network when called.
 
-A [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs) is provided to run tests in the browser.
+### The projects
 
-Build the MAPP browser bundles before launching the local test environment:
+`pnpm test` runs `turbo run test`, which covers every package. The MAPP library contributes two Vitest projects, the XYZ app one.
+
+| Package | Project | Environment | Tests |
+|---|---|---|---|
+| `@geolytix/xyz-app` | — | node | `apps/xyz/tests/mod/**` -- the XYZ API |
+| `@geolytix/mapp` | `lib` | happy-dom | `apps/mapp/tests/lib/**` -- values and logic |
+| `@geolytix/mapp` | `browser` | Chromium via Playwright | `apps/mapp/tests/browser/**` -- anything that renders |
+
+Run one package or one project:
 
 ```bash
-NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
+pnpm test                                        # everything, through turbo
+pnpm --filter=@geolytix/mapp test                # both front-end projects
+pnpm --filter=@geolytix/mapp test:lib            # the fast inner loop
+pnpm --filter=@geolytix/mapp test:browser        # Chromium only
+pnpm --filter=@geolytix/mapp test:watch          # watch the lib project
 ```
 
-The current tests require an active user to execute.
+`test:lib` finishes in about a second and is what to run while writing front-end code.
 
-In order for the tests to run you will need to configure the test object on a locale.
+### Which project does a test belong in?
 
-```json
-"test": {
-  "options": {
-    "quiet": true,
-    "showSummary": true
-  }
-},
-```
+Start in `lib`. Move to `browser` only when the assertion genuinely needs a rendering engine.
 
-To run the different tests you can provide the `test` param as part of the url params.
+Use `browser` for:
 
-eg.
+- **Anything built with `mapp.utils.html`.** This is not a preference, it is a hard constraint -- see below.
+- Anything asserting on real geometry, projection, hit detection or map size.
+- `lib/mapview/**`, the OpenLayers feature formats, and the style parsers.
 
-`/?test=core` - run the core front end tests
-`/?test=integrity` - run the integrity tests
+Use `lib` for everything else: `lib/utils`, `lib/dictionary.mjs`, `lib/hooks.mjs`, `lib/location`, and the parts of `lib/layer` that decorate and parse rather than render.
 
-- `core` - `mapp` object tests
-- `integrity` - workspaces and XYZ process environments tests
+> [!IMPORTANT]
+> **uhtml templates do not work outside a real browser.**
+>
+> `lib/utils/uhtml.mjs` marks its interpolation points with an attribute named `isµ0`. Neither happy-dom nor jsdom keeps an attribute whose name contains a non-ASCII character, so the placeholder is dropped, uhtml cannot find it, and the template throws `bad template`.
+>
+> Node interpolations such as ``html`<div>${value}</div>` `` are fine. Attribute interpolations such as ``html`<div style=${css}>` `` are not. Since almost every UI element uses attribute interpolation somewhere, **`lib/ui/**` tests belong in the `browser` project.**
+>
+> If you see `Unknown Error: bad template:` in a `lib` project test, this is why. Move the file to `apps/mapp/tests/browser/`.
 
-### Writing Browser Tests
+### The mapp global harness
 
-#### Test Structure
-
-Browser tests use the describe-it pattern for organization:
+`apps/mapp/tests/lib/setup.mjs` builds the `mapp` namespace the same way the browser does, by importing `lib/mapp.mjs` and `lib/ui.mjs` for their side effects. Tests then call through the global exactly as the application does. There is nothing to import.
 
 ```javascript
-import { describe, it, assertTrue } from 'codi';
+import { describe, expect, it } from 'vitest';
 
-describe({ name: 'Feature Description', id: 'feature_description' }, () => {
-  it(
-    {
-      name: 'should behave in a specific way',
-      parentId: 'feature_description',
-    },
-    () => {
-      // Test code
-    },
-  );
+describe('utils/paramString', () => {
+  it('returns an empty string without params', () => {
+    expect(mapp.utils.paramString(null)).toEqual('');
+  });
 });
 ```
 
-Example with multiple assertions:
+`apps/mapp/tests/browser/setup.mjs` does the same, but loads the real OpenLayers from the pinned `ol` devDependency first.
+
+#### Stubbing
+
+Because the namespace is a plain mutable object, a dependency is replaced by assignment rather than by module factory mocking.
 
 ```javascript
-codi.describe(
-  {
-    name: 'All languages should have the same base language entries',
-    id: 'dictionaries',
-  },
-  () => {
-    Object.keys(mapp.dictionaries).forEach((language) => {
-      codi.it(
-        {
-          name: `The ${language} dictionary should have all the base keys`,
-          parentId: 'dictionaries',
-        },
-        () => {
-          Object.keys(base_dictionary).forEach((key) => {
-            codi.assertTrue(
-              !!mapp.dictionaries[language][key],
-              `${language} should have ${key}`,
-            );
-          });
-        },
-      );
-    });
-  },
-);
+const xhr = vi.spyOn(mapp.utils, 'xhr').mockResolvedValue({ features: [] });
+
+mapp.utils.gazetteer.datasets('term', gazetteer);
+
+expect(xhr).toHaveBeenCalledTimes(2);
 ```
 
-### Browser Tests Development Environment Setup
+`vi.mock()` is still the right tool for the 19 modules that import a sibling directly.
 
-#### Build Configuration
+The setup file replaces `mapp.utils.esmImport` and `mapp.utils.scriptElement` with functions that throw. **No test may reach the network.** If a module under test needs one of them, stub it for that test.
 
-Tests require an unminified build to enable debugging and stepping through code. This is handled by the build system (`apps/mapp/vite.config.mjs`).
+#### OpenLayers in the lib project
 
-Setting process environment `NODE_ENV=DEVELOPMENT` disables minification in build processes.
+`apps/mapp/tests/lib/stubs/ol.mjs` provides an inert nested Proxy that satisfies the version check in `lib/mapp.mjs` and stops module level `ol` access from throwing. It implements no behaviour. A test whose assertion depends on real OpenLayers will fail on the assertion -- that is the signal to move it to the `browser` project.
+
+#### Reading files from the lib project
+
+happy-dom replaces the global `URL` with an implementation that ignores a `file:` base, so `new URL('../thing', import.meta.url)` resolves against the document rather than the module and yields an `http:` URL. Use `import.meta.dirname` with `node:path` instead.
+
+```javascript
+import { join } from 'node:path';
+
+const source = readFileSync(join(import.meta.dirname, '../../lib/mapp.mjs'), 'utf8');
+```
+
+#### Fixtures shared with the server tests
+
+The workspace, layer, infoj and dataview definitions under `apps/xyz/tests/assets/` are the contract between the server and the client, so front-end tests import them across the package boundary rather than keeping a second copy. The `browser` project allows the path through `server.fs.allow` in `apps/mapp/vitest.config.mjs`.
+
+### Writing a browser test
+
+The `browser` project runs in real Chromium, so the DOM is real and elements can be clicked.
+
+```javascript
+import { describe, expect, it } from 'vitest';
+
+describe('ui/elements/dropdown', () => {
+  it('calls back with the entry on change', () => {
+    const calls = [];
+
+    const node = mapp.ui.elements.dropdown({
+      callback: (event, entry) => calls.push(entry),
+      entries: entries(),
+    });
+
+    const select = node.querySelector('select');
+
+    select.selectedIndex = 2;
+    select.dispatchEvent(new Event('change'));
+
+    expect(calls[0].option).toEqual('ting_2');
+  });
+});
+```
+
+#### The mapview fixture
+
+`apps/mapp/tests/browser/fixtures/mapview.mjs` creates a real decorated mapview backed by a real `ol.Map`.
+
+```javascript
+import { createMapview, renderComplete } from './fixtures/mapview.mjs';
+
+mapview = await createMapview();
+
+await renderComplete(mapview);
+
+expect(mapview.Map.getSize()).toEqual([800, 600]);
+```
+
+Two things to know:
+
+- **Always await it.** `mapp.Mapview()` returns the object synchronously in the common case, but returns a promise when the locale declares `syncPlugins` or `svgTemplates`.
+- **The target needs a non-zero size.** An OpenLayers Map in a zero height container never renders a frame, so anything waiting on `rendercomplete` would hang. The fixture sets 800x600.
+
+Call `mapview.remove()` in an `afterEach`.
+
+#### Running the browser project locally
+
+The browser project needs Chromium, which is a one-off download:
+
+```bash
+pnpm exec playwright install chromium
+```
+
+CI caches it on the resolved Playwright version.
+
+### Integrity tests
+
+`apps/mapp/tests/integrity/**` is the one suite still on [Codi](https://www.npmjs.com/package/codi-test-framework), and deliberately so. It asserts that a **deployed instance** is correctly configured -- that its workspace resolves, its layers have reachable sources, and its database connections answer. That is a property of a running deployment and its Postgres, not of the source, so a unit runner in CI cannot make the assertion.
+
+Codi is loaded at runtime via ESM by the test plugin, `apps/mapp/lib/plugins/test.mjs`. It is not a package.json dependency.
+
+The suite is the `integrity` entry of the MAPP Vite build, which emits `public/js/lib/integrity.js`. The test plugin imports that bundle when the `test` url param is present:
+
+```
+/?test=integrity
+```
+
+Configure the test object on the locale to control the output:
+
+```json
+"test": {
+  "quiet": true,
+  "showSummary": true
+},
+```
+
+The `?test=core` param is gone. Those tests are now `pnpm test`.
+
+For an unminified build with source maps, so the suite can be stepped through in DevTools:
 
 ```bash
 NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
 ```
 
-### Running Tests in Development Mode
+### Coverage
 
-1. Set the environment variable:
+```bash
+pnpm --filter=@geolytix/mapp test:coverage
+```
 
-   ```bash
-   NODE_ENV=DEVELOPMENT
-   ```
+writes `apps/mapp/coverage/lcov.info` covering `apps/mapp/lib/**`, alongside the `apps/xyz/coverage/lcov.info` produced by `pnpm test:xyz:coverage`. Both are listed in `sonar-project.properties`.
 
-   > This can be defined in your .env or in your nodemon.json config.
+Measuring `lib/**` for the first time moves the reported total a long way, because 184 previously unmeasured modules enter the denominator. The code did not get worse; the measurement got honest.
 
-2. Build the project:
-
-   ```bash
-   pnpm build --filter=@geolytix/mapp
-   ```
-
-3. Verify that:
-   - Source maps are generated
-   - Code is not minified
-
-4. Launch the application and navigate to `localhost:3000/test?template=test_view`
-
-5. Open Chrome DevTools to:
-   - View test results in the console
-   - Debug and step through unminified code
-   - Use source maps for accurate file locations
-
-### Debugging Benefits
-
-The unminified development build provides several advantages:
-
-- Clear, readable code in Chrome DevTools
-- Accurate source mapping to original files
-- Ability to set breakpoints in original source files
-- Step-through debugging from Chrome to VSCode
-- Easier identification of test failures
+`lib/utils/uhtml.mjs` is excluded -- it is a vendored, minified third party bundle.

@@ -48,7 +48,9 @@ export default function loadPlugins(plugins, endsWith = ['.js', '.mjs']) {
 
 function loadPlugin(plugin) {
   return new Promise((resolve, reject) =>
-    import(plugin)
+    // The plugin URL is only known at runtime. The hint keeps bundlers from
+    // attempting to analyse and resolve it at build time.
+    import(/* @vite-ignore */ plugin)
       .then((mod) => {
         resolve(mod);
       })

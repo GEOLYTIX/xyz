@@ -8,10 +8,22 @@
   "packageManager": "pnpm@10.10.0",
   "scripts": {
     "build": "vite build && pnpm css",
-    "css": "vite build --config vite.css.config.mjs"
+    "css": "vite build --config vite.css.config.mjs",
+    "test": "vitest run",
+    "test:lib": "vitest run --project lib",
+    "test:browser": "vitest run --project browser",
+    "test:watch": "vitest --project lib",
+    "test:coverage": "vitest run --coverage"
   },
   "license": "MIT",
   "devDependencies": {
-    "vite": "catalog:"
+    "@vitest/browser": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "happy-dom": "catalog:",
+    "ol": "catalog:",
+    "playwright": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
   }
 }

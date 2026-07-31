@@ -13,6 +13,14 @@ export default defineConfig({
       entry: {
         mapp: fileURLToPath(new URL('./lib/mapp.mjs', import.meta.url)),
         ui: fileURLToPath(new URL('./lib/ui.mjs', import.meta.url)),
+
+        // The integrity suite asserts that a deployed instance is correctly
+        // configured, so it runs in the browser against the live instance
+        // rather than in Vitest. The test plugin imports this bundle when
+        // `?test=integrity` is present. See TESTING.md.
+        integrity: fileURLToPath(
+          new URL('./tests/integrity/_integrity.test.mjs', import.meta.url),
+        ),
       },
       fileName: (_format, entryName) => `${entryName}.js`,
       formats: ['es'],
