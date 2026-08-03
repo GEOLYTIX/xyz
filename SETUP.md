@@ -114,7 +114,9 @@ NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
 For JSDoc generation, see [DOCUMENTATION.md](./DOCUMENTATION.md).
 
 ## Vercel deployment
-Deployments to Vercel require environment variables to be encrypted with varlock. Please refer to the [varlock documentation](./varlock/README.md) for configuration and workflows.
+Deployments to Vercel require environment variables to be frozen and encrypted with varlock before deploying.
+
+Please refer to [DEPLOYMENT.md](./DEPLOYMENT.md) for the full deployment workflow, and to the [varlock documentation](./varlock/README.md) for schema and secret configuration.
 
 ## Tests
 Please refer to [TESTING.md](./TESTING.md) in regards to testing the individual XYZ monorepo apps.

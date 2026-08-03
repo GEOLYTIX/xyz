@@ -38,9 +38,11 @@ A bundled MAPP library is provided in the public directory. It is not required t
 
 Please refer to the [wiki pages](https://github.com/GEOLYTIX/xyz/wiki) for detailed interface references.
 
-For repository setup, local development, and deployment workflows, see [SETUP.md](./SETUP.md).
+For repository setup and local development, see [SETUP.md](./SETUP.md).
 
-For environment validation, vanilla Varlock examples, and frozen Vercel deployments, see [VARLOCK.md](./VARLOCK.md).
+For Vercel and self-hosted deployment workflows, see [DEPLOYMENT.md](./DEPLOYMENT.md).
+
+For environment validation, vanilla Varlock examples, and frozen Vercel deployments, see [varlock/README.md](./varlock/README.md).
 
 ## Version History
 

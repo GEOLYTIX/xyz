@@ -65,7 +65,9 @@ gcloud auth application-default login
 ```
 
 ## Deployment to Vercel
-For deployments to Vercel it is required to freeze the active local schema and env values before deploying:
+Varlock is optional on Vercel. A deployment without a frozen `.varlock.blob` falls back to the environment variables configured in the Vercel project.
+
+To deploy *with* varlock, freeze the active local schema and env values before deploying:
 
 ```sh
 pnpm freeze-env --env=production
