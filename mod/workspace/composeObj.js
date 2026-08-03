@@ -46,7 +46,7 @@ export default async function composeObj(obj, roles) {
 
   const templateScope = [...obj.parentRoles, obj.role].filter(Boolean);
 
-  workspace.scopes.add(templateScope);
+  workspace.scopes.add(templateScope.join('.'));
 
   if (!checkScope(templateScope, roles)) {
     return new Error(
@@ -88,11 +88,9 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   template = filterTemplateProperties(template);
 
   // The templateScope array must be spread into a new array to prevent the original templateScope from being modified by nested templates.
-  templateScope = [...templateScope, template.role];
+  templateScope = [...templateScope, template.role].filter(Boolean);
 
-  workspace.scopes.add(templateScope);
-
-  templateScope = templateScope.filter(Boolean);
+  workspace.scopes.add(templateScope.join('.'));
 
   if (!checkScope(templateScope, roles)) {
     return;
@@ -346,7 +344,7 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
 
   if (roles === true) {
     accessRoles.forEach((role) => {
-      workspace.scopes.add([...templateScope, role]);
+      workspace.scopes.add([...templateScope, role].filter(Boolean).join('.'));
     });
     // Role check is not required for admin endpoints. The roles parameter is set to true to bypass role checks.
     return true;

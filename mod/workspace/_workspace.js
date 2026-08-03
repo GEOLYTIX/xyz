@@ -304,18 +304,18 @@ async function scopes(req, res) {
     await nestedLocales({ locales: {} }, locale, { roles: true });
   }
 
-  const scopesStringsSet = new Set();
+  // const scopesStringsSet = new Set();
 
-  cachedWorkspace.scopes.forEach((scope) => {
-    scopesStringsSet.add(scope.filter(Boolean).join('.'));
-  });
+  // cachedWorkspace.scopes.forEach((scope) => {
+  //   scopesStringsSet.add(scope);
+  // });
 
-  const scopesArray = Array.from(scopesStringsSet)
+  const scopesArray = Array.from(cachedWorkspace.scopes)
     .filter(Boolean)
     .sort((a, b) => a.localeCompare(b));
 
   if (req.params.tree) {
-    scopesArrayToTree(res, scopesStringsSet);
+    scopesArrayToTree(res, cachedWorkspace.scopes);
     return;
   }
 
@@ -416,7 +416,7 @@ async function test(req, res) {
   const negatedRoles = new Set();
 
   cachedWorkspace.scopes.forEach((scope) => {
-    scope.filter(Boolean).forEach((role) => {
+    scope.split('.').forEach((role) => {
       if (role.startsWith('!')) {
         negatedRoles.add(role);
       }
