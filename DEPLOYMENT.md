@@ -39,7 +39,7 @@ Varlock is optional. `apps/xyz/mod/utils/processEnv.js` supports two ways of get
 Set the variables in Vercel project settings (dashboard, `vercel env add`, or `pnpm push-env`) and deploy. Nothing needs to be frozen, and `git push` deploys through Vercel's Git integration work normally.
 
 ```
-Vercel project env  ──build──▶  process.env  ──▶  processEnv.js applies defaults  ──▶  xyzEnv
+Vercel project env  ──build ──▶  process.env  ──▶  processEnv.js applies defaults  ──▶  xyzEnv
 ```
 
 This is the simpler path. It gives up Varlock's schema validation, `gsm()` secret references, and log/response redaction, since none of those run when there is no blob.
