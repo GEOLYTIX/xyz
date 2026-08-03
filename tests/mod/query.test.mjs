@@ -249,6 +249,32 @@ describe('Query: Testing Query API', () => {
     });
   });
 
+  describe('Restricted templates', () => {
+    it('admin_only_query query without admin access', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'admin_only_query',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(401);
+    });
+
+    it('role_restricted_query query without roles', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'role_restricted_query',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(400);
+    });
+  });
+
   describe('Query execution', () => {
     it('should execute a simple query and return a single row', async () => {
       mockDbQuery.mockResolvedValueOnce([{ greeting: 'hello' }]);

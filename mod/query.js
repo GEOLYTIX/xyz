@@ -1,7 +1,6 @@
 /**
 The query module exports the [SQL] query method to pass queries to dbs connections configured in the XYZ process environment.
 
-@requires /user/login
 @requires /utils/dbs
 @requires /utils/logger
 @requires /utils/sqlFilter
@@ -12,11 +11,11 @@ The query module exports the [SQL] query method to pass queries to dbs connectio
 @module /query
 */
 
-import login from './user/login.js';
 import dbs_connections from './utils/dbs.js';
 import logger from './utils/logger.js';
 import sqlFilter from './utils/sqlFilter.js';
 import workspaceCache from './workspace/cache.js';
+import composeObj from './workspace/composeObj.js';
 import getLayer from './workspace/getLayer.js';
 import getTemplate from './workspace/getTemplate.js';
 
@@ -65,14 +64,17 @@ export default async function query(req, res) {
   if (res.finished) return;
 
   // Must be run after the layerQuery method since the query template could be defined within the layer [template].
-  // The template must be a copy to prevent mutation of the cached template object which may be used in other requests.
-  const template = await getTemplate(req.params.template);
+  const template = await composeObj(
+    { template: req.params.template },
+    req.params.user?.roles,
+  );
 
-  if (template.err instanceof Error) {
+  if (template instanceof Error) {
+    console.log(template.message);
     res
-      .status(500)
+      .status(400)
       .setHeader('Content-Type', 'text/plain')
-      .send(template.err.message);
+      .send(template.message);
     return;
   }
 
@@ -87,17 +89,12 @@ export default async function query(req, res) {
     return;
   }
 
-  // The template requires user login.
-  if (template.roles && !req.params.user) {
-    req.params.msg = 'login_required';
-    login(req, res);
-    return;
-  }
-
   // The template requires the admin role for the user.
   if (template.admin && !req.params.user?.admin) {
-    req.params.msg = 'admin_required';
-    login(req, res);
+    res
+      .status(401)
+      .setHeader('Content-Type', 'text/plain')
+      .send(`${req.params.template} query requires admin credentials.`);
     return;
   }
 
