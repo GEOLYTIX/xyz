@@ -14,6 +14,11 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],
+      // Write to the repository root so the CI coverage check and the
+      // sonar.javascript.lcov.reportPaths in sonar-project.properties resolve.
+      reportsDirectory: fileURLToPath(
+        new URL('../../coverage', import.meta.url),
+      ),
     },
   },
 });
