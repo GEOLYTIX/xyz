@@ -206,12 +206,12 @@ describe('workspace: nested_roles/workspace', () => {
 
   it('scopes: nested locales with nested roles', async () => {
     const expectedRoles = [
+      'another_role',
       'germany',
-      'germany.another_role',
       'germany.globalvista',
+      'germany.globalvista.another_role',
       'germany.globalvista.OBJ_ROLE',
       'germany.globalvista.TEMPLATE_ROLE',
-      'germany.TEMPLATE_ROLE',
       'OBJ_ROLE',
       'TEMPLATE_ROLE',
       'uk',
@@ -261,13 +261,14 @@ describe('workspace: nested_roles/workspace', () => {
 
     const expectedRolesTree = {
       germany: {
-        TEMPLATE_ROLE: {},
-        another_role: {},
         globalvista: {
-          OBJ_ROLE: {},
           TEMPLATE_ROLE: {},
+          another_role: {},
+          OBJ_ROLE: {},
         },
       },
+      TEMPLATE_ROLE: {},
+      another_role: {},
       uk: {
         globalvista: {
           OBJ_ROLE: {},
@@ -290,7 +291,6 @@ describe('workspace: nested_roles/workspace', () => {
         test: {},
       },
       OBJ_ROLE: {},
-      TEMPLATE_ROLE: {},
     };
 
     await getKeyMethod(req, res);
@@ -539,7 +539,7 @@ describe('workspace: errs', () => {
       testResult.srcErr.sort((a, b) => a.localeCompare(b)),
     );
 
-    expect(testResult.templateWarn.length).toEqual(2);
+    expect(testResult.templateWarn.length).toEqual(1);
 
     expect(testResult.templateWarn).toEqual(
       testResult.templateWarn.sort((a, b) => a.localeCompare(b)),
