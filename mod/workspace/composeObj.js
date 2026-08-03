@@ -164,6 +164,8 @@ async function parseTemplates(obj, roles, templateScope) {
   if (obj === null) return;
 
   for (const [key, val] of Object.entries(obj)) {
+    // Locale object layers should never be processed. Layers will be processed in the getLayer method. The layers property will be removed from the locale object after processing.
+    if (key === 'layers') continue;
     if (queryTemplate(key, val, obj, roles, templateScope)) {
       continue;
     }
@@ -385,9 +387,6 @@ The arrayProperty method processes array properties of an object. It iterates ov
 */
 async function arrayProperty(key, val, obj, roles, templateScope) {
   if (!Array.isArray(val)) return false;
-
-  // Do not process the layers when a locale is being composed. The layers will be processed in the getLayer method.
-  if (key === 'layers') return true;
 
   const kept = [];
   for (const item of val) {
