@@ -304,12 +304,6 @@ async function scopes(req, res) {
     await nestedLocales({ locales: {} }, locale, { roles: true });
   }
 
-  // const scopesStringsSet = new Set();
-
-  // cachedWorkspace.scopes.forEach((scope) => {
-  //   scopesStringsSet.add(scope);
-  // });
-
   const scopesArray = Array.from(cachedWorkspace.scopes)
     .filter(Boolean)
     .sort((a, b) => a.localeCompare(b));
