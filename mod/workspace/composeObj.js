@@ -39,7 +39,7 @@ export default async function composeObj(obj, roles) {
     delete template.src;
 
     if (Array.isArray(obj.templates) && Array.isArray(template.templates)) {
-      const templatesMergeError = `Attempting to merge obj templates array [${obj.templates.length}] into prototype template with templates array [${template.templates.length}].`;
+      const templatesMergeError = `Key [${obj.key || obj.src}] template has a templates array and is attempting to merge into a prototype template with a templates array. To resolve this move the template object to the first position in the templates array.`;
       workspace.errors.add(templatesMergeError);
       obj.warn ??= [];
       obj.warn.push(templatesMergeError);
