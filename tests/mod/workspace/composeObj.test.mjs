@@ -319,4 +319,45 @@ describe('composeObj', async () => {
     expect(response.hover.query).toEqual('oppscan_hover_franchisee');
     expect(response.hover.template).toBeFalsy();
   });
+
+  it('templates nested in templates modifying an array of objects', async () => {
+    const obj = {
+      arr: [
+        {
+          init: true,
+        },
+      ],
+      templates: [
+        {
+          templates: [
+            {
+              arr: [
+                {
+                  a: true,
+                },
+                {
+                  b: true,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          arr: [
+            {
+              1: true,
+            },
+            {
+              2: true,
+            },
+          ],
+        },
+      ],
+    };
+
+    // The user holds a role but not one of the accessRoles in the nested roles object.
+    const response = await composeObj(obj);
+
+    expect(response.arr.length === 5).toBeTruthy();
+  });
 });
