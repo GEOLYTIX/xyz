@@ -17,22 +17,8 @@ const { default: checkWorkspaceCache } = await import(
   '../../../mod/workspace/cache.js'
 );
 
-//Assigning console.error to a property to restore original function with.
-const originalConsole = console.error;
-
-//erros from test so we can assert on them and not get polute the console.
-const mockErrors = [];
-
-beforeAll(() => {
-  //Changing the console.error function to push to our local collection of messages.
-  console.error = (message) => {
-    mockErrors.push(message);
-  };
-});
-
-afterAll(() => {
-  console.error = originalConsole;
-});
+//Errors from test so we can assert on them and not pollute the console.
+mockConsole('error');
 
 describe('getTemplate', async () => {
   globalThis.xyzEnv = {
@@ -97,6 +83,18 @@ describe('getTemplate', async () => {
     const result = await getTemplate('bad_mod_query');
 
     expect(result instanceof Error).toBeTruthy();
+  });
+
+  it('query module is the name of a function', async () => {
+    const template = 'toString';
+
+    const { default: getTemplate } = await import(
+      '../../../mod/workspace/getTemplate.js'
+    );
+
+    const result = await getTemplate(template);
+
+    expect(result instanceof Error).toBeFalsy();
   });
 
   it('query module render string', async () => {
