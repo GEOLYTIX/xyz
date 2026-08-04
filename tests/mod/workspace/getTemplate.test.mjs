@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { mockConsole } from '../../scaffold.mjs';
 
 // The file provider is mocked with an actual passthrough so single tests can assign a mock implementation.
 const mockFileFn = vi.fn();
@@ -13,9 +14,7 @@ vi.mock('../../../mod/provider/file.js', async (importOriginal) => {
   };
 });
 
-const { default: checkWorkspaceCache } = await import(
-  '../../../mod/workspace/cache.js'
-);
+import checkWorkspaceCache from '../../../mod/workspace/cache.js';
 
 //Errors from test so we can assert on them and not pollute the console.
 mockConsole('error');
@@ -31,7 +30,7 @@ describe('getTemplate', async () => {
   );
 
   //Calling the cache method with force to reload a new workspace
-  await checkWorkspaceCache('file');
+  await checkWorkspaceCache(true);
 
   it('get undefined template', async () => {
     const result = await getTemplate();
