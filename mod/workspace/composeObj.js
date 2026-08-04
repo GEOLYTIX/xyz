@@ -39,7 +39,7 @@ export default async function composeObj(obj, roles) {
     delete template.src;
 
     if (Array.isArray(obj.templates) && Array.isArray(template.templates)) {
-      const templatesMergeError = `Attempting to merge obj templates array [${obj.templates.join(',')}] into prototype template with templates array [${template.templates.join(',')}].`;
+      const templatesMergeError = `Attempting to merge obj templates array [${obj.templates.length}] into prototype template with templates array [${template.templates.length}].`;
       workspace.errors.add(templatesMergeError);
       obj.warn ??= [];
       obj.warn.push(templatesMergeError);
