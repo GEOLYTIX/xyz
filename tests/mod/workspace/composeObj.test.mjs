@@ -321,43 +321,30 @@ describe('composeObj', async () => {
   });
 
   it('templates nested in templates modifying an array of objects', async () => {
+    // The template adds one additional entry to the infoj from a nested templates array.
+    // The templates array on the object itself adds another additional entry to the infoj array, so the final infoj array should have 4 entries (as the original has 2 entries).
     const obj = {
-      arr: [
-        {
-          init: true,
-        },
-      ],
+      template: {
+        src: 'file:./tests/assets/layers/template_test/layer_with_nested_templates.json',
+      },
       templates: [
         {
-          templates: [
-            {
-              arr: [
-                {
-                  a: true,
-                },
-                {
-                  b: true,
-                },
-              ],
-            },
-          ],
-        },
-        {
-          arr: [
-            {
-              1: true,
-            },
-            {
-              2: true,
-            },
-          ],
+          src: 'file:./tests/assets/layers/template_test/layer_with_nested_templates_infoj_addition_two.json',
         },
       ],
     };
-
     // The user holds a role but not one of the accessRoles in the nested roles object.
     const response = await composeObj(obj);
 
-    expect(response.arr.length === 5).toBeTruthy();
+    // Expect the obj.infoj to have a length of 4.
+    expect(response.infoj.length).toEqual(4);
+    // Expect a field of name addition_one to be present in the infoj array.
+    expect(
+      response.infoj.some((item) => item.field === 'addition_one'),
+    ).toBeTruthy();
+    // Expect a field of name addition_two to be present in the infoj array.
+    expect(
+      response.infoj.some((item) => item.field === 'addition_two'),
+    ).toBeTruthy();
   });
 });
