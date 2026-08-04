@@ -286,4 +286,37 @@ describe('composeObj', async () => {
     expect(response.root).toBeTruthy();
     expect(response.nested).toBeFalsy();
   });
+
+  it('nested roles object with query template', async () => {
+    const obj = {
+      classList: 'expanded',
+      hover: {
+        template: {
+          key: 'oppscan_hover',
+          src: '${CLIENT}/italy/queries/oppscan_dt_hover.sql',
+        },
+        roles: {
+          Franchisee: {
+            query: 'oppscan_hover_franchisee',
+            display: true,
+            hidden: true,
+            template: {
+              key: 'oppscan_hover_franchisee',
+              src: '${TEMPLATES}/yum/tools/find_opportunity/queries/oppscan_hover_franchisee.sql',
+            },
+          },
+        },
+        query: 'oppscan_hover',
+        hidden: true,
+
+        display: true,
+      },
+    };
+
+    // The user holds a role but not one of the accessRoles in the nested roles object.
+    const response = await composeObj(obj, ['Franchisee']);
+
+    expect(response.hover.query).toEqual('oppscan_hover_franchisee');
+    expect(response.hover.template).toBeFalsy();
+  });
 });
