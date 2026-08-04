@@ -38,13 +38,6 @@ export default async function composeObj(obj, roles) {
     delete obj.template;
     delete template.src;
 
-    if (Array.isArray(obj.templates) && Array.isArray(template.templates)) {
-      const templatesMergeError = `Key [${obj.key || obj.src}] template has a templates array and is attempting to merge into a prototype template with a templates array. To resolve this move the template object to the first position in the templates array.`;
-      workspace.errors.add(templatesMergeError);
-      obj.warn ??= [];
-      obj.warn.push(templatesMergeError);
-    }
-
     // Merge obj --> template
     obj = merge(template, obj);
   }
@@ -170,7 +163,10 @@ async function parseTemplates(obj, roles, templateScope) {
 
   if (obj === null) return;
 
-  for (const [key, val] of Object.entries(obj)) {
+  for (const key of Object.keys(obj)) {
+    // The value must be read fresh on each iteration rather than destructured from a snapshot. Earlier keys in this same loop (eg. a templates array) can merge into and reassign a not-yet-processed property (eg. infoj), and a stale val would overwrite that merge when this key is reached.
+    const val = obj[key];
+
     // Locale object layers should never be processed. Layers will be processed in the getLayer method. The layers property will be removed from the locale object after processing.
     if (key === 'layers') continue;
     if (queryTemplate(key, val, obj, roles, templateScope)) {

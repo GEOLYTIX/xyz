@@ -206,7 +206,7 @@ describe('composeObj', async () => {
     const layer = await composeObj(obj, ['foo', 'alpha']);
 
     expect(layer.name === 'Test Alpha').toBeTruthy();
-    expect(layer.infoj.length).toEqual(1);
+    expect(layer.infoj.length).toEqual(2);
   });
 
   it('obj with nested templates in template and roles', async () => {
@@ -320,7 +320,7 @@ describe('composeObj', async () => {
     expect(response.hover.template).toBeFalsy();
   });
 
-  it('templates nested in templates modifying an array of objects', async () => {
+  it('templates from src nested in template and templates modifying an array of objects', async () => {
     // The template adds one additional entry to the infoj from a nested templates array.
     // The templates array on the object itself adds another additional entry to the infoj array, so the final infoj array should have 4 entries (as the original has 2 entries).
     const obj = {
@@ -336,6 +336,40 @@ describe('composeObj', async () => {
 
     const response = await composeObj(obj);
 
-    expect(response.warn.length).toEqual(1);
+    expect(response.infoj.length).toEqual(4);
+  });
+
+  it('templates nested in templates modifying an array of objects', async () => {
+    const obj = {
+      infoj: [
+        {
+          a: true,
+        },
+      ],
+      template: {
+        templates: [
+          {
+            infoj: [
+              {
+                b: true,
+              },
+            ],
+          },
+        ],
+      },
+      templates: [
+        {
+          infoj: [
+            {
+              c: true,
+            },
+          ],
+        },
+      ],
+    };
+
+    const response = await composeObj(obj);
+
+    expect(response.infoj.length).toEqual(3);
   });
 });
