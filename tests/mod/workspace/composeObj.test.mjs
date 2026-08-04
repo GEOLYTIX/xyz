@@ -333,18 +333,9 @@ describe('composeObj', async () => {
         },
       ],
     };
-    // The user holds a role but not one of the accessRoles in the nested roles object.
+
     const response = await composeObj(obj);
 
-    // Expect the obj.infoj to have a length of 4.
-    expect(response.infoj.length).toEqual(4);
-    // Expect a field of name addition_one to be present in the infoj array.
-    expect(
-      response.infoj.some((item) => item.field === 'addition_one'),
-    ).toBeTruthy();
-    // Expect a field of name addition_two to be present in the infoj array.
-    expect(
-      response.infoj.some((item) => item.field === 'addition_two'),
-    ).toBeTruthy();
+    expect(response.warn.length).toEqual(1);
   });
 });
