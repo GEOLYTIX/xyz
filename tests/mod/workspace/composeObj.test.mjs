@@ -320,7 +320,7 @@ describe('composeObj', async () => {
     expect(response.hover.template).toBeFalsy();
   });
 
-  it('templates from src nested in template and templates modifying an array of objects', async () => {
+  it('templates from src nested in template and templates modifying an array of objects with roles', async () => {
     // The template adds one additional entry to the infoj from a nested templates array.
     // The templates array on the object itself adds another additional entry to the infoj array, so the final infoj array should have 5 entries (as the original has 2 entries).
     const obj = {
@@ -330,6 +330,28 @@ describe('composeObj', async () => {
       templates: [
         {
           src: 'file:./tests/assets/layers/template_test/layer_with_nested_templates_infoj_query_entry.json',
+        },
+        {
+          src: 'file:./tests/assets/layers/template_test/layer_with_nested_templates_infoj_addition_two.json',
+        },
+      ],
+    };
+
+    const response = await composeObj(obj);
+
+    expect(response.infoj.length).toEqual(5);
+  });
+
+  it('templates from src nested in template and templates modifying an array of objects with role', async () => {
+    // The template adds one additional entry to the infoj from a nested templates array.
+    // The templates array on the object itself adds another additional entry to the infoj array, so the final infoj array should have 5 entries (as the original has 2 entries).
+    const obj = {
+      template: {
+        src: 'file:./tests/assets/layers/template_test/layer_with_nested_templates.json',
+      },
+      templates: [
+        {
+          src: 'file:./tests/assets/layers/template_test/layer_with_nested_templates_infoj_query_entry_role.json',
         },
         {
           src: 'file:./tests/assets/layers/template_test/layer_with_nested_templates_infoj_addition_two.json',

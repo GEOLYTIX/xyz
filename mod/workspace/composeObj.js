@@ -297,11 +297,8 @@ async function templatesArray(key, val, obj, roles, templateScope) {
   delete obj.templates;
 
   for (const template of val) {
-    console.log('\nBEFORE MERGE - obj.key:', obj.key, 'obj.infoj.length:', obj.infoj?.length);
     // Merge template from templates array into the object. The templates will be merged in the order they are defined in the array.
     await mergeTemplateIntoObj(obj, template, roles, templateScope);
-    console.log('\nAFTER MERGE - template:', template.src || template.key, 'into obj:', obj.key);
-    console.log('obj.infoj.length:', obj.infoj?.length);
   }
 
   return true;
@@ -333,10 +330,14 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
 
   const accessRoles = [];
 
+  // gateRoles are roleKeys defined with a plain true/null value. Their presence means the obj itself is only visible to a user holding one of these roles. Object roleVal entries merge role specific properties into obj conditionally but do not gate the obj's own visibility.
+  const gateRoles = [];
+
   for (const [roleKey, roleVal] of Object.entries(val)) {
     // Check for accessRoles in the roles object.
     if (roleVal === true || roleVal === null) {
       accessRoles.push(roleKey);
+      gateRoles.push(roleKey);
       continue;
     }
 
@@ -358,21 +359,24 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
     return true;
   }
 
+  // The roles object has no gateRoles, so the obj itself is not gated and remains visible regardless of the roles provided by the user.
+  if (!gateRoles.length) return true;
+
+  // Access to the object is granted if the accessRoles array includes a wildcard role '*'. This allows for unrestricted access to the object regardless of the user's roles.
+  if (accessRoles.includes('*')) return true;
+
   if (!roles) {
     return new Error(
       'Access to the object with the roles property is denied. No roles were provided.',
     );
   }
 
-  // Access to the object is granted if the accessRoles array includes a wildcard role '*'. This allows for unrestricted access to the object regardless of the user's roles.
-  if (accessRoles.includes('*')) return true;
-
-  // At least one of the accessRoles must be included in the roles array provided by the user. If not, access to the obj will be denied.
-  if (accessRoles.some((role) => roles.includes(role))) {
+  // At least one of the gateRoles must be included in the roles array provided by the user. If not, access to the obj will be denied.
+  if (gateRoles.some((role) => roles.includes(role))) {
     return true;
   } else {
     return new Error(
-      `Access to the object with the roles property is denied. User does not have any of the required accessRoles: ${accessRoles.join(', ')}`,
+      `Access to the object with the roles property is denied. User does not have any of the required accessRoles: ${gateRoles.join(', ')}`,
     );
   }
 }

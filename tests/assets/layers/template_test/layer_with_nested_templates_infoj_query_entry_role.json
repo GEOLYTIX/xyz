@@ -12,11 +12,8 @@
       "queryparams": {
         "id": true
       },
-      "roles": {
-        "Franchisee": {
-          "skipEntry": true
-        }
-      },
+      "role": "Franchisee",
+      "skipEntry": true,
       "skipNullValue": true,
       "type": "text",
       "inline": true,
