@@ -297,8 +297,11 @@ async function templatesArray(key, val, obj, roles, templateScope) {
   delete obj.templates;
 
   for (const template of val) {
+    console.log('\nBEFORE MERGE - obj.key:', obj.key, 'obj.infoj.length:', obj.infoj?.length);
     // Merge template from templates array into the object. The templates will be merged in the order they are defined in the array.
     await mergeTemplateIntoObj(obj, template, roles, templateScope);
+    console.log('\nAFTER MERGE - template:', template.src || template.key, 'into obj:', obj.key);
+    console.log('obj.infoj.length:', obj.infoj?.length);
   }
 
   return true;

@@ -322,12 +322,15 @@ describe('composeObj', async () => {
 
   it('templates from src nested in template and templates modifying an array of objects', async () => {
     // The template adds one additional entry to the infoj from a nested templates array.
-    // The templates array on the object itself adds another additional entry to the infoj array, so the final infoj array should have 4 entries (as the original has 2 entries).
+    // The templates array on the object itself adds another additional entry to the infoj array, so the final infoj array should have 5 entries (as the original has 2 entries).
     const obj = {
       template: {
         src: 'file:./tests/assets/layers/template_test/layer_with_nested_templates.json',
       },
       templates: [
+        {
+          src: 'file:./tests/assets/layers/template_test/layer_with_nested_templates_infoj_query_entry.json',
+        },
         {
           src: 'file:./tests/assets/layers/template_test/layer_with_nested_templates_infoj_addition_two.json',
         },
@@ -336,7 +339,7 @@ describe('composeObj', async () => {
 
     const response = await composeObj(obj);
 
-    expect(response.infoj.length).toEqual(4);
+    expect(response.infoj.length).toEqual(5);
   });
 
   it('templates nested in templates modifying an array of objects', async () => {
