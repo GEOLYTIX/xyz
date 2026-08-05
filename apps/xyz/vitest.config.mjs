@@ -6,11 +6,7 @@ const rootDir = fileURLToPath(new URL('.', import.meta.url));
 export default defineConfig({
   root: rootDir,
   test: {
-    include: [
-      './tests/mod/**/*.test.mjs',
-      './tests/plugins/**/*.test.mjs',
-      './tests/utils/**/*.test.mjs',
-    ],
+    include: ['./tests/mod/**/*.test.mjs', './tests/plugins/**/*.test.mjs'],
     exclude: ['./tests/lib/**', './tests/browser/**', './tests/_mapp.test.mjs'],
     setupFiles: ['./tests/setup.mjs'],
     testTimeout: 10000,

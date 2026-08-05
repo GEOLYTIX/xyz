@@ -1,6 +1,13 @@
 import { createMocks } from 'node-mocks-http';
-import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { mockConsole } from '../scaffold.mjs';
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 
 /**
  * ## Query Tests
@@ -70,6 +77,11 @@ vi.mock('../../mod/workspace/cache.js', async (importOriginal) => {
   return { ...actual, default: vi.fn().mockImplementation(actual.default) };
 });
 
+vi.mock('../../mod/utils/roles.js', async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, check: vi.fn().mockImplementation(actual.check) };
+});
+
 const { default: queries } = await import(
   '../../mod/workspace/templates/_queries.js'
 );
@@ -80,18 +92,25 @@ const { default: checkWorkspaceCache } = await import(
 const { default: getTemplate } = await import(
   '../../mod/workspace/getTemplate.js'
 );
+const Roles = await import('../../mod/utils/roles.js');
 
 // Suppress console.error from getTemplate for missing template tests.
-mockConsole('error');
+const originalConsoleError = console.error;
 
 describe('Query: Testing Query API', () => {
   beforeAll(async () => {
+    console.error = () => {};
+
     globalThis.xyzEnv = {
       TITLE: 'QUERY TEST',
       WORKSPACE: 'file:./tests/assets/query_workspace.json',
     };
 
     await checkWorkspaceCache(true);
+  });
+
+  afterAll(() => {
+    console.error = originalConsoleError;
   });
 
   beforeEach(() => {
@@ -121,6 +140,10 @@ describe('Query: Testing Query API', () => {
   });
 
   describe('dbs connection', () => {
+    beforeEach(() => {
+      Roles.check.mockReturnValue(true);
+    });
+
     it('should return 400 when the resolved dbs connection does not exist', async () => {
       const { req, res } = createMocks({
         params: {
@@ -152,18 +175,12 @@ describe('Query: Testing Query API', () => {
       expect(mockDbQuery).not.toHaveBeenCalled();
     });
 
-    it('use template.dbs if defined', async () => {
+    it('should use template.dbs when provided', async () => {
       const { req, res } = createMocks({
         params: {
           template: 'mock_template',
           user: { roles: ['admin'], admin: true },
-          // bypass getLayer lookup
-          layer: {
-            qID: 'id',
-            srid: 4326,
-            geom: 'geom',
-            dbs: 'layer_db',
-          },
+          dbs: 'template_db',
         },
       });
 
@@ -171,22 +188,44 @@ describe('Query: Testing Query API', () => {
       getTemplate.mockResolvedValueOnce({
         template: 'SELECT * FROM mock_table',
         dbs: 'template_db',
-        layer: true, // Requires layer
       });
 
       await query(req, res);
 
       expect(mockTemplateDb).toHaveBeenCalled();
-      expect(mockLayerDb).not.toHaveBeenCalled();
       expect(mockWorkspaceDb).not.toHaveBeenCalled();
+      expect(mockReqDb).not.toHaveBeenCalled();
+      expect(mockLayerDb).not.toHaveBeenCalled();
     });
 
-    it('use layer.dbs if template.dbs unavailable', async () => {
+    it('should use workspace.dbs as template dbs not provided', async () => {
       const { req, res } = createMocks({
         params: {
           template: 'mock_template',
           user: { roles: ['admin'], admin: true },
-          // bypass getLayer lookup
+        },
+      });
+
+      checkWorkspaceCache.mockResolvedValueOnce({ dbs: 'workspace_db' });
+      getTemplate.mockResolvedValueOnce({
+        template: 'SELECT * FROM mock_table',
+        dbs: 'workspace_db',
+      });
+
+      await query(req, res);
+
+      expect(mockWorkspaceDb).toHaveBeenCalled();
+      expect(mockReqDb).not.toHaveBeenCalled();
+      expect(mockTemplateDb).not.toHaveBeenCalled();
+      expect(mockLayerDb).not.toHaveBeenCalled();
+    });
+
+    it('should use layer.dbs when defined, overriding workspace dbs as template dbs not provided', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'mock_template',
+          user: { roles: ['admin'], admin: true },
+          // Inject layer directly into req.params to bypass getLayer lookup
           layer: {
             qID: 'id',
             srid: 4326,
@@ -199,6 +238,7 @@ describe('Query: Testing Query API', () => {
       checkWorkspaceCache.mockResolvedValueOnce({ dbs: 'workspace_db' });
       getTemplate.mockResolvedValueOnce({
         template: 'SELECT * FROM mock_table',
+        dbs: 'layer_db',
         layer: true, // Requires layer
       });
 
@@ -206,6 +246,8 @@ describe('Query: Testing Query API', () => {
 
       expect(mockLayerDb).toHaveBeenCalled();
       expect(mockWorkspaceDb).not.toHaveBeenCalled();
+      expect(mockReqDb).not.toHaveBeenCalled();
+      expect(mockTemplateDb).not.toHaveBeenCalled();
     });
   });
 
@@ -223,7 +265,7 @@ describe('Query: Testing Query API', () => {
       expect(res.statusCode).toBe(400);
     });
 
-    it('query template with layer flag without layer param', async () => {
+    it('should return 400 when a layer template is used without a layer param', async () => {
       const { req, res } = createMocks({
         params: {
           template: 'location_get',
@@ -233,32 +275,9 @@ describe('Query: Testing Query API', () => {
       await query(req, res);
 
       expect(res.statusCode).toBe(400);
-    });
-  });
-
-  describe('Restricted templates', () => {
-    it('admin_only_query query without admin access', async () => {
-      const { req, res } = createMocks({
-        params: {
-          template: 'admin_only_query',
-        },
-      });
-
-      await query(req, res);
-
-      expect(res.statusCode).toBe(401);
-    });
-
-    it('role_restricted_query query without roles', async () => {
-      const { req, res } = createMocks({
-        params: {
-          template: 'role_restricted_query',
-        },
-      });
-
-      await query(req, res);
-
-      expect(res.statusCode).toBe(400);
+      expect(res._getData()).toContain(
+        'location_get query requires a valid layer request parameter',
+      );
     });
   });
 

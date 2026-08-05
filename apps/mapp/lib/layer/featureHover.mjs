@@ -12,14 +12,6 @@ The featureHover method will send an xhr request for the provided feature argume
 
 @param {object} feature
 @param {layer} layer A decorated mapp layer object.
-@property {object} feature.properties The feature properties object.
-@property {number} feature.properties.count The number of features at the feature coordinates.
-@property {string} feature.properties.id The feature id.
-@property {object} layer.mapview The mapp mapview object.
-@property {object} layer.style.hover The hover style object.
-@property {boolean} layer.style.hover.display Whether to display hover infotips.
-@property {string} layer.style.hover.field The field name to use for the hover label.
-@property {function} layer.style.hover.render A function to render the hover infotip content.
 */
 export default function featureHover(feature, layer) {
   // The hover method must only execute if the display flag is set.
@@ -54,7 +46,7 @@ export default function featureHover(feature, layer) {
 
   if (!table) return;
 
-  const queryParams = {
+  const paramString = mapp.utils.paramString({
     coords:
       feature.properties.count > 1 &&
       ol.proj.transform(
@@ -72,10 +64,7 @@ export default function featureHover(feature, layer) {
     qID: layer.qID,
     table,
     template: layer.style.hover.query || 'infotip',
-    ...layer.queryparams,
-  };
-
-  const paramString = mapp.utils.paramString(queryParams);
+  });
 
   mapp.utils
     .xhr({

@@ -1,41 +1,58 @@
 /**
 ## /workspace/cache
-The module exports the default checkWorkspaceCache method which returns the async cacheWorkspace method which resolves into a JSON workspace.
+The module exports the cacheWorkspace method which returns a workspace from the module scope cache variable or call the cacheWorkspace method to cache the workspace.
 
 Default templates can be overwritten in the workspace or by providing a CUSTOM_TEMPLATES xyzEnvironment variable which references a JSON with templates to be merged into the workspace.
 
-@requires /provider/getSrc
+@requires /provider/getFrom
 @requires /utils/merge
 @requires /utils/processEnv
 
 @module /workspace/cache
 */
 
-import { clearSrcMap, getSrc } from '../provider/getSrc.js';
+import getFrom from '../provider/getFrom.js';
 import logger from '../utils/logger.js';
 import merge from '../utils/merge.js';
 
-let timestamp = 0;
-let workspacePromise = null;
+let cache = null;
+let timestamp = Infinity;
 
 /**
 @function checkWorkspaceCache
 
 @description
-The async cacheWorkspace method is assigned to the module scope workspacePromise variable. The variable is re-assigned if the WORKSPACE_AGE xyzEnvironment variable is exceeded or the force param is true.
+The method checks whether the module scope variable cache has been populated.
+
+The timestamp set by cacheWorkspace is checked against the current time. The [workspace] cache will be invalidated if the difference exceeds the WORKSPACE_AGE xyzEnvironment variable.
+
+Setting the WORKSPACE_AGE to 0 is not recommended as this could cause the cache to be flushed while a request is passed through the XYZ API. A layer query processed by the [Query API module]{@link module:/query~layerQuery} will request the layer and associated locale which could be defined in remote templates. Each request to the [Workspace API getTemplate]{@link module:/workspace/getTemplate~getTemplate} method for the locale, layer, and query templates will call the checkWorkspaceCache method which will cause the workspace to be flushed and templates previously cached from their src no longer available.
+
+The cacheWorkspace method is called if the cache is invalid.
 
 @param {boolean} [force] The workspace cache will be cleared with the force param flag.
-@returns {Promise<workspace>} Resolves to the JSON workspace.
+@returns {workspace} JSON Workspace.
 */
 export default function checkWorkspaceCache(force) {
-  // A WORKSPACE_AGE of 0 invalidates the cache on every check.
-  if (force || Date.now() - timestamp >= +xyzEnv.WORKSPACE_AGE) {
-    workspacePromise = cacheWorkspace();
+  if (force) {
+    // Reset the cache with force flag.
+    cache = null;
   }
 
-  workspacePromise ??= cacheWorkspace();
+  // cache is null on first request for workspace.
+  // cacheWorkspace is async and must be awaited.
+  if (!cache) return cacheWorkspace();
 
-  return workspacePromise;
+  // cacheWorkspace will set the current timestamp
+  // and cache workspace outside export closure prior to returning workspace.
+  if (Date.now() - timestamp > +xyzEnv.WORKSPACE_AGE) {
+    // current time minus cached timestamp exceeds WORKSPACE_AGE
+    cache = null;
+
+    return cacheWorkspace();
+  }
+
+  return cache;
 }
 
 import mail_templates from './templates/_mails.js';
@@ -45,7 +62,6 @@ import view_templates from './templates/_views.js';
 
 /**
 @function cacheWorkspace
-@async
 
 @description
 The workspace is retrived from the source defined in the WORKSPACE xyzEnvironment variable.
@@ -56,31 +72,27 @@ Each locale from the workspace.locale{} is merged into the workspace.locale{} te
 
 Locale objects get their key and name properties assigned if falsy.
 
-The workspace is assigned to the module scope workspacePromise variable and the timestamp is recorded.
+The workspace is assigned to the module scope cache variable and the timestamp is recorded.
 
-@returns {Promise<workspace>} Resolves to the JSON workspace.
+@returns {workspace} JSON Workspace.
 */
 async function cacheWorkspace() {
-  // The timestamp is recorded before the workspace is fetched to determine the cache age.
-  timestamp = Date.now();
+  const src = xyzEnv.WORKSPACE?.split(':')[0];
 
-  const cache_timestamp = timestamp;
+  const workspace = Object.hasOwn(getFrom, src)
+    ? await getFrom[src](xyzEnv.WORKSPACE)
+    : {};
 
-  clearSrcMap();
-
-  // The workspace must be fetched fresh on cache invalidation.
-  const workspace = await getSrc({ src: xyzEnv.WORKSPACE });
-
+  // Return error if source failed.
   if (workspace instanceof Error) {
-    console.error(workspace);
-    return {
-      error: true,
-      message: workspace.message,
-      stack: workspace.stack,
-    };
+    return workspace;
   }
 
-  workspace.errors = new Set();
+  const custom_templates =
+    xyzEnv.CUSTOM_TEMPLATES &&
+    (await getFrom[xyzEnv.CUSTOM_TEMPLATES.split(':')[0]](
+      xyzEnv.CUSTOM_TEMPLATES,
+    ));
 
   const workspace_templates = structuredClone(workspace.templates);
 
@@ -90,21 +102,7 @@ async function cacheWorkspace() {
   assign_workspace_templates(workspace.templates, mail_templates);
   assign_workspace_templates(workspace.templates, msg_templates);
   assign_workspace_templates(workspace.templates, query_templates);
-
-  if (xyzEnv.CUSTOM_TEMPLATES) {
-    const custom_templates = await getSrc({ src: xyzEnv.CUSTOM_TEMPLATES });
-    if (custom_templates instanceof Error) {
-      console.error(custom_templates);
-      workspace.errors.add(`CUSTOM_TEMPLATES: ${custom_templates?.message}`);
-    } else if (typeof custom_templates === 'object') {
-      assign_workspace_templates(
-        workspace.templates,
-        custom_templates,
-        'custom',
-      );
-    }
-  }
-
+  assign_workspace_templates(workspace.templates, custom_templates, 'custom');
   assign_workspace_templates(
     workspace.templates,
     workspace_templates,
@@ -121,13 +119,36 @@ async function cacheWorkspace() {
     locale: workspace.locale,
   };
 
-  workspace.key ??= xyzEnv.TITLE;
+  // Loop through locale keys in workspace.
+  Object.keys(workspace.locales).forEach((locale_key) => {
+    // workspace has a locale prototype.
+    // don't merge workspace.locale with itself.
+    if (workspace.locale && locale_key !== 'locale') {
+      // Create clone to prevent the workspace.locale from being modified.
+      const locale = structuredClone(workspace.locale);
 
-  workspace.scopes = new Set();
+      merge(locale, workspace.locales[locale_key]);
+
+      workspace.locales[locale_key] = locale;
+    }
+
+    // Assign key value as key on locale object.
+    workspace.locales[locale_key].key = locale_key;
+  });
+
+  if (workspace.plugins) {
+    console.warn(
+      `Default plugins should be defined in the default workspace.locale{}`,
+    );
+  }
+
+  workspace.key ??= xyzEnv.TITLE;
 
   logger(`Workspace cached;`, 'workspace');
 
-  workspace.timestamp = cache_timestamp;
+  timestamp = Date.now();
+
+  cache = workspace;
 
   return workspace;
 }

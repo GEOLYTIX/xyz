@@ -1,9 +1,22 @@
 import sql_table_insert from '@geolytix/xyz-app/mod/workspace/templates/sql_table_insert.js';
-import { describe, expect, it } from 'vitest';
-import { mockConsole } from '../../../scaffold.mjs';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
-//mockWarnings from test so we can assert on them and not pollute the console.
-const mockWarnings = mockConsole('warn');
+//Assigning console.warn to a property to restore original function with.
+const originalConsole = console.warn;
+
+//mockWarnings from test so we can assert on them and not get polute the console.
+const mockWarnings = [];
+
+beforeAll(() => {
+  //Changing the console.warn function to push to our local collection of messages.
+  console.warn = (message) => {
+    mockWarnings.push(message);
+  };
+});
+
+afterAll(() => {
+  console.warn = originalConsole;
+});
 
 describe('sql_table_insert', () => {
   it('base test', () => {

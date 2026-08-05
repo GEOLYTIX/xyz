@@ -18,13 +18,13 @@ token_not_found: {
 
 English being the default language, each language template should have the 'en' property.
 
-@requires /provider/getSrc
+@requires /provider/getFrom
 @requires /workspace/getTemplate
 
 @module /utils/languageTemplates
 */
 
-import { getSrc } from '../provider/getSrc.js';
+import getFrom from '../provider/getFrom.js';
 
 import getTemplate from '../workspace/getTemplate.js';
 
@@ -74,19 +74,18 @@ export default async function languageTemplates(params) {
   params.language ??= 'en';
 
   // Assign language property from languageTemplate as template
-  let template = Object.hasOwn(languageTemplate, params.language)
+  const template = Object.hasOwn(languageTemplate, params.language)
     ? languageTemplate[params.language]
     : languageTemplate.en;
 
-  if (typeof template !== 'string') {
-    return template;
-  }
+  if (typeof template !== 'string') return template;
 
-  template = await getSrc({ src: template });
+  const method = template.split(':')[0];
 
-  if (template instanceof Error) {
-    // Return the template string value if the template is not available in workspace.
-    return params.template;
+  // HTML Templates must be gotten as string from [template] string.
+  if (Object.hasOwn(getFrom, method)) {
+    // Get template from method.
+    return await getFrom[method](template);
   }
 
   return template;

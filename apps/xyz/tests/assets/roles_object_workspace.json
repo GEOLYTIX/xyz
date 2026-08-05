@@ -1,5 +1,8 @@
 {
   "templates": {
+    "roles_template": {
+      "src": "file:./tests/assets/layers/template_test/roles_template.json"
+    },
     "uk_locale": {
       "name": "United Kingdom",
       "roles": {
@@ -22,14 +25,6 @@
       "name": "GeoBurger",
       "roles": {
         "GeoBurger": true
-      },
-      "locales": ["roles_locale"]
-    },
-    "roles_locale": {
-      "roles": {
-        "Super": null,
-        "Standard": null,
-        "A": null
       }
     }
   },
@@ -42,6 +37,14 @@
     "pol": {
       "template": "pol_locale",
       "locales": ["geocoffee_locale"]
+    },
+    "roles_locale": {
+      "roles": {
+        "Super": null,
+        "Standard": null,
+        "A": null
+      },
+      "template": "roles_template"
     }
   }
 }

@@ -1,7 +1,0 @@
-{
-  "name": "Recursive",
-  "template": {
-    "key": "recursive_template",
-    "src": "file:./tests/assets/cache_sources/recursive_template.json"
-  }
-}

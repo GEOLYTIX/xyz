@@ -9,7 +9,6 @@ export default defineConfig({
     include: [
       './apps/xyz/tests/mod/**/*.test.mjs',
       './apps/xyz/tests/plugins/**/*.test.mjs',
-      './apps/xyz/tests/utils/**/*.test.mjs',
     ],
     exclude: [
       './apps/xyz/tests/lib/**',

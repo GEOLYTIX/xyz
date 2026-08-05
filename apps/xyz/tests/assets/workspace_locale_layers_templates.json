@@ -17,10 +17,6 @@
     "mod_query_no_default": {
       "src": "file:./tests/assets/queries/mod_query_no_default.js",
       "module": true
-    },
-    "toString": {
-      "src": "file:./tests/assets/queries/tostring.js",
-      "module": true
     }
   },
   "locale": {

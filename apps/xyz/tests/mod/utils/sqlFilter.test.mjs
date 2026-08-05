@@ -1,8 +1,18 @@
-import { describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import sqlfilter from '../../../mod/utils/sqlFilter.js';
-import { mockConsole } from '../../scaffold.mjs';
 
-mockConsole('warn');
+const originalConsole = console.warn;
+const mockWarns = [];
+
+beforeAll(() => {
+  console.warn = (log) => {
+    mockWarns.push(log);
+  };
+});
+
+afterAll(() => {
+  console.warn = originalConsole;
+});
 
 describe('sqlFilter', () => {
   it('should return correct string for eq filter', () => {

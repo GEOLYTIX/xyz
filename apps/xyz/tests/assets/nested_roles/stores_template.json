@@ -1,0 +1,11 @@
+{
+  "role": "stores",
+  "layers": {
+    "OSM_STORES": {
+      "display": true,
+      "format": "tiles",
+      "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    }
+  },
+  "locales": ["brand_a_template", "brand_b_template"]
+}

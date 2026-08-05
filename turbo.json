@@ -23,10 +23,6 @@
     "lint": {
       "dependsOn": ["^lint"],
       "outputs": []
-    },
-    "workspace:cache": {
-      "cache": false,
-      "outputs": []
     }
   }
 }

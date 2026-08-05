@@ -2,20 +2,19 @@
 ## /workspace/getLayer
 The getLayer module exports the getLayer method which is required by the query and workspace modules.
 
-@requires /utils/envReplace
+@requires /utils/roles
 @requires /utils/merge
-@requires /workspace/composeObj
+@requires /workspace/mergeTemplates
 @requires /workspace/getLocale
 @requires /workspace/getTemplate
 
 @module /workspace/getLayer
 */
 
-import envReplace from '../utils/envReplace.js';
 import merge from '../utils/merge.js';
-import composeObj from './composeObj.js';
 import getLocale from './getLocale.js';
 import getTemplate from './getTemplate.js';
+import mergeTemplates from './mergeTemplates.js';
 
 /**
 @function getLayer
@@ -24,13 +23,13 @@ import getTemplate from './getTemplate.js';
 @description
 A layer will primarily be requested from a locale.
 
-The getLocale method will return an error if the requesting user does not have access to the locale.
+The getLocale method will err if the requesting user does not have access to the locale.
 
 If a layer is not part of a locale an attempt to get the layer directly from the workspace templates will be made.
 
 The locale object can be provided as an additional param. The getLocale method of the workspace API may request any layer in the locale after the locale has already been retrieved. This will prevent a loopback to the locale for every layer in the locale.
 
-The composeObj module will be called to merge templates into the locale object and substitute SRC_* xyzEnvironment variables.
+The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* xyzEnvironment variables.
 
 A role check is performed to check whether the requesting user has access to the layer object.
 
@@ -47,11 +46,18 @@ Template properties will be removed as these are not required by the MAPP API bu
 @property {string} [params.locale] Locale key.
 @property {string} params.layer Layer key.
 @property {Object} [params.user] Requesting user.
+@property {Boolean} [params.ignoreRoles] Whether role check should be performed.
 @property {Array} [user.roles] User roles.
 
 @returns {Promise<Object|Error>} JSON Layer.
 */
 export default async function getLayer(params, locale) {
+  if (typeof params.layer !== 'string') {
+    return new Error(
+      'The layer [key] params must be provided as a string property.',
+    );
+  }
+
   if (/[^a-zA-Z0-9 :_-]/.exec(params.layer)) {
     return new Error(
       'The layer [key] property may only contain whitelisted character [^a-zA-Z0-9 :_-]',
@@ -60,6 +66,10 @@ export default async function getLayer(params, locale) {
 
   if (!locale) {
     locale = await getLocale(params);
+  }
+
+  if (params.ignoreRoles) {
+    params.user.roles = true;
   }
 
   // getLocale will return err if role.check fails.
@@ -73,10 +83,13 @@ export default async function getLayer(params, locale) {
     // A layer maybe defined as a template only.
     layer = await getTemplate(params.layer);
 
-    if (layer instanceof Error) {
-      return new Error('Unable to validate template layer.');
+    if (!layer || layer instanceof Error) {
+      return new Error('Unable to validate layer param.');
     }
   }
+
+  // layer may be null.
+  if (!layer) return;
 
   // Assign key value as key on layer object.
   layer.key ??= params.layer;
@@ -85,12 +98,14 @@ export default async function getLayer(params, locale) {
     layer = merge(structuredClone(locale.layer), layer);
   }
 
-  layer.parentRoles = locale.parentRoles;
+  if (locale.role) {
+    layer.localeRole = locale.role;
+  }
 
   // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
-  layer = await composeObj(layer, params.user?.roles);
+  layer = await mergeTemplates(layer, params.user?.roles);
 
-  // The composeObj method returned an Error.
+  // The mergeTemplates method returned an Error.
   if (layer instanceof Error) {
     return layer;
   }
@@ -109,12 +124,11 @@ export default async function getLayer(params, locale) {
     };
   }
 
-  if (Array.isArray(layer.plugins)) {
-    layer.plugins = layer.plugins.map((plugin) => envReplace(plugin));
-  }
-
-  delete layer.role;
-  delete layer.parentRoles;
+  // Remove properties which are only required for the fetching templates and composing workspace objects.
+  delete layer.src;
+  delete layer.template;
+  delete layer.templates;
+  delete layer._type;
 
   return layer;
 }

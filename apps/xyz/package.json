@@ -14,8 +14,7 @@
     "dev": "varlock run -- node --inspect server.js",
     "test": "varlock run --path ../../varlock/vanilla.env.schema --path ../../varlock/vanilla.env -- vitest run",
     "test:watch": "varlock run --path ../../varlock/vanilla.env.schema --path ../../varlock/vanilla.env -- vitest",
-    "test:coverage": "varlock run --path ../../varlock/vanilla.env.schema --path ../../varlock/vanilla.env -- vitest run --coverage",
-    "workspace:cache": "varlock run -- node ./utils/cache-workspace.js"
+    "test:coverage": "varlock run --path ../../varlock/vanilla.env.schema --path ../../varlock/vanilla.env -- vitest run --coverage"
   },
   "varlock": {
     "loadPath": "../../"

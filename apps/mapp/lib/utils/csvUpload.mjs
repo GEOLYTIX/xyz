@@ -127,24 +127,18 @@ export default async function csvUpload(file, params = {}) {
       // Split text file into rows on carriage return / new line.
       const rows = e.target.result.trim().split(/\r?\n/);
 
+      let matrix;
+      try {
+        matrix = rows.map((row) => splitRowIntoFields(row));
+      } catch (error) {
+        resolve([error]);
+        return;
+      }
+
       // The file has a header row.
       if (params.header) rows.shift();
 
-      let matrix;
-      try {
-        matrix = rows.map((row) => splitRowIntoFields(row, params));
-      } catch (error) {
-        resolve([error]);
-        return;
-      }
-
-      let chunks;
-      try {
-        chunks = chunkRows(matrix, params);
-      } catch (error) {
-        resolve([error]);
-        return;
-      }
+      const chunks = chunkRows(matrix, params);
 
       let responses = [];
 
@@ -190,14 +184,7 @@ function chunkRows(matrix, params) {
 
   matrix.forEach((fields) => {
     for (const indx in fields) {
-      const field = Object.keys(params.fields)?.[indx];
-
-      if (!field) {
-        throw new Error(
-          `Unexpected field. Please ensure the CSV file has the correct number of fields.`,
-        );
-      }
-
+      const field = Object.keys(params.fields)[indx];
       const type = params.fields[field];
 
       //assign field definition to its type with a `::` separator e.g. field::field_type
@@ -233,10 +220,10 @@ function chunkRows(matrix, params) {
 The method splits a CSV row string into fields.
 
 @param {String} row The row to split.
-@param {Object} params The parameters object.
 @returns {Array} The fields array.
 */
-function splitRowIntoFields(row, params) {
+let expectedFieldCount = null; // Variable to store the expected number of fields
+function splitRowIntoFields(row) {
   // Create an array to store the fields.
   const fields = [];
 
@@ -269,8 +256,9 @@ function splitRowIntoFields(row, params) {
   fields.push(currentField.trim());
 
   // Check if the number of fields matches the expected field count.
-  const expectedFieldCount = Object.keys(params.fields).length;
-  if (fields.length !== expectedFieldCount) {
+  if (expectedFieldCount === null) {
+    expectedFieldCount = fields.length;
+  } else if (fields.length !== expectedFieldCount) {
     throw new Error(
       `Inconsistent number of fields. Expected ${expectedFieldCount}, but got ${fields.length}.`,
     );

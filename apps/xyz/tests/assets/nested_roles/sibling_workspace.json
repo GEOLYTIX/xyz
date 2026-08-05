@@ -1,36 +1,10 @@
 {
   "templates": {
     "stores_template": {
-      "role": "stores",
-      "layers": {
-        "OSM_STORES": {
-          "display": true,
-          "format": "tiles",
-          "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        }
-      },
-      "locales": ["brand_a_template", "brand_b_template"]
-    },
-    "nested_template": {
-      "role": "nested",
-      "layers": {
-        "OSM_Nested": {
-          "display": true,
-          "format": "tiles",
-          "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        }
-      },
-      "locales": ["brand_a_template", "brand_b_template"]
+      "src": "file:./tests/assets/nested_roles/stores_template.json"
     },
     "demographics_template": {
-      "role": "demographics",
-      "layers": {
-        "OSM_DEMOGRAPHICS": {
-          "display": true,
-          "format": "tiles",
-          "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        }
-      }
+      "src": "file:./tests/assets/nested_roles/demographics_template.json"
     },
     "brand_a_template": {
       "src": "file:./tests/assets/nested_roles/brand_a_template.json"
@@ -51,11 +25,7 @@
   "locales": {
     "uk": {
       "role": "uk",
-      "templates": [
-        "demographics_template",
-        "stores_template",
-        "nested_template"
-      ]
+      "templates": ["demographics_template", "stores_template"]
     }
   }
 }

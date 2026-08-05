@@ -19,16 +19,9 @@ vi.mock('resend', () => ({
   }),
 }));
 
-vi.mock('../../../mod/provider/getSrc.js', () => ({
-  getSrc: (params) => {
-    // The test param checks whether a provider exists for the src.
-    if (typeof params === 'object' && params?.test) {
-      return params.src.split(':')[0] === 'file';
-    }
-
-    const src = typeof params === 'string' ? params : params?.src;
-
-    return fileGet(src);
+vi.mock('../../../mod/provider/getFrom.js', () => ({
+  default: {
+    file: fileGet,
   },
 }));
 
@@ -79,6 +72,15 @@ describe('resend Module', () => {
     await mailer.send({
       name: 'Rob',
       template: 'welcome',
+      to: 'user@example.com',
+    });
+
+    expect(emailSend).toHaveBeenCalledWith({
+      from: 'sender@example.com',
+      html: undefined,
+      sender: 'sender@example.com',
+      subject: 'Welcome Rob',
+      text: 'Plain Rob',
       to: 'user@example.com',
     });
 
@@ -166,6 +168,24 @@ describe('resend Module', () => {
     ]);
 
     expect(fileGet).toHaveBeenCalledWith('file:text-template');
+    expect(batchSend).toHaveBeenCalledWith([
+      {
+        from: 'sender@example.com',
+        html: undefined,
+        sender: 'sender@example.com',
+        subject: 'Welcome Rob',
+        text: '    Body for Rob',
+        to: 'rob@example.com',
+      },
+      {
+        from: 'sender@example.com',
+        html: undefined,
+        sender: 'sender@example.com',
+        subject: 'Hello Ada',
+        text: 'Second Ada',
+        to: 'ada@example.com',
+      },
+    ]);
 
     expect(logger).toHaveBeenNthCalledWith(
       1,
@@ -204,6 +224,10 @@ describe('resend Module', () => {
     expect(logger).toHaveBeenCalledWith(
       'From: sender@example.com\nTo: rob@example.com',
       'mailer',
+    );
+    expect(logger).toHaveBeenCalledWith(
+      'From: sender@example.com\nTo: rob@example.com\nBody:\n Body Rob',
+      'mailer_body',
     );
   });
 });

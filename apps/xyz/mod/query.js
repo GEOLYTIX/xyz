@@ -1,8 +1,10 @@
 /**
 The query module exports the [SQL] query method to pass queries to dbs connections configured in the XYZ process environment.
 
+@requires /user/login
 @requires /utils/dbs
 @requires /utils/logger
+@requires /utils/roles
 @requires /utils/sqlFilter
 @requires /workspace/cache
 @requires /workspace/getLayer
@@ -11,11 +13,12 @@ The query module exports the [SQL] query method to pass queries to dbs connectio
 @module /query
 */
 
+import login from './user/login.js';
 import dbs_connections from './utils/dbs.js';
 import logger from './utils/logger.js';
+import * as Roles from './utils/roles.js';
 import sqlFilter from './utils/sqlFilter.js';
 import workspaceCache from './workspace/cache.js';
-import composeObj from './workspace/composeObj.js';
 import getLayer from './workspace/getLayer.js';
 import getTemplate from './workspace/getTemplate.js';
 
@@ -66,17 +69,14 @@ export default async function query(req, res) {
   if (res.finished) return;
 
   // Must be run after the layerQuery method since the query template could be defined within the layer [template].
-  const template = await composeObj(
-    { template: req.params.template },
-    req.params.user?.roles,
-  );
+  // The template must be a copy to prevent mutation of the cached template object which may be used in other requests.
+  const template = { ...(await getTemplate(req.params.template)) };
 
-  if (template instanceof Error) {
-    console.log(template.message);
+  if (template.err instanceof Error) {
     res
-      .status(400)
+      .status(500)
       .setHeader('Content-Type', 'text/plain')
-      .send(template.message);
+      .send(template.err.message);
     return;
   }
 
@@ -91,16 +91,29 @@ export default async function query(req, res) {
     return;
   }
 
-  // The template requires the admin role for the user.
-  if (template.admin && !req.params.user?.admin) {
-    res
-      .status(401)
-      .setHeader('Content-Type', 'text/plain')
-      .send(`${req.params.template} query requires admin credentials.`);
+  // The template requires user login.
+  if (template.roles && !req.params.user) {
+    req.params.msg = 'login_required';
+    login(req, res);
     return;
   }
 
-  // Use layer dbs if defined, or workspace dbs, or provided dbs in the query.
+  // The template requires the admin role for the user.
+  if (template.admin && !req.params.user?.admin) {
+    req.params.msg = 'admin_required';
+    login(req, res);
+    return;
+  }
+
+  // Validate template role access.
+  if (!Roles.check(template, req.params.user?.roles)) {
+    res
+      .status(403)
+      .setHeader('Content-Type', 'text/plain')
+      .send('Role access denied for query template.');
+    return;
+  }
+  // Use template dbs, layer dbs if defined, or workspace dbs in the query.
   template.dbs ??= req.params.layer?.dbs || req.params.workspace.dbs;
 
   // Validate that the dbs string exists as a stored connection method in dbs_connections.
