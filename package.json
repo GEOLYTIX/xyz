@@ -1,14 +1,11 @@
 {
   "name": "xyz",
-  "version": "v4.23.6",
+  "version": "v4.24.0",
+  "packageManager": "pnpm@11.3.0",
   "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
-  },
-  "packageManager": "pnpm@10.10.0",
-  "pnpm": {
-    "neverBuiltDependencies": []
   },
   "scripts": {
     "dev": "node --inspect express.js",
@@ -22,7 +19,8 @@
     "mapp-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose",
     "xyz-docs": "jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
     "test-docs": "jsdoc --configure ./utils/jsdoc_test.json --verbose",
-    "push-env": "node ./utils/sync-vercel-env.js"
+    "push-env": "node ./utils/sync-vercel-env.js",
+    "workspace:cache": "node ./utils/cache-workspace.js"
   },
   "license": "MIT",
   "optionalDependencies": {
@@ -40,7 +38,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
-    "@vitest/coverage-v8": "4.1.4",
+    "@vitest/coverage-v8": "4.1.10",
     "clean-jsdoc-theme": "^4.3.2",
     "concurrently": "^9.2.1",
     "cookie-parser": "^1.4.7",
@@ -50,6 +48,6 @@
     "node-mocks-http": "^1.17.2",
     "nodemon": "^3.1.14",
     "undici": "^7.25.0",
-    "vitest": "^4.1.4"
+    "vitest": "^4.1.10"
   }
 }

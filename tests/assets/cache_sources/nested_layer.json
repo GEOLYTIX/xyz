@@ -1,0 +1,7 @@
+{
+  "dbs": "NEON",
+  "format": "geojson",
+  "query": {
+    "src": "file:./tests/assets/cache_sources/query.sql"
+  }
+}

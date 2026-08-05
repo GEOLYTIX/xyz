@@ -60,6 +60,9 @@ The source array will be spread into the target array only if it contains items 
 function arrayMerge(source, target, key) {
   // Check whether source and target are both arrays.
   if (Array.isArray(source[key]) && Array.isArray(target[key])) {
+    // An empty source array has nothing to contribute. The target array must be left as is; source[key].every() would otherwise return true vacuously and wipe the target array.
+    if (!source[key].length) return true;
+
     // Check whether the source and target arrays are equal.
     if (source[key].every((item) => target[key].includes(item))) {
       // Do not merge.

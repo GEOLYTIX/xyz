@@ -1,6 +1,7 @@
 import { createHmac } from 'node:crypto';
 import { createMocks } from 'node-mocks-http';
 import { describe, expect, it, vi } from 'vitest';
+import file_signer from '../../../mod/sign/file.js';
 
 globalThis.xyzEnv = {
   FILE_RESOURCES: 'public',
@@ -49,8 +50,6 @@ describe('file:', () => {
     fsMockFn.mockImplementation(() => {
       return 'PRIVATEKEY';
     });
-
-    const { default: file_signer } = await import('../../../mod/sign/file.js');
 
     const result = file_signer(req);
 

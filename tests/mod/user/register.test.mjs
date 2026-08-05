@@ -3,6 +3,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 globalThis.xyzEnv = {
   PRIVATE: '192.168.1.1:3000|user:password|acl.test',
+  WORKSPACE: 'file:./tests/assets/_workspace.json',
 };
 
 const originalWarn = console.warn;

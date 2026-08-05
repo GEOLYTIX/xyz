@@ -2,8 +2,7 @@
   "dbs": "NEON",
   "templates": {
     "login_required_query": {
-      "template": "SELECT 1",
-      "login": true
+      "template": "SELECT 1"
     },
     "admin_only_query": {
       "template": "SELECT 1",

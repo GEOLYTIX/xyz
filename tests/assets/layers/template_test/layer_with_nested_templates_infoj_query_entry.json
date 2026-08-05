@@ -1,0 +1,27 @@
+{
+  "infoj": [
+    {
+      "field": "sales_currency_time_period",
+      "title": "Currency & Time period",
+      "query": "get_sales_currency",
+      "queryCheck": true,
+      "template": {
+        "key": "get_sales_currency",
+        "template": "SELECT 99 AS sales_currency_time_period WHERE id = %{id}"
+      },
+      "queryparams": {
+        "id": true
+      },
+      "roles": {
+        "Franchisee": {
+          "skipEntry": true
+        }
+      },
+      "skipNullValue": true,
+      "type": "text",
+      "inline": true,
+      "group": "Sales & Transactions",
+      "groupClassList": "expanded"
+    }
+  ]
+}

@@ -376,7 +376,6 @@ Overall: **61.9% statements, 55.3% branches, 65.4% functions, 62.6% lines**
 | Module | Stmts | Branch |
 |---|---|---|
 | `mod/utils/merge.js` | 100% | 96% |
-| `mod/utils/roles.js` | 96% | 93% |
 | `mod/user/token.js` | 100% | 100% |
 | `mod/user/list.js` | 100% | 85% |
 | `mod/user/log.js` | 94% | 94% |
@@ -385,7 +384,6 @@ Overall: **61.9% statements, 55.3% branches, 65.4% functions, 62.6% lines**
 | `mod/user/delete.js` | 89% | 86% |
 | `mod/workspace/cache.js` | 89% | 80% |
 | `mod/workspace/getLocale.js` | 95% | 93% |
-| `mod/workspace/mergeTemplates.js` | 88% | 87% |
 | `mod/provider/cloudfront.js` | 92% | 90% |
 
 ### Modules that need tests
