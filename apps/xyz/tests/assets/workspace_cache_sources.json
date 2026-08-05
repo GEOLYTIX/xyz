@@ -1,0 +1,33 @@
+{
+  "templates": {
+    "module_query": {
+      "module": true,
+      "src": "file:./tests/assets/queries/mod_query.js"
+    },
+    "recursive_template": {
+      "src": "file:./tests/assets/cache_sources/recursive_template.json"
+    },
+    "remote_locale": {
+      "src": "file:./tests/assets/cache_sources/remote_locale.json"
+    },
+    "same_shared_layer": {
+      "src": "file:./tests/assets/cache_sources/shared_layer.json"
+    },
+    "shared_layer": {
+      "src": "file:./tests/assets/cache_sources/shared_layer.json"
+    }
+  },
+  "locale": {
+    "layers": {
+      "Inline": {
+        "template": {
+          "key": "inline_layer",
+          "src": "file:./tests/assets/cache_sources/shared_layer.json"
+        }
+      },
+      "Remote": {
+        "template": "shared_layer"
+      }
+    }
+  }
+}

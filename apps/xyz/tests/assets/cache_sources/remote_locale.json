@@ -1,0 +1,11 @@
+{
+  "role": "remote",
+  "layers": {
+    "Nested": {
+      "template": {
+        "key": "nested_layer",
+        "src": "file:./tests/assets/cache_sources/nested_layer.json"
+      }
+    }
+  }
+}

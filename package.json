@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
-  "packageManager": "pnpm@11.1.3",
+  "packageManager": "pnpm@11.3.0",
   "scripts": {
     "dev": "turbo run dev --filter=@geolytix/xyz-app",
     "freeze-env": "node utils/freeze-env.js",
@@ -21,7 +21,8 @@
     "generate-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose && jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
     "mapp-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose",
     "xyz-docs": "jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
-    "push-env": "node ./utils/sync-vercel-env.js"
+    "push-env": "node ./utils/sync-vercel-env.js",
+    "workspace:cache": "turbo run workspace:cache --filter=@geolytix/xyz-app"
   },
   "license": "MIT",
   "dependencies": {
