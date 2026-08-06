@@ -72,6 +72,8 @@ async function cacheWorkspace() {
   const workspace = await getSrc({ src: xyzEnv.WORKSPACE });
 
   if (workspace instanceof Error) {
+    // The getSrc would not be retried otherwise.
+    workspacePromise = null
     console.error(workspace);
     return {
       error: true,

@@ -4,6 +4,12 @@ Deploying the XYZ monorepo. The primary target is Vercel, where the Express app 
 
 See [SETUP.md](./SETUP.md) for local setup and [varlock/README.md](./varlock/README.md) for env schema detail.
 
+The Vercel CLI must be installed in order to deploy to Vercel from the command line terminal.
+
+```bash
+npm install vercel -g
+```
+
 ## How it is wired
 
 The root `vercel.json` builds one entry point and routes everything to it:
@@ -26,7 +32,18 @@ The root `vercel.json` builds one entry point and routes everything to it:
 
 Varlock is optional. `apps/xyz/mod/utils/processEnv.js` accepts configuration two ways — pick either per project.
 
-### Option A — Vercel project environment variables
+### Option: vercel.json env object
+The env object from the launch.json can be appended to the vercel.json to deploy an instance with the same environment variables.
+
+```json
+"env": {
+  "WORKSPACE": "file:./public/workspace.json"
+}
+```
+
+### Option: Vercel project environment variables
+
+If you have .env file in the project root it is possible to upload these with a vercel api token.
 
 Set the variables in Vercel project settings and deploy. Nothing is frozen, and Git-integration deploys work normally.
 
@@ -36,7 +53,18 @@ Vercel project env ──build──▶ process.env ──▶ processEnv.js defa
 
 Simplest path. You give up schema validation, `gsm()` references, and log/response redaction, since none of that runs without a blob.
 
-### Option B — frozen Varlock blob
+Set the variables in Vercel project settings, then:
+
+```bash
+vercel --prod              # production
+vercel --target=preview    # preview
+```
+
+Use `vercel env add <NAME> production` for one variable or `pnpm push-env --env=production` for a whole file. With this setup Git-integration deploys work and you need not deploy from the CLI at all.
+
+Vercel resolves environment variables at build time, so redeploy after changing one.
+
+### Option: frozen Varlock blob
 
 Resolve and validate the environment into `.varlock.blob` before deploying. `vercel.json` ships it via `includeFiles`, and the app hydrates from it at cold start.
 
@@ -107,19 +135,6 @@ pnpm exec varlock load --compact
 Only when freezing a blob: a valid `.env` and `.env.schema` at the repository root, plus credentials for any `gsm()` references.
 
 ## Deploying
-
-### Without Varlock
-
-Set the variables in Vercel project settings, then:
-
-```bash
-vercel --prod              # production
-vercel --target=preview    # preview
-```
-
-Use `vercel env add <NAME> production` for one variable or `pnpm push-env --env=production` for a whole file. With this setup Git-integration deploys work and you need not deploy from the CLI at all.
-
-Vercel resolves environment variables at build time, so redeploy after changing one.
 
 ### With a frozen blob
 

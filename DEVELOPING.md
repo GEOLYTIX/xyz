@@ -30,24 +30,9 @@ App-specific build and development notes live with each app:
 - [MAPP app](./apps/mapp/README.md)
 - [SAML app](./apps/saml/README.md)
 
-## Test Debugging
+## Test Debugging [VSCode]
 
-You can debug Vitest tests with the following VSCode launch config:
-
-```json
-{
-  "type": "node",
-  "request": "launch",
-  "name": "Debug Vitest Tests",
-  "autoAttachChildProcesses": true,
-  "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-  "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
-  "args": ["run", "--no-file-parallelism"],
-  "console": "integratedTerminal",
-  "internalConsoleOptions": "neverOpen",
-  "cwd": "${workspaceFolder}"
-}
-```
+We recommend to use the vitest extension for VSCode to debug XYZ modules through the test scripts.
 
 ## Biome
 
