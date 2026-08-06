@@ -2,19 +2,10 @@
 ## /workspace
 The Workspace API module exports the getKeyMethod() which returns a method from the keyMethods{} object.
 
-- layer
-- locale
-- locales
-- roles
-- test
-
-The workspace typedef object has templates, locale, locales, dbs, and roles properties. The workspace will be cached in the process by the workspace/cache module.
-
 @requires /workspace/cache
 @requires /workspace/getLocale
 @requires /workspace/getLayer
 @requires /workspace/getTemplate
-@requires /utils/roles
 @requires crypto
 
 @module /workspace
@@ -31,23 +22,25 @@ The workspace object defines the mapp resources available in an XYZ instance.
 @property {template} templates Each property in the templates object is a global template typedef.
 */
 
-// It must not be possible to modify object prototypes
-Object.freeze(Object.prototype);
+// It should not be possible to modify object prototypes.
+// Keep this hardening enabled outside Vitest environments.
+if (!process.env.VITEST) Object.freeze(Object.prototype);
 
 import { createHash } from 'node:crypto';
+import { cacheSources } from '../provider/getSrc.js';
 import logger from '../utils/logger.js';
-import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
 import getLocale from './getLocale.js';
-import getTemplate from './getTemplate.js';
 
 const keyMethods = {
   layer,
   locale,
   locales,
-  roles,
+  scopes,
+  roles, // deprecated, use scopes instead
   test,
+  compose,
 };
 
 let workspace;
@@ -70,13 +63,6 @@ export default async function getKeyMethod(req, res) {
   Object.assign(req.params, req._params);
 
   workspace = await workspaceCache();
-
-  if (workspace instanceof Error) {
-    return res
-      .status(500)
-      .setHeader('Content-Type', 'text/plain')
-      .send('Failed to load workspace.');
-  }
 
   // The keys object must own a user provided lookup key
   if (!Object.hasOwn(keyMethods, req.params.key)) {
@@ -119,7 +105,44 @@ async function layer(req, res) {
       .send(layer.message);
   }
 
-  res.json(removeRoles(layer));
+  res.send(layer);
+}
+
+/**
+@function locale
+@async
+
+@description
+The method requests a JSON locale from the getLocale module.
+
+The getLocale method will load all layers in the locale and check for user role access with the boolean layers property in the request params.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request params.
+@property {string} [params.locale] Locale key.
+@property {boolean} [params.layers] Whether layer objects should be returned with the locale.
+@property {Object} [params.user] User requesting the locale.
+
+@returns {res} The HTTP response with either an error.message or the JSON locale.
+*/
+async function locale(req, res) {
+  const locale = await getLocale(req.params);
+
+  if (locale instanceof Error) {
+    res
+      .status(400)
+      .setHeader('Content-Type', 'text/plain')
+      .send(locale.message);
+    return;
+  }
+
+  delete locale.role;
+  delete locale.parentRoles;
+
+  assignChecksum(locale);
+
+  res.send(locale);
 }
 
 /**
@@ -138,21 +161,16 @@ The nestedLocales method will be returned if a locale property is provided in th
 @property {Object} req.params HTTP request params.
 @property {string} [params.locale] Request nested locales for the locale.
 @property {Object} [params.user] User requesting the locales.
-
-@returns {res} The HTTP response with a JSON array of accessible locale objects.
 */
 async function locales(req, res) {
   if (req.params.locale) {
-    getNestedLocales(req, res);
+    await getNestedLocales(req, res);
     return;
   }
 
   const locales = [];
 
   for (const localeKey of Object.keys(workspace.locales)) {
-    // Nested locales should not be parsed unless specifically requested.
-    if (localeKey.split(',').length > 1) continue;
-
     const locale = await getLocale({
       user: req.params.user,
       locale: localeKey,
@@ -192,14 +210,8 @@ in the UK locale. The name for a nested locale will be concatenated like so
 @property {Object} req.params HTTP request params.
 @property {string} params.locale Request nested locales for the locale.
 @property {Object} [params.user] User requesting the locales.
-
-@returns {res} The HTTP response with either an error.message or JSON array of
-locales in workspace.
 */
 async function getNestedLocales(req, res) {
-  // The locale property is required for nested locales.
-  if (!req.params.locale) return;
-
   const locale = await getLocale(req.params);
 
   if (locale instanceof Error) {
@@ -225,10 +237,8 @@ async function getNestedLocales(req, res) {
     if (nestedLocale instanceof Error) continue;
 
     nestedLocales.push({
-      key: Array.isArray(nestedLocale.key)
-        ? nestedLocale.key.join(',')
-        : nestedLocale.key,
-      name: `${nestedLocale.name || key}`,
+      key: nestedLocale.keys.join(','),
+      name: nestedLocale.name,
       locales: nestedLocale.locales,
     });
   }
@@ -237,115 +247,37 @@ async function getNestedLocales(req, res) {
 }
 
 /**
-@function locale
-@async
+@function roles
 
 @description
-The method requests a JSON locale from the getLocale module.
-
-All locale layers are requested from the getLayer module with `params.layers` flag.
-
-The locale.layers{} object is reduced to an array of layer keys without the `params.layers` flag.
+The roles method is deprecated. Use the scopes method instead.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
-@property {Object} req.params HTTP request params.
-@property {string} [params.locale] Locale key.
-@property {boolean} [params.layers] Whether layer objects should be returned with the locale.
-@property {Object} [params.user] User requesting the locale.
-
-@returns {res} The HTTP response with either an error.message or the JSON locale.
 */
-async function locale(req, res) {
-  const locale = await getLocale(req.params);
-
-  if (locale instanceof Error) {
-    return res
-      .status(400)
-      .setHeader('Content-Type', 'text/plain')
-      .send(locale.message);
-  }
-
-  if (Array.isArray(locale.keys)) {
-    req.params.locale = locale.keys;
-  }
-
-  // Prevent with no [] layers to crash the iteration process.
-  locale.layers ??= {};
-
-  // Return layer object instead of array of layer keys
-  if (req.params.layers) {
-    const layers = Object.keys(locale.layers).map(
-      async (key) =>
-        await getLayer(
-          {
-            ...req.params,
-            layer: key,
-          },
-          locale,
-        ),
+function roles(req, res) {
+  res
+    .status(410) // Gone
+    .send(
+      `The workspace/roles endpoint is deprecated. Use workspace/scopes instead.`,
     );
-
-    await Promise.all(layers).then((layers) => {
-      locale.layers = layers
-        .filter((layer) => !!layer)
-
-        // The getLayer method will return an Error if role access is prevented.
-        .filter((layer) => !(layer instanceof Error));
-    });
-
-    const localeWithoutRoles = removeRoles(locale);
-
-    assignChecksum(localeWithoutRoles);
-
-    return res.json(localeWithoutRoles);
-  }
-
-  // Check layer access.
-  locale.layers =
-    locale.layers &&
-    Object.entries(locale.layers)
-
-      // filter layers which are null
-      .filter((layer) => layer[1] !== null)
-
-      // check layer for user roles
-      .filter((layer) => !!Roles.check(layer[1], req.params.user?.roles))
-      .map((layer) => layer[0]);
-
-  const localeWithoutRoles = removeRoles(locale);
-
-  assignChecksum(localeWithoutRoles);
-
-  res.json(localeWithoutRoles);
 }
 
 /**
-@function roles
+@function scopes
 @async
 
 @description
-The roles method returns an array of roles returned from the roles utility.
-
-This method is only available to users with admin credentials.
-
-The cacheTemplates method will called to read any template from it's src and cache the template. This is required to extract any roles from the workspace which may be defined in a template only.
-
-The workspace.roles{} object will be returned with the `detail=true` url parameter.
-
-A hierarchical tree structure can be requested with the `tree=true` url parameter.
+The scopes method returns an array of scopes which are the templateScopes assigned to each template in the workspace.templates{} object.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 
 @property {Object} req.params HTTP request parameter.
-@property {Object} params.user User requesting the roles.
+@property {Object} params.user User requesting the scopes.
 @property {boolean} params.user.admin Whether user has admin privileges (required).
-@property {boolean} [params.tree] Whether the roles should be returned as a hierarchical tree structure.
-
-@returns {Array|Object} Returns either an array of roles as strings, detailed roles object, or hierarchical roles tree.
 */
-async function roles(req, res) {
+async function scopes(req, res) {
   if (!req.params.user?.admin) {
     res
       .status(403)
@@ -353,93 +285,111 @@ async function roles(req, res) {
     return;
   }
 
-  if (req.params.detail) {
-    return res.send(workspace.roles);
-  }
+  // TODO check why the scopes array is different from composedWorkspace
+  // const cachedWorkspace = await composeWorkspace();
 
-  const locales = await cacheTemplates({
-    user: req.params.user,
-    locales: true,
-  });
+  const cachedWorkspace = await workspaceCache(true);
 
-  const rolesSet = new Set();
-
-  for (const locale of Object.values(locales)) {
-    Roles.setInObj(rolesSet, locale);
-  }
-
-  const rolesTree = {};
-
-  // Delete restricted Asterisk role.
-  rolesSet.delete('*');
-
-  // Remove self-referential double roles
-  const rolesToRemove = new Set();
-  rolesSet.forEach((role) => {
-    const parts = role.split('.');
-    // Check if it's a double role like 'locale.locale'
-    if (parts.length === 2 && parts[0] === parts[1]) {
-      rolesToRemove.add(role);
-    }
-    // Also remove triple+ nesting of same role
-    for (let i = 0; i < parts.length - 1; i++) {
-      if (parts[i] === parts[i + 1]) {
-        rolesToRemove.add(role);
-        break;
-      }
+  await cacheSources(cachedWorkspace).then((errors) => {
+    if (errors.length) {
+      console.error(new Error(errors.join('\n')));
     }
   });
 
-  rolesToRemove.forEach((role) => rolesSet.delete(role));
+  // The nestedLocales method will be called for each locale in the cached workspace to ensure that all nested locales are loaded and checked for user access.
+  for (const localeKey of Object.keys(cachedWorkspace.locales)) {
+    const locale = await getLocale({
+      locale: localeKey,
+      layers: true,
+      user: { roles: true },
+    });
+    await nestedLocales({ locales: {} }, locale, { roles: true });
+  }
 
-  for (const role of rolesSet) {
-    const rolesArr = role.split('.');
+  const scopesArray = Array.from(cachedWorkspace.scopes)
+    .filter(Boolean)
+    .sort((a, b) => a.localeCompare(b));
+
+  if (req.params.tree) {
+    scopesArrayToTree(res, cachedWorkspace.scopes);
+    return;
+  }
+
+  res.send(scopesArray);
+}
+
+/**
+@function scopesArrayToTree
+
+@description
+The scopesArrayToTree method converts an array of scopes strings into a tree structure.
+
+@param {res} res HTTP response.
+@param {Set} scopesStringsSet Set of scopes strings.
+*/
+function scopesArrayToTree(res, scopesStringsSet) {
+  const scopesTree = {};
+
+  for (const scope of scopesStringsSet) {
+    if (scope === '') continue;
+
+    const rolesArr = scope.split('.');
 
     if (rolesArr.length > 1) {
       rolesArr.reduce(
         (accumulator, currentValue) => (accumulator[currentValue] ??= {}),
-        rolesTree,
+        scopesTree,
       );
-
-      for (const role of rolesArr) {
-        rolesSet.add(role);
-      }
     } else {
-      rolesTree[role] ??= {};
+      scopesTree[scope] ??= {};
     }
   }
 
-  const rolesArr = Array.from(rolesSet).sort((a, b) => a.localeCompare(b));
+  res.send(scopesTree);
+}
 
-  if (req.params.tree) {
-    return res.send(rolesTree);
+/**
+@function nestedLocales
+@async
+
+@description
+The nestedLocales method iterates the locale.locales array property and requests each nested locale from the getLocale method.
+
+The nestedLocales method is called recursively to check for further nested locales.
+
+@param {Object} locale The locale object.
+@param {Object} user The user requesting the nested locales.
+@property {Array} [locale.locales] An array of nested locale keys.
+*/
+async function nestedLocales(cachedWorkspace, locale, user) {
+  if (!Array.isArray(locale.locales)) return;
+
+  const keys = locale.keys ?? [locale.key];
+  for (const localeKey of locale.locales) {
+    const nestedLocale = await getLocale({
+      locale: [...keys, localeKey],
+      layers: true,
+      user,
+    });
+
+    cachedWorkspace.locales[nestedLocale.key] = nestedLocale;
+
+    await nestedLocales(cachedWorkspace, nestedLocale, user);
   }
-
-  res.send(rolesArr);
 }
 
 /**
 @function test
 
 @description
-The workspace/test method which is only available to user with admin credentials requests all locales in workspace.
-
-The cached workspace will be flushed for the test method.
-
-Requesting all locales should add any additional templates to the workspace.
-
-The test method will iterate over all workspace.templates and get from the getTemplate method to check whether any errors are logged on a template in regards to its src parameter.
-
-A flat array of template.err will be returned from the workspace/test method.
+The test method is an admin-only endpoint that checks the workspace sources for errors and warnings.
 
 @param {req} req HTTP request.
 @param {req} res HTTP response.
 
-@property {Object} req.params HTTP request parameter.
-@property {Boolean} [params.detail] Flag to return the cached workspace.
-@property {boolean} [params.force] Whether to force refresh the workspace cache.
-@property {Object} params.user The user requesting the test method.
-@property {Boolean} user.admin The user is required to have admin privileges.
+@property {Object} req.params HTTP request params.
+@property {Object} params.user User requesting the test method.
+@property {boolean} params.user.admin Whether user has admin privileges (required).
 */
 async function test(req, res) {
   if (!req.params.user?.admin) {
@@ -449,331 +399,132 @@ async function test(req, res) {
     return;
   }
 
-  // Force re-caching of workspace.
-  let cache;
-  if (req.params.force) {
-    cache = await cacheTemplates({
-      user: req.params.user,
-      force: req.params.force,
+  const cachedWorkspace = await composeWorkspace();
+
+  const warnings = new Set();
+
+  parseWarnings(warnings, cachedWorkspace.locale);
+
+  parseWarnings(warnings, cachedWorkspace.locales);
+
+  const templateWarn = Array.from(warnings).sort((a, b) => a.localeCompare(b));
+
+  const negatedRoles = new Set();
+
+  cachedWorkspace.scopes.forEach((scope) => {
+    scope.split('.').forEach((role) => {
+      if (role.startsWith('!')) {
+        negatedRoles.add(role);
+      }
     });
-  } else {
-    cache = workspace;
-  }
+  });
 
-  const testConfig = {
-    errArr: [],
-    properties: new Set(['template', 'templates', 'query']),
-    results: {},
-    used_templates: [],
-    unused_templates: [],
+  const testResult = {
+    srcErr: cachedWorkspace.err?.sort((a, b) => a.localeCompare(b)) ?? [],
+    templateWarn,
+    negatedRoles: Array.from(negatedRoles).sort((a, b) => a.localeCompare(b)),
   };
-
-  testConfig.workspace_templates = new Set(
-    Object.entries(cache.templates)
-      .filter(([key, value]) => value._type === 'workspace')
-      .filter(([key, value]) => !value.src?.endsWith('.html'))
-      .map(([key, value]) => key),
-  );
-
-  // Create clone of workspace_templates
-  testConfig.unused_templates = new Set([...testConfig.workspace_templates]);
-  testConfig.overwritten_templates = new Set();
-
-  testWorkspaceLocales(testConfig);
-
-  for (const [key, template] of Object.entries(cache.templates)) {
-    if (template instanceof Error) {
-      testConfig.errArr.push(`${key}: ${template.message}`);
-    }
-
-    if (template.err instanceof Error) {
-      testConfig.errArr.push(`${key}: ${template.err.message}`);
-    }
-  }
-
-  const results = processTestResults(testConfig);
 
   res.setHeader('content-type', 'application/json');
 
-  const result = req.params.detail ? { ...results, ...workspace } : results;
-
-  res.send(JSON.stringify(result));
+  res.send(testResult);
 }
 
 /**
-@function testWorkspaceLocales
-@description
-Tests all locales in the workspace for errors and analyzes template usage.
-
-@param {Object} testConfig The test configuration object.
-*/
-function testWorkspaceLocales(testConfig) {
-  for (const localeKey of Object.keys(workspace.locales)) {
-    const locale = workspace.locales[localeKey];
-
-    // If you can't get the locale, access is denied, add the error to the errArr.
-    if (locale instanceof Error) {
-      testConfig.errArr.push(`${localeKey}: ${locale.message}`);
-      continue;
-    }
-
-    // If the locale has no layers, just skip it.
-    if (!locale.layers) continue;
-
-    for (const layerKey of Object.keys(locale.layers)) {
-      const layer = locale.layers[layerKey];
-
-      if (layer instanceof Error) {
-        testConfig.errArr?.push(`${layerKey}: ${layer.message}`);
-      }
-    }
-
-    // Test locale and all of its layers as nested object for template usage.
-    templateUse(locale, testConfig);
-  }
-}
-
-/**
-@function templateUse
+@function parseWarnings
 
 @description
-Iterates through all nested object properties.
-Test properties found in the test.properties Set.
-Removes template keys from test.unused_templates Set.
-Add template keys to test.used_templates Array.
+The parseWarnings method recursively iterates an object and collects any warn[] arrays into a single warnings array.
 
-@param {Object} obj The object to test.
-@param {Object} test The test config object.
-@property {Set} test.properties Set of properties to test ['template', 'templates', 'query']
-@property {Set} test.workspace_templates Set of templates _type=workspace templates.
-@property {Set} test.unused_templates Set of templates not (yet) used.
-@property {Set} test.overwritten_templates Set of _type=workspace templates which have been overwritten.
-@property {Array} test.used_templates Array of template keys for each usage.
+@param {Array} warnings The array to collect warnings.
+@param {Object} obj The object to iterate for warn[] arrays.
 */
-function templateUse(obj, test) {
+function parseWarnings(warnings, obj) {
   if (typeof obj !== 'object') return;
 
-  Object.entries(obj).forEach((entry) => {
-    // entry key === ['template', 'templates', 'query']
-    if (test.properties.has(entry[0])) {
-      if (Array.isArray(entry[1])) {
-        entry[1]
-          .filter((item) => typeof item === 'string')
-          .forEach((item) => {
-            test.unused_templates.delete(item);
-            test.used_templates.push(item);
-          });
-      }
+  if (obj === null) return;
 
-      if (typeof entry[1] === 'object' && Object.hasOwn(entry[1], 'key')) {
-        if (test.workspace_templates.has(entry[1].key)) {
-          test.overwritten_templates.add(entry[1].key);
-        }
-        return;
-      }
-
-      if (typeof entry[1] === 'string') {
-        test.unused_templates.delete(entry[1]);
-        test.used_templates.push(entry[1]);
-      }
-    }
-
-    // Iterate through each array, eg. infoj
-    if (Array.isArray(entry[1])) {
-      entry[1].forEach((entry) => templateUse(entry, test));
-
-      // Iterate through nested objects eg. layers
-    } else if (entry[1] instanceof Object) {
-      templateUse(entry[1], test);
-    }
-  });
-}
-
-/**
-@function processTestResults
-@description
-Processes the test configuration and returns formatted results.
-
-@param {Object} testConfig The test configuration object.
-@returns {Object} Formatted test results object.
-*/
-function processTestResults(testConfig) {
-  const results = {};
-
-  results.errors = testConfig.errArr.flat();
-  results.unused_templates = Array.from(testConfig.unused_templates);
-  results.overwritten_templates = Array.from(testConfig.overwritten_templates);
-
-  // Sort the array.
-  testConfig.used_templates.sort((a, b) => {
-    if (a > b) return 1;
-    if (a < b) return -1;
-    return 0;
-  });
-
-  // Reduce the test.used_templates array to count the occurrence of each template.
-  results.usage = Object.fromEntries(
-    testConfig.used_templates.reduce(
-      (acc, e) => acc.set(e, (acc.get(e) || 0) + 1),
-      new Map(),
-    ),
-  );
-
-  return results;
-}
-
-/**
-@function removeRoles
-@description
-Recursively removes all 'roles' objects from the provided object [locale, layer].
-This function is designed to sanitize locale configuration objects before sending to the client,
-ensuring that role-based permissions data is not exposed.
-@param {object} obj A locale or layer JSON object.
-@returns {object}
-*/
-function removeRoles(obj) {
-  // If param is not an object or is null, return as is
-  if (typeof obj !== 'object' || obj === null) {
-    return obj;
-  }
-
-  // If object is an array, process each element
-  if (Array.isArray(obj)) {
-    return obj.map((item) => removeRoles(item));
-  }
-
-  // Create a new object to store cleaned properties
-  const cleanedObj = {};
-
-  // Process each property in the object
-  for (const [key, value] of Object.entries(obj)) {
-    // Skip 'roles' properties
-    if (key === 'roles') {
+  for (const [key, val] of Object.entries(obj)) {
+    if (key === 'warn' && Array.isArray(val)) {
+      val.forEach((warning) => warnings.add(warning));
       continue;
     }
 
-    // Recursively clean nested objects
-    cleanedObj[key] = removeRoles(value);
-  }
+    if (Array.isArray(val)) {
+      val.forEach((item) => parseWarnings(warnings, item));
+      continue;
+    }
 
-  return cleanedObj;
+    if (typeof val === 'object') {
+      parseWarnings(warnings, val);
+      continue;
+    }
+  }
 }
 
 /**
-@function cacheTemplates
-@async
+@function compose
 
 @description
-The workspaceCache method will be called with the params force flag. If true, any cached templates as well as the workspace itself will be reset.
+The compose method returns a fully composed workspace object with all templates, locales, and layers resolved.
 
-The method will iterate over the locales in a structuredClone of the cached workspace.locales and execute the loadLocale method for each.
+@param {req} req HTTP request.
+@param {res} res HTTP response.
 
-Finally each template defined in the workspace.templates will be cached.
-
-@param {user} params Configuration parameter for workspace caching.
-@property {Object} [params.user] User context for permission checking when loading locales and layers.
-@property {Boolean} [params.force] Whether the cached workspace should be cleared.
-@property {Boolean} [params.locales] Return the structured clone of the workspace.locales.
+@property {Object} req.params HTTP request params.
+@property {Object} params.user User requesting the compose method.
+@property {boolean} params.user.admin Whether user has admin privileges (required).
 */
-async function cacheTemplates(params) {
-  const timestamp = Date.now();
-  const cache = await workspaceCache(params.force);
-
-  const locales = structuredClone(cache.locales);
-
-  for (const localeKey of Object.keys(locales)) {
-    await loadLocale(locales, localeKey, params.user);
-  }
-  logger(`cachelocales: ${Date.now() - timestamp}`, 'cachelocales');
-
-  const templatePromises = Object.keys(workspace.templates).map(async (key) => {
-    await getTemplate(key);
-  });
-
-  await Promise.allSettled(templatePromises);
-
-  logger(`cachetemplates: ${Date.now() - timestamp}`, 'cachetemplates');
-
-  if (params.locales) {
-    return locales;
+async function compose(req, res) {
+  if (!req.params.user?.admin) {
+    res
+      .status(403)
+      .send(`Admin credentials are required to compose the workspace.`);
+    return;
   }
 
-  return cache;
+  const composedWorkspace = await composeWorkspace();
+
+  delete composedWorkspace.templates;
+  delete composedWorkspace.scopes;
+
+  assignChecksum(composedWorkspace);
+
+  res.setHeader('content-type', 'application/json');
+
+  res.send(composedWorkspace);
 }
 
 /**
-@function loadLocale
+@function composeWorkspace
 @async
 
 @description
-The getLocale method is called for the locale defined by the localeKey param.
+The composeWorkspace method returns a fully composed workspace object with all templates, locales, and layers resolved.
 
-The locale is assigned to a structuredClone of the workspace.locales{} provided as locales param.
+The workspaceCache() is called to retrieve the cached workspace. The cacheSources() method is called to ensure that all sources are cached and any errors are logged.
 
-A promises array is created for each layer in the locale to ensure that the getLayers method is called synchronous for each layer in the locale.layers{} object.
+The nestedLocales() method is called for each locale in the cached workspace to ensure that all nested locales are loaded and checked for user access.
 
-@param {object} locales structuredClone of the cached workspace.locales{}.
-@param {string} localeKey key of the locale to be loaded.
-@param {user} user The user object is required to load only locales the test user has access to.
+@returns {Promise<Object>} The fully composed workspace object.
 */
-async function loadLocale(locales, localeKey, user) {
-  // Will get layer and assignTemplates to workspace.
-  const locale = await getLocale({
-    locale: localeKey,
-    user: user,
-    ignoreRoles: true,
-  });
+async function composeWorkspace() {
+  const cachedWorkspace = await workspaceCache(true);
 
-  locales[localeKey] = locale;
+  cachedWorkspace.err = await cacheSources(cachedWorkspace);
 
-  // If the locale has no layers, just skip it.
-  if (locale.layers) {
-    const layerPromises = Object.keys(locale.layers).map(async (layerKey) => {
-      const currentKey = localeKey.split(',').pop();
-      const localeDef = locales[currentKey];
-
-      let isDefined = !!localeDef?.layers?.[layerKey];
-
-      if (!isDefined) {
-        const templateKey = localeDef?.template || (!localeDef && currentKey);
-
-        if (templateKey) {
-          const template = await getTemplate(templateKey);
-          if (
-            !(template instanceof Error) &&
-            Object.hasOwn(template.layers || {}, layerKey)
-          ) {
-            isDefined = true;
-          }
-        }
-      }
-
-      if (!isDefined && Object.hasOwn(locale.layers, layerKey)) {
-        return;
-      }
-
-      // Will get layer and assignTemplates to workspace.
-      const layer = await getLayer(
-        {
-          layer: layerKey,
-          locale: locale.key,
-          user,
-          ignoreRoles: true,
-        },
-        locale,
-      );
-
-      locale.layers[layerKey] = layer;
+  // The nestedLocales method will be called for each locale in the cached workspace to ensure that all nested locales are loaded and checked for user access.
+  for (const localeKey of Object.keys(cachedWorkspace.locales)) {
+    const locale = await getLocale({
+      locale: localeKey,
+      layers: true,
+      user: { roles: true },
     });
 
-    await Promise.allSettled(layerPromises);
+    cachedWorkspace.locales[localeKey] = locale;
+    await nestedLocales(cachedWorkspace, locale, { roles: true });
   }
-
-  if (!Array.isArray(locale.locales)) return;
-
-  for (const nestedLocale of locale.locales) {
-    await loadLocale(locales, [localeKey, nestedLocale].join(','), user);
-  }
+  return cachedWorkspace;
 }
 
 /**

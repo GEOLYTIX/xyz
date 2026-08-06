@@ -2,226 +2,176 @@
 ## /workspace/getLocale
 The getLocale module exports the getLocale method which is required by the getLayer and workspace modules.
 
-@requires /utils/roles
+@requires /utils/envReplace
 @requires /utils/merge
-@requires /workspace/mergeTemplates
 @requires /workspace/cache
+@requires /workspace/composeObj
 @requires /workspace/getTemplate
 
 @module /workspace/getLocale
 */
 
+import envReplace from '../utils/envReplace.js';
 import merge from '../utils/merge.js';
-import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
-
+import composeObj from './composeObj.js';
+import getLayer from './getLayer.js';
 import getTemplate from './getTemplate.js';
-import mergeTemplates from './mergeTemplates.js';
 
 /**
 @function getLocale
 @async
 
 @description
-The getLocale method requests the workspace from cache and checks whether the requested locale is a property of the workspace.locales{}.
+Nested locales can be requested by providing an array of locale keys. The first locale key will be used to retrieve the locale object and the remaining locale keys will be merged into the first locale as nested locales.
 
-The workspace.locale is assigned as locale if params.locale is undefined.
-
-Any locale can be nested into another locale, if the locale property is defined as an array of locale keys.
-
-The localeKey will be shifted from the locale array property. The getLocale method will call itself recursively with the locale object provided as parentLocale param. The current locale object will be merged into the parentLocale. The locale key for nested locales is an array which reflects the locale array property.
-
-The locales array property which provides an interface for locales which can be nested but are not available from the workspace.locales directly is removed on nested locales.
-
-The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* xyzEnvironment variables.
-
-A role check is performed to check whether the requesting user has access to the locale.
-
-Role objects in the locale and nested layers are merged with their respective parent objects.
-
-Template properties will be removed as these are not required by the MAPP API but only for the composition of workspace objects.
+The getLocale method will return an error if the requesting user does not have access to the locale.
 
 @param {Object} params
 @param {Object} [parentLocale] Locale will be merged into optional parentLocale to create a nested locale.
 @property {string} [params.locale] Locale key.
 @property {array} [params.locale] An array of locale keys to be merged as a nested locale.
 @property {Object} [params.user] Requesting user.
-@property {Boolean} [params.ignoreRoles] Whether role check should be performed.
 @property {Array} [user.roles] User roles.
+@property {Boolean} [params.layers] Whether to retrieve layers for the locale.
 
 @returns {Promise<Object|Error>} JSON Locale.
 */
 export default async function getLocale(params, parentLocale) {
   const workspace = await workspaceCache();
 
-  if (workspace instanceof Error) {
-    return workspace;
-  }
-
-  if (params.ignoreRoles) {
-    params.user.roles = true;
-  }
-
   if (typeof params.locale === 'string') {
     params.locale = params.locale.split(',');
   }
 
-  const localeKey = Array.isArray(params.locale)
+  let localeKey = Array.isArray(params.locale)
     ? params.locale.shift()
     : params.locale;
 
-  let locale = await loadLocale(workspace, localeKey);
+  localeKey ??= 'locale';
 
-  if (locale instanceof Error) {
-    return new Error(locale.message);
-  }
-
-  locale = await processRoles(locale, parentLocale, params);
-
-  if (locale instanceof Error) {
-    return locale;
-  }
-
-  return await composeLocale(locale, parentLocale, params, workspace.key);
-}
-
-async function loadLocale(workspace, key) {
   let locale;
 
-  if (!key || key === 'locale') {
-    locale = workspace.locale;
-  } else if (Object.hasOwn(workspace.locales, key)) {
-    locale = workspace.locales[key];
-  } else {
-    locale = await getTemplate(key);
+  if (localeKey === 'locale') {
+    locale = structuredClone(workspace.locale);
+    locale.key ??= localeKey;
+  } else if (Object.hasOwn(workspace.locales, localeKey)) {
+    locale = structuredClone(workspace.locales[localeKey]);
+    locale.key ??= localeKey;
+  } else if (typeof localeKey === 'string') {
+    locale = await getTemplate(localeKey);
+    locale.key ??= localeKey;
   }
 
-  // This is to prevent that locale in the workspace is modified.
-  return structuredClone(locale);
-}
-
-/**
-@function processRoles
-@async
-
-@description
-The processRoles method calls the utility method that combines a parentLocale roles with a locale.
-
-The locale.template and templates[] will be merged into the locale object.
-
-Locale access for the user will be checked without the ignoreRoles property provided in the params object.
-
-An error will be returned if the user does not have access to the role.
-
-If the parentLocale has a localesRoleContext property (set by mergeTemplates when a template contributes a locales array), it is used as the role context for combining. This ensures nested locales are combined only with the roles of the template that defined the locales array, not the accumulated roles of all sibling templates.
-
-@param {Object} locale
-@param {Object} parentLocale Parent locale with roles.
-@param {Object} params
-@property {user} [params.user] User object with access roles.
-@property {boolean} [params.ignoreRoles] Ignore roles for template merging and checks.
-
-@returns {Promise<Object|Error>} JSON Locale.
-*/
-async function processRoles(locale, parentLocale, params) {
-  // Assign parent roles to locale for combination.
-  // Use the scoped localesRoleContext if available, so that nested locales
-  // are combined only with the template's roles that contributed the locales
-  // array, not accumulated sibling template roles.
-  if (parentLocale?.roles) {
-    const roleContext = parentLocale.localesRoleContext || parentLocale;
-    Roles.combine(locale, roleContext);
+  if (typeof localeKey === 'object') {
+    locale = structuredClone(localeKey);
   }
 
-  // Pass params.user.roles to enforce role checks on merged templates.
-  // The role check for the locale itself will be performed after the mergeTemplates method.
-  locale = await mergeTemplates(locale, params.user?.roles);
-
-  // The mergeTemplates method returned an Error.
+  // Failed to getTemplate localeKey.
   if (locale instanceof Error) {
     return locale;
   }
 
-  // Strict Role Check
-  if (params.ignoreRoles) {
+  // Merge the default workspace locale
+  if (!parentLocale && locale.key !== 'locale') {
+    locale = merge(structuredClone(workspace.locale), locale);
+  }
+
+  if (parentLocale) {
+    locale.parentRoles = parentLocale.parentRoles.length
+      ? parentLocale.parentRoles
+      : [parentLocale.role];
+  }
+
+  locale = await composeObj(locale, params.user?.roles);
+
+  if (locale instanceof Error) {
     return locale;
   }
-
-  if (!Roles.check(locale.roles, params.user?.roles)) {
-    return new Error('Role access denied.');
-  }
-
-  return locale;
-}
-
-/**
-@function composeLocale
-@async
-
-@description
-Composes the final locale object by merging with an optional parentLocale and recursively processing further nested locales.
-
-When a parentLocale is provided, its properties are merged into the locale. The locale name and role are composed with dot-notation to reflect the nesting hierarchy.
-
-Temporary properties used during workspace composition (src, template, templates, _type, localesRoleContext) are removed before returning.
-
-@param {Object} locale The locale object to compose.
-@param {Object} [parentLocale] Optional parent locale to merge into.
-@param {Object} params Request parameters including locale keys and user.
-@param {string} workspaceKey The workspace key to assign.
-
-@returns {Promise<Object>} The composed locale object.
-*/
-async function composeLocale(locale, parentLocale, params, workspaceKey) {
-  locale.workspace = workspaceKey;
 
   locale.name ??= locale.key;
 
-  if (parentLocale) {
-    // Only locales of a nested locales should be used for further nesting.
-    delete parentLocale.locales;
-
-    parentLocale.keys ??= [parentLocale.key];
-    parentLocale.name ??= parentLocale.key;
-    locale.keys = [locale.key];
-
-    // Compose the nested locale name.
-    locale.name = `${parentLocale.name}/${locale.name}`;
-
-    if (parentLocale.role && locale.role) {
-      // When localesRoleContext exists, compose the role with the most
-      // specific parent path from the context (e.g., "uk.stores") rather
-      // than the locale's own role (e.g., "uk"), which would create a
-      // spurious compound like "uk.brand_a" instead of "uk.stores.brand_a".
-      if (parentLocale.localesRoleContext?.roles) {
-        const contextRoles = Object.keys(parentLocale.localesRoleContext.roles);
-        // Use the longest role as it represents the most specific path.
-        const parentRole = contextRoles.toSorted(
-          (a, b) => b.length - a.length,
-        )[0];
-        locale.role = `${parentRole}.${locale.role}`;
-      } else {
-        locale.role = `${parentLocale.role}.${locale.role}`;
-      }
-    }
-
-    locale = merge(structuredClone(parentLocale), locale);
-  }
+  locale = mergeParentLocale(locale, parentLocale);
 
   if (Array.isArray(params.locale) && params.locale.length > 0) {
+    // Recursively call getLocale with locale as parentLocale to merge nested locales.
     locale = await getLocale(params, locale);
+
+    // The locale must be returned to prevent processing plugins and layers on a parent locale prior to merging the nested locale.
+    return locale;
   }
 
   if (Array.isArray(locale.keys)) {
-    locale.key = locale.keys;
+    locale.key = locale.keys.join(',');
   }
 
-  // Remove properties which are only required for the fetching templates and composing workspace objects.
-  delete locale.src;
-  delete locale.template;
-  delete locale.templates;
-  delete locale._type;
-  delete locale.localesRoleContext;
+  if (Array.isArray(locale.plugins)) {
+    locale.plugins = locale.plugins.map((plugin) => envReplace(plugin));
+  }
+
+  await localeLayers(locale, params);
 
   return locale;
+}
+
+/**
+@function mergeParentLocale
+@async
+
+@description
+Merges a child locale into a parent locale, composing their properties and updating the nested locale structure.
+
+@param {Object} locale The locale object to compose.
+@param {Object} [parentLocale] Optional parent locale to merge into.
+*/
+function mergeParentLocale(locale, parentLocale) {
+  if (!parentLocale) {
+    return locale;
+  }
+
+  const parentClone = structuredClone(parentLocale);
+
+  // Only locales of a nested locales should be used for further nesting.
+  delete parentClone.locales;
+  delete parentClone.parentRoles;
+
+  parentClone.keys ??= [parentClone.key];
+  parentClone.keys.push(locale.key);
+  parentClone.name ??= parentClone.key;
+
+  // Compose the nested locale name.
+  locale.name = `${parentClone.name}/${locale.name}`;
+
+  if (locale.role) {
+    locale.parentRoles.push(locale.role);
+  }
+
+  locale = merge(parentClone, locale);
+
+  return locale;
+}
+
+async function localeLayers(locale, params) {
+  if (!params.layers) {
+    return;
+  }
+
+  if (!locale.layers) {
+    return;
+  }
+
+  const layers = [];
+
+  for (const layerKey of Object.keys(locale.layers)) {
+    const layer = await getLayer({ ...params, layer: layerKey }, locale);
+
+    if (layer instanceof Error) {
+      continue;
+    }
+
+    layers.push(layer);
+  }
+
+  // Locale layers should be returned as an array.
+  locale.layers = layers;
 }

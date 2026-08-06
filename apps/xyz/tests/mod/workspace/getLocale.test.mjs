@@ -1,27 +1,28 @@
 import checkWorkspaceCache from '@geolytix/xyz-app/mod/workspace/cache.js';
+import getLocale from '@geolytix/xyz-app/mod/workspace/getLocale.js';
 import { describe, expect, it } from 'vitest';
 
 describe('getLocale', async () => {
-  const { default: getLocale } = await import(
-    '@geolytix/xyz-app/mod/workspace/getLocale.js'
-  );
-
   globalThis.xyzEnv = {
     TITLE: 'WORKSPACE TEST',
     WORKSPACE: 'file:./tests/assets/_workspace.json',
+    LEGACY_ROLES: true,
   };
 
-  //Calling the cache method with force to reload a new workspace
   await checkWorkspaceCache(true);
 
-  it('access restricted locale', async () => {
-    //Use a locale template which has a role on it
-    //Assign a different role to the user and check whether the user gets access to the locale.
-    //If the role in the locale is different the user should not get access.
-    const obj = {
-      user: {
-        roles: ['locale_template'],
-      },
+  it('locale no existe', async () => {
+    const params = {
+      locale: 'no_existe',
+    };
+
+    const locale = await getLocale(params);
+
+    expect(locale instanceof Error).toBeTruthy();
+  });
+
+  it('locale with role; no user', async () => {
+    const params = {
       locale: {
         template: {
           key: 'locale_a',
@@ -30,71 +31,117 @@ describe('getLocale', async () => {
       },
     };
 
-    const template = await getLocale(obj);
+    const locale = await getLocale(params);
 
-    expect(template instanceof Error).toBeTruthy();
+    expect(locale instanceof Error).toBeTruthy();
   });
 
-  it('1. locale with role, templates with roles', async () => {
-    // Provide the user with 3 roles
-    // Europe = locale
-    // scratch_role = template for layer
-    // brand_c = locale template
+  it('locale as string with role; user with roles', async () => {
     const params = {
-      user: {
-        roles: ['europe', 'scratch_role', 'brand_c'],
-      },
-      locale: 'europe',
-    };
-
-    let locale = await getLocale(params);
-
-    expect(Object.hasOwn(locale.layers, 'Scratch')).toBeTruthy();
-
-    params.locale = 'brand_c_locale';
-
-    locale = await getLocale(params);
-
-    expect(Object.hasOwn(locale.layers, 'brand_c_layer')).toBeTruthy();
-  });
-
-  it('2. locale without role, templates with roles', async () => {
-    // Provide the user with 1 roles
-    // brand_c = locale template
-    const params = {
-      user: {
-        roles: ['brand_c'],
-      },
       locale: 'uk',
+      user: {
+        roles: ['uk'],
+      },
     };
 
-    let locale = await getLocale(params);
+    const locale = await getLocale(params);
 
     expect(locale.key === 'uk').toBeTruthy();
-
-    params.locale = 'brand_c_locale';
-
-    locale = await getLocale(params);
-
-    expect(Object.hasOwn(locale.layers, 'brand_c_layer')).toBeTruthy();
+    // This default locale with the OSM layer has been merged into the UK locale which has no layers.
+    expect(locale.layers.OSM).toBeTruthy();
   });
 
-  it('3. locale without role, templates without roles', async () => {
-    // Provide the user with no roles
-    // brand_a_locale = locale template without role
+  it('locale as object with template with role; user with roles', async () => {
     const params = {
-      user: {},
-      locale: 'uk',
+      locale: {
+        template: {
+          key: 'locale_a',
+          src: 'file:./tests/assets/layers/template_test/locale.json',
+        },
+      },
+      user: {
+        roles: ['locale'],
+      },
     };
 
-    let locale = await getLocale(params);
+    const locale = await getLocale(params);
 
-    expect(locale.key === 'uk').toBeTruthy();
+    expect(locale.key === 'locale_a').toBeTruthy();
+  });
 
-    params.locale = 'brand_a_locale';
+  it('nested locales with role[s]; user with first level role', async () => {
+    const params = {
+      locale: ['europe', 'UK_locale'],
+      user: {
+        roles: ['europe'],
+      },
+    };
 
-    locale = await getLocale(params);
+    const locale = await getLocale(params);
 
-    expect(Object.hasOwn(locale.layers, 'brand_a_layer')).toBeTruthy();
+    expect(locale instanceof Error).toBeTruthy();
+  });
+
+  it('nested locales with role[s]; user with roles array', async () => {
+    const params = {
+      locale: ['europe', 'UK_locale'],
+      user: {
+        roles: ['europe', 'UK'],
+      },
+    };
+
+    const locale = await getLocale(params);
+
+    expect(locale.name === 'europe/UK_locale').toBeTruthy();
+  });
+
+  it('nested locales with layers and role[s]; user with roles array', async () => {
+    const params = {
+      locale: ['europe', 'UK_locale'],
+      layers: true,
+      user: {
+        roles: ['europe', 'UK', 'scratch_role'],
+      },
+    };
+
+    const locale = await getLocale(params);
+
+    expect(locale.layers.some((layer) => layer.key === 'Scratch')).toBeTruthy();
+    expect(
+      locale.layers.some((layer) => layer.key === 'restricted'),
+    ).toBeFalsy();
+  });
+
+  it('nested locales with role[s]; user with nested role string', async () => {
+    const params = {
+      locale: ['europe', 'UK_locale'],
+      user: {
+        roles: ['europe.UK'],
+      },
+    };
+
+    const locale = await getLocale(params);
+
+    expect(locale.name === 'europe/UK_locale').toBeTruthy();
+  });
+
+  it('nested locales with layers and role[s]; user with nested role string', async () => {
+    const params = {
+      locale: ['europe', 'UK_locale'],
+      layers: true,
+      user: {
+        roles: ['europe.UK.scratch_role.scratch_role_template'],
+      },
+    };
+
+    const locale = await getLocale(params);
+
+    const osmLayer = locale.layers.find((layer) => layer.key === 'OSM');
+    expect(osmLayer.template.warn).toBeTruthy();
+
+    const scratchLayer = locale.layers.find((layer) => layer.key === 'Scratch');
+
+    expect(scratchLayer.name === 'SCRATCH ROLE TEMPLATE').toBeTruthy();
+    expect(scratchLayer.template.warn).toBeTruthy();
   });
 });

@@ -27,3 +27,5 @@ docs/*
 *.crt
 
 .vercel
+
+.claude/settings.local.json

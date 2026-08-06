@@ -1,0 +1,6 @@
+{
+  "format": "geojson",
+  "nested": {
+    "src": "file:./tests/assets/cache_sources/nested_layer.json"
+  }
+}

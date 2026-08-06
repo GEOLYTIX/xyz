@@ -26,8 +26,14 @@
       "role": "UK",
       "extent": {},
       "layers": {
-        "brand_c_layer": {}
+        "brand_c_layer": {},
+        "restricted": {
+          "role": "restricted"
+        }
       }
+    },
+    "template_layer": {
+      "template": "scratch_geojson"
     },
     "OSM": {
       "display": true,
@@ -35,6 +41,10 @@
       "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       "attribution": {
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      },
+      "template": {
+        "role": "attribution",
+        "attribution": true
       }
     },
     "scratch_geojson": {
@@ -45,6 +55,14 @@
       "geom": "geom_3857",
       "qID": "id",
       "style": {
+        "template": {
+          "key": "highlight-true",
+          "highlight": true,
+          "default": {
+            "fillColor": "#090"
+          },
+          "_role": "highlight"
+        },
         "highlight": {
           "scale": 1.3,
           "strokeColor": "#090"
@@ -55,10 +73,14 @@
           "name": "SCRATCH NO ROLE TEMPLATE"
         },
         {
-          "name": "SCRATCH ROLE TEMPLATE",
-          "role": "scratch_role_template"
+          "src": "file:./tests/assets/scratch_role_template.json"
         }
       ],
+      "template": {
+        "key": "dbs_XYZ",
+        "src": "file:./tests/assets/dbs_XYZ.json",
+        "dbs": "XYZ"
+      },
       "infoj": [
         {
           "type": "geometry",
@@ -81,7 +103,16 @@
     }
   },
   "locale": {
+    "queryparams": {
+      "locale": "uk"
+    },
+    "layer": {
+      "locale_layer": true
+    },
     "layers": {
+      "plugins_layer": {
+        "plugins": ["${TEST}plugin.js"]
+      },
       "OSM": {
         "template": "OSM"
       },
@@ -99,8 +130,8 @@
   },
   "locales": {
     "uk": {
+      "plugins": ["plugin_a", "plugin_b"],
       "extent": {},
-      "layers": {},
       "locales": ["brand_a_locale", "brand_b_locale", "UK_locale"]
     },
     "europe": {
