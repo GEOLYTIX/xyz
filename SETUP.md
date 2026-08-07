@@ -36,6 +36,39 @@ Use `git clone https://github.com/GEOLYTIX/xyz.git` to clone the repository into
 
 Change into the directory and use `pnpm install` to install any monorepo dependencies defined or referenced in the package.json
 
+## launch.json [VSCode]
+
+After the dependencies are installed on local the process can be launched in debug through the VSCode interface. A new node launch.json can be created through the debug interface panel.
+
+The Express server app `apps/xyz/server.js` must be referenced as program to launch. This allows to provide environment variables as env object, eg. to define the test WORKSPACE in the public folder.
+
+```json
+{
+    "type": "node",
+    "request": "launch",
+    "name": "Launch Program (no Varlock, no .env)",
+    "skipFiles": [
+        "<node_internals>/**"
+    ],
+    "program": "apps/xyz/server.js",
+    "env": {
+        "WORKSPACE": "file:./public/workspace.json"
+    }
+},
+```
+
+Alternatively it is possible to define a launch block which recognises a .env file in the root. The command uses pnpm to execute the dev script [`varlock run -- node --inspect server.js`] defined in the package.json of the xyz app.
+
+```json
+{
+    "type": "node-terminal",
+    "request": "launch",
+    "name": "Launch via Varlock (.env recognized)",
+    "command": "pnpm --filter @geolytix/xyz-app dev",
+    "cwd": "${workspaceFolder}"
+}
+```
+
 ## Environment variables
 The node process which runs the xyz express app can be configured with environment variables in an env file in the repository root.
 
@@ -114,7 +147,9 @@ NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
 For JSDoc generation, see [DOCUMENTATION.md](./DOCUMENTATION.md).
 
 ## Vercel deployment
-Deployments to Vercel require environment variables to be encrypted with varlock. Please refer to the [varlock documentation](./varlock/README.md) for configuration and workflows.
+Deployments to Vercel require environment variables to be frozen and encrypted with varlock before deploying.
+
+Please refer to [DEPLOYMENT.md](./DEPLOYMENT.md) for the full deployment workflow, and to the [varlock documentation](./varlock/README.md) for schema and secret configuration.
 
 ## Tests
 Please refer to [TESTING.md](./TESTING.md) in regards to testing the individual XYZ monorepo apps.

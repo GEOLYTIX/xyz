@@ -3,7 +3,9 @@
 
 The processEnv module parses environment variables, sets defaults, and assigns an object with variable properties as globalThis.xyzEnv.
 
-Sensitive variables must be declared in an .env.schema file in the root directory.
+Varlock is optional. The module hydrates the environment from varlock when a frozen .varlock.blob or a `varlock run` parent process provides one, and otherwise falls back to the environment variables the process was launched with.
+
+Sensitive variables must be declared in an .env.schema file in the root directory when varlock is used.
 
 Non sensitive environment variables such as a local workspace may be provided in the root env file.
 
@@ -29,31 +31,32 @@ import {
 import { decryptEnvBlobSync, isEncryptedBlob } from 'varlock/encrypt-env';
 
 if (process.env.VERCEL) {
-  // Vercel deployments hydrate the environment from the frozen blob written by utils/freeze-env.js before the deployment.
+  // Vercel deployments may hydrate the environment from the frozen blob written by utils/freeze-env.js before the deployment.
   // No schema, plugin, or secret resolution happens at runtime.
+  // The blob is optional. Without it the process uses the environment variables configured in the Vercel project.
   const frozenEnvPath = new URL('../../../../.varlock.blob', import.meta.url);
 
-  if (!existsSync(frozenEnvPath)) {
-    throw new Error(
-      'Missing .varlock.blob - run `pnpm freeze-env` before deploying.',
-    );
-  }
+  if (existsSync(frozenEnvPath)) {
+    let frozenEnv = readFileSync(frozenEnvPath, 'utf8');
 
-  let frozenEnv = readFileSync(frozenEnvPath, 'utf8');
-
-  if (isEncryptedBlob(frozenEnv)) {
-    if (!process.env._VARLOCK_ENV_KEY) {
-      throw new Error(
-        '.varlock.blob is encrypted but _VARLOCK_ENV_KEY is not set in the process environment.',
-      );
+    if (isEncryptedBlob(frozenEnv)) {
+      // A blob which cannot be decrypted is a misconfiguration rather than an opt out of varlock.
+      if (!process.env._VARLOCK_ENV_KEY) {
+        throw new Error(
+          '.varlock.blob is encrypted but _VARLOCK_ENV_KEY is not set in the process environment.',
+        );
+      }
+      frozenEnv = decryptEnvBlobSync(frozenEnv, process.env._VARLOCK_ENV_KEY);
     }
-    frozenEnv = decryptEnvBlobSync(frozenEnv, process.env._VARLOCK_ENV_KEY);
-  }
 
-  process.env.__VARLOCK_ENV = frozenEnv;
+    process.env.__VARLOCK_ENV = frozenEnv;
+  }
 }
 
-internal.initVarlockEnv();
+// Varlock is optional. allowFail prevents initVarlockEnv from throwing when there is nothing to hydrate,
+// eg. a deployment without a frozen blob or a process not launched through `varlock run`.
+// The process then falls back to the environment variables it was launched with.
+internal.initVarlockEnv({ allowFail: true });
 
 // Match varlock/auto-load runtime behavior; redact sensitive values from console output and prevent leaks in HTTP responses.
 patchGlobalConsole();
