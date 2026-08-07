@@ -32,6 +32,7 @@ import logger from '../utils/logger.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
 import getLocale from './getLocale.js';
+import getScopes, { scopesArray, scopesTree } from './getScopes.js';
 
 const keyMethods = {
   layer,
@@ -288,64 +289,14 @@ async function scopes(req, res) {
   // TODO check why the scopes array is different from composedWorkspace
   // const cachedWorkspace = await composeWorkspace();
 
-  const cachedWorkspace = await workspaceCache(true);
-
-  await cacheSources(cachedWorkspace).then((errors) => {
-    if (errors.length) {
-      console.error(new Error(errors.join('\n')));
-    }
-  });
-
-  // The nestedLocales method will be called for each locale in the cached workspace to ensure that all nested locales are loaded and checked for user access.
-  for (const localeKey of Object.keys(cachedWorkspace.locales)) {
-    const locale = await getLocale({
-      locale: localeKey,
-      layers: true,
-      user: { roles: true },
-    });
-    await nestedLocales({ locales: {} }, locale, { roles: true });
-  }
-
-  const scopesArray = Array.from(cachedWorkspace.scopes)
-    .filter(Boolean)
-    .sort((a, b) => a.localeCompare(b));
+  const workspaceScopes = await getScopes();
 
   if (req.params.tree) {
-    scopesArrayToTree(res, cachedWorkspace.scopes);
+    res.send(scopesTree(workspaceScopes));
     return;
   }
 
-  res.send(scopesArray);
-}
-
-/**
-@function scopesArrayToTree
-
-@description
-The scopesArrayToTree method converts an array of scopes strings into a tree structure.
-
-@param {res} res HTTP response.
-@param {Set} scopesStringsSet Set of scopes strings.
-*/
-function scopesArrayToTree(res, scopesStringsSet) {
-  const scopesTree = {};
-
-  for (const scope of scopesStringsSet) {
-    if (scope === '') continue;
-
-    const rolesArr = scope.split('.');
-
-    if (rolesArr.length > 1) {
-      rolesArr.reduce(
-        (accumulator, currentValue) => (accumulator[currentValue] ??= {}),
-        scopesTree,
-      );
-    } else {
-      scopesTree[scope] ??= {};
-    }
-  }
-
-  res.send(scopesTree);
+  res.send(scopesArray(workspaceScopes));
 }
 
 /**
