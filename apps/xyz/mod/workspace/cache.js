@@ -73,7 +73,7 @@ async function cacheWorkspace() {
 
   if (workspace instanceof Error) {
     // The getSrc would not be retried otherwise.
-    workspacePromise = null
+    workspacePromise = null;
     console.error(workspace);
     return {
       error: true,
