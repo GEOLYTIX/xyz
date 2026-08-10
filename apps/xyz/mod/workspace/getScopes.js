@@ -108,15 +108,10 @@ export function scopesTree(scopes) {
   for (const scope of scopes) {
     if (scope === '') continue;
 
-    const rolesArr = scope.split('.');
+    let node = tree;
 
-    if (rolesArr.length > 1) {
-      rolesArr.reduce(
-        (accumulator, currentValue) => (accumulator[currentValue] ??= {}),
-        tree,
-      );
-    } else {
-      tree[scope] ??= {};
+    for (const part of scope.split('.')) {
+      node = node[part] ??= {};
     }
   }
 
