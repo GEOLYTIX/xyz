@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import getScopes, {
+
+import {
+  getScopes,
   checkScope,
   scopesArray,
   scopesTree,
-} from '../../../mod/workspace/getScopes.js';
+} from '../../../mod/workspace/scopes.js';
 
 globalThis.xyzEnv = {
   WORKSPACE: 'file:./tests/assets/_workspace.json',

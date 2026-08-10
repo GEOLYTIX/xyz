@@ -1,7 +1,7 @@
 /**
-## /workspace/getScopes
+## /workspace/scopes
 
-The getScopes module exports the getScopes method which returns the complete set of templateScopes defined in the workspace.
+The scopes module exports the getScopes method which returns the complete set of templateScopes defined in the workspace.
 
 A templateScope is only recorded in workspace.scopes{} when the object which defines it is composed. The getScopes method therefore composes every locale, nested locale, and layer with role checks bypassed before the scopes are read.
 
@@ -9,7 +9,7 @@ A templateScope is only recorded in workspace.scopes{} when the object which def
 @requires /workspace/cache
 @requires /workspace/getLocale
 
-@module /workspace/getScopes
+@module /workspace/scopes
 */
 
 import { cacheSources } from '../provider/getSrc.js';
@@ -27,7 +27,7 @@ Locales are composed with the roles parameter set to true so that every template
 
 @returns {Promise<Set<string>>} The set of templateScopes defined in the workspace.
 */
-export default async function getScopes() {
+export async function getScopes() {
   const workspace = await workspaceCache(true);
 
   const errors = await cacheSources(workspace);

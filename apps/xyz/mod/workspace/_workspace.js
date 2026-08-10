@@ -32,7 +32,7 @@ import logger from '../utils/logger.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
 import getLocale from './getLocale.js';
-import getScopes, { scopesArray, scopesTree } from './getScopes.js';
+import { getScopes, scopesArray, scopesTree } from './scopes.js';
 
 const keyMethods = {
   layer,
