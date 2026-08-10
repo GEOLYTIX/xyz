@@ -11,8 +11,8 @@
 
 import merge from '../utils/merge.js';
 import workspaceCache from './cache.js';
-import { checkScope } from './scopes.js';
 import getTemplate from './getTemplate.js';
+import { checkScope } from './scopes.js';
 
 let workspace;
 

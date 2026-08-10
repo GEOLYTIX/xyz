@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  getScopes,
   checkScope,
+  getScopes,
   scopesArray,
   scopesTree,
 } from '../../../mod/workspace/scopes.js';
