@@ -155,9 +155,7 @@ export function checkScope(templateScope, roles) {
   }
 
   // Access should be granted if the templateScopeString is the first part of any nested role.
-  if (
-    roles.findIndex((role) => role.startsWith(`${templateScopeString}.`)) > -1
-  ) {
+  if (roles.some((role) => role.startsWith(`${templateScopeString}.`))) {
     return true;
   }
 
