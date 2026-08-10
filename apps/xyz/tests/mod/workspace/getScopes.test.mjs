@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { checkScope } from '../../../mod/workspace/composeObj.js';
 import getScopes, {
+  checkScope,
   scopesArray,
   scopesTree,
 } from '../../../mod/workspace/getScopes.js';
