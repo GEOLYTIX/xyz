@@ -1,16 +1,11 @@
 /**
 ## /workspace/authorization
 
-The authorization module exports the seam through which workspace composition
-routes template scope access decisions.
+The authorization module exports the seam through which workspace composition routes template scope access decisions.
 
-A composing host may register an asynchronous authorization provider to answer
-scope decisions from an external policy store, eg. OpenFGA.
+A composing host may register an asynchronous authorization provider to answer scope decisions from an external policy store, eg. OpenFGA.
 
-The provider is only consulted when the AUTHORIZATION_PROVIDER flag is enabled
-in the xyzEnv. Without the flag the authorizeScope method returns the
-synchronous checkScope semantics for the user.roles array, matching the
-LEGACY_ROLES flag pattern.
+The provider is only consulted when the AUTHORIZATION_PROVIDER flag is enabled in the xyzEnv. Without the flag the authorizeScope method returns the synchronous checkScope semantics for the user.roles array, matching the LEGACY_ROLES flag pattern.
 
 @requires /workspace/scopes
 
@@ -40,9 +35,7 @@ let provider;
 @function setAuthorizationProvider
 
 @description
-The method registers an authorization provider for workspace composition. The
-provider is only consulted with the AUTHORIZATION_PROVIDER flag enabled in the
-xyzEnv.
+The method registers an authorization provider for workspace composition. The provider is only consulted with the AUTHORIZATION_PROVIDER flag enabled in the xyzEnv.
 
 Calling the method without a provider argument clears the registration.
 

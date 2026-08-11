@@ -1,12 +1,12 @@
 {
   "source": {
-    "include": ["./apps/xyz/api", "./apps/xyz/mod", "server.js"],
+    "include": ["./apps/xyz/mod"],
     "includePattern": ".js$"
   },
   "plugins": ["plugins/markdown"],
   "opts": {
     "encoding": "utf8",
-    "readme": "./apps/xyz/api/README.md",
+    "readme": "./apps/xyz/README.md",
     "destination": "docs/",
     "recurse": true,
     "verbose": true,
@@ -25,7 +25,7 @@
         {
           "title": "Mapp",
           "id": "mapp",
-          "link": "/xyz/mapp"
+          "link": "/docs/mapp"
         }
       ]
     }

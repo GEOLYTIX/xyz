@@ -21,6 +21,7 @@ let workspace;
 @async
 
 @description
+The composeObj method is the main entry point for composing an object with templates and roles. It will recursively traverse the provided object and its nested objects to identify and process template definitions.
 
 @param {Object} obj
 @param {array} [roles] An array of user roles from request params.
@@ -81,6 +82,7 @@ export default async function composeObj(obj, roles) {
 @async
 
 @description
+The mergeTemplateIntoObj method merges a template into an object. It first retrieves the template using the getTemplate method, then filters the template properties using the filterTemplateProperties method.
 
 @param {Object} obj
 @param {Object} template The template maybe an object with a src property or a string.
