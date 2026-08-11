@@ -110,6 +110,7 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SAML_PROVIDER_NAME] Display name for your service
 @property {String} [SLO_CALLBACK] URL for handling logout callbacks
 @property {Boolean} [LEGACY_ROLES] Enable legacy role checks
+@property {Boolean} [AUTHORIZATION_PROVIDER] Route workspace composition scope checks through the [authorization]{@link module:/workspace/authorization} provider registered by the composing host.
 */
 
 const defaults = {

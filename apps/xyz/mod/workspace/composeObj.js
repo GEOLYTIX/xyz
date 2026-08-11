@@ -2,17 +2,17 @@
 ## /workspace/composeObj
 
 @requires /utils/merge
+@requires /workspace/authorization
 @requires /workspace/cache
 @requires /workspace/getTemplate
-@requires /workspace/getScopes
 
 @module /workspace/composeObj
 */
 
 import merge from '../utils/merge.js';
+import { authorizeScope } from './authorization.js';
 import workspaceCache from './cache.js';
 import getTemplate from './getTemplate.js';
-import { checkScope } from './scopes.js';
 
 let workspace;
 
@@ -54,7 +54,14 @@ export default async function composeObj(obj, roles) {
 
   workspace.scopes.add(templateScope.join('.'));
 
-  if (!checkScope(templateScope, roles)) {
+  const allowed = await authorizeScope({
+    obj,
+    roles,
+    scope: [...templateScope],
+    scopeKey: templateScope.join('.'),
+  });
+
+  if (!allowed) {
     return new Error(
       `User does not have access to object with template scope: ${templateScope.join('.')}`,
     );
@@ -98,7 +105,14 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
 
   workspace.scopes.add(templateScope.join('.'));
 
-  if (!checkScope(templateScope, roles)) {
+  const allowed = await authorizeScope({
+    obj: template,
+    roles,
+    scope: [...templateScope],
+    scopeKey: templateScope.join('.'),
+  });
+
+  if (!allowed) {
     return;
   }
 
@@ -324,7 +338,7 @@ The role as defined by the key in the roles object will be added to the accessRo
 @param {Object} obj
 @param {array} roles
 @param {array} templateScope
-@returns {boolean} 
+@returns {boolean}
 */
 async function rolesTemplates(key, val, obj, roles, templateScope) {
   if (key !== 'roles') return false;
@@ -399,7 +413,7 @@ The arrayProperty method processes array properties of an object. It iterates ov
 @param {Object} obj
 @param {array} roles
 @param {array} templateScope
-@returns {boolean} 
+@returns {boolean}
 */
 async function arrayProperty(key, val, obj, roles, templateScope) {
   if (!Array.isArray(val)) return false;
