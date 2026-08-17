@@ -90,6 +90,8 @@ export default async function decorate(layer) {
   // Set layer opacity from style.
   layer.L.setOpacity(layer.style?.opacity || 1);
 
+  prewarmStyleIcons(layer);
+
   // Check which infoj entries should be skipped.
   if (Array.isArray(layer.infoj_skip)) {
     layer.infoj
@@ -114,6 +116,76 @@ export default async function decorate(layer) {
   });
 
   return layer;
+}
+
+/**
+@function prewarmStyleIcons
+
+@description
+The prewarmStyleIcons method rasterizes the icon variants of the layer style configuration into bitmaps, and requests a redraw of the layer as bitmaps become available.
+
+The icon variants of a layer are the icon styles of the layer style configuration, including those of the theme categories. Rasterizing these before the first render prevents the feature style render from having to substitute a fallback symbol.
+
+The layer must be redrawn as bitmaps become available, since the style function will have returned a fallback symbol for a variant which was not yet rasterized.
+
+@param {layer} layer A decorated mapp layer.
+@property {layer-style} layer.style The mapp-layer style configuration.
+*/
+function prewarmStyleIcons(layer) {
+  const icons = styleIcons(layer.style);
+
+  if (!icons.length) return;
+
+  mapp.utils.svgBitmap.onBitmapReady(() => layer.L?.changed());
+
+  const urls = icons.map((icon) => mapp.utils.iconUrl(icon)).filter(Boolean);
+
+  mapp.utils.svgBitmap.prewarm(urls).then(() => layer.L?.changed());
+}
+
+/**
+@function styleIcons
+
+@description
+The styleIcons method collects the icon style objects from a layer style configuration.
+
+The styleParser assigns self references between the style, theme, and label objects, so objects which have already been walked must be tracked.
+
+@param {layer-style} style The mapp-layer style configuration.
+
+@returns {array} An array of mapp icon style objects.
+*/
+export function styleIcons(style) {
+  const icons = [];
+  const walked = new WeakSet();
+
+  function walk(node) {
+    if (node === null || typeof node !== 'object') return;
+
+    if (walked.has(node)) return;
+
+    walked.add(node);
+
+    if (Array.isArray(node)) {
+      node.forEach(walk);
+      return;
+    }
+
+    // Only the plain objects of the JSON style configuration are walked. A style property may hold a DOM node or an Openlayers object.
+    if (node.constructor !== Object) return;
+
+    if (node.icon) {
+      Array.isArray(node.icon)
+        ? icons.push(...node.icon)
+        : icons.push(node.icon);
+    }
+
+    Object.values(node).forEach(walk);
+  }
+
+  walk(style);
+
+  return icons.filter((icon) => icon !== null && typeof icon === 'object');
 }
 
 /**

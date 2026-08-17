@@ -1,0 +1,295 @@
+/**
+## mapp.utils.svgBitmap{}
+
+The svgToBitmap module rasterizes SVG data URLs into ImageBitmap objects for use as the `img` option of an Openlayers style Icon.
+
+An SVG referenced as an image is not an image resource to the browser. Chrome instantiates a complete isolated SVG document for each one, with a Page, LocalFrame, and StyleEngine, and keeps it alive for the lifetime of the image resource. A canvas or ImageBitmap backed Icon instantiates no document at all.
+
+Rasterization is queued with a concurrency limit. Rasterizing the whole variant set at once creates that many documents at once, and the collector will not keep pace.
+
+@module /utils/svgToBitmap
+*/
+
+/**
+The bitmaps Map holds the rasterized {image, pixelRatio} entry for a data URL.
+
+The pixelRatio the entry was rasterized at is stored with the image. An Icon must be scaled by the reciprocal to render at the size the SVG declares.
+*/
+const bitmaps = new Map();
+
+/**
+The pending Map holds the in flight rasterization promise for a data URL, so that a src requested from consecutive renders is only rasterized once.
+*/
+const pending = new Map();
+
+/**
+The failed Set holds data URLs which could not be rasterized. A failed src is not retried.
+*/
+const failed = new Set();
+
+/**
+Callbacks to be notified when new bitmaps become available, so that a layer can be redrawn.
+*/
+const listeners = new Set();
+
+/**
+The queue holds rasterization jobs which have not yet started.
+*/
+const queue = [];
+
+/**
+The number of variants to rasterize.
+
+A bitmap is retained for the lifetime of the session, as is the Openlayers IconImageCache entry which is keyed on the uid of the image object. Evicting and rasterizing a variant again would create a second uid and a second permanent cache entry, so the cache is capped rather than evicted. A style with more variants than the limit renders the fallback symbol.
+*/
+const bitmapLimit = 256;
+
+/**
+The number of rasterizations to run at once.
+*/
+const concurrency = 16;
+
+/**
+The width and height to rasterize at where the SVG declares no intrinsic size.
+*/
+const defaultSize = 24;
+
+let active = 0;
+
+let cappedWarning = false;
+
+let notifyFrame = false;
+
+/**
+@function iconBitmap
+
+@description
+The iconBitmap method returns the rasterized entry for a data URL, and requests the rasterization of a src which has not yet been rasterized.
+
+The method is called from the feature style render and must not block. A src which is not yet available returns undefined for the caller to substitute a fallback symbol.
+
+Only a `data:` src is rasterized. A src which is a url is a single image resource shared by every feature which references it, which is the deduplication the browser is designed for.
+
+@param {string} src The icon url or data URL.
+
+@returns {Object} The {image, pixelRatio} entry for the src.
+*/
+export function iconBitmap(src) {
+  if (typeof src !== 'string') return;
+
+  if (!src.startsWith('data:')) return;
+
+  const entry = bitmaps.get(src);
+
+  if (entry) return entry;
+
+  requestBitmap(src);
+}
+
+/**
+@function requestBitmap
+
+@description
+The requestBitmap method queues the rasterization of a data URL and returns the promise for the queued job.
+
+@param {string} src The data URL to rasterize.
+
+@returns {Promise} The rasterization promise.
+*/
+export function requestBitmap(src) {
+  if (typeof src !== 'string') return;
+
+  if (!src.startsWith('data:')) return;
+
+  if (bitmaps.has(src) || failed.has(src)) return;
+
+  const inflight = pending.get(src);
+
+  if (inflight) return inflight;
+
+  if (bitmaps.size + pending.size >= bitmapLimit) {
+    if (!cappedWarning) {
+      cappedWarning = true;
+      console.warn(
+        `svgToBitmap: ${bitmapLimit} icon variants rasterized. Additional variants will render the fallback symbol. Reduce the number of icon variants in the style configuration.`,
+      );
+    }
+    return;
+  }
+
+  const promise = new Promise((resolve) => {
+    queue.push({ resolve, src });
+  });
+
+  pending.set(src, promise);
+
+  drain();
+
+  return promise;
+}
+
+/**
+@function prewarm
+@async
+
+@description
+The prewarm method requests the rasterization of an array of data URLs and resolves once all have been rasterized or have failed.
+
+@param {array} srcs An array of icon urls or data URLs.
+
+@returns {Promise<void>}
+*/
+export async function prewarm(srcs) {
+  if (!Array.isArray(srcs)) return;
+
+  const promises = [...new Set(srcs)].map(requestBitmap).filter(Boolean);
+
+  if (!promises.length) return;
+
+  await Promise.all(promises);
+}
+
+/**
+@function onBitmapReady
+
+@description
+The onBitmapReady method registers a callback to be called once per animation frame in which new bitmaps became available.
+
+@param {function} callback The method to call.
+*/
+export function onBitmapReady(callback) {
+  typeof callback === 'function' && listeners.add(callback);
+}
+
+/**
+@function bitmapStats
+
+@description
+The bitmapStats method returns the state of the bitmap cache for diagnostics.
+
+@returns {Object} The number of rasterized, pending, and failed variants.
+*/
+export function bitmapStats() {
+  return {
+    bitmaps: bitmaps.size,
+    capped: bitmaps.size + pending.size >= bitmapLimit,
+    failed: failed.size,
+    pending: pending.size,
+  };
+}
+
+/**
+@function drain
+
+@description
+The drain method starts queued rasterization jobs up to the concurrency limit.
+*/
+function drain() {
+  while (active < concurrency && queue.length) {
+    const job = queue.shift();
+
+    active++;
+
+    rasterize(job.src)
+      .then((entry) => {
+        bitmaps.set(job.src, entry);
+        scheduleNotify();
+      })
+      .catch((error) => {
+        failed.add(job.src);
+        console.warn('svgToBitmap: rasterization failed.', error);
+      })
+      .finally(() => {
+        pending.delete(job.src);
+        active--;
+        job.resolve();
+        drain();
+      });
+  }
+}
+
+/**
+@function rasterize
+@async
+
+@description
+The rasterize method draws an SVG data URL into a canvas and returns the canvas as an ImageBitmap.
+
+The image element is not retained. The isolated SVG document the browser created for it is released with the image, since the data URL is never assigned to an Openlayers style Icon and so is never held by the IconImageCache.
+
+@param {string} src The data URL to rasterize.
+
+@returns {Promise<Object>} The {image, pixelRatio} entry.
+*/
+async function rasterize(src) {
+  const image = new Image();
+
+  image.src = src;
+
+  await (image.decode ? image.decode() : imageLoad(image));
+
+  const pixelRatio = globalThis.devicePixelRatio || 1;
+
+  const width = Math.max(
+    1,
+    Math.round((image.naturalWidth || defaultSize) * pixelRatio),
+  );
+
+  const height = Math.max(
+    1,
+    Math.round((image.naturalHeight || defaultSize) * pixelRatio),
+  );
+
+  const canvas = document.createElement('canvas');
+
+  canvas.width = width;
+  canvas.height = height;
+
+  canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+
+  if (typeof createImageBitmap === 'function') {
+    try {
+      // An ImageBitmap holds only the decoded pixels. Openlayers makes the same swap for the canvas of a RegularShape.
+      return { image: await createImageBitmap(canvas), pixelRatio };
+    } catch (error) {
+      console.warn('svgToBitmap: createImageBitmap failed.', error);
+    }
+  }
+
+  return { image: canvas, pixelRatio };
+}
+
+/**
+@function imageLoad
+
+@description
+The imageLoad method resolves once the image element has loaded, for browsers without HTMLImageElement.decode.
+
+@param {Object} image An image element.
+
+@returns {Promise<void>}
+*/
+function imageLoad(image) {
+  return new Promise((resolve, reject) => {
+    image.addEventListener('load', resolve, { once: true });
+    image.addEventListener('error', reject, { once: true });
+  });
+}
+
+/**
+@function scheduleNotify
+
+@description
+The scheduleNotify method calls the registered listeners once for the animation frame in which bitmaps became available.
+*/
+function scheduleNotify() {
+  if (notifyFrame) return;
+
+  // The flag must be set before the frame is requested. Assigning the return value would leave the flag set if the callback were to be called synchronously.
+  notifyFrame = true;
+
+  globalThis.requestAnimationFrame(() => {
+    notifyFrame = false;
+    listeners.forEach((callback) => callback());
+  });
+}

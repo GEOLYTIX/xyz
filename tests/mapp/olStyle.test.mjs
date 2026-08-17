@@ -1,18 +1,36 @@
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 /**
-The olStyle module is browser code with no imports. It reads the ol namespace and mapp.utils from globals, so it can be tested in node against fake Openlayers style classes.
+The olStyle module is browser code with no browser imports. It reads the ol namespace and mapp.utils from globals, so it can be tested in node against fake Openlayers style classes.
 
-The fake Icon records the options it was constructed with. Counting constructions is what these tests are for: the module must construct one Icon per distinct icon variant rather than one per feature.
+The svgToBitmap module is mocked so that a test controls which icon variants have been rasterized. The fake Icon and Circle record the options they were constructed with: counting constructions is what these tests are for, since the module must construct one image style per distinct icon variant rather than one per feature.
 */
 let olStyle;
 
+const bitmapEntries = new Map();
+
+vi.mock('../../apps/mapp/lib/utils/svgToBitmap.mjs', () => ({
+  bitmapStats: () => ({}),
+  iconBitmap: (src) => bitmapEntries.get(src),
+  onBitmapReady: () => {},
+  prewarm: async () => {},
+  requestBitmap: () => undefined,
+}));
+
 const iconOptions = [];
+const circleOptions = [];
 
 class Icon {
   constructor(options) {
     this.options = options;
     iconOptions.push(options);
+  }
+}
+
+class Circle {
+  constructor(options) {
+    this.options = options;
+    circleOptions.push(options);
   }
 }
 
@@ -25,6 +43,7 @@ class Style {
 beforeAll(async () => {
   vi.stubGlobal('ol', {
     style: {
+      Circle,
       Fill: class {},
       Icon,
       Stroke: class {},
@@ -49,51 +68,119 @@ beforeAll(async () => {
 
 beforeEach(() => {
   iconOptions.length = 0;
+  circleOptions.length = 0;
 });
 
 /**
-The Icon memo is module scoped and persists for the lifetime of the module. Each test uses its own src so that an Icon memoized by one test can not satisfy another test.
+The image style memos are module scoped and persist for the lifetime of the module. Each test uses its own src so that a style memoized by one test can not satisfy another test.
 */
 function testSrc(id) {
   return `data:image/svg+xml,${encodeURIComponent(`<svg id="${id}"/>`)}`;
 }
 
-describe('olStyle icon sharing', () => {
+/**
+Seeds a rasterized variant for the src, as the svgToBitmap module would.
+*/
+function seedBitmap(src, pixelRatio = 2) {
+  const image = { height: 24 * pixelRatio, width: 24 * pixelRatio };
+  bitmapEntries.set(src, { image, pixelRatio });
+  return image;
+}
+
+describe('olStyle bitmap icons', () => {
   it('constructs one Icon for many features with an identical icon style', () => {
     const src = testSrc('shared');
+    const image = seedBitmap(src);
 
     const Styles = Array.from({ length: 100 }, () =>
       // Each feature carries its own cloned style object, as featureStyle assigns with structuredClone.
       olStyle({ icon: { url: src } }),
     );
 
-    const images = Styles.map((s) => s[0].image);
-
     // One Icon for one hundred features. Every feature style holds the same object.
     expect(iconOptions).toHaveLength(1);
-    expect(new Set(images).size).toBe(1);
+    expect(new Set(Styles.map((s) => s[0].image)).size).toBe(1);
+    expect(iconOptions[0].img).toBe(image);
+    expect(iconOptions[0].src).toBeUndefined();
   });
 
-  it('constructs a separate Icon per scale', () => {
-    const src = testSrc('scale');
+  it('divides the scale by the pixel ratio the bitmap was rasterized at', () => {
+    const src = testSrc('pixelRatio');
+    seedBitmap(src, 2);
 
-    // The cluster, zoom, field, and highlight scales are per feature values. The scale must stay part of the Icon key.
+    // A bitmap rasterized at twice the device pixel ratio must render at half the scale to occupy the size the SVG declares.
+    olStyle({ icon: { scale: 3, url: src } });
+
+    expect(iconOptions[0].scale).toBe(1.5);
+  });
+
+  it('constructs a separate Icon per scale and per anchor', () => {
+    const src = testSrc('variants');
+    seedBitmap(src, 1);
+
+    // The cluster, zoom, field, and highlight scales are per feature values, so the scale must stay part of the Icon key and out of the variant key.
     olStyle({ clusterScale: 1.5, icon: { url: src } });
     olStyle({ clusterScale: 2.5, icon: { url: src } });
     olStyle({ clusterScale: 1.5, icon: { url: src } });
+    olStyle({ icon: { anchor: [0.5, 1], url: src } });
 
-    expect(iconOptions).toHaveLength(2);
-    expect(iconOptions.map((options) => options.scale)).toEqual([1.5, 2.5]);
+    expect(iconOptions).toHaveLength(3);
   });
 
-  it('constructs a separate Icon per anchor', () => {
-    const src = testSrc('anchor');
+  it('caches the Styles on the feature', () => {
+    const src = testSrc('cached');
+    seedBitmap(src);
 
-    olStyle({ icon: { anchor: [0.5, 1], url: src } });
-    olStyle({ icon: { anchor: [0.5, 0.5], url: src } });
-    olStyle({ icon: { anchor: [0.5, 1], url: src } });
+    const feature = { set: vi.fn() };
 
-    expect(iconOptions).toHaveLength(2);
+    olStyle({ icon: { url: src } }, feature);
+
+    expect(feature.set).toHaveBeenCalledWith('Styles', expect.anything(), true);
+  });
+});
+
+describe('olStyle fallback symbol', () => {
+  it('renders a Circle rather than a data url Icon while a variant is rasterized', () => {
+    // An Icon constructed from the data url would be retained by the Openlayers IconImageCache as an isolated SVG document, which is the leak this replaces.
+    const Styles = olStyle({ icon: { url: testSrc('notRasterized') } });
+
+    expect(iconOptions).toHaveLength(0);
+    expect(circleOptions).toHaveLength(1);
+    expect(Styles[0].image).toBeInstanceOf(Circle);
+  });
+
+  it('shares one Circle per fill colour', () => {
+    olStyle({ icon: { fillColor: '#1a9641', url: testSrc('fallbackA') } });
+    olStyle({ icon: { fillColor: '#1a9641', url: testSrc('fallbackB') } });
+    olStyle({ icon: { fillColor: '#d7191c', url: testSrc('fallbackC') } });
+
+    // The Openlayers cache key for a RegularShape is structural, so a fixed radius yields one entry per colour however many features render it.
+    expect(circleOptions).toHaveLength(2);
+    expect(circleOptions.every((options) => options.radius === 6)).toBe(true);
+  });
+
+  it('does not cache the Styles on the feature', () => {
+    // Cached Styles would outlive the rasterization and the fallback would never be replaced.
+    const feature = { set: vi.fn() };
+
+    olStyle({ icon: { url: testSrc('notCached') } }, feature);
+
+    expect(feature.set).not.toHaveBeenCalled();
+  });
+});
+
+describe('olStyle url icons', () => {
+  it('keeps a remote url on the src path with crossOrigin', () => {
+    // A url is a single image resource shared by every feature which references it, which is the deduplication the browser is designed for.
+    olStyle({
+      icon: { url: 'https://geolytix.github.io/MapIcons/poi/train_icon.svg' },
+    });
+
+    expect(iconOptions).toHaveLength(1);
+    expect(iconOptions[0].crossOrigin).toBe('anonymous');
+    expect(iconOptions[0].src).toBe(
+      'https://geolytix.github.io/MapIcons/poi/train_icon.svg',
+    );
   });
 
   it('applies the compound scale to the Icon', () => {
@@ -107,29 +194,12 @@ describe('olStyle icon sharing', () => {
   });
 });
 
-describe('olStyle crossOrigin', () => {
-  it('does not assign crossOrigin for a data url', () => {
-    // crossOrigin has no effect on a data url and is a component of the Openlayers IconImageCache key.
-    olStyle({ icon: { url: testSrc('crossOrigin') } });
-
-    expect(iconOptions[0].crossOrigin).toBeUndefined();
-  });
-
-  it('assigns crossOrigin for a remote url', () => {
-    olStyle({
-      icon: { url: 'https://geolytix.github.io/MapIcons/poi/train_icon.svg' },
-    });
-
-    expect(iconOptions[0].crossOrigin).toBe('anonymous');
-  });
-});
-
 describe('olStyle icon url', () => {
   it('creates the icon url from the svgSymbols type method', () => {
-    const Styles = olStyle({ icon: { fillColor: '#1a9641', type: 'dot' } });
+    const Styles = olStyle({ icon: { fillColor: '#2b83ba', type: 'dot' } });
 
     expect(Styles).toHaveLength(1);
-    expect(decodeURIComponent(iconOptions[0].src)).toContain('fill="#1a9641"');
+    expect(Styles[0].image).toBeInstanceOf(Circle);
   });
 
   it('does not push a style for an icon without a url', () => {
@@ -139,13 +209,17 @@ describe('olStyle icon url', () => {
     const Styles = olStyle({ icon: { template: 'late', type: 'template' } });
 
     expect(iconOptions).toHaveLength(0);
+    expect(circleOptions).toHaveLength(0);
     expect(Styles).toHaveLength(0);
   });
 
   it('processes an icon array as separate styles', () => {
-    const Styles = olStyle({
-      icon: [{ url: testSrc('array1') }, { url: testSrc('array2') }],
-    });
+    const first = testSrc('array1');
+    const second = testSrc('array2');
+    seedBitmap(first);
+    seedBitmap(second);
+
+    const Styles = olStyle({ icon: [{ url: first }, { url: second }] });
 
     expect(Styles).toHaveLength(2);
     expect(iconOptions).toHaveLength(2);

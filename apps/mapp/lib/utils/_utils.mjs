@@ -54,7 +54,7 @@ import {
   formatNumericValue,
   unformatStringValue,
 } from './numericFormatter.mjs';
-import style from './olStyle.mjs';
+import style, { iconUrl } from './olStyle.mjs';
 import paramString from './paramString.mjs';
 import ping from './ping.mjs';
 import { polygonIntersectFeatures } from './polygonIntersectFeatures.mjs';
@@ -64,6 +64,7 @@ import queryParams from './queryParams.mjs';
 import scriptElement from './scriptElement.mjs';
 import * as svgSymbols from './svgSymbols.mjs';
 import { svgTemplates } from './svgTemplates.mjs';
+import * as svgBitmap from './svgToBitmap.mjs';
 import { temporal } from './temporal.mjs';
 import textFile from './textFile.mjs';
 import * as userIndexedDB from './userIndexedDB.mjs';
@@ -85,6 +86,7 @@ export default {
   getCurrentPosition,
   hexa,
   html,
+  iconUrl,
   jsonParser,
   keyvalue_dictionary,
   loadDictionary,
@@ -103,6 +105,7 @@ export default {
   simpleStatistics,
   style,
   svg,
+  svgBitmap,
   svgSymbols,
   svgTemplates,
   temporal,
