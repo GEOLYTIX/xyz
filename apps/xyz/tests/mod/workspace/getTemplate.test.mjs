@@ -234,7 +234,7 @@ describe('getTemplate', async () => {
       const first = await getTemplate('nested_roles_template');
 
       // The roles object is merged for a user holding the restricted role.
-      const composed = await composeObj(first, ['restricted']);
+      const composed = await composeObj(first, { roles: ['restricted'] });
 
       expect(composed.nested).toMatchObject({ keep: true, merged: true });
 

@@ -24,12 +24,13 @@ let workspace;
 The composeObj method is the main entry point for composing an object with templates and roles. It will recursively traverse the provided object and its nested objects to identify and process template definitions.
 
 @param {Object} obj
-@param {array} [roles] An array of user roles from request params.
+@param {User} [user] The requesting user from request params.
 
 @property {string} [obj.template] Key of template for the object.
 @property {array} [obj.templates] An array of template keys to be merged into the object.
+@property {array<string>|boolean} [user.roles] An array of user roles. Admin endpoints set the roles property to true to bypass role checks.
 */
-export default async function composeObj(obj, roles) {
+export default async function composeObj(obj, user) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
@@ -57,9 +58,9 @@ export default async function composeObj(obj, roles) {
 
   const allowed = await authorizeScope({
     obj,
-    roles,
     scope: [...templateScope],
     scopeKey: templateScope.join('.'),
+    user,
   });
 
   if (!allowed) {
@@ -68,7 +69,7 @@ export default async function composeObj(obj, roles) {
     );
   }
 
-  const rolesCheck = await parseTemplates(obj, roles, templateScope);
+  const rolesCheck = await parseTemplates(obj, user, templateScope);
 
   if (rolesCheck instanceof Error) {
     return rolesCheck;
@@ -86,12 +87,12 @@ The mergeTemplateIntoObj method merges a template into an object. It first retri
 
 @param {Object} obj
 @param {Object} template The template maybe an object with a src property or a string.
-@param {array} [roles] An array of user roles from request params.
+@param {User} [user] The requesting user from request params.
 @param {array} [templateScope] The templateScope is an array that represents nested template roles/scope.
 
 @returns {Promise<Object>} Returns the merged obj.
 */
-async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
+async function mergeTemplateIntoObj(obj, template, user, templateScope = []) {
   template = await getTemplate(template);
 
   if (template instanceof Error) {
@@ -109,16 +110,16 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
 
   const allowed = await authorizeScope({
     obj: template,
-    roles,
     scope: [...templateScope],
     scopeKey: templateScope.join('.'),
+    user,
   });
 
   if (!allowed) {
     return;
   }
 
-  const rolesCheck = await parseTemplates(template, roles, templateScope);
+  const rolesCheck = await parseTemplates(template, user, templateScope);
 
   if (rolesCheck instanceof Error) {
     obj.warn ??= [];
@@ -177,10 +178,10 @@ If a template object is found, it will be added to the workspace.templates objec
 If an array of templates is found, each template will be merged into the object in the order they are defined in the array.
 
 @param {Object} obj
-@param {Object} roles
+@param {User} [user] The requesting user from request params.
 @param {array} templateScope
 */
-async function parseTemplates(obj, roles, templateScope) {
+async function parseTemplates(obj, user, templateScope) {
   if (typeof obj !== 'object') return;
 
   if (obj === null) return;
@@ -191,11 +192,11 @@ async function parseTemplates(obj, roles, templateScope) {
 
     // Locale object layers should never be processed. Layers will be processed in the getLayer method. The layers property will be removed from the locale object after processing.
     if (key === 'layers') continue;
-    if (queryTemplate(key, val, obj, roles, templateScope)) {
+    if (queryTemplate(key, val, obj, user, templateScope)) {
       continue;
     }
 
-    if (await templatesArray(key, val, obj, roles, templateScope)) {
+    if (await templatesArray(key, val, obj, user, templateScope)) {
       continue;
     }
 
@@ -203,7 +204,7 @@ async function parseTemplates(obj, roles, templateScope) {
       key,
       val,
       obj,
-      roles,
+      user,
       templateScope,
     );
 
@@ -216,12 +217,12 @@ async function parseTemplates(obj, roles, templateScope) {
     }
 
     // Recursively process each item in an array property of the object.
-    if (await arrayProperty(key, val, obj, roles, templateScope)) {
+    if (await arrayProperty(key, val, obj, user, templateScope)) {
       continue;
     }
 
     // Recursively process nested objects
-    const parseTemplatesCheck = await parseTemplates(val, roles, templateScope);
+    const parseTemplatesCheck = await parseTemplates(val, user, templateScope);
     if (parseTemplatesCheck instanceof Error) {
       delete obj[key];
     }
@@ -241,11 +242,11 @@ Access to an object is denied if the user does not have access to a prototype te
 @param {string} key
 @param {Object} val
 @param {Object} obj
-@param {array} roles
+@param {User} [user] The requesting user from request params.
 @param {array} templateScope
 @returns {boolean} Returns true if the key is 'template' and the val has a key property.
 */
-function queryTemplate(key, val, obj, roles, templateScope) {
+function queryTemplate(key, val, obj, user, templateScope) {
   if (key !== 'template') return false;
 
   if (typeof val === 'string') {
@@ -300,11 +301,11 @@ The method checks if the key is 'templates' and the val is an array. If so, it w
 @param {string} key
 @param {Object} val
 @param {Object} obj
-@param {array} roles
+@param {User} [user] The requesting user from request params.
 @param {array} templateScope
 @returns {boolean} Returns true if the key is 'templates' and the val is an array.
 */
-async function templatesArray(key, val, obj, roles, templateScope) {
+async function templatesArray(key, val, obj, user, templateScope) {
   if (key !== 'templates') return false;
 
   if (!Array.isArray(val)) {
@@ -320,7 +321,7 @@ async function templatesArray(key, val, obj, roles, templateScope) {
 
   for (const template of val) {
     // Merge template from templates array into the object. The templates will be merged in the order they are defined in the array.
-    await mergeTemplateIntoObj(obj, template, roles, templateScope);
+    await mergeTemplateIntoObj(obj, template, user, templateScope);
   }
 
   return true;
@@ -333,17 +334,20 @@ async function templatesArray(key, val, obj, roles, templateScope) {
 @description
 The rolesTemplates method processes the 'roles' property of an object. It iterates over each role and merges the corresponding template into the object if the role value is true or an object.
 
-The role as defined by the key in the roles object will be added to the accessRoles array. Access to the obj will be denied if none of the accessRoles are included in the roles array provided by the user.
+The role as defined by the key in the roles object will be added to the accessRoles array. Access to the obj will be denied if none of the accessRoles are included in the user.roles array.
 
 @param {string} key
 @param {Object} val
 @param {Object} obj
-@param {array} roles
+@param {User} [user] The requesting user from request params.
 @param {array} templateScope
+@property {array|boolean} [user.roles] An array of user roles.
 @returns {boolean}
 */
-async function rolesTemplates(key, val, obj, roles, templateScope) {
+async function rolesTemplates(key, val, obj, user, templateScope) {
   if (key !== 'roles') return false;
+
+  const roles = user?.roles;
 
   // The roles property value must be an object. If the value is true, null, or not an object, access to the obj will be denied.
   if (typeof val !== 'object' || val === true || !val) return false;
@@ -369,7 +373,7 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
       role: roleKey,
       ...roleVal,
     };
-    await mergeTemplateIntoObj(obj, template, roles, templateScope);
+    await mergeTemplateIntoObj(obj, template, user, templateScope);
     accessRoles.push(roleKey);
   }
 
@@ -377,7 +381,7 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
     accessRoles.forEach((role) => {
       workspace.scopes.add([...templateScope, role].filter(Boolean).join('.'));
     });
-    // Role check is not required for admin endpoints. The roles parameter is set to true to bypass role checks.
+    // Role check is not required for admin endpoints. The user.roles property is set to true to bypass role checks.
     return true;
   }
 
@@ -413,16 +417,16 @@ The arrayProperty method processes array properties of an object. It iterates ov
 @param {string} key
 @param {Object} val
 @param {Object} obj
-@param {array} roles
+@param {User} [user] The requesting user from request params.
 @param {array} templateScope
 @returns {boolean}
 */
-async function arrayProperty(key, val, obj, roles, templateScope) {
+async function arrayProperty(key, val, obj, user, templateScope) {
   if (!Array.isArray(val)) return false;
 
   const kept = [];
   for (const item of val) {
-    const rolesCheck = await parseTemplates(item, roles, templateScope);
+    const rolesCheck = await parseTemplates(item, user, templateScope);
     if (!(rolesCheck instanceof Error)) kept.push(item);
   }
   obj[key] = kept;
