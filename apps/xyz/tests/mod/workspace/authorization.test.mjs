@@ -30,7 +30,10 @@ describe('basic authorization', () => {
 
     expect(denied instanceof Error).toBeTruthy();
 
-    const allowed = await composeObj({ role: 'analyst' }, { roles: ['analyst'] });
+    const allowed = await composeObj(
+      { role: 'analyst' },
+      { roles: ['analyst'] },
+    );
 
     expect(allowed instanceof Error).toBeFalsy();
   });
@@ -192,7 +195,10 @@ describe('basic authorization', () => {
     expect(denied instanceof Error).toBeTruthy();
 
     // The user.roles semantics apply for a user without the property.
-    const allowed = await composeObj({ role: 'analyst' }, { roles: ['analyst'] });
+    const allowed = await composeObj(
+      { role: 'analyst' },
+      { roles: ['analyst'] },
+    );
 
     expect(allowed instanceof Error).toBeFalsy();
   });
