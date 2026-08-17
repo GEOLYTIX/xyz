@@ -303,7 +303,7 @@ The method checks if the key is 'templates' and the val is an array. If so, it w
 @param {Object} obj
 @param {User} [user] The requesting user from request params.
 @param {array} templateScope
-@returns {boolean} Returns true if the key is 'templates' and the val is an array.
+@returns {Promise<boolean>} Returns true if the key is 'templates' and the val is an array.
 */
 async function templatesArray(key, val, obj, user, templateScope) {
   if (key !== 'templates') return false;
@@ -342,7 +342,7 @@ The role as defined by the key in the roles object will be added to the accessRo
 @param {User} [user] The requesting user from request params.
 @param {array} templateScope
 @property {array|boolean} [user.roles] An array of user roles.
-@returns {boolean}
+@returns {Promise<boolean>}
 */
 async function rolesTemplates(key, val, obj, user, templateScope) {
   if (key !== 'roles') return false;
@@ -419,7 +419,7 @@ The arrayProperty method processes array properties of an object. It iterates ov
 @param {Object} obj
 @param {User} [user] The requesting user from request params.
 @param {array} templateScope
-@returns {boolean}
+@returns {Promise<boolean>}
 */
 async function arrayProperty(key, val, obj, user, templateScope) {
   if (!Array.isArray(val)) return false;
