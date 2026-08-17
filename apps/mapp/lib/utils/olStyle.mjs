@@ -106,6 +106,56 @@ export default function olStyle(style, feature) {
 }
 
 /**
+The memoizedStyleIcons Map holds ol.style.Icon objects for the icon src, anchor, and scale.
+
+An ol.style.Icon is immutable once created and may be shared by any number of features. Sharing the object prevents a new Icon being allocated for every feature on every render.
+*/
+const memoizedStyleIcons = new Map();
+
+/**
+The number of ol.style.Icon objects to memoize.
+
+The scale is part of the key and may be a unique value per feature where a cluster or zoom scale is applied. The memo is bound to prevent unbounded growth. Entries are evicted in insertion order.
+*/
+const styleIconMemoLimit = 1024;
+
+/**
+@function styleIcon
+
+@description
+The styleIcon method returns a memoized ol.style.Icon for the src, anchor, and scale.
+
+The crossOrigin option is not assigned for a `data:image` src. The option has no effect on a data URL and is a component of the Openlayers IconImageCache key.
+
+@param {string} src The icon url or data URL.
+@param {array} anchor The icon anchor.
+@param {number} scale The icon scale.
+
+@returns {Object} An Openlayers style Icon object.
+*/
+function styleIcon(src, anchor, scale) {
+  const key = `${src}|${anchor}|${scale}`;
+
+  if (memoizedStyleIcons.has(key)) return memoizedStyleIcons.get(key);
+
+  const Icon = new ol.style.Icon({
+    anchor: anchor,
+    crossOrigin: src.startsWith('data:') ? undefined : 'anonymous',
+    scale: scale,
+    src: src,
+  });
+
+  // Evict the oldest entry before the memo exceeds the styleIconMemoLimit.
+  if (memoizedStyleIcons.size >= styleIconMemoLimit) {
+    memoizedStyleIcons.delete(memoizedStyleIcons.keys().next().value);
+  }
+
+  memoizedStyleIcons.set(key, Icon);
+
+  return Icon;
+}
+
+/**
 @function iconStyle
 
 @description
@@ -137,12 +187,7 @@ function iconStyle(Styles, style, icon, feature) {
   // Push OL icon Style into Styles array.
   Styles.push(
     new ol.style.Style({
-      image: new ol.style.Icon({
-        anchor: icon.anchor || [0.5, 0.5],
-        crossOrigin: 'anonymous',
-        scale: scale,
-        src: icon.url,
-      }),
+      image: styleIcon(icon.url, icon.anchor || [0.5, 0.5], scale),
       zIndex: style.zIndex,
     }),
   );
