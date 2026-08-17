@@ -9,6 +9,11 @@ The legendIcon module exports the default legendIcon(style) method.
 const xmlSerializer = new XMLSerializer();
 
 /**
+The width and height for a legend icon element where the style declares none.
+*/
+const legendIconSize = 24;
+
+/**
 @function legendIcon
 
 @description
@@ -62,6 +67,26 @@ function createIconFromArray(style) {
   canvas.width = style.width;
   canvas.height = style.height;
 
+  // The icon variants are rasterized before the icons are drawn. A `data:image` src assigned to an Openlayers style Icon would be retained by the IconImageCache as an isolated SVG document.
+  const urls = style.icon.map(
+    (icon) => icon.url || icon.svg || svgSymbolUrl(icon),
+  );
+
+  mapp.utils.svgBitmap.prewarm(urls).then(() => drawIcons(canvas, style));
+
+  return canvas;
+}
+
+/**
+@function drawIcons
+
+@description
+The drawIcons method draws the `style.icon[]` array into the canvas of a layered legend icon.
+
+@param {HTMLElement} canvas The canvas element to draw the icons into.
+@param {feature-style} style A JSON style object.
+*/
+function drawIcons(canvas, style) {
   let toLoad = style.icon.length;
 
   // Images must be loaded in imageStyle image object before they can be applied to canvas.
@@ -95,12 +120,11 @@ function createIconFromArray(style) {
       continue;
     }
 
-    const imageStyle = new ol.style.Icon({
-      anchor: icon.legendAnchor || [0.5, 0.5],
-      crossOrigin: 'anonymous',
-      scale: legendScale * (icon.scale || 1),
-      src: iconUrl,
-    });
+    const imageStyle = legendImageStyle(
+      iconUrl,
+      icon.legendAnchor || [0.5, 0.5],
+      legendScale * (icon.scale || 1),
+    );
 
     icon.legendStyle = new ol.style.Style({
       image: imageStyle,
@@ -118,6 +142,39 @@ function createIconFromArray(style) {
   }
 
   return canvas;
+}
+
+/**
+@function legendImageStyle
+
+@description
+The legendImageStyle method returns an Openlayers style Icon for a legend icon.
+
+A `data:image` src is rendered from a rasterized bitmap where one is available. A bitmap backed Icon is loaded on creation, so the load state check of the drawIcons method resolves immediately.
+
+@param {string} src The icon url or data URL.
+@param {array} anchor The icon anchor.
+@param {number} scale The icon scale.
+
+@returns {Object} An Openlayers style Icon object.
+*/
+function legendImageStyle(src, anchor, scale) {
+  const bitmap = mapp.utils.svgBitmap.iconBitmap(src);
+
+  if (bitmap) {
+    return new ol.style.Icon({
+      anchor: anchor,
+      img: bitmap.image,
+      scale: scale / bitmap.pixelRatio,
+    });
+  }
+
+  return new ol.style.Icon({
+    anchor: anchor,
+    crossOrigin: src.startsWith('data:') ? undefined : 'anonymous',
+    scale: scale,
+    src: src,
+  });
 }
 
 /**
@@ -146,6 +203,9 @@ function createIconFromInlineStyle(style) {
     );
   }
 
+  // A `data:image` background image instantiates an isolated SVG document for as long as the element is in the document. The rasterized bitmap is drawn into a canvas instead.
+  if (iconUrl?.startsWith('data:')) return createIconFromBitmap(iconUrl, style);
+
   const inlineStyle = `
     background-position: center;
     background-repeat: no-repeat;
@@ -155,6 +215,40 @@ function createIconFromInlineStyle(style) {
     background-image: url(${iconUrl})`;
 
   return mapp.utils.html.node`<div style=${inlineStyle}>`;
+}
+
+/**
+@function createIconFromBitmap
+
+@description
+The createIconFromBitmap method returns a canvas element with the rasterized bitmap of a `data:image` URL drawn into it.
+
+The canvas is returned before the bitmap is available. The bitmap is drawn into the canvas element once it has been rasterized.
+
+@param {string} src The data URL for the icon.
+@param {feature-style} style A JSON style object.
+
+@returns {HTMLElement} A canvas element for the style.
+*/
+function createIconFromBitmap(src, style) {
+  const width = style.width || legendIconSize;
+  const height = style.height || legendIconSize;
+
+  const canvas = mapp.utils.html.node`<canvas
+    style=${`width: ${width}px; height: ${height}px;`}>`;
+
+  mapp.utils.svgBitmap.prewarm([src]).then(() => {
+    const bitmap = mapp.utils.svgBitmap.iconBitmap(src);
+
+    if (!bitmap) return;
+
+    canvas.width = bitmap.image.width;
+    canvas.height = bitmap.image.height;
+
+    canvas.getContext('2d').drawImage(bitmap.image, 0, 0);
+  });
+
+  return canvas;
 }
 
 /**
