@@ -187,45 +187,63 @@ async function parseTemplates(obj, user, templateScope) {
   if (obj === null) return;
 
   for (const key of Object.keys(obj)) {
-    // The value must be read fresh on each iteration rather than destructured from a snapshot. Earlier keys in this same loop (eg. a templates array) can merge into and reassign a not-yet-processed property (eg. infoj), and a stale val would overwrite that merge when this key is reached.
-    const val = obj[key];
+    const parseKeyCheck = await parseKey(key, obj, user, templateScope);
 
-    // Locale object layers should never be processed. Layers will be processed in the getLayer method. The layers property will be removed from the locale object after processing.
-    if (key === 'layers') continue;
-    if (queryTemplate(key, val, obj, user, templateScope)) {
-      continue;
+    if (parseKeyCheck instanceof Error) {
+      return parseKeyCheck;
     }
+  }
+}
 
-    if (await templatesArray(key, val, obj, user, templateScope)) {
-      continue;
-    }
+/**
+@function parseKey
+@async
 
-    const rolesTemplatesCheck = await rolesTemplates(
-      key,
-      val,
-      obj,
-      user,
-      templateScope,
-    );
+@description
+The parseKey method processes a single key of an object parsed by the parseTemplates method.
 
-    if (rolesTemplatesCheck === true) {
-      continue;
-    }
+The key value is checked against the queryTemplate, templatesArray, rolesTemplates, and arrayProperty methods in order. The first method to process the key value will short circuit the remaining checks. A key value which is not processed by any of these methods will be traversed recursively by the parseTemplates method.
 
-    if (rolesTemplatesCheck instanceof Error) {
-      return rolesTemplatesCheck;
-    }
+@param {string} key
+@param {Object} obj
+@param {User} [user] The requesting user from request params.
+@param {array} templateScope
 
-    // Recursively process each item in an array property of the object.
-    if (await arrayProperty(key, val, obj, user, templateScope)) {
-      continue;
-    }
+@returns {Promise<Error|undefined>} Returns an Error if the roles check for the obj fails.
+*/
+async function parseKey(key, obj, user, templateScope) {
+  // The value must be read fresh on each iteration rather than destructured from a snapshot. Earlier keys in the parseTemplates loop (eg. a templates array) can merge into and reassign a not-yet-processed property (eg. infoj), and a stale val would overwrite that merge when this key is reached.
+  const val = obj[key];
 
-    // Recursively process nested objects
-    const parseTemplatesCheck = await parseTemplates(val, user, templateScope);
-    if (parseTemplatesCheck instanceof Error) {
-      delete obj[key];
-    }
+  // Locale object layers should never be processed. Layers will be processed in the getLayer method. The layers property will be removed from the locale object after processing.
+  if (key === 'layers') return;
+
+  if (queryTemplate(key, val, obj, user, templateScope)) return;
+
+  if (await templatesArray(key, val, obj, user, templateScope)) return;
+
+  const rolesTemplatesCheck = await rolesTemplates(
+    key,
+    val,
+    obj,
+    user,
+    templateScope,
+  );
+
+  if (rolesTemplatesCheck === true) return;
+
+  if (rolesTemplatesCheck instanceof Error) {
+    return rolesTemplatesCheck;
+  }
+
+  // Recursively process each item in an array property of the object.
+  if (await arrayProperty(key, val, obj, user, templateScope)) return;
+
+  // Recursively process nested objects
+  const parseTemplatesCheck = await parseTemplates(val, user, templateScope);
+
+  if (parseTemplatesCheck instanceof Error) {
+    delete obj[key];
   }
 }
 
