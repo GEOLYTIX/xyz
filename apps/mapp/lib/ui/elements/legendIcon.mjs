@@ -236,8 +236,10 @@ function createIconFromBitmap(src, style) {
   const width = style.width || legendIconSize;
   const height = style.height || legendIconSize;
 
+  const inlineStyle = `width: ${width}px; height: ${height}px;`
+
   const canvas = mapp.utils.html.node`<canvas
-    style=${`width: ${width}px; height: ${height}px;`}>`;
+    style=${inlineStyle}>`;
 
   mapp.utils.svgBitmap.requestBitmaps([src]).then(() => {
     const bitmap = mapp.utils.svgBitmap.iconBitmap(src);
