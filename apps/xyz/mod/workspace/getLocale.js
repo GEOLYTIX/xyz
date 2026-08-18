@@ -83,7 +83,7 @@ export default async function getLocale(params, parentLocale) {
       : [parentLocale.role];
   }
 
-  locale = await composeObj(locale, params.user?.roles);
+  locale = await composeObj(locale, params.user);
 
   if (locale instanceof Error) {
     return locale;

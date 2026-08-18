@@ -1,13 +1,13 @@
 /**
 Basic authorization.
 
-An asynchronous authorization provider can be registered for workspace
-composition. The provider decides scope access in composeObj instead of the
+Asynchronous authorization providers can be registered for workspace
+composition. A provider decides scope access in composeObj instead of the
 user.roles array.
 
-The provider is only consulted when the AUTHORIZATION_PROVIDER flag is
-enabled in the xyzEnv, matching the LEGACY_ROLES flag pattern. Without the
-flag the user.roles semantics apply unchanged.
+A provider is only consulted for a user with an authorization_provider property
+matching the key the provider was registered with. Without the property the
+user.roles semantics apply unchanged.
 
 This is the first increment: the root composeObj decision only.
 */
@@ -22,24 +22,26 @@ globalThis.xyzEnv = {
 
 describe('basic authorization', () => {
   afterEach(() => {
-    setAuthorizationProvider();
-    delete globalThis.xyzEnv.AUTHORIZATION_PROVIDER;
+    setAuthorizationProvider('openfga');
   });
 
-  it('without the AUTHORIZATION_PROVIDER flag the user.roles semantics apply', async () => {
+  it('without the authorization_provider property the user.roles semantics apply', async () => {
     const denied = await composeObj({ role: 'analyst' });
 
     expect(denied instanceof Error).toBeTruthy();
 
-    const allowed = await composeObj({ role: 'analyst' }, ['analyst']);
+    const allowed = await composeObj(
+      { role: 'analyst' },
+      { roles: ['analyst'] },
+    );
 
     expect(allowed instanceof Error).toBeFalsy();
   });
 
-  it('a registered provider is ignored without the flag', async () => {
+  it('a registered provider is ignored without the user property', async () => {
     const checkScope = vi.fn(async () => true);
 
-    setAuthorizationProvider({ checkScope });
+    setAuthorizationProvider('openfga', { checkScope });
 
     const denied = await composeObj({ role: 'analyst' });
 
@@ -48,13 +50,14 @@ describe('basic authorization', () => {
   });
 
   it('a provider allow admits a scoped object without user roles', async () => {
-    globalThis.xyzEnv.AUTHORIZATION_PROVIDER = true;
-
     const checkScope = vi.fn(async () => true);
 
-    setAuthorizationProvider({ checkScope });
+    setAuthorizationProvider('openfga', { checkScope });
 
-    const obj = await composeObj({ role: 'analyst' });
+    const obj = await composeObj(
+      { role: 'analyst' },
+      { authorization_provider: 'openfga' },
+    );
 
     expect(obj instanceof Error).toBeFalsy();
     expect(checkScope).toHaveBeenCalled();
@@ -62,55 +65,106 @@ describe('basic authorization', () => {
     expect(checkScope.mock.calls[0][0].scopeKey).toBe('analyst');
   });
 
+  it('the provider context receives the user object', async () => {
+    const checkScope = vi.fn(async () => true);
+
+    setAuthorizationProvider('openfga', { checkScope });
+
+    const user = {
+      authorization_provider: 'openfga',
+      email: 'analyst@geolytix.co.uk',
+      roles: ['analyst'],
+    };
+
+    await composeObj({ role: 'analyst' }, user);
+
+    expect(checkScope.mock.calls[0][0].user).toEqual(user);
+  });
+
+  it('a user is only routed through their own provider', async () => {
+    const openfga = vi.fn(async () => true);
+    const other = vi.fn(async () => true);
+
+    setAuthorizationProvider('openfga', { checkScope: openfga });
+    setAuthorizationProvider('other', { checkScope: other });
+
+    await composeObj({ role: 'analyst' }, { authorization_provider: 'other' });
+
+    expect(other).toHaveBeenCalled();
+    expect(openfga).not.toHaveBeenCalled();
+
+    setAuthorizationProvider('other');
+  });
+
+  it('the roles object gate does not apply to a provider user', async () => {
+    setAuthorizationProvider('openfga', { checkScope: async () => true });
+
+    const withoutRoles = await composeObj(
+      { roles: { analyst: true } },
+      { authorization_provider: 'openfga' },
+    );
+
+    expect(withoutRoles instanceof Error).toBeFalsy();
+
+    const otherRoles = await composeObj(
+      { roles: { analyst: true } },
+      { authorization_provider: 'openfga', roles: ['other'] },
+    );
+
+    expect(otherRoles instanceof Error).toBeFalsy();
+  });
+
   it('a provider deny returns an Error despite matching user roles', async () => {
-    globalThis.xyzEnv.AUTHORIZATION_PROVIDER = true;
+    setAuthorizationProvider('openfga', { checkScope: async () => false });
 
-    setAuthorizationProvider({ checkScope: async () => false });
-
-    const response = await composeObj({ role: 'analyst' }, ['analyst']);
+    const response = await composeObj(
+      { role: 'analyst' },
+      { authorization_provider: 'openfga', roles: ['analyst'] },
+    );
 
     expect(response instanceof Error).toBeTruthy();
   });
 
-  it('the enabled flag without a registered provider fails closed', async () => {
-    globalThis.xyzEnv.AUTHORIZATION_PROVIDER = true;
-
-    const response = await composeObj({ role: 'analyst' }, ['analyst']);
+  it('a user property without a registered provider fails closed', async () => {
+    const response = await composeObj(
+      { role: 'analyst' },
+      { authorization_provider: 'openfga', roles: ['analyst'] },
+    );
 
     expect(response instanceof Error).toBeTruthy();
   });
 
   it('a provider error fails closed', async () => {
-    globalThis.xyzEnv.AUTHORIZATION_PROVIDER = true;
-
-    setAuthorizationProvider({
+    setAuthorizationProvider('openfga', {
       checkScope: async () => {
         throw new Error('Authorization store unavailable.');
       },
     });
 
-    const response = await composeObj({ role: 'analyst' }, ['analyst']);
+    const response = await composeObj(
+      { role: 'analyst' },
+      { authorization_provider: 'openfga', roles: ['analyst'] },
+    );
 
     expect(response instanceof Error).toBeTruthy();
   });
 
   it('a provider allow merges a role-gated template without user roles', async () => {
-    globalThis.xyzEnv.AUTHORIZATION_PROVIDER = true;
+    setAuthorizationProvider('openfga', { checkScope: async () => true });
 
-    setAuthorizationProvider({ checkScope: async () => true });
-
-    const obj = await composeObj({
-      templates: [{ analystProp: true, role: 'analyst' }],
-    });
+    const obj = await composeObj(
+      {
+        templates: [{ analystProp: true, role: 'analyst' }],
+      },
+      { authorization_provider: 'openfga' },
+    );
 
     expect(obj instanceof Error).toBeFalsy();
     expect(obj.analystProp).toBe(true);
   });
 
   it('a provider deny silently skips the template merge despite matching user roles', async () => {
-    globalThis.xyzEnv.AUTHORIZATION_PROVIDER = true;
-
-    setAuthorizationProvider({
+    setAuthorizationProvider('openfga', {
       checkScope: async ({ scopeKey }) => scopeKey !== 'analyst',
     });
 
@@ -118,7 +172,7 @@ describe('basic authorization', () => {
       {
         templates: [{ analystProp: true, role: 'analyst' }],
       },
-      ['analyst'],
+      { authorization_provider: 'openfga', roles: ['analyst'] },
     );
 
     expect(obj instanceof Error).toBeFalsy();
@@ -126,16 +180,17 @@ describe('basic authorization', () => {
   });
 
   it('a merged template is consulted with the chained scopeKey', async () => {
-    globalThis.xyzEnv.AUTHORIZATION_PROVIDER = true;
-
     const checkScope = vi.fn(async () => true);
 
-    setAuthorizationProvider({ checkScope });
+    setAuthorizationProvider('openfga', { checkScope });
 
-    await composeObj({
-      role: 'retail',
-      templates: [{ analystProp: true, role: 'analyst' }],
-    });
+    await composeObj(
+      {
+        role: 'retail',
+        templates: [{ analystProp: true, role: 'analyst' }],
+      },
+      { authorization_provider: 'openfga' },
+    );
 
     const scopeKeys = checkScope.mock.calls.map(
       ([context]) => context.scopeKey,
@@ -145,18 +200,23 @@ describe('basic authorization', () => {
     expect(scopeKeys).toContain('retail.analyst');
   });
 
-  it('removing the flag restores the user.roles semantics', async () => {
-    globalThis.xyzEnv.AUTHORIZATION_PROVIDER = true;
+  it('clearing the provider registration fails closed', async () => {
+    setAuthorizationProvider('openfga', { checkScope: async () => true });
 
-    setAuthorizationProvider({ checkScope: async () => true });
+    setAuthorizationProvider('openfga');
 
-    delete globalThis.xyzEnv.AUTHORIZATION_PROVIDER;
-
-    const denied = await composeObj({ role: 'analyst' });
+    const denied = await composeObj(
+      { role: 'analyst' },
+      { authorization_provider: 'openfga', roles: ['analyst'] },
+    );
 
     expect(denied instanceof Error).toBeTruthy();
 
-    const allowed = await composeObj({ role: 'analyst' }, ['analyst']);
+    // The user.roles semantics apply for a user without the property.
+    const allowed = await composeObj(
+      { role: 'analyst' },
+      { roles: ['analyst'] },
+    );
 
     expect(allowed instanceof Error).toBeFalsy();
   });

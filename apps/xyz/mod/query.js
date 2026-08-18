@@ -68,7 +68,7 @@ export default async function query(req, res) {
   // Must be run after the layerQuery method since the query template could be defined within the layer [template].
   const template = await composeObj(
     { template: req.params.template },
-    req.params.user?.roles,
+    req.params.user,
   );
 
   if (template instanceof Error) {
