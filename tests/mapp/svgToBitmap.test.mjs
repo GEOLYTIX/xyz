@@ -10,6 +10,11 @@ let svgToBitmap;
 let imagesCreated = 0;
 let failSrc;
 
+/**
+The dimensions the browser reports for a src. An SVG which declares no width and height has no intrinsic size as an image, and the browser reports the 300x150 default replaced element size for it.
+*/
+const naturalSizes = new Map();
+
 const pixelRatio = 2;
 
 class FakeImage {
@@ -19,11 +24,11 @@ class FakeImage {
   }
 
   get naturalWidth() {
-    return 24;
+    return (naturalSizes.get(this.src_) || [24, 24])[0];
   }
 
   get naturalHeight() {
-    return 24;
+    return (naturalSizes.get(this.src_) || [24, 24])[1];
   }
 
   decode() {
@@ -144,6 +149,34 @@ describe('svgToBitmap rasterization', () => {
     await expect(
       svgToBitmap.requestBitmaps(undefined),
     ).resolves.toBeUndefined();
+  });
+
+  it('rasterizes a sizeless svg at the ratio of its viewBox', async () => {
+    // The browser has no intrinsic size for an SVG which declares no width and height. Rasterizing at the reported 300x150 would squash a non square symbol into the wrong ratio.
+    const src = `data:image/svg+xml,${encodeURIComponent('<svg viewBox="0 0 20 30" xmlns="http://www.w3.org/2000/svg"><path d="M 0,0" /></svg>')}`;
+
+    naturalSizes.set(src, [300, 150]);
+
+    await svgToBitmap.requestBitmaps([src]);
+
+    const entry = svgToBitmap.iconBitmap(src);
+
+    expect(entry.image.width).toBe(20 * pixelRatio);
+    expect(entry.image.height).toBe(30 * pixelRatio);
+  });
+
+  it('prefers the declared width and height over the viewBox', async () => {
+    // The viewBox is only read where the root element declares no dimensions of its own.
+    const src = `data:image/svg+xml,${encodeURIComponent('<svg width="20" height="30" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg" />')}`;
+
+    naturalSizes.set(src, [300, 150]);
+
+    await svgToBitmap.requestBitmaps([src]);
+
+    const entry = svgToBitmap.iconBitmap(src);
+
+    expect(entry.image.width).toBe(20 * pixelRatio);
+    expect(entry.image.height).toBe(30 * pixelRatio);
   });
 
   it('reports a src which will not be rasterized as unavailable', async () => {

@@ -264,14 +264,20 @@ async function rasterize(src) {
 
   const pixelRatio = globalThis.devicePixelRatio || 1;
 
+  // The SVG source is the authority on the intrinsic dimensions. An SVG which declares no width and height has no intrinsic size as an image, and the browser reports the default 300x150 replaced element size for it, which is not the ratio the symbol is drawn at.
+  const [intrinsicWidth, intrinsicHeight] = svgSize(src) || [
+    image.naturalWidth,
+    image.naturalHeight,
+  ];
+
   const width = Math.max(
     1,
-    Math.round((image.naturalWidth || defaultSize) * pixelRatio),
+    Math.round((intrinsicWidth || defaultSize) * pixelRatio),
   );
 
   const height = Math.max(
     1,
-    Math.round((image.naturalHeight || defaultSize) * pixelRatio),
+    Math.round((intrinsicHeight || defaultSize) * pixelRatio),
   );
 
   const canvas = document.createElement('canvas');
@@ -291,6 +297,56 @@ async function rasterize(src) {
   }
 
   return { image: canvas, pixelRatio };
+}
+
+/**
+@function svgSize
+
+@description
+The svgSize method returns the intrinsic dimensions declared by an SVG data URL.
+
+The width and height attributes of the root element are read first, and the viewBox is read where the element declares no width and height. Only the ratio of the two matters to the rasterization, so a unit suffix such as `pt` is not converted.
+
+The method returns undefined for a src which is not a percent encoded SVG document, for the caller to fall back to the dimensions the browser reports for the image.
+
+@param {string} src The data URL to read.
+
+@returns {array} The [width, height] the SVG declares.
+*/
+function svgSize(src) {
+  if (!src.startsWith('data:image/svg+xml,')) return;
+
+  let root;
+
+  try {
+    root = decodeURIComponent(src.slice(src.indexOf(',') + 1)).match(
+      /<svg\b[^>]*>/,
+    )?.[0];
+  } catch {
+    // A src which is not percent encoded is not decoded.
+    return;
+  }
+
+  if (!root) return;
+
+  const width = Number.parseFloat(
+    root.match(/\bwidth\s*=\s*["']?([\d.]+)/)?.[1],
+  );
+
+  const height = Number.parseFloat(
+    root.match(/\bheight\s*=\s*["']?([\d.]+)/)?.[1],
+  );
+
+  if (width > 0 && height > 0) return [width, height];
+
+  const viewBox = root
+    .match(/\bviewBox\s*=\s*["']([^"']+)["']/)?.[1]
+    ?.split(/[\s,]+/)
+    .map(Number);
+
+  if (viewBox?.length === 4 && viewBox[2] > 0 && viewBox[3] > 0) {
+    return [viewBox[2], viewBox[3]];
+  }
 }
 
 /**

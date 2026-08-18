@@ -63,9 +63,12 @@ The createIconFromArray method iterates through an `style.icon[]` array to creat
 @returns {HTMLElement} A HTML element for the style.
 */
 function createIconFromArray(style) {
+  const width = style.width || legendIconSize;
+  const height = style.height || legendIconSize;
+
   const canvas = document.createElement('canvas');
-  canvas.width = style.width;
-  canvas.height = style.height;
+  canvas.width = width;
+  canvas.height = height;
 
   // The icon variants are rasterized before the icons are drawn. A `data:image` src assigned to an Openlayers style Icon would be retained by the IconImageCache as an isolated SVG document.
   const urls = style.icon.map(
@@ -74,7 +77,7 @@ function createIconFromArray(style) {
 
   mapp.utils.svgBitmap
     .requestBitmaps(urls)
-    .then(() => drawIcons(canvas, style));
+    .then(() => drawIcons(canvas, style, width, height));
 
   return canvas;
 }
@@ -85,26 +88,52 @@ function createIconFromArray(style) {
 @description
 The drawIcons method draws the `style.icon[]` array into the canvas of a layered legend icon.
 
+The canvas is sized from the ratio of the layered icons within the width and height bounds, and the icons are scaled to fit. A canvas which is not sized to the same ratio clips a non square icon.
+
 @param {HTMLElement} canvas The canvas element to draw the icons into.
 @param {feature-style} style A JSON style object.
+@param {number} width The width bound for the legend icon.
+@param {number} height The height bound for the legend icon.
 */
-function drawIcons(canvas, style) {
+function drawIcons(canvas, style, width, height) {
   let toLoad = style.icon.length;
 
   // Images must be loaded in imageStyle image object before they can be applied to canvas.
   function onImgLoad() {
     if (--toLoad) return;
 
+    const images = style.icon
+      .map((icon) => icon.legendStyle?.getImage())
+      .filter(Boolean);
+
+    // The icons are layered on the same point, so the composite occupies the largest drawn width and the largest drawn height.
+    const drawn = images.map((image) => {
+      const size = image.getImageSize() || [width, height];
+      const scale = image.getScale() || 1;
+      return [size[0] * scale, size[1] * scale];
+    });
+
+    const compositeWidth = Math.max(...drawn.map((size) => size[0])) || width;
+    const compositeHeight = Math.max(...drawn.map((size) => size[1])) || height;
+
+    // The composite is fitted within the bounds. An icon is scaled by the same ratio so that it occupies the canvas it is drawn into.
+    const ratio = Math.min(width / compositeWidth, height / compositeHeight);
+
+    const size = [compositeWidth * ratio, compositeHeight * ratio];
+
+    images.forEach((image) => image.setScale(image.getScale() * ratio));
+
     const vectorContext = ol.render.toContext(canvas.getContext('2d'), {
       pixelRatio: 1,
-      size: [style.width, style.height],
+      size,
     });
 
     // Styles can not be assigned as array to convas context.
+    // The geometry is drawn in the size units of the context, which the pixelRatio is applied to.
     style.icon.forEach((icon) => {
       vectorContext.setStyle(icon.legendStyle);
       vectorContext.drawGeometry(
-        new ol.geom.Point([canvas.width * 0.5, canvas.height * 0.5]),
+        new ol.geom.Point([size[0] * 0.5, size[1] * 0.5]),
       );
     });
   }
@@ -227,6 +256,8 @@ The createIconFromBitmap method returns a canvas element with the rasterized bit
 
 The canvas is returned before the bitmap is available. The bitmap is drawn into the canvas element once it has been rasterized.
 
+The element is sized from the ratio of the rasterized icon within the style width and height, which default to the legendIconSize. A non square icon is not stretched to fill a square cell.
+
 @param {string} src The data URL for the icon.
 @param {feature-style} style A JSON style object.
 
@@ -262,6 +293,16 @@ function createIconFromBitmap(src, style) {
 
     canvas.width = bitmap.image.width;
     canvas.height = bitmap.image.height;
+
+    // The bitmap was rasterized at the device pixel ratio from the intrinsic dimensions the SVG declares.
+    const intrinsicWidth = bitmap.image.width / bitmap.pixelRatio;
+    const intrinsicHeight = bitmap.image.height / bitmap.pixelRatio;
+
+    // The element takes the ratio of the icon within the width and height bounds. The canvas is drawn at the dimensions of the bitmap, and an element which is not sized to the same ratio stretches it: a 20x30 icon in a 24x24 cell would render 24x24.
+    const ratio = Math.min(width / intrinsicWidth, height / intrinsicHeight);
+
+    canvas.style.width = `${intrinsicWidth * ratio}px`;
+    canvas.style.height = `${intrinsicHeight * ratio}px`;
 
     canvas.getContext('2d').drawImage(bitmap.image, 0, 0);
   });
