@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { styleIcons } from '../../apps/mapp/lib/layer/styleParser.mjs';
 
 /**
-The styleIcons method collects the icon style objects of a layer style configuration so that their variants can be rasterized before the first render.
+The styleIcons method collects the icon style objects of a layer style configuration, which the styleParser uses to establish whether the layer must be redrawn as icon bitmaps become available.
 
 The layer style configuration is JSON, but the styleParser assigns self references between the style, theme, themes, and label objects. The walk must terminate on those and must not descend into anything which is not a plain configuration object.
 */
@@ -35,7 +35,7 @@ describe('styleIcons', () => {
       },
     };
 
-    // The variant count of the profiled layer. Every category is a variant which must be rasterized.
+    // The variant count of the profiled layer. Every category is a variant which may be rendered.
     expect(styleIcons(style)).toHaveLength(430);
   });
 

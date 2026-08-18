@@ -13,7 +13,7 @@ vi.mock('../../apps/mapp/lib/utils/svgToBitmap.mjs', () => ({
   bitmapStats: () => ({}),
   iconBitmap: (src) => bitmapEntries.get(src),
   onBitmapReady: () => {},
-  prewarm: async () => {},
+  requestBitmaps: async () => {},
   requestBitmap: () => undefined,
 }));
 

@@ -3,7 +3,6 @@
 
 The styleParser module exports the styleParser method as default which is intended to check the consistency of layer styles and issue console warnings in regards to backwards compatibility.
 
-@requires /utils/olStyle
 @requires /utils/svgToBitmap
 
 @module /layer/styleParser
@@ -52,7 +51,7 @@ The styleParser method checks the highlight features style and calls the warning
 
 The clusterStyle method is called to ensure that cluster layer have a cluster style.
 
-The prewarmStyleIcons method is called to rasterize the icon variants of the parsed style configuration.
+The redrawStyleIcons method is called to redraw the layer as the icon bitmaps of the style configuration become available.
 
 Individual themes in the themes object are parsed and a theme is assigned to the
 
@@ -159,7 +158,7 @@ export default function styleParser(layer) {
     )[0]?.field;
   }
 
-  prewarmStyleIcons(layer);
+  redrawStyleIcons(layer);
 }
 
 /**
@@ -611,28 +610,24 @@ function handleHovers(layer) {
 }
 
 /**
-@function prewarmStyleIcons
+@function redrawStyleIcons
 
 @description
-The prewarmStyleIcons method rasterizes the icon variants of the layer style configuration into bitmaps, and requests a redraw of the layer as bitmaps become available.
+The redrawStyleIcons method requests a redraw of the layer as icon bitmaps become available.
 
-The icon variants of a layer are the icon styles of the layer style configuration, including those of the theme categories. Rasterizing these before the first render prevents the feature style render from having to substitute a fallback symbol.
+An icon variant is rasterized on demand by the feature style render, which substitutes a fallback symbol for a variant which is not yet available. The layer must be redrawn once the bitmap has been rasterized in order for the icon to replace the fallback symbol.
 
-The layer must be redrawn as bitmaps become available, since the style function will have returned a fallback symbol for a variant which was not yet rasterized. The layer.L Openlayers layer is created by the layer format method after the styleParser has been called, and is therefore only referenced from the redraw callbacks.
+The variants of the style configuration are not rasterized ahead of the render. A configuration may hold thousands of variants of which only those of the features in the mapview are rendered, and the bitmap cache is bounded and is not evicted.
+
+The redraw is only registered for a style configuration which has icons. The layer.L Openlayers layer is created by the layer format method after the styleParser has been called, and is therefore only referenced from the redraw callback.
 
 @param {layer} layer A json layer object.
 @property {layer-style} layer.style The mapp-layer style configuration.
 */
-function prewarmStyleIcons(layer) {
-  const icons = styleIcons(layer.style);
-
-  if (!icons.length) return;
+function redrawStyleIcons(layer) {
+  if (!styleIcons(layer.style).length) return;
 
   mapp.utils.svgBitmap.onBitmapReady(() => layer.L?.changed());
-
-  const urls = icons.map((icon) => mapp.utils.iconUrl(icon)).filter(Boolean);
-
-  mapp.utils.svgBitmap.prewarm(urls).then(() => layer.L?.changed());
 }
 
 /**

@@ -7,6 +7,8 @@ An SVG referenced as an image is not an image resource to the browser. Chrome in
 
 Rasterization is queued with a concurrency limit. Rasterizing the whole variant set at once creates that many documents at once, and the collector will not keep pace.
 
+A variant is only rasterized when it is being rendered. The feature style render requests the variant of the feature it is styling and substitutes a fallback symbol until the bitmap is available, and the legend requests the variants which it draws. The style configuration of a layer is not rasterized, as a configuration may hold thousands of variants of which only a few are ever rendered.
+
 @module /utils/svgToBitmap
 */
 
@@ -92,6 +94,8 @@ export function iconBitmap(src) {
 @description
 The requestBitmap method queues the rasterization of a data URL and returns the promise for the queued job.
 
+A request must only be made for a variant which is being rendered. The bitmap cache is bounded and is not evicted, so a variant which is rasterized speculatively is held for the lifetime of the session in place of a variant which is rendered.
+
 @param {string} src The data URL to rasterize.
 
 @returns {Promise} The rasterization promise.
@@ -129,17 +133,19 @@ export function requestBitmap(src) {
 }
 
 /**
-@function prewarm
+@function requestBitmaps
 @async
 
 @description
-The prewarm method requests the rasterization of an array of data URLs and resolves once all have been rasterized or have failed.
+The requestBitmaps method requests the rasterization of an array of data URLs and resolves once all have been rasterized or have failed.
+
+The method is awaited by a caller which draws the icons itself, such as the legendIcon element. The array must hold the variants which are being drawn. Requesting the variants of a style configuration would fill the bounded cache with variants which are never rendered.
 
 @param {array} srcs An array of icon urls or data URLs.
 
 @returns {Promise<void>}
 */
-export async function prewarm(srcs) {
+export async function requestBitmaps(srcs) {
   if (!Array.isArray(srcs)) return;
 
   const promises = [...new Set(srcs)].map(requestBitmap).filter(Boolean);

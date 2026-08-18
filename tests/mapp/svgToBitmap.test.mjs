@@ -70,7 +70,7 @@ describe('svgToBitmap rasterization', () => {
     // The first read misses and requests the rasterization.
     expect(svgToBitmap.iconBitmap(src)).toBeUndefined();
 
-    await svgToBitmap.prewarm([src]);
+    await svgToBitmap.requestBitmaps([src]);
 
     const entry = svgToBitmap.iconBitmap(src);
 
@@ -88,7 +88,7 @@ describe('svgToBitmap rasterization', () => {
     svgToBitmap.iconBitmap(src);
     svgToBitmap.requestBitmap(src);
 
-    await svgToBitmap.prewarm([src, src]);
+    await svgToBitmap.requestBitmaps([src, src]);
 
     svgToBitmap.iconBitmap(src);
 
@@ -103,7 +103,7 @@ describe('svgToBitmap rasterization', () => {
     expect(svgToBitmap.iconBitmap(url)).toBeUndefined();
     expect(svgToBitmap.requestBitmap(url)).toBeUndefined();
 
-    await svgToBitmap.prewarm([url]);
+    await svgToBitmap.requestBitmaps([url]);
 
     expect(imagesCreated).toBe(before);
   });
@@ -112,7 +112,7 @@ describe('svgToBitmap rasterization', () => {
     const src = testSrc('fails');
     failSrc = src;
 
-    await svgToBitmap.prewarm([src]);
+    await svgToBitmap.requestBitmaps([src]);
 
     expect(svgToBitmap.iconBitmap(src)).toBeUndefined();
     expect(svgToBitmap.bitmapStats().failed).toBeGreaterThan(0);
@@ -120,7 +120,7 @@ describe('svgToBitmap rasterization', () => {
     const before = imagesCreated;
 
     svgToBitmap.iconBitmap(src);
-    await svgToBitmap.prewarm([src]);
+    await svgToBitmap.requestBitmaps([src]);
 
     expect(imagesCreated).toBe(before);
 
@@ -132,7 +132,7 @@ describe('svgToBitmap rasterization', () => {
 
     svgToBitmap.onBitmapReady(listener);
 
-    await svgToBitmap.prewarm([testSrc('notify')]);
+    await svgToBitmap.requestBitmaps([testSrc('notify')]);
 
     expect(listener).toHaveBeenCalled();
   });
@@ -141,7 +141,9 @@ describe('svgToBitmap rasterization', () => {
     expect(svgToBitmap.iconBitmap(undefined)).toBeUndefined();
     expect(svgToBitmap.iconBitmap(null)).toBeUndefined();
     expect(svgToBitmap.requestBitmap({})).toBeUndefined();
-    await expect(svgToBitmap.prewarm(undefined)).resolves.toBeUndefined();
+    await expect(
+      svgToBitmap.requestBitmaps(undefined),
+    ).resolves.toBeUndefined();
   });
 
   it('caps the number of variants rather than evicting them', async () => {
@@ -152,13 +154,15 @@ describe('svgToBitmap rasterization', () => {
       testSrc(`cap${index}`),
     );
 
-    await svgToBitmap.prewarm(srcs);
+    await svgToBitmap.requestBitmaps(srcs);
 
     const stats = svgToBitmap.bitmapStats();
 
     expect(stats.capped).toBe(true);
     expect(stats.bitmaps).toBeLessThan(srcs.length);
-    expect(warn).toHaveBeenCalledWith(expect.stringContaining('icon variants'));
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('icon variants rasterized'),
+    );
 
     warn.mockRestore();
   });

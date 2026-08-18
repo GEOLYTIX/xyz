@@ -72,7 +72,9 @@ function createIconFromArray(style) {
     (icon) => icon.url || icon.svg || svgSymbolUrl(icon),
   );
 
-  mapp.utils.svgBitmap.prewarm(urls).then(() => drawIcons(canvas, style));
+  mapp.utils.svgBitmap
+    .requestBitmaps(urls)
+    .then(() => drawIcons(canvas, style));
 
   return canvas;
 }
@@ -237,7 +239,7 @@ function createIconFromBitmap(src, style) {
   const canvas = mapp.utils.html.node`<canvas
     style=${`width: ${width}px; height: ${height}px;`}>`;
 
-  mapp.utils.svgBitmap.prewarm([src]).then(() => {
+  mapp.utils.svgBitmap.requestBitmaps([src]).then(() => {
     const bitmap = mapp.utils.svgBitmap.iconBitmap(src);
 
     if (!bitmap) return;
