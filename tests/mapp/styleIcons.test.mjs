@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { styleIcons } from '../../apps/mapp/lib/layer/decorate.mjs';
+import { styleIcons } from '../../apps/mapp/lib/layer/styleParser.mjs';
 
 /**
 The styleIcons method collects the icon style objects of a layer style configuration so that their variants can be rasterized before the first render.

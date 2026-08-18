@@ -3,6 +3,9 @@
 
 The styleParser module exports the styleParser method as default which is intended to check the consistency of layer styles and issue console warnings in regards to backwards compatibility.
 
+@requires /utils/olStyle
+@requires /utils/svgToBitmap
+
 @module /layer/styleParser
 */
 
@@ -48,6 +51,8 @@ The styleParser method parses and validates the mapp.style object and its proper
 The styleParser method checks the highlight features style and calls the warnings method.
 
 The clusterStyle method is called to ensure that cluster layer have a cluster style.
+
+The prewarmStyleIcons method is called to rasterize the icon variants of the parsed style configuration.
 
 Individual themes in the themes object are parsed and a theme is assigned to the
 
@@ -153,6 +158,8 @@ export default function styleParser(layer) {
       layer.style.icon_scaling.fields,
     )[0]?.field;
   }
+
+  prewarmStyleIcons(layer);
 }
 
 /**
@@ -601,4 +608,74 @@ function handleHovers(layer) {
   if (layer.style?.hover) {
     layer.style.hover.method ??= mapp.layer.featureHover;
   }
+}
+
+/**
+@function prewarmStyleIcons
+
+@description
+The prewarmStyleIcons method rasterizes the icon variants of the layer style configuration into bitmaps, and requests a redraw of the layer as bitmaps become available.
+
+The icon variants of a layer are the icon styles of the layer style configuration, including those of the theme categories. Rasterizing these before the first render prevents the feature style render from having to substitute a fallback symbol.
+
+The layer must be redrawn as bitmaps become available, since the style function will have returned a fallback symbol for a variant which was not yet rasterized. The layer.L Openlayers layer is created by the layer format method after the styleParser has been called, and is therefore only referenced from the redraw callbacks.
+
+@param {layer} layer A json layer object.
+@property {layer-style} layer.style The mapp-layer style configuration.
+*/
+function prewarmStyleIcons(layer) {
+  const icons = styleIcons(layer.style);
+
+  if (!icons.length) return;
+
+  mapp.utils.svgBitmap.onBitmapReady(() => layer.L?.changed());
+
+  const urls = icons.map((icon) => mapp.utils.iconUrl(icon)).filter(Boolean);
+
+  mapp.utils.svgBitmap.prewarm(urls).then(() => layer.L?.changed());
+}
+
+/**
+@function styleIcons
+
+@description
+The styleIcons method collects the icon style objects from a layer style configuration.
+
+The styleParser assigns self references between the style, theme, and label objects, so objects which have already been walked must be tracked.
+
+@param {layer-style} style The mapp-layer style configuration.
+
+@returns {array} An array of mapp icon style objects.
+*/
+export function styleIcons(style) {
+  const icons = [];
+  const walked = new WeakSet();
+
+  function walk(node) {
+    if (node === null || typeof node !== 'object') return;
+
+    if (walked.has(node)) return;
+
+    walked.add(node);
+
+    if (Array.isArray(node)) {
+      node.forEach(walk);
+      return;
+    }
+
+    // Only the plain objects of the JSON style configuration are walked. A style property may hold a DOM node or an Openlayers object.
+    if (node.constructor !== Object) return;
+
+    if (node.icon) {
+      Array.isArray(node.icon)
+        ? icons.push(...node.icon)
+        : icons.push(node.icon);
+    }
+
+    Object.values(node).forEach(walk);
+  }
+
+  walk(style);
+
+  return icons.filter((icon) => icon !== null && typeof icon === 'object');
 }

@@ -344,7 +344,12 @@ function theme(layer) {
   }
 
   if (Object.hasOwn(mapp.ui.layers.legends, layer.style.theme?.type)) {
-    mapp.ui.layers.legends[layer.style.theme.type](layer);
+    layer.showCallbacks.push(() => {
+      mapp.ui.layers.legends[layer.style.theme.type](layer);
+    });
+
+    // The legend methods replace the children of the layer.style.legend node with the legend content.
+    layer.style.legend = mapp.utils.html.node`<div class="legend">`;
 
     layer.style.legend && content.push(layer.style.legend);
   }
