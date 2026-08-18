@@ -168,6 +168,30 @@ export function onBitmapReady(callback) {
 }
 
 /**
+@function bitmapUnavailable
+
+@description
+The bitmapUnavailable method returns whether a data URL will not be rasterized, either because the rasterization failed or because the bitmap limit is reached.
+
+The caller must render the icon from the data URL src, as there is no bitmap to wait for. A src which is rasterized or in flight is not unavailable, and must render the fallback symbol until the bitmap has been drawn.
+
+@param {string} src The icon url or data URL.
+
+@returns {boolean} The src will not be rasterized.
+*/
+export function bitmapUnavailable(src) {
+  if (typeof src !== 'string') return false;
+
+  if (!src.startsWith('data:')) return false;
+
+  if (bitmaps.has(src) || pending.has(src)) return false;
+
+  if (failed.has(src)) return true;
+
+  return bitmaps.size + pending.size >= bitmapLimit;
+}
+
+/**
 @function bitmapStats
 
 @description
@@ -203,6 +227,10 @@ function drain() {
       })
       .catch((error) => {
         failed.add(job.src);
+
+        // The listeners must be notified of a failure as well as of a bitmap. A layer which rendered the fallback symbol for the src would otherwise not redraw the icon from the data URL src.
+        scheduleNotify();
+
         console.warn('svgToBitmap: rasterization failed.', error);
       })
       .finally(() => {

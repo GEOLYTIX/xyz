@@ -9,8 +9,11 @@ let olStyle;
 
 const bitmapEntries = new Map();
 
+const unavailableSrcs = new Set();
+
 vi.mock('../../apps/mapp/lib/utils/svgToBitmap.mjs', () => ({
   bitmapStats: () => ({}),
+  bitmapUnavailable: (src) => unavailableSrcs.has(src),
   iconBitmap: (src) => bitmapEntries.get(src),
   onBitmapReady: () => {},
   requestBitmaps: async () => {},
@@ -76,6 +79,14 @@ The image style memos are module scoped and persist for the lifetime of the modu
 */
 function testSrc(id) {
   return `data:image/svg+xml,${encodeURIComponent(`<svg id="${id}"/>`)}`;
+}
+
+/**
+Seeds a variant which will not be rasterized for the src, as the svgToBitmap module would for a failed rasterization or once the bitmap limit is reached.
+*/
+function seedUnavailable(src) {
+  unavailableSrcs.add(src);
+  return src;
 }
 
 /**
@@ -166,6 +177,39 @@ describe('olStyle fallback symbol', () => {
     olStyle({ icon: { url: testSrc('notCached') } }, feature);
 
     expect(feature.set).not.toHaveBeenCalled();
+  });
+});
+
+describe('olStyle unavailable bitmap', () => {
+  it('renders the data url Icon for a variant which will not be rasterized', () => {
+    // There is no bitmap to wait for. The icon itself must be drawn rather than the symbol which stands in for it, as the legendIcon element likewise draws the data url where no bitmap is available.
+    const src = seedUnavailable(testSrc('unavailable'));
+
+    const Styles = olStyle({ icon: { url: src } });
+
+    expect(circleOptions).toHaveLength(0);
+    expect(iconOptions).toHaveLength(1);
+    expect(iconOptions[0].src).toBe(src);
+    expect(Styles[0].image).toBeInstanceOf(Icon);
+  });
+
+  it('constructs one Icon for many features with an unavailable variant', () => {
+    const src = seedUnavailable(testSrc('unavailableShared'));
+
+    Array.from({ length: 100 }, () => olStyle({ icon: { url: src } }));
+
+    expect(iconOptions).toHaveLength(1);
+  });
+
+  it('caches the Styles on the feature', () => {
+    // The Styles hold the icon rather than a fallback symbol, so there is nothing for a later render to replace.
+    const src = seedUnavailable(testSrc('unavailableCached'));
+
+    const feature = { set: vi.fn() };
+
+    olStyle({ icon: { url: src } }, feature);
+
+    expect(feature.set).toHaveBeenCalledWith('Styles', expect.anything(), true);
   });
 });
 

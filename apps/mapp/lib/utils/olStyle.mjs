@@ -8,7 +8,7 @@ The olStyle utility module exports the default olStyle method.
 @module /utils/olStyle
 */
 
-import { iconBitmap } from './svgToBitmap.mjs';
+import { bitmapUnavailable, iconBitmap } from './svgToBitmap.mjs';
 
 /**
 @global
@@ -156,6 +156,8 @@ A `data:image` src is rendered from a rasterized bitmap. An SVG referenced as an
 
 A fallback ol.style.Circle is returned while the variant is rasterized. The fallback must not be an Icon with the data URL src, since that would populate the IconImageCache with every variant before any bitmap is ready.
 
+A variant which will not be rasterized, because the rasterization failed or the bitmap limit is reached, is rendered from the data URL src. There is no bitmap to wait for and the symbol must not remain in place of the icon, as the legendIcon element likewise draws the data URL where no bitmap is available.
+
 A src which is a url is not rasterized. It is a single image resource shared by every feature which references it.
 
 @param {object} icon The mapp icon style object.
@@ -177,7 +179,9 @@ function styleIcon(icon, scale) {
     });
   }
 
-  if (icon.url.startsWith('data:')) return fallbackIcon(icon);
+  if (icon.url.startsWith('data:') && !bitmapUnavailable(icon.url)) {
+    return fallbackIcon(icon);
+  }
 
   return memoizedIcon(`${icon.url}|${anchor}|${scale}`, {
     anchor: anchor,

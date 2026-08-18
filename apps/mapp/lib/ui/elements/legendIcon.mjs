@@ -236,7 +236,7 @@ function createIconFromBitmap(src, style) {
   const width = style.width || legendIconSize;
   const height = style.height || legendIconSize;
 
-  const inlineStyle = `width: ${width}px; height: ${height}px;`
+  const inlineStyle = `width: ${width}px; height: ${height}px;`;
 
   const canvas = mapp.utils.html.node`<canvas
     style=${inlineStyle}>`;
@@ -244,7 +244,21 @@ function createIconFromBitmap(src, style) {
   mapp.utils.svgBitmap.requestBitmaps([src]).then(() => {
     const bitmap = mapp.utils.svgBitmap.iconBitmap(src);
 
-    if (!bitmap) return;
+    if (!bitmap) {
+      const fallbackStyle = `
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: ${width}px;
+        height: ${height}px;
+        background-image: url(${src})`;
+
+      const fallback = mapp.utils.html.node`<div style=${fallbackStyle}>`;
+
+      canvas.replaceWith(fallback);
+
+      return;
+    }
 
     canvas.width = bitmap.image.width;
     canvas.height = bitmap.image.height;

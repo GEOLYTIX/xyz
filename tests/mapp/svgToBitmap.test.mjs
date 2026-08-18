@@ -146,6 +146,60 @@ describe('svgToBitmap rasterization', () => {
     ).resolves.toBeUndefined();
   });
 
+  it('reports a src which will not be rasterized as unavailable', async () => {
+    // The caller renders the icon from the data url where the bitmap will not arrive, rather than holding the fallback symbol in place of the icon.
+    const failing = testSrc('unavailableFails');
+    const rasterized = testSrc('unavailableRasterized');
+
+    expect(svgToBitmap.bitmapUnavailable(failing)).toBe(false);
+
+    failSrc = failing;
+
+    await svgToBitmap.requestBitmaps([failing, rasterized]);
+
+    failSrc = undefined;
+
+    expect(svgToBitmap.bitmapUnavailable(failing)).toBe(true);
+
+    // A rasterized src is drawn from its bitmap, and a url is not rasterized at all.
+    expect(svgToBitmap.bitmapUnavailable(rasterized)).toBe(false);
+    expect(
+      svgToBitmap.bitmapUnavailable(
+        'https://geolytix.github.io/MapIcons/poi/train_icon.svg',
+      ),
+    ).toBe(false);
+    expect(svgToBitmap.bitmapUnavailable(undefined)).toBe(false);
+  });
+
+  it('does not report an in flight src as unavailable', async () => {
+    // The fallback symbol is rendered until the bitmap has been drawn. A src which is being rasterized must not be drawn from its data url.
+    const src = testSrc('unavailableInflight');
+
+    const promise = svgToBitmap.requestBitmap(src);
+
+    expect(svgToBitmap.bitmapUnavailable(src)).toBe(false);
+
+    await promise;
+  });
+
+  it('notifies listeners when a rasterization fails', async () => {
+    // A layer which rendered the fallback symbol must redraw the icon from the data url src.
+    const listener = vi.fn();
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    svgToBitmap.onBitmapReady(listener);
+
+    failSrc = testSrc('notifyFails');
+
+    await svgToBitmap.requestBitmaps([failSrc]);
+
+    failSrc = undefined;
+
+    expect(listener).toHaveBeenCalled();
+
+    warn.mockRestore();
+  });
+
   it('caps the number of variants rather than evicting them', async () => {
     // A bitmap is retained by the Openlayers IconImageCache under the uid of the image object. Evicting and rasterizing a variant again would create a second permanent cache entry, so the cache is capped.
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -160,6 +214,9 @@ describe('svgToBitmap rasterization', () => {
 
     expect(stats.capped).toBe(true);
     expect(stats.bitmaps).toBeLessThan(srcs.length);
+
+    // A variant which the cap excludes will not be rasterized. The caller must render it from the data url rather than hold the fallback symbol for the session.
+    expect(svgToBitmap.bitmapUnavailable(testSrc('capped'))).toBe(true);
     expect(warn).toHaveBeenCalledWith(
       expect.stringContaining('icon variants rasterized'),
     );
