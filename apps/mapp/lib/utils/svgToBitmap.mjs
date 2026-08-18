@@ -300,6 +300,16 @@ async function rasterize(src) {
 }
 
 /**
+The patterns which the svgSize method reads the intrinsic dimensions with.
+
+The patterns are held at module scope so that they are compiled once rather than per rasterization. RegExp.exec is used in place of String.match, which is equivalent for a pattern without the global flag.
+*/
+const svgRootPattern = /<svg\b[^>]*>/;
+const svgWidthPattern = /\bwidth\s*=\s*["']?([\d.]+)/;
+const svgHeightPattern = /\bheight\s*=\s*["']?([\d.]+)/;
+const svgViewBoxPattern = /\bviewBox\s*=\s*["']([^"']+)["']/;
+
+/**
 @function svgSize
 
 @description
@@ -319,8 +329,8 @@ function svgSize(src) {
   let root;
 
   try {
-    root = decodeURIComponent(src.slice(src.indexOf(',') + 1)).match(
-      /<svg\b[^>]*>/,
+    root = svgRootPattern.exec(
+      decodeURIComponent(src.slice(src.indexOf(',') + 1)),
     )?.[0];
   } catch {
     // A src which is not percent encoded is not decoded.
@@ -329,18 +339,14 @@ function svgSize(src) {
 
   if (!root) return;
 
-  const width = Number.parseFloat(
-    root.match(/\bwidth\s*=\s*["']?([\d.]+)/)?.[1],
-  );
+  const width = Number.parseFloat(svgWidthPattern.exec(root)?.[1]);
 
-  const height = Number.parseFloat(
-    root.match(/\bheight\s*=\s*["']?([\d.]+)/)?.[1],
-  );
+  const height = Number.parseFloat(svgHeightPattern.exec(root)?.[1]);
 
   if (width > 0 && height > 0) return [width, height];
 
-  const viewBox = root
-    .match(/\bviewBox\s*=\s*["']([^"']+)["']/)?.[1]
+  const viewBox = svgViewBoxPattern
+    .exec(root)?.[1]
     ?.split(/[\s,]+/)
     .map(Number);
 
