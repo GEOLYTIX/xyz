@@ -19,6 +19,8 @@ Dictionary entries:
 
 @requires /ui/layers
 
+@requires /layer/featureFields
+
 @module /ui/elements/layerStyle
 */
 
@@ -302,6 +304,8 @@ function opacitySlider(layer) {
 @description
 The theme() style element method will returns a content array with elements for the theme meta text and legend.
 
+The legend node is created for the legend methods to render into. The legend of a theme with a distribution is built by the featureFields.process method once the layer data has been received, since the distribution determines which categories are shown in the legend. Legends which are not derived from the layer data are built from a layer.showCallbacks method.
+
 @param {layer} layer A decorated mapp layer with a style object.
 
 @property {layer-style} layer.style The layer style configuration.
@@ -344,14 +348,22 @@ function theme(layer) {
   }
 
   if (Object.hasOwn(mapp.ui.layers.legends, layer.style.theme?.type)) {
-    layer.showCallbacks.push(() => {
-      mapp.ui.layers.legends[layer.style.theme.type](layer);
-    });
-
     // The legend methods replace the children of the layer.style.legend node with the legend content.
     layer.style.legend = mapp.utils.html.node`<div class="legend">`;
 
-    layer.style.legend && content.push(layer.style.legend);
+    content.push(layer.style.legend);
+
+    // The legend of a theme with a distribution is built by the featureFields.process method once the layer data has been received. A legend built from the theme configuration prior to that would request icons for categories which are not displayed in the legend built from the data.
+    const dataDistribution = Object.hasOwn(
+      mapp.layer.featureFields.distribution,
+      layer.style.theme.distribution,
+    );
+
+    if (!dataDistribution) {
+      layer.showCallbacks.push(() => {
+        mapp.ui.layers.legends[layer.style.theme.type](layer);
+      });
+    }
   }
 
   return mapp.utils.html.node`<div data-id="layerTheme">${content}`;
