@@ -69,6 +69,11 @@ export default async function apiKey(req, res) {
     roles: user.roles,
   };
 
+  // The authorization_provider property is assigned by a composing host and is not stored in the ACL. The property must be carried over from the requesting user.
+  if (req.params.user.authorization_provider) {
+    api_user.authorization_provider = req.params.user.authorization_provider;
+  }
+
   const key = jwt.sign(api_user, xyzEnv.SECRET, {
     algorithm: xyzEnv.SECRET_ALGORITHM,
   });

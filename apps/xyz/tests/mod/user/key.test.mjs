@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { createMocks } from 'node-mocks-http';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -138,5 +139,23 @@ describe('key:', async () => {
 
     expect(res.statusCode === 200).toBeTruthy();
     expect(res._getData().startsWith('ey')).toBeTruthy();
+  });
+
+  it('carries the authorization_provider property over to the api key', async () => {
+    const { req, res } = createMocks({
+      params: {
+        user: { ...user, authorization_provider: 'openfga' },
+      },
+    });
+
+    aclFn.mockImplementation(async () => {
+      return [user];
+    });
+
+    await apiKey(req, res);
+
+    const token = jwt.decode(res._getData());
+
+    expect(token.authorization_provider).toBe('openfga');
   });
 });

@@ -235,4 +235,50 @@ describe('cookie:', async () => {
 
     expect(Object.hasOwn(token, 'sessionIndex')).toBeTruthy();
   });
+
+  it('carries the authorization_provider property over to the new cookie', async () => {
+    const user = {
+      email: 'test@geolytix.co.uk',
+      roles: [],
+      admin: false,
+    };
+
+    const providerUser = {
+      ...user,
+      authorization_provider: 'openfga',
+    };
+
+    const secret = crypto.randomUUID();
+
+    globalThis.xyzEnv.SECRET = secret;
+
+    const { req, res } = createMocks({
+      headers: {
+        host: 'http://localhost:3000',
+      },
+      cookies: {
+        TEST: jwt.sign(providerUser, secret),
+      },
+      params: {},
+    });
+
+    aclFn.mockImplementation(() => {
+      return [user];
+    });
+
+    await cookie(req, res);
+
+    const header = res.getHeader('set-cookie');
+    let token = {};
+
+    header.split(';').forEach((cookie) => {
+      const [name, value] = cookie.trim().split('=');
+
+      if (name === 'TEST') {
+        token = jwt.decode(value);
+      }
+    });
+
+    expect(token.authorization_provider).toBe('openfga');
+  });
 });

@@ -173,7 +173,7 @@ describe('composeObj', async () => {
       },
     };
 
-    const with_roles = await composeObj(obj, ['foo']);
+    const with_roles = await composeObj(obj, { roles: ['foo'] });
 
     expect(with_roles.check === true).toBeTruthy();
   });
@@ -187,7 +187,7 @@ describe('composeObj', async () => {
       },
     };
 
-    const with_roles = await composeObj(obj, ['foo']);
+    const with_roles = await composeObj(obj, { roles: ['foo'] });
 
     expect(with_roles.check === true).toBeTruthy();
   });
@@ -203,7 +203,7 @@ describe('composeObj', async () => {
     };
 
     // Access to the layer should be granted because the user has the "foo" role.
-    const layer = await composeObj(obj, ['foo', 'alpha']);
+    const layer = await composeObj(obj, { roles: ['foo', 'alpha'] });
 
     expect(layer.name === 'Test Alpha').toBeTruthy();
     expect(layer.infoj.length).toEqual(2);
@@ -224,7 +224,7 @@ describe('composeObj', async () => {
       'locale.layer_a.draw_circle',
     ];
 
-    const layer = await composeObj(obj, roles);
+    const layer = await composeObj(obj, { roles });
 
     expect(layer.draw?.point).toBeTruthy();
     expect(layer.draw?.circle).toBeTruthy();
@@ -247,7 +247,7 @@ describe('composeObj', async () => {
       'locale.layer_a.draw_circle',
     ];
 
-    const layer = await composeObj(obj, roles);
+    const layer = await composeObj(obj, { roles });
 
     expect(layer.draw?.point).toBeTruthy();
     expect(layer.draw?.circle).toBeTruthy();
@@ -264,7 +264,7 @@ describe('composeObj', async () => {
     };
 
     // The user holds a role but not one of the accessRoles in the roles object.
-    const response = await composeObj(obj, ['some_other_role']);
+    const response = await composeObj(obj, { roles: ['some_other_role'] });
 
     expect(response instanceof Error).toBeTruthy();
   });
@@ -281,7 +281,7 @@ describe('composeObj', async () => {
     };
 
     // The user holds a role but not one of the accessRoles in the nested roles object.
-    const response = await composeObj(obj, ['some_other_role']);
+    const response = await composeObj(obj, { roles: ['some_other_role'] });
 
     expect(response.root).toBeTruthy();
     expect(response.nested).toBeFalsy();
@@ -314,7 +314,7 @@ describe('composeObj', async () => {
     };
 
     // The user holds a role but not one of the accessRoles in the nested roles object.
-    const response = await composeObj(obj, ['Franchisee']);
+    const response = await composeObj(obj, { roles: ['Franchisee'] });
 
     expect(response.hover.query).toEqual('oppscan_hover_franchisee');
     expect(response.hover.template).toBeFalsy();
