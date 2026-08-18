@@ -118,6 +118,11 @@ export default async function cookie(req, res) {
         user.session = payload.session;
       }
 
+      // The authorization_provider property is assigned by a composing host and is not stored in the ACL. The property must be carried over from the current token.
+      if (payload.authorization_provider) {
+        user.authorization_provider = payload.authorization_provider;
+      }
+
       //If we have a sessionIndex from a SAML IdP then we need to pass it from the
       //already created cookie as this is not stored in the acl.
       if (decodedCookie.sessionIndex) {

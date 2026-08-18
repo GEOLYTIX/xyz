@@ -354,6 +354,8 @@ The rolesTemplates method processes the 'roles' property of an object. It iterat
 
 The role as defined by the key in the roles object will be added to the accessRoles array. Access to the obj will be denied if none of the accessRoles are included in the user.roles array.
 
+The user.roles gate does not apply to a user with an authorization_provider property. Scope access for such a user is decided by the provider in the authorizeScope method.
+
 @param {string} key
 @param {Object} val
 @param {Object} obj
@@ -402,6 +404,9 @@ async function rolesTemplates(key, val, obj, user, templateScope) {
     // Role check is not required for admin endpoints. The user.roles property is set to true to bypass role checks.
     return true;
   }
+
+  // A user with an authorization_provider property is not gated by the user.roles array. Scope access for the user is decided by the provider in the authorizeScope method.
+  if (user?.authorization_provider) return true;
 
   // The roles object has no gateRoles, so the obj itself is not gated and remains visible regardless of the roles provided by the user.
   if (!gateRoles.length) return true;

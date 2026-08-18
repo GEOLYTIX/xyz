@@ -96,6 +96,24 @@ describe('basic authorization', () => {
     setAuthorizationProvider('other');
   });
 
+  it('the roles object gate does not apply to a provider user', async () => {
+    setAuthorizationProvider('openfga', { checkScope: async () => true });
+
+    const withoutRoles = await composeObj(
+      { roles: { analyst: true } },
+      { authorization_provider: 'openfga' },
+    );
+
+    expect(withoutRoles instanceof Error).toBeFalsy();
+
+    const otherRoles = await composeObj(
+      { roles: { analyst: true } },
+      { authorization_provider: 'openfga', roles: ['other'] },
+    );
+
+    expect(otherRoles instanceof Error).toBeFalsy();
+  });
+
   it('a provider deny returns an Error despite matching user roles', async () => {
     setAuthorizationProvider('openfga', { checkScope: async () => false });
 
