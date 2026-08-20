@@ -29,6 +29,9 @@ catalog:
   varlock: 1.7.2
   vite: 8.0.16
   vitest: 4.1.10
+minimumReleaseAge: 10080
+blockExoticSubdeps: true
+trustPolicy: no-downgrade
 minimumReleaseAgeExclude:
   - '@varlock/google-secret-manager-plugin'
   - varlock
