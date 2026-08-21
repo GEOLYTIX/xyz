@@ -19,7 +19,10 @@ const legendIconSize = 24;
 @description
 The legendIcon method returns an icon for displaying a mapp-style object outside the mapview.Map canvas.
 
+The bitmap render is opt in with the `layer.style.bitmap_icons` flag, which the legend module assigns to the style object of the layer it renders. An icon is drawn from the `data:image` src itself where the flag is not set.
+
 @param {feature-style} style A JSON style object.
+@property {Boolean} [style.bitmap_icons] The icon should be drawn from a rasterized bitmap.
 
 @returns {HTMLElement} A HTML element for the style.
 */
@@ -59,6 +62,7 @@ export default function legendIcon(style) {
 The createIconFromArray method iterates through an `style.icon[]` array to create a layered and scaled icon element for displaying an icon style.
 
 @param {feature-style} style A JSON style object.
+@property {Boolean} [style.bitmap_icons] The icons should be drawn from rasterized bitmaps.
 
 @returns {HTMLElement} A HTML element for the style.
 */
@@ -69,6 +73,11 @@ function createIconFromArray(style) {
   const canvas = document.createElement('canvas');
   canvas.width = width;
   canvas.height = height;
+
+  if (!style.bitmap_icons) {
+    drawIcons(canvas, style, width, height);
+    return canvas;
+  }
 
   // The icon variants are rasterized before the icons are drawn. A `data:image` src assigned to an Openlayers style Icon would be retained by the IconImageCache as an isolated SVG document.
   const urls = style.icon.map(
@@ -94,6 +103,7 @@ The canvas is sized from the ratio of the layered icons within the width and hei
 @param {feature-style} style A JSON style object.
 @param {number} width The width bound for the legend icon.
 @param {number} height The height bound for the legend icon.
+@property {Boolean} [style.bitmap_icons] The icons should be drawn from rasterized bitmaps.
 */
 function drawIcons(canvas, style, width, height) {
   let toLoad = style.icon.length;
@@ -155,6 +165,7 @@ function drawIcons(canvas, style, width, height) {
       iconUrl,
       icon.legendAnchor || [0.5, 0.5],
       legendScale * (icon.scale || 1),
+      style.bitmap_icons,
     );
 
     icon.legendStyle = new ol.style.Style({
@@ -181,16 +192,17 @@ function drawIcons(canvas, style, width, height) {
 @description
 The legendImageStyle method returns an Openlayers style Icon for a legend icon.
 
-A `data:image` src is rendered from a rasterized bitmap where one is available. A bitmap backed Icon is loaded on creation, so the load state check of the drawIcons method resolves immediately.
+A `data:image` src is rendered from a rasterized bitmap where the bitmap render is enabled and a bitmap is available. A bitmap backed Icon is loaded on creation, so the load state check of the drawIcons method resolves immediately.
 
 @param {string} src The icon url or data URL.
 @param {array} anchor The icon anchor.
 @param {number} scale The icon scale.
+@param {Boolean} [bitmapIcons] The icon should be drawn from a rasterized bitmap.
 
 @returns {Object} An Openlayers style Icon object.
 */
-function legendImageStyle(src, anchor, scale) {
-  const bitmap = mapp.utils.svgBitmap.iconBitmap(src);
+function legendImageStyle(src, anchor, scale, bitmapIcons) {
+  const bitmap = bitmapIcons && mapp.utils.svgBitmap.iconBitmap(src);
 
   if (bitmap) {
     return new ol.style.Icon({
@@ -215,6 +227,7 @@ function legendImageStyle(src, anchor, scale) {
 The createIconFromInlineStyle creates an icon from an inline style object.
 
 @param {feature-style} style A JSON style object.
+@property {Boolean} [style.bitmap_icons] The icon should be drawn from a rasterized bitmap.
 
 @returns {HTMLElement} A HTML element for the style.
 */
@@ -235,7 +248,9 @@ function createIconFromInlineStyle(style) {
   }
 
   // A `data:image` background image instantiates an isolated SVG document for as long as the element is in the document. The rasterized bitmap is drawn into a canvas instead.
-  if (iconUrl?.startsWith('data:')) return createIconFromBitmap(iconUrl, style);
+  if (style.bitmap_icons && iconUrl?.startsWith('data:')) {
+    return createIconFromBitmap(iconUrl, style);
+  }
 
   const inlineStyle = `
     background-position: center;

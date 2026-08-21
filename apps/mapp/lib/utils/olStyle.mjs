@@ -24,6 +24,7 @@ A JSON mapp-style object.
 @property {string} [fillColor] The fill color of the polygon symbol.
 @property {number} [fillOpacity] The fill opacity of the polygon symbol.
 @property {Array} [lineDash] An Array of numbers that specify distances to alternately draw a line and a gap, eg: [5, 4].
+@property {Boolean} [bitmap_icons] Icons should be rendered from rasterized bitmaps.
 
 */
 
@@ -34,6 +35,7 @@ A JSON mapp-style object.
 The olStyle method takes a mapp-style JSON representation to create an Openlayers style object for rendering Openlayers features in the Openlayers mapview.Map.
 
 @param {feature-style} style A JSON mapp-style object.
+@param {Object} [feature] The Openlayers feature to style.
 
 @returns {Object} An Openlayers feature style object.
 */
@@ -152,6 +154,8 @@ const warnedSymbolTypes = new Set();
 @description
 The styleIcon method returns the Openlayers image style for an icon.
 
+The bitmap render is opt in for a layer with the `layer.style.bitmap_icons` flag, which the featureStyle method assigns to the feature style object. A src is rendered as the Openlayers style Icon src where the flag is not set.
+
 A `data:image` src is rendered from a rasterized bitmap. An SVG referenced as an image instantiates a complete isolated SVG document in the browser render engine, and the Openlayers IconImageCache retains it for the lifetime of the session. A bitmap instantiates no document.
 
 A fallback ol.style.Circle is returned while the variant is rasterized. The fallback must not be an Icon with the data URL src, since that would populate the IconImageCache with every variant before any bitmap is ready.
@@ -162,25 +166,28 @@ A src which is a url is not rasterized. It is a single image resource shared by 
 
 @param {object} icon The mapp icon style object.
 @param {number} scale The icon scale.
+@param {Boolean} [bitmapIcons] The icon should be rendered from a rasterized bitmap.
 
 @returns {Object} An Openlayers image style object.
 */
-function styleIcon(icon, scale) {
+function styleIcon(icon, scale, bitmapIcons) {
   const anchor = icon.anchor || [0.5, 0.5];
 
-  const bitmap = iconBitmap(icon.url);
+  if (bitmapIcons) {
+    const bitmap = iconBitmap(icon.url);
 
-  if (bitmap) {
-    // The bitmap was rasterized at the device pixel ratio. The Icon must be scaled by the reciprocal to render at the size the SVG declares.
-    return memoizedIcon(`${icon.url}|${anchor}|${scale}`, {
-      anchor: anchor,
-      img: bitmap.image,
-      scale: scale / bitmap.pixelRatio,
-    });
-  }
+    if (bitmap) {
+      // The bitmap was rasterized at the device pixel ratio. The Icon must be scaled by the reciprocal to render at the size the SVG declares.
+      return memoizedIcon(`${icon.url}|${anchor}|${scale}`, {
+        anchor: anchor,
+        img: bitmap.image,
+        scale: scale / bitmap.pixelRatio,
+      });
+    }
 
-  if (icon.url.startsWith('data:') && !bitmapUnavailable(icon.url)) {
-    return fallbackIcon(icon);
+    if (icon.url.startsWith('data:') && !bitmapUnavailable(icon.url)) {
+      return fallbackIcon(icon);
+    }
   }
 
   return memoizedIcon(`${icon.url}|${anchor}|${scale}`, {
@@ -293,6 +300,7 @@ On Openlayers Style Icon requires an URL. A `data:image` URL will be created fro
 @param {feature-style} style A JSON mapp-style object.
 @param {object} icon An array of Openlayers style objects.
 @param {object} feature The Openlayers feature to style with an icon.
+@property {Boolean} [style.bitmap_icons] The icon should be rendered from a rasterized bitmap.
 */
 function iconStyle(Styles, style, icon, feature) {
   // Calculate scale for icon render.
@@ -310,7 +318,7 @@ function iconStyle(Styles, style, icon, feature) {
   // Push OL icon Style into Styles array.
   Styles.push(
     new ol.style.Style({
-      image: styleIcon(icon, scale),
+      image: styleIcon(icon, scale, style.bitmap_icons),
       zIndex: style.zIndex,
     }),
   );

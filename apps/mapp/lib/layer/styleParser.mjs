@@ -12,6 +12,7 @@ The styleParser module exports the styleParser method as default which is intend
 @global
 @typedef {Object} layer-style
 @property {Boolean} [cache] The feature style should be retrieved from the feature 'Styles' property.
+@property {Boolean} [bitmap_icons] Icons should be rendered from rasterized bitmaps.
 @property {object} theme The current theme to be rendered.
 @property {feature-style} [default] The default style for features.
 @property {feature-style} [highlight] The style for highlighted features.
@@ -615,6 +616,8 @@ function handleHovers(layer) {
 @description
 The redrawStyleIcons method requests a redraw of the layer as icon bitmaps become available.
 
+The bitmap render is opt in with the `layer.style.bitmap_icons` flag. A layer without the flag renders its icons from the src and has no bitmap to wait for.
+
 An icon variant is rasterized on demand by the feature style render, which substitutes a fallback symbol for a variant which is not yet available. The layer must be redrawn once the bitmap has been rasterized in order for the icon to replace the fallback symbol.
 
 The variants of the style configuration are not rasterized ahead of the render. A configuration may hold thousands of variants of which only those of the features in the mapview are rendered, and the bitmap cache is bounded and is not evicted.
@@ -625,6 +628,8 @@ The redraw is only registered for a style configuration which has icons. The lay
 @property {layer-style} layer.style The mapp-layer style configuration.
 */
 function redrawStyleIcons(layer) {
+  if (!layer.style.bitmap_icons) return;
+
   if (!styleIcons(layer.style).length) return;
 
   mapp.utils.svgBitmap.onBitmapReady(() => layer.L?.changed());

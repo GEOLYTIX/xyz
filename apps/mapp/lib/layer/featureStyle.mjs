@@ -14,6 +14,7 @@ Returns a style function for OL vector layers.
 @param {layer} layer
 @property {layer-style} layer.style The layer style config.
 @property {Boolean} [style.cache] The feature style should be retrieved from the feature 'Styles' property.
+@property {Boolean} [style.bitmap_icons] Feature icons should be rendered from rasterized bitmaps.
 
 @returns {function} The style function for the layer.
 */
@@ -65,6 +66,11 @@ export default function featureStyle(layer) {
 
     // IconScalingStyle will scale icons based on the feature properties
     iconScalingStyle(feature);
+
+    // The bitmap render is opt in for the layer. The olStyle method reads the flag from the style object the icon belongs to.
+    if (layer.style.bitmap_icons) {
+      feature.style.bitmap_icons = true;
+    }
 
     return mapp.utils.style(feature.style, feature);
   };

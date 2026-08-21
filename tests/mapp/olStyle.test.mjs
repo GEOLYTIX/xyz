@@ -75,6 +75,11 @@ beforeEach(() => {
 });
 
 /**
+The bitmap render is opt in with the `layer.style.bitmap_icons` flag, which the featureStyle method assigns to the feature style object. A test of the bitmap render must set the flag on the style object.
+*/
+const bitmapIcons = { bitmap_icons: true };
+
+/**
 The image style memos are module scoped and persist for the lifetime of the module. Each test uses its own src so that a style memoized by one test can not satisfy another test.
 */
 function testSrc(id) {
@@ -105,7 +110,7 @@ describe('olStyle bitmap icons', () => {
 
     const Styles = Array.from({ length: 100 }, () =>
       // Each feature carries its own cloned style object, as featureStyle assigns with structuredClone.
-      olStyle({ icon: { url: src } }),
+      olStyle({ ...bitmapIcons, icon: { url: src } }),
     );
 
     // One Icon for one hundred features. Every feature style holds the same object.
@@ -120,7 +125,7 @@ describe('olStyle bitmap icons', () => {
     seedBitmap(src, 2);
 
     // A bitmap rasterized at twice the device pixel ratio must render at half the scale to occupy the size the SVG declares.
-    olStyle({ icon: { scale: 3, url: src } });
+    olStyle({ ...bitmapIcons, icon: { scale: 3, url: src } });
 
     expect(iconOptions[0].scale).toBe(1.5);
   });
@@ -130,10 +135,10 @@ describe('olStyle bitmap icons', () => {
     seedBitmap(src, 1);
 
     // The cluster, zoom, field, and highlight scales are per feature values, so the scale must stay part of the Icon key and out of the variant key.
-    olStyle({ clusterScale: 1.5, icon: { url: src } });
-    olStyle({ clusterScale: 2.5, icon: { url: src } });
-    olStyle({ clusterScale: 1.5, icon: { url: src } });
-    olStyle({ icon: { anchor: [0.5, 1], url: src } });
+    olStyle({ ...bitmapIcons, clusterScale: 1.5, icon: { url: src } });
+    olStyle({ ...bitmapIcons, clusterScale: 2.5, icon: { url: src } });
+    olStyle({ ...bitmapIcons, clusterScale: 1.5, icon: { url: src } });
+    olStyle({ ...bitmapIcons, icon: { anchor: [0.5, 1], url: src } });
 
     expect(iconOptions).toHaveLength(3);
   });
@@ -144,16 +149,33 @@ describe('olStyle bitmap icons', () => {
 
     const feature = { set: vi.fn() };
 
-    olStyle({ icon: { url: src } }, feature);
+    olStyle({ ...bitmapIcons, icon: { url: src } }, feature);
 
     expect(feature.set).toHaveBeenCalledWith('Styles', expect.anything(), true);
+  });
+
+  it('renders the data url Icon for a style without the bitmap_icons flag', () => {
+    // The bitmap render is opt in. A layer without the flag renders the data url as the Openlayers style Icon src, as it did before the bitmap render.
+    const src = testSrc('optOut');
+    seedBitmap(src);
+
+    const Styles = olStyle({ icon: { url: src } });
+
+    expect(circleOptions).toHaveLength(0);
+    expect(iconOptions).toHaveLength(1);
+    expect(iconOptions[0].src).toBe(src);
+    expect(iconOptions[0].img).toBeUndefined();
+    expect(Styles[0].image).toBeInstanceOf(Icon);
   });
 });
 
 describe('olStyle fallback symbol', () => {
   it('renders a Circle rather than a data url Icon while a variant is rasterized', () => {
     // An Icon constructed from the data url would be retained by the Openlayers IconImageCache as an isolated SVG document, which is the leak this replaces.
-    const Styles = olStyle({ icon: { url: testSrc('notRasterized') } });
+    const Styles = olStyle({
+      ...bitmapIcons,
+      icon: { url: testSrc('notRasterized') },
+    });
 
     expect(iconOptions).toHaveLength(0);
     expect(circleOptions).toHaveLength(1);
@@ -161,9 +183,18 @@ describe('olStyle fallback symbol', () => {
   });
 
   it('shares one Circle per fill colour', () => {
-    olStyle({ icon: { fillColor: '#1a9641', url: testSrc('fallbackA') } });
-    olStyle({ icon: { fillColor: '#1a9641', url: testSrc('fallbackB') } });
-    olStyle({ icon: { fillColor: '#d7191c', url: testSrc('fallbackC') } });
+    olStyle({
+      ...bitmapIcons,
+      icon: { fillColor: '#1a9641', url: testSrc('fallbackA') },
+    });
+    olStyle({
+      ...bitmapIcons,
+      icon: { fillColor: '#1a9641', url: testSrc('fallbackB') },
+    });
+    olStyle({
+      ...bitmapIcons,
+      icon: { fillColor: '#d7191c', url: testSrc('fallbackC') },
+    });
 
     // The Openlayers cache key for a RegularShape is structural, so a fixed radius yields one entry per colour however many features render it.
     expect(circleOptions).toHaveLength(2);
@@ -174,7 +205,7 @@ describe('olStyle fallback symbol', () => {
     // Cached Styles would outlive the rasterization and the fallback would never be replaced.
     const feature = { set: vi.fn() };
 
-    olStyle({ icon: { url: testSrc('notCached') } }, feature);
+    olStyle({ ...bitmapIcons, icon: { url: testSrc('notCached') } }, feature);
 
     expect(feature.set).not.toHaveBeenCalled();
   });
@@ -185,7 +216,7 @@ describe('olStyle unavailable bitmap', () => {
     // There is no bitmap to wait for. The icon itself must be drawn rather than the symbol which stands in for it, as the legendIcon element likewise draws the data url where no bitmap is available.
     const src = seedUnavailable(testSrc('unavailable'));
 
-    const Styles = olStyle({ icon: { url: src } });
+    const Styles = olStyle({ ...bitmapIcons, icon: { url: src } });
 
     expect(circleOptions).toHaveLength(0);
     expect(iconOptions).toHaveLength(1);
@@ -196,7 +227,9 @@ describe('olStyle unavailable bitmap', () => {
   it('constructs one Icon for many features with an unavailable variant', () => {
     const src = seedUnavailable(testSrc('unavailableShared'));
 
-    Array.from({ length: 100 }, () => olStyle({ icon: { url: src } }));
+    Array.from({ length: 100 }, () =>
+      olStyle({ ...bitmapIcons, icon: { url: src } }),
+    );
 
     expect(iconOptions).toHaveLength(1);
   });
@@ -207,7 +240,7 @@ describe('olStyle unavailable bitmap', () => {
 
     const feature = { set: vi.fn() };
 
-    olStyle({ icon: { url: src } }, feature);
+    olStyle({ ...bitmapIcons, icon: { url: src } }, feature);
 
     expect(feature.set).toHaveBeenCalledWith('Styles', expect.anything(), true);
   });
@@ -240,7 +273,10 @@ describe('olStyle url icons', () => {
 
 describe('olStyle icon url', () => {
   it('creates the icon url from the svgSymbols type method', () => {
-    const Styles = olStyle({ icon: { fillColor: '#2b83ba', type: 'dot' } });
+    const Styles = olStyle({
+      ...bitmapIcons,
+      icon: { fillColor: '#2b83ba', type: 'dot' },
+    });
 
     expect(Styles).toHaveLength(1);
     expect(Styles[0].image).toBeInstanceOf(Circle);
@@ -263,7 +299,10 @@ describe('olStyle icon url', () => {
     seedBitmap(first);
     seedBitmap(second);
 
-    const Styles = olStyle({ icon: [{ url: first }, { url: second }] });
+    const Styles = olStyle({
+      ...bitmapIcons,
+      icon: [{ url: first }, { url: second }],
+    });
 
     expect(Styles).toHaveLength(2);
     expect(iconOptions).toHaveLength(2);
