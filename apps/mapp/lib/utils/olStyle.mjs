@@ -38,12 +38,10 @@ The olStyle method takes a mapp-style JSON representation to create an Openlayer
 @param {Object} [feature] The Openlayers feature to style.
 
 @returns {Object} An Openlayers feature style object.
+@property {Boolean} [Styles.fallback] A provisional symbol was rendered in place of an icon variant which is being rasterized.
 */
 export default function olStyle(style, feature) {
   if (!style) return null;
-
-  // The fallback flag is assigned by the styleIcon method for the current olStyle call.
-  fallbackStyle = false;
 
   // Array for OL Style objects.
   const Styles = [];
@@ -110,7 +108,9 @@ export default function olStyle(style, feature) {
 
   // Set Styles object to cache style.
   // A style with a fallback symbol must not be cached. The cached Styles would outlive the rasterization of the icon variant and the fallback would never be replaced.
-  !fallbackStyle && feature?.set?.('Styles', Styles, true);
+  if (!Styles.fallback) {
+    feature?.set?.('Styles', Styles, true);
+  }
 
   return Styles;
 }
@@ -132,16 +132,18 @@ The fallback is rendered while an icon variant is being rasterized. The Openlaye
 const memoizedFallbacks = new Map();
 
 /**
+The fallbackImages Set holds the ol.style.Circle objects of the memoizedFallbacks.
+
+The iconStyle method marks the Styles array of a style which rendered a fallback with the Set. A provisional render must be recognised from the image style itself rather than from module state: a flag assigned for the current olStyle call would be reset by a nested call, and would be read by the wrong call were any part of the style render to become asynchronous.
+*/
+const fallbackImages = new Set();
+
+/**
 The number of ol.style.Icon objects to memoize.
 
 The scale is part of the key and may be a unique value per feature where a cluster or zoom scale is applied. The memo is bound to prevent unbounded growth. Entries are evicted in insertion order.
 */
 const styleIconMemoLimit = 1024;
-
-/**
-Set by the styleIcon method where a fallback symbol was returned for the current olStyle call.
-*/
-let fallbackStyle = false;
 
 /**
 The svgSymbols types which have been warned about, so that an invalid type is not warned for every feature of every render.
@@ -235,8 +237,6 @@ The fallbackIcon method returns a memoized ol.style.Circle to render an icon var
 @returns {Object} An Openlayers style Circle object.
 */
 function fallbackIcon(icon) {
-  fallbackStyle = true;
-
   const fillColor = icon.fillColor || '#999';
 
   if (memoizedFallbacks.has(fillColor)) return memoizedFallbacks.get(fillColor);
@@ -248,6 +248,7 @@ function fallbackIcon(icon) {
   });
 
   memoizedFallbacks.set(fillColor, Circle);
+  fallbackImages.add(Circle);
 
   return Circle;
 }
@@ -309,6 +310,7 @@ On Openlayers Style Icon requires an URL. A `data:image` URL will be created fro
 @param {object} icon An array of Openlayers style objects.
 @param {object} feature The Openlayers feature to style with an icon.
 @property {Boolean} [style.bitmap_icons] The icon should be rendered from a rasterized bitmap.
+@property {Boolean} [Styles.fallback] Assigned where a provisional symbol was rendered in place of the icon.
 */
 function iconStyle(Styles, style, icon, feature) {
   // Calculate scale for icon render.
@@ -323,10 +325,17 @@ function iconStyle(Styles, style, icon, feature) {
   // Create icon url from svgSymbols method if not defined as url or svg source.
   if (!iconUrl(icon, feature)) return;
 
+  const image = styleIcon(icon, scale, style.bitmap_icons);
+
+  // The mark travels with the Styles array which the provisional symbol was rendered into, so that a consumer of the array can establish whether the render is complete.
+  if (fallbackImages.has(image)) {
+    Styles.fallback = true;
+  }
+
   // Push OL icon Style into Styles array.
   Styles.push(
     new ol.style.Style({
-      image: styleIcon(icon, scale, style.bitmap_icons),
+      image: image,
       zIndex: style.zIndex,
     }),
   );

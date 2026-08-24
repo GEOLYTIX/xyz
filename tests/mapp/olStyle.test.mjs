@@ -209,6 +209,24 @@ describe('olStyle fallback symbol', () => {
 
     expect(feature.set).not.toHaveBeenCalled();
   });
+
+  it('marks the Styles array a fallback was rendered into', () => {
+    // The mark travels with the array rather than through module state, so that a consumer of a Styles array can establish whether the render is complete.
+    const fallback = olStyle({
+      ...bitmapIcons,
+      icon: { url: testSrc('marked') },
+    });
+
+    expect(fallback.fallback).toBe(true);
+
+    // A style which rendered every icon must not carry the mark of the preceding call.
+    const complete = olStyle({
+      ...bitmapIcons,
+      icon: { url: seedUnavailable(testSrc('notMarked')) },
+    });
+
+    expect(complete.fallback).toBeUndefined();
+  });
 });
 
 describe('olStyle unavailable bitmap', () => {

@@ -30,7 +30,8 @@ export default function featureStyle(layer) {
       // Check for and return existing Styles object.
       const Styles = feature.get('Styles');
 
-      if (Styles) return Styles;
+      // A Styles array with a provisional symbol in place of an icon must be styled again. The olStyle method does not cache one, and the flag is checked here so that a cached array can be established to be complete.
+      if (Styles && !Styles.fallback) return Styles;
     }
 
     // Assign feature properties.
