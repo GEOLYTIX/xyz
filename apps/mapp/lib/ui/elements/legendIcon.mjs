@@ -3,7 +3,7 @@
 
 The legendIcon module exports the default legendIcon(style) method.
 
-The icon url is resolved with the mapp.utils.iconUrl method, so that the legend icon and the feature render of the mapview.Map resolve the url of an icon style object by the same rules.
+The icon url is resolved with the mapp.utils.iconUrl method and rendered with the mapp.utils.imageStyle method, so that the legend icon and the feature render of the mapview.Map resolve and draw an icon style object by the same rules.
 
 @requires /utils/olStyle
 
@@ -101,6 +101,8 @@ The drawIcons method draws the `style.icon[]` array into the canvas of a layered
 
 The canvas is sized from the ratio of the layered icons within the width and height bounds, and the icons are scaled to fit. A canvas which is not sized to the same ratio clips a non square icon.
 
+The image styles are memoized by the imageStyle method and are shared with the feature render of the mapview.Map. An ol.style.Icon must not be mutated, so the fitted style is requested rather than the ratio being set as the scale of the style the icons were measured from.
+
 @param {HTMLElement} canvas The canvas element to draw the icons into.
 @param {feature-style} style A JSON style object.
 @param {number} width The width bound for the legend icon.
@@ -125,15 +127,25 @@ function drawIcons(canvas, style, width, height) {
       return [size[0] * scale, size[1] * scale];
     });
 
-    const compositeWidth = Math.max(...drawn.map((size) => size[0])) || width;
-    const compositeHeight = Math.max(...drawn.map((size) => size[1])) || height;
+    const compositeWidth = Math.max(...drawn.map((size) => size[0]));
+    const compositeHeight = Math.max(...drawn.map((size) => size[1]));
 
     // The composite is fitted within the bounds. An icon is scaled by the same ratio so that it occupies the canvas it is drawn into.
-    const ratio = Math.min(width / compositeWidth, height / compositeHeight);
+    const ratio = fitRatio(width, height, compositeWidth, compositeHeight);
 
-    const size = [compositeWidth * ratio, compositeHeight * ratio];
+    const size = [
+      (compositeWidth || width) * ratio,
+      (compositeHeight || height) * ratio,
+    ];
 
-    images.forEach((image) => image.setScale(image.getScale() * ratio));
+    // The fitted style is requested for the scale the icon is drawn at. The Openlayers IconImageCache holds the image of the style the icon was measured from, so the fitted style is loaded on creation.
+    style.icon.forEach((icon) => {
+      if (!icon.legendStyle) return;
+
+      icon.legendStyle = new ol.style.Style({
+        image: legendImageStyle(icon, style, legendScale, ratio),
+      });
+    });
 
     const vectorContext = ol.render.toContext(canvas.getContext('2d'), {
       pixelRatio: 1,
@@ -163,12 +175,7 @@ function drawIcons(canvas, style, width, height) {
       continue;
     }
 
-    const imageStyle = legendImageStyle(
-      iconUrl,
-      icon.legendAnchor || [0.5, 0.5],
-      legendScale * (icon.scale || 1),
-      style.bitmap_icons,
-    );
+    const imageStyle = legendImageStyle(icon, style, legendScale);
 
     icon.legendStyle = new ol.style.Style({
       image: imageStyle,
@@ -192,33 +199,24 @@ function drawIcons(canvas, style, width, height) {
 @function legendImageStyle
 
 @description
-The legendImageStyle method returns an Openlayers style Icon for a legend icon.
+The legendImageStyle method returns the Openlayers image style for an icon of a layered legend icon.
 
-A `data:image` src is rendered from a rasterized bitmap where the bitmap render is enabled and a bitmap is available. A bitmap backed Icon is loaded on creation, so the load state check of the drawIcons method resolves immediately.
+No fallback is passed to the imageStyle method. The legend draws the image itself and is not redrawn, so a provisional symbol would remain in place of the icon.
 
-@param {string} src The icon url or data URL.
-@param {array} anchor The icon anchor.
-@param {number} scale The icon scale.
-@param {Boolean} [bitmapIcons] The icon should be drawn from a rasterized bitmap.
+@param {object} icon The mapp icon style object.
+@param {feature-style} style A JSON style object.
+@param {number} legendScale The scale of the layered legend icon.
+@param {number} [ratio] The ratio the icon is fitted within the legend icon bounds by.
+@property {Boolean} [style.bitmap_icons] The icon should be drawn from a rasterized bitmap.
 
-@returns {Object} An Openlayers style Icon object.
+@returns {Object} An Openlayers image style object.
 */
-function legendImageStyle(src, anchor, scale, bitmapIcons) {
-  const bitmap = bitmapIcons && mapp.utils.svgBitmap.iconBitmap(src);
-
-  if (bitmap) {
-    return new ol.style.Icon({
-      anchor: anchor,
-      img: bitmap.image,
-      scale: scale / bitmap.pixelRatio,
-    });
-  }
-
-  return new ol.style.Icon({
-    anchor: anchor,
-    crossOrigin: src.startsWith('data:') ? undefined : 'anonymous',
-    scale: scale,
-    src: src,
+function legendImageStyle(icon, style, legendScale, ratio) {
+  return mapp.utils.imageStyle({
+    anchor: icon.legendAnchor,
+    bitmap: style.bitmap_icons,
+    scale: legendScale * (icon.scale || 1) * (ratio || 1),
+    url: mapp.utils.iconUrl(icon),
   });
 }
 
@@ -250,15 +248,11 @@ function createIconFromInlineStyle(style) {
     return createIconFromBitmap(iconUrl, style);
   }
 
-  const inlineStyle = `
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: ${style.width + 'px' || '100%'};
-    height: ${style.height + 'px' || '100%'};
-    background-image: url(${iconUrl})`;
-
-  return mapp.utils.html.node`<div style=${inlineStyle}>`;
+  return backgroundImage(
+    iconUrl,
+    style.width || legendIconSize,
+    style.height || legendIconSize,
+  );
 }
 
 /**
@@ -289,17 +283,7 @@ function createIconFromBitmap(src, style) {
     const bitmap = mapp.utils.svgBitmap.iconBitmap(src);
 
     if (!bitmap) {
-      const fallbackStyle = `
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: contain;
-        width: ${width}px;
-        height: ${height}px;
-        background-image: url(${src})`;
-
-      const fallback = mapp.utils.html.node`<div style=${fallbackStyle}>`;
-
-      canvas.replaceWith(fallback);
+      canvas.replaceWith(backgroundImage(src, width, height));
 
       return;
     }
@@ -312,7 +296,7 @@ function createIconFromBitmap(src, style) {
     const intrinsicHeight = bitmap.image.height / bitmap.pixelRatio;
 
     // The element takes the ratio of the icon within the width and height bounds. The canvas is drawn at the dimensions of the bitmap, and an element which is not sized to the same ratio stretches it: a 20x30 icon in a 24x24 cell would render 24x24.
-    const ratio = Math.min(width / intrinsicWidth, height / intrinsicHeight);
+    const ratio = fitRatio(width, height, intrinsicWidth, intrinsicHeight);
 
     canvas.style.width = `${intrinsicWidth * ratio}px`;
     canvas.style.height = `${intrinsicHeight * ratio}px`;
@@ -350,17 +334,7 @@ function createLineSymbol(style) {
       stroke-width=${style.strokeWidth}
       stroke-dasharray=${style.lineDash} />`;
 
-  const backgroundImage = `data:image/svg+xml,${encodeURIComponent(xmlSerializer.serializeToString(icon))}`;
-
-  const inlineStyle = `
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: ${style.width}px;
-    height: ${style.height}px;
-    background-image: url(${backgroundImage});`;
-
-  return mapp.utils.html`<div style=${inlineStyle}>`;
+  return backgroundImage(svgDataUrl(icon), style.width, style.height);
 }
 
 /**
@@ -396,15 +370,65 @@ function createPolygonSymbol(style) {
       stroke-width=${style.strokeWidth}
       stroke-dasharray=${style.lineDash} >`;
 
-  const backgroundImage = `data:image/svg+xml,${encodeURIComponent(xmlSerializer.serializeToString(icon))}`;
+  return backgroundImage(svgDataUrl(icon), style.width, style.height);
+}
 
+/**
+@function backgroundImage
+
+@description
+The backgroundImage method returns a div element which draws the url as a contained background image.
+
+@param {string} url The image url or data URL.
+@param {number} width The element width in pixels.
+@param {number} height The element height in pixels.
+
+@returns {HTMLElement} A div element for the url.
+*/
+function backgroundImage(url, width, height) {
   const inlineStyle = `
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
-    width: ${style.width}px;
-    height: ${style.height}px;
-    background-image: url(${backgroundImage});`;
+    width: ${width}px;
+    height: ${height}px;
+    background-image: url(${url});`;
 
-  return mapp.utils.html`<div style=${inlineStyle}>`;
+  return mapp.utils.html.node`<div style=${inlineStyle}>`;
+}
+
+/**
+@function svgDataUrl
+
+@description
+The svgDataUrl method returns the `data:image` URL for an SVG element, as the svgSymbols module methods do for the symbol they create.
+
+@param {Object} icon An SVG element.
+
+@returns {string} The data URL for the element.
+*/
+function svgDataUrl(icon) {
+  return `data:image/svg+xml,${encodeURIComponent(xmlSerializer.serializeToString(icon))}`;
+}
+
+/**
+@function fitRatio
+
+@description
+The fitRatio method returns the ratio by which an icon of the intrinsic dimensions is scaled to occupy the width and height bounds of a legend icon without being stretched.
+
+A dimension which could not be established takes the bound it is fitted within, so that the ratio for it is 1.
+
+@param {number} width The width bound for the legend icon.
+@param {number} height The height bound for the legend icon.
+@param {number} intrinsicWidth The width the icon is drawn at.
+@param {number} intrinsicHeight The height the icon is drawn at.
+
+@returns {number} The ratio to scale the icon by.
+*/
+function fitRatio(width, height, intrinsicWidth, intrinsicHeight) {
+  return Math.min(
+    width / (intrinsicWidth || width),
+    height / (intrinsicHeight || height),
+  );
 }

@@ -54,7 +54,7 @@ import {
   formatNumericValue,
   unformatStringValue,
 } from './numericFormatter.mjs';
-import style, { iconUrl } from './olStyle.mjs';
+import style, { iconUrl, imageStyle } from './olStyle.mjs';
 import paramString from './paramString.mjs';
 import ping from './ping.mjs';
 import { polygonIntersectFeatures } from './polygonIntersectFeatures.mjs';
@@ -87,6 +87,7 @@ export default {
   hexa,
   html,
   iconUrl,
+  imageStyle,
   jsonParser,
   keyvalue_dictionary,
   loadDictionary,

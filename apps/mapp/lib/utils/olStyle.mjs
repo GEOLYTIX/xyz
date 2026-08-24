@@ -151,52 +151,61 @@ The svgSymbols types which have been warned about, so that an invalid type is no
 const warnedSymbolTypes = new Set();
 
 /**
-@function styleIcon
+@function imageStyle
 
 @description
-The styleIcon method returns the Openlayers image style for an icon.
+The imageStyle method returns the Openlayers image style for an icon url.
+
+The method is the single policy for rendering an icon url as an Openlayers image style. The feature render of the mapview.Map and the legendIcon element both draw from it, so that an icon is not rendered by one and cached by the other on different terms.
 
 The bitmap render is opt in for a layer with the `layer.style.bitmap_icons` flag, which the featureStyle method assigns to the feature style object. A src is rendered as the Openlayers style Icon src where the flag is not set.
 
 A `data:image` src is rendered from a rasterized bitmap. An SVG referenced as an image instantiates a complete isolated SVG document in the browser render engine, and the Openlayers IconImageCache retains it for the lifetime of the session. A bitmap instantiates no document.
 
-A fallback ol.style.Circle is returned while the variant is rasterized. The fallback must not be an Icon with the data URL src, since that would populate the IconImageCache with every variant before any bitmap is ready.
+A fallback ol.style.Circle is returned while the variant is rasterized, for a caller which passes a fallback icon style. The fallback must not be an Icon with the data URL src, since that would populate the IconImageCache with every variant before any bitmap is ready. A caller which draws the image itself rather than being redrawn, eg. the legendIcon element, passes no fallback and renders the data URL src.
 
-A variant which will not be rasterized, because the rasterization failed or the bitmap limit is reached, is rendered from the data URL src. There is no bitmap to wait for and the symbol must not remain in place of the icon, as the legendIcon element likewise draws the data URL where no bitmap is available.
+A variant which will not be rasterized, because the rasterization failed or the bitmap limit is reached, is rendered from the data URL src. There is no bitmap to wait for and the symbol must not remain in place of the icon.
 
 A src which is a url is not rasterized. It is a single image resource shared by every feature which references it.
 
-@param {object} icon The mapp icon style object.
-@param {number} scale The icon scale.
-@param {Boolean} [bitmapIcons] The icon should be rendered from a rasterized bitmap.
+@param {Object} params The image style parameters.
+@property {string} params.url The icon url or data URL.
+@property {Array} [params.anchor] The icon anchor.
+@property {Boolean} [params.bitmap] The icon should be rendered from a rasterized bitmap.
+@property {Object} [params.fallback] The mapp icon style object to render a provisional symbol from while the variant is rasterized.
+@property {number} [params.scale] The icon scale.
 
 @returns {Object} An Openlayers image style object.
 */
-function styleIcon(icon, scale, bitmapIcons) {
-  const anchor = icon.anchor || [0.5, 0.5];
+export function imageStyle(params) {
+  const anchor = params.anchor || [0.5, 0.5];
 
-  if (bitmapIcons) {
-    const bitmap = iconBitmap(icon.url);
+  const scale = params.scale || 1;
+
+  const url = params.url;
+
+  if (params.bitmap) {
+    const bitmap = iconBitmap(url);
 
     if (bitmap) {
       // The bitmap was rasterized at the device pixel ratio. The Icon must be scaled by the reciprocal to render at the size the SVG declares.
-      return memoizedIcon(`${icon.url}|${anchor}|${scale}`, {
+      return memoizedIcon(`${url}|${anchor}|${scale}`, {
         anchor: anchor,
         img: bitmap.image,
         scale: scale / bitmap.pixelRatio,
       });
     }
 
-    if (icon.url.startsWith('data:') && !bitmapUnavailable(icon.url)) {
-      return fallbackIcon(icon);
+    if (params.fallback && url.startsWith('data:') && !bitmapUnavailable(url)) {
+      return fallbackIcon(params.fallback);
     }
   }
 
-  return memoizedIcon(`${icon.url}|${anchor}|${scale}`, {
+  return memoizedIcon(`${url}|${anchor}|${scale}`, {
     anchor: anchor,
     crossOrigin: 'anonymous',
     scale: scale,
-    src: icon.url,
+    src: url,
   });
 }
 
@@ -325,7 +334,13 @@ function iconStyle(Styles, style, icon, feature) {
   // Create icon url from svgSymbols method if not defined as url or svg source.
   if (!iconUrl(icon, feature)) return;
 
-  const image = styleIcon(icon, scale, style.bitmap_icons);
+  const image = imageStyle({
+    anchor: icon.anchor,
+    bitmap: style.bitmap_icons,
+    fallback: icon,
+    scale: scale,
+    url: icon.url,
+  });
 
   // The mark travels with the Styles array which the provisional symbol was rendered into, so that a consumer of the array can establish whether the render is complete.
   if (fallbackImages.has(image)) {

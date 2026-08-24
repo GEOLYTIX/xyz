@@ -6,6 +6,7 @@ The olStyle module is browser code with no browser imports. It reads the ol name
 The svgToBitmap module is mocked so that a test controls which icon variants have been rasterized. The fake Icon and Circle record the options they were constructed with: counting constructions is what these tests are for, since the module must construct one image style per distinct icon variant rather than one per feature.
 */
 let olStyle;
+let imageStyle;
 
 const bitmapEntries = new Map();
 
@@ -66,7 +67,10 @@ beforeAll(async () => {
     },
   });
 
-  olStyle = (await import('../../apps/mapp/lib/utils/olStyle.mjs')).default;
+  const module = await import('../../apps/mapp/lib/utils/olStyle.mjs');
+
+  olStyle = module.default;
+  imageStyle = module.imageStyle;
 });
 
 beforeEach(() => {
@@ -350,5 +354,55 @@ describe('olStyle icon url', () => {
 
     expect(Styles).toHaveLength(2);
     expect(iconOptions).toHaveLength(2);
+  });
+});
+
+/**
+The imageStyle method is the single policy for rendering an icon url as an Openlayers image style. The feature render draws from it through the olStyle method, and the legendIcon element calls it directly as mapp.utils.imageStyle.
+
+What these tests establish is the part of the contract the legend depends on: a caller which passes no fallback is never handed a provisional symbol, and it shares the memoized Icons with the feature render rather than constructing its own.
+*/
+describe('imageStyle', () => {
+  it('renders the data url src where no fallback is passed', () => {
+    // The legend draws the image itself and is not redrawn, so a provisional symbol would remain in place of the icon.
+    const url = testSrc('noFallback');
+
+    const image = imageStyle({ bitmap: true, url });
+
+    expect(circleOptions).toHaveLength(0);
+    expect(image).toBeInstanceOf(Icon);
+    expect(iconOptions[0].src).toBe(url);
+  });
+
+  it('renders the bitmap where one is available', () => {
+    const url = testSrc('legendBitmap');
+    const image = seedBitmap(url, 2);
+
+    imageStyle({ bitmap: true, scale: 3, url });
+
+    expect(iconOptions[0].img).toBe(image);
+    expect(iconOptions[0].scale).toBe(1.5);
+  });
+
+  it('shares the memoized Icon with the feature render', () => {
+    // An Icon constructed for the legend as well as for the render would hold a second Openlayers IconImageCache entry for the same variant.
+    const url = testSrc('shared-memo');
+    seedBitmap(url, 1);
+
+    const Styles = olStyle({ ...bitmapIcons, icon: { url } });
+
+    const image = imageStyle({ bitmap: true, url });
+
+    expect(iconOptions).toHaveLength(1);
+    expect(image).toBe(Styles[0].image);
+  });
+
+  it('defaults the anchor and the scale', () => {
+    const url = testSrc('defaults');
+
+    imageStyle({ url });
+
+    expect(iconOptions[0].anchor).toEqual([0.5, 0.5]);
+    expect(iconOptions[0].scale).toBe(1);
   });
 });
