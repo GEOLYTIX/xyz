@@ -161,10 +161,18 @@ export async function requestBitmaps(srcs) {
 @description
 The onBitmapReady method registers a callback to be called once per animation frame in which new bitmaps became available.
 
+The returned method removes the callback. A callback holds the object it was created for, eg. a layer which is redrawn as its icons become available, and the listeners are held for the lifetime of the session. A caller which registers a callback for an object with a lifetime must remove it as the object is removed.
+
 @param {function} callback The method to call.
+
+@returns {function} A method which removes the callback.
 */
 export function onBitmapReady(callback) {
-  typeof callback === 'function' && listeners.add(callback);
+  if (typeof callback !== 'function') return () => {};
+
+  listeners.add(callback);
+
+  return () => listeners.delete(callback);
 }
 
 /**

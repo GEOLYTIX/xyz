@@ -142,6 +142,37 @@ describe('svgToBitmap rasterization', () => {
     expect(listener).toHaveBeenCalled();
   });
 
+  it('does not notify a listener which has been removed', async () => {
+    // A callback holds the object it was created for and the listeners are held for the lifetime of the session. A caller must be able to remove one.
+    const listener = vi.fn();
+
+    const offBitmapReady = svgToBitmap.onBitmapReady(listener);
+
+    offBitmapReady();
+
+    await svgToBitmap.requestBitmaps([testSrc('removed')]);
+
+    expect(listener).not.toHaveBeenCalled();
+  });
+
+  it('removes only the listener the method was returned for', async () => {
+    const removed = vi.fn();
+    const retained = vi.fn();
+
+    svgToBitmap.onBitmapReady(removed)();
+    svgToBitmap.onBitmapReady(retained);
+
+    await svgToBitmap.requestBitmaps([testSrc('removedOne')]);
+
+    expect(removed).not.toHaveBeenCalled();
+    expect(retained).toHaveBeenCalled();
+  });
+
+  it('returns a method for a callback which is not a function', () => {
+    // The caller must not have to check the return value before it removes the callback.
+    expect(() => svgToBitmap.onBitmapReady(undefined)()).not.toThrow();
+  });
+
   it('ignores a nullish or non string src', async () => {
     expect(svgToBitmap.iconBitmap(undefined)).toBeUndefined();
     expect(svgToBitmap.iconBitmap(null)).toBeUndefined();

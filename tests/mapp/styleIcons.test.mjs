@@ -1,5 +1,7 @@
-import { describe, expect, it } from 'vitest';
-import { styleIcons } from '../../apps/mapp/lib/layer/styleParser.mjs';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import styleParser, {
+  styleIcons,
+} from '../../apps/mapp/lib/layer/styleParser.mjs';
 
 /**
 The styleIcons method collects the icon style objects of a layer style configuration, which the styleParser uses to establish whether the layer must be redrawn as icon bitmaps become available.
@@ -66,5 +68,94 @@ describe('styleIcons', () => {
   it('returns an empty array for a style without icons', () => {
     expect(styleIcons({ default: { fillColor: '#fff' } })).toEqual([]);
     expect(styleIcons({})).toEqual([]);
+  });
+});
+
+/**
+The redrawStyleIcons method registers a callback with the svgToBitmap module to redraw the layer as icon bitmaps become available.
+
+The callback holds the layer, and the svgToBitmap listeners are held for the lifetime of the session. What these tests establish is that the registration is revoked as the layer is removed, and that a layer which is decorated again is not registered twice: a retained callback holds the layer, its mapview, and every feature of both.
+*/
+describe('redrawStyleIcons', () => {
+  const listeners = new Set();
+
+  beforeEach(() => {
+    listeners.clear();
+
+    vi.stubGlobal('mapp', {
+      layer: { featureHover: () => {} },
+      utils: {
+        svgBitmap: {
+          onBitmapReady: (callback) => {
+            listeners.add(callback);
+            return () => listeners.delete(callback);
+          },
+        },
+      },
+    });
+  });
+
+  /**
+  Stands in for the layer the decorator passes to the format method, which calls the styleParser. The removeCallbacks array is assigned by the decorator after the format method has returned, so the styleParser must create it.
+  */
+  function testLayer() {
+    return {
+      key: 'test',
+      style: { bitmap_icons: true, default: { icon: { type: 'dot' } } },
+    };
+  }
+
+  it('registers a redraw callback for a layer with the bitmap_icons flag', () => {
+    styleParser(testLayer());
+
+    expect(listeners.size).toBe(1);
+  });
+
+  it('does not register a callback without the bitmap_icons flag', () => {
+    const layer = testLayer();
+    delete layer.style.bitmap_icons;
+
+    styleParser(layer);
+
+    expect(listeners.size).toBe(0);
+  });
+
+  it('does not register a callback for a style without icons', () => {
+    const layer = testLayer();
+    layer.style.default = { fillColor: '#fff' };
+
+    styleParser(layer);
+
+    expect(listeners.size).toBe(0);
+  });
+
+  it('removes the callback as the layer is removed', () => {
+    const layer = testLayer();
+
+    styleParser(layer);
+
+    expect(listeners.size).toBe(1);
+
+    // The layer.remove method calls the removeCallbacks with the layer.
+    layer.removeCallbacks.forEach((fn) => fn(layer));
+
+    expect(listeners.size).toBe(0);
+    expect(layer.offBitmapReady).toBeUndefined();
+  });
+
+  it('does not register a callback twice for a layer which is parsed again', () => {
+    const layer = testLayer();
+
+    styleParser(layer);
+    styleParser(layer);
+
+    expect(listeners.size).toBe(1);
+
+    // The remove callback removes whichever registration is current, so a second is not pushed.
+    expect(layer.removeCallbacks).toHaveLength(1);
+
+    layer.removeCallbacks.forEach((fn) => fn(layer));
+
+    expect(listeners.size).toBe(0);
   });
 });

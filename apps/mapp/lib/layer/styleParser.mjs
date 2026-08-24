@@ -624,15 +624,36 @@ The variants of the style configuration are not rasterized ahead of the render. 
 
 The redraw is only registered for a style configuration which has icons. The layer.L Openlayers layer is created by the layer format method after the styleParser has been called, and is therefore only referenced from the redraw callback.
 
+The callback holds the layer, and the svgToBitmap listeners are held for the lifetime of the session. The layer.offBitmapReady method removes the callback and is called as the layer is removed, so that a layer which is no longer in a mapview is not retained by the listener.
+
 @param {layer} layer A json layer object.
 @property {layer-style} layer.style The mapp-layer style configuration.
+@property {function} layer.offBitmapReady The method which removes the redraw callback.
 */
 function redrawStyleIcons(layer) {
   if (!layer.style.bitmap_icons) return;
 
   if (!styleIcons(layer.style).length) return;
 
-  mapp.utils.svgBitmap.onBitmapReady(() => layer.L?.changed());
+  const registered = typeof layer.offBitmapReady === 'function';
+
+  // A layer which is decorated again must not be registered a second time.
+  layer.offBitmapReady?.();
+
+  layer.offBitmapReady = mapp.utils.svgBitmap.onBitmapReady(() =>
+    layer.L?.changed(),
+  );
+
+  // The remove callback removes whichever registration is current, so it is only pushed for the first.
+  if (registered) return;
+
+  // The layer decorator assigns the removeCallbacks array after the format method has called the styleParser.
+  layer.removeCallbacks ??= [];
+
+  layer.removeCallbacks.push((layer) => {
+    layer.offBitmapReady?.();
+    delete layer.offBitmapReady;
+  });
 }
 
 /**
