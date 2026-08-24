@@ -260,6 +260,8 @@ The iconUrl method returns the url for a mapp icon style object, creating a `dat
 
 The url is assigned to the icon object, which is shared by every feature styled from the same style configuration.
 
+The svg property is a legacy definition of the url which the styleParser assigns to the url property. The svg source is resolved before the symbol type, as an icon which declares a source has no symbol to create: the styleParser does not migrate the svg property of an icon which also declares a type, and a type which is not an svgSymbols method must not prevent the source being rendered.
+
 @param {object} icon The mapp icon style object.
 @param {object} [feature] The Openlayers feature to style with an icon.
 
@@ -267,6 +269,12 @@ The url is assigned to the icon object, which is shared by every feature styled 
 */
 export function iconUrl(icon, feature) {
   if (icon.url) return icon.url;
+
+  if (icon.svg) {
+    icon.url = icon.svg;
+
+    return icon.url;
+  }
 
   const type = icon.type || 'dot';
 
@@ -283,7 +291,7 @@ export function iconUrl(icon, feature) {
   }
 
   // The url is not assigned where the symbol method fails to create one, eg. a template which is not yet loaded.
-  icon.url = icon.svg || svgSymbol(icon, feature);
+  icon.url = svgSymbol(icon, feature);
 
   return icon.url;
 }

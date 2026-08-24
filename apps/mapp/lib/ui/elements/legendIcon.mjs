@@ -3,6 +3,10 @@
 
 The legendIcon module exports the default legendIcon(style) method.
 
+The icon url is resolved with the mapp.utils.iconUrl method, so that the legend icon and the feature render of the mapview.Map resolve the url of an icon style object by the same rules.
+
+@requires /utils/olStyle
+
 @module /ui/elements/legendIcon
 */
 
@@ -80,9 +84,7 @@ function createIconFromArray(style) {
   }
 
   // The icon variants are rasterized before the icons are drawn. A `data:image` src assigned to an Openlayers style Icon would be retained by the IconImageCache as an isolated SVG document.
-  const urls = style.icon.map(
-    (icon) => icon.url || icon.svg || svgSymbolUrl(icon),
-  );
+  const urls = style.icon.map((icon) => mapp.utils.iconUrl(icon));
 
   mapp.utils.svgBitmap
     .requestBitmaps(urls)
@@ -151,7 +153,7 @@ function drawIcons(canvas, style, width, height) {
   const legendScale = style.icon[0].legendScale || 1;
 
   for (const icon of style.icon) {
-    const iconUrl = icon.url || icon.svg || svgSymbolUrl(icon);
+    const iconUrl = mapp.utils.iconUrl(icon);
 
     if (!iconUrl) {
       console.warn(
@@ -233,12 +235,8 @@ The createIconFromInlineStyle creates an icon from an inline style object.
 */
 
 function createIconFromInlineStyle(style) {
-  const iconUrl =
-    style.icon?.svg ||
-    style.svg ||
-    style.icon?.url ||
-    style.url ||
-    svgSymbolUrl(style.icon || style);
+  // The style object itself holds the icon properties where it has no icon object.
+  const iconUrl = mapp.utils.iconUrl(style.icon || style);
 
   if (!iconUrl) {
     console.warn(
@@ -323,27 +321,6 @@ function createIconFromBitmap(src, style) {
   });
 
   return canvas;
-}
-
-/**
-@function svgSymbolUrl
-
-@description
-The svgSymbolUrl function returns the URL for an SVG symbol based on its type.
-
-The method will return undefined if the symbol type is not found in the mapp.utils.svgSymbols object. This is to prevent errors when an invalid symbol type is provided.
-
-@param {string} icon The icon type to create from svgSymbols.
-
-@returns {SVGElement} Icon SVG element from mapp.utils.svgSymbols.
-*/
-function svgSymbolUrl(icon) {
-  // Assign 'dot' as default.
-  icon.type ??= 'dot';
-
-  if (!Object.hasOwn(mapp.utils.svgSymbols, icon.type)) return;
-
-  return mapp.utils.svgSymbols[icon.type](icon);
 }
 
 /**

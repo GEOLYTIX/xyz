@@ -282,6 +282,32 @@ describe('olStyle icon url', () => {
     expect(Styles[0].image).toBeInstanceOf(Circle);
   });
 
+  it('renders the svg source of an icon with an unavailable type', () => {
+    // The styleParser does not migrate the svg property of an icon which also declares a type, eg. the legacy { type: 'svg', svg } definition. The source must be rendered rather than the icon being dropped for a type which is not an svgSymbols method.
+    const icon = { svg: testSrc('svgSource'), type: 'svg' };
+
+    const Styles = olStyle({ icon });
+
+    expect(Styles).toHaveLength(1);
+    expect(iconOptions).toHaveLength(1);
+    expect(iconOptions[0].src).toBe(icon.svg);
+
+    // The url is assigned to the icon object, which is shared by every feature styled from the same configuration.
+    expect(icon.url).toBe(icon.svg);
+  });
+
+  it('renders the url of an icon which declares a url and an svg source', () => {
+    // The legend resolves the url with the same method, so the legend icon and the feature render must not differ for an icon which declares both.
+    const url = testSrc('urlPrecedence');
+
+    const Styles = olStyle({
+      icon: { svg: testSrc('svgPrecedence'), url },
+    });
+
+    expect(Styles).toHaveLength(1);
+    expect(iconOptions[0].src).toBe(url);
+  });
+
   it('does not push a style for an icon without a url', () => {
     // The svgSymbols template method returns undefined for a template which is not yet loaded.
     mapp.utils.svgSymbols.template = () => undefined;
