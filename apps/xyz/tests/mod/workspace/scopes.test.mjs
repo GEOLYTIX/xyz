@@ -57,4 +57,30 @@ describe('getScopes', () => {
       expect(checkScope(scope.split('.'), [scope])).toBe(true);
     }
   });
+
+  it('resolves repeat requests from the cached workspace', async () => {
+    const first = await getScopes();
+    const second = await getScopes();
+
+    // The same workspace.scopes{} set is returned without a cache rebuild.
+    expect(second).toBe(first);
+  });
+
+  it('shares one composition between concurrent requests', async () => {
+    const [first, second] = await Promise.all([getScopes(), getScopes()]);
+
+    expect(second).toBe(first);
+  });
+
+  it('rebuilds the workspace cache with the force param', async () => {
+    const cached = await getScopes();
+    const forced = await getScopes(true);
+
+    // A rebuilt workspace cache has a new workspace.scopes{} set.
+    expect(forced).not.toBe(cached);
+    expect(scopesArray(forced)).toEqual(scopesArray(cached));
+
+    // The rebuilt workspace is cached for subsequent requests.
+    expect(await getScopes()).toBe(forced);
+  });
 });
