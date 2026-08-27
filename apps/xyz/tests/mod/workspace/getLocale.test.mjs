@@ -69,6 +69,27 @@ describe('getLocale', async () => {
     expect(locale.key === 'locale_a').toBeTruthy();
   });
 
+    it('locale as object with 2 templates with role; user with roles; user only has permission to one', async () => {
+    const params = {
+      layers: true,
+      locale: {
+        "key": "locale_a",
+          template: {
+          src: 'file:./tests/assets/layers/template_test/locale_two_layers_roles.json',
+        },
+      },
+      user: {
+        roles: ['Super'],
+      },
+    };
+
+    const locale = await getLocale(params);
+    
+    // Expect locale.layers to contain a layer with the key 'layer' and not contain a layer with the key 'layer_b'
+    expect(locale.layers.layer).toBeTruthy();
+    expect(locale.layers.layer_b).toBeFalsy();
+  });
+
   it('nested locales with role[s]; user with first level role', async () => {
     const params = {
       locale: ['europe', 'UK_locale'],
