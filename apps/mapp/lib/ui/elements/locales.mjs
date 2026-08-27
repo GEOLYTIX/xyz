@@ -78,7 +78,7 @@ async function buildDropdown(elements, locale, level, locales) {
     entries: locales.map((l) => {
       const keys = l.key.split(',');
       const names = l.name.split('/');
-      const title = `${keys.length === level ? '<- Back' : ''}${names.slice(level).join('/')}`;
+      const title = `${keys.length === level ? mapp.dictionary.locale_back_option : ''}${names.slice(level).join('/')}`;
 
       // Build string for selected from slicing keys[] array with current level.
       const selectedLv =
