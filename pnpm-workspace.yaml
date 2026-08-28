@@ -19,6 +19,7 @@ catalog:
   clean-jsdoc-theme: ^4.3.2
   cookie-parser: ^1.4.5
   express: 5.2.0
+  jsdom: ^28.0.0
   express-rate-limit: ^7.5.1
   jsonwebtoken: ^9.0.2
   node-mocks-http: ^1.17.2

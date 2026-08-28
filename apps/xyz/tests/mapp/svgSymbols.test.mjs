@@ -1,34 +1,14 @@
+// @vitest-environment jsdom
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 
 /**
-The svgSymbols module is browser code. It creates an XMLSerializer at module scope and imports uhtml, which binds document methods at module init.
+The svgSymbols module is browser code. It creates an XMLSerializer at module scope and imports uhtml, which binds document methods at module init, so the tests run in a jsdom environment.
 
-These tests stub only what module init touches, then import the module dynamically so the stubs are in place first. The template symbol needs nothing beyond the stubs, since it substitutes into a string rather than building a node. The drawn symbols need a real DOM and are covered in the jsdom block below.
+The module is imported dynamically so the mapp global is in place first. The template symbol substitutes into a string. The drawn symbols build nodes with uhtml and serialize them with XMLSerializer.
 */
 let svgSymbols;
 
 beforeAll(async () => {
-  vi.stubGlobal(
-    'XMLSerializer',
-    class {
-      serializeToString() {
-        return '<svg/>';
-      }
-    },
-  );
-
-  // uhtml destructures these from document at module init. The template symbol calls none of them.
-  const noop = () => {};
-
-  vi.stubGlobal('document', {
-    createDocumentFragment: noop,
-    createElement: noop,
-    createElementNS: noop,
-    createTextNode: noop,
-    createTreeWalker: noop,
-    importNode: noop,
-  });
-
   vi.stubGlobal('mapp', {
     utils: {
       svgSymbols: {
@@ -39,7 +19,7 @@ beforeAll(async () => {
     },
   });
 
-  svgSymbols = await import('../../apps/mapp/lib/utils/svgSymbols.mjs');
+  svgSymbols = await import('../../../mapp/lib/utils/svgSymbols.mjs');
 });
 
 /**
@@ -136,11 +116,9 @@ describe('svgSymbols.template memoization', () => {
 });
 
 /**
-The drawn symbols build nodes with uhtml and serialize them with XMLSerializer. They require a DOM.
-
-Run with `npx vitest run tests/mapp --environment jsdom` once jsdom is available in the workspace, and remove the skip. The stubs in beforeAll must be dropped for the jsdom run.
+The drawn symbols build nodes with uhtml and serialize them with XMLSerializer. Each symbol method is memoized on the style values it reads, and the data URL is the serialized SVG.
 */
-describe.skip('svgSymbols drawn symbols memoization (requires jsdom)', () => {
+describe('svgSymbols drawn symbols memoization', () => {
   it('memoizes dot on fillColor', () => {
     expect(svgSymbols.dot({ fillColor: '#1a9641' })).toBe(
       svgSymbols.dot({ fillColor: '#1a9641' }),
@@ -179,5 +157,93 @@ describe.skip('svgSymbols drawn symbols memoization (requires jsdom)', () => {
     expect(svgSymbols.dot({ fillColor: '#1a9641' })).not.toBe(
       svgSymbols.square({ fillColor: '#1a9641' }),
     );
+  });
+});
+
+/**
+Every drawn symbol serializes into a `data:image/svg+xml` URL. The layered symbols append one element per layer, so the decoded URL carries the layer colour.
+*/
+describe('svgSymbols drawn symbols output', () => {
+  const layers = { 0.5: '#abcdef' };
+
+  const layered = ['target', 'triangle', 'square', 'diamond', 'semiCircle'];
+
+  for (const type of layered) {
+    it(`${type} draws the fillColor and the layers`, () => {
+      const url = svgSymbols[type]({ fillColor: '#123456', layers });
+
+      expect(url).toMatch(/^data:image\/svg\+xml,/);
+
+      const decoded = decodeURIComponent(url);
+
+      expect(decoded).toContain('#123456');
+      expect(decoded).toContain('#abcdef');
+    });
+
+    it(`${type} draws without layers and defaults the fillColor`, () => {
+      const decoded = decodeURIComponent(svgSymbols[type]({}));
+
+      expect(decoded).toMatch(/#FFF|#fff/);
+      expect(decoded).not.toContain('#abcdef');
+    });
+  }
+
+  it('markerColor draws the marker and dot colours', () => {
+    const decoded = decodeURIComponent(
+      svgSymbols.markerColor({ colorDot: '#0000ff', colorMarker: '#ff0000' }),
+    );
+
+    expect(decoded).toContain('#ff0000');
+    expect(decoded).toContain('#0000ff');
+
+    // The dot colour is part of the key.
+    expect(
+      svgSymbols.markerColor({ colorDot: '#0000ff', colorMarker: '#ff0000' }),
+    ).not.toBe(
+      svgSymbols.markerColor({ colorDot: '#00ff00', colorMarker: '#ff0000' }),
+    );
+  });
+
+  it('circle draws the stroke and defaults the stroke values', () => {
+    const decoded = decodeURIComponent(
+      svgSymbols.circle({ strokeColor: '#654321', strokeWidth: 3 }),
+    );
+
+    expect(decoded).toContain('stroke="#654321"');
+    expect(decoded).toContain('stroke-width="3"');
+
+    const defaults = decodeURIComponent(svgSymbols.circle({}));
+
+    expect(defaults).toContain('stroke="#333"');
+    expect(defaults).toContain('stroke-width="1"');
+  });
+
+  it('template does not substitute where the substitute is not an object', () => {
+    const decoded = decodeURIComponent(
+      svgSymbols.template({ substitute: 'SUBSTITUTE_COLOUR', template: 'pin' }),
+    );
+
+    expect(decoded).toContain('SUBSTITUTE_COLOUR');
+  });
+
+  it('evicts the oldest memo entry once the memo limit is reached', () => {
+    // The memo holds 1024 entries per symbol type and evicts in insertion order. A template is changed after its entry has been evicted, so a memo which did not evict would return the stale string.
+    mapp.utils.svgSymbols.templates.evict = '<svg id="stale"/>';
+
+    const stale = svgSymbols.template({ template: 'evict' });
+
+    for (let index = 0; index < 1024; index++) {
+      svgSymbols.template({
+        substitute: { SUBSTITUTE_COLOUR: `#${index}` },
+        template: 'pin',
+      });
+    }
+
+    mapp.utils.svgSymbols.templates.evict = '<svg id="fresh"/>';
+
+    expect(decodeURIComponent(stale)).toContain('stale');
+    expect(
+      decodeURIComponent(svgSymbols.template({ template: 'evict' })),
+    ).toContain('fresh');
   });
 });

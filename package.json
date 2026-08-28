@@ -37,6 +37,7 @@
     "@biomejs/biome": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "clean-jsdoc-theme": "catalog:",
+    "jsdom": "catalog:",
     "node-mocks-http": "catalog:",
     "turbo": "catalog:",
     "undici": "catalog:",

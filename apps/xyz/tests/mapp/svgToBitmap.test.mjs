@@ -61,7 +61,7 @@ beforeAll(async () => {
     return 1;
   });
 
-  svgToBitmap = await import('../../apps/mapp/lib/utils/svgToBitmap.mjs');
+  svgToBitmap = await import('../../../mapp/lib/utils/svgToBitmap.mjs');
 });
 
 function testSrc(id) {

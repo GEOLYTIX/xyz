@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import styleParser, {
   styleIcons,
-} from '../../apps/mapp/lib/layer/styleParser.mjs';
+} from '../../../mapp/lib/layer/styleParser.mjs';
 
 /**
 The styleIcons method collects the icon style objects of a layer style configuration, which the styleParser uses to establish whether the layer must be redrawn as icon bitmaps become available.

@@ -12,7 +12,7 @@ const bitmapEntries = new Map();
 
 const unavailableSrcs = new Set();
 
-vi.mock('../../apps/mapp/lib/utils/svgToBitmap.mjs', () => ({
+vi.mock('../../../mapp/lib/utils/svgToBitmap.mjs', () => ({
   bitmapStats: () => ({}),
   bitmapUnavailable: (src) => unavailableSrcs.has(src),
   iconBitmap: (src) => bitmapEntries.get(src),
@@ -67,7 +67,7 @@ beforeAll(async () => {
     },
   });
 
-  const module = await import('../../apps/mapp/lib/utils/olStyle.mjs');
+  const module = await import('../../../mapp/lib/utils/olStyle.mjs');
 
   olStyle = module.default;
   imageStyle = module.imageStyle;
