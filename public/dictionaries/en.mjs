@@ -90,6 +90,7 @@ export default {
   layers: 'Layers',
   link: 'Link',
   loading: 'Loading',
+  locale_back_option: '<- Back',
   location_clear_all: 'Clear locations',
   location_new_failed: 'Creating new location has failed.',
   location_no_location_selected: 'No Locations selected',
