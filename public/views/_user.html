@@ -147,9 +147,6 @@
   <script>
   window.onload = async () => {
 
-    // Get list of available roles from workspace.
-    const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/scopes`)
-
     // List of languages key values.
     const languagesList = {
       "en": "English",
@@ -182,6 +179,10 @@
     if (params.email) {
       data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
     }
+
+     // Get list of available roles from workspace.
+    // Once this is available, update the dropdown list of roles in the user table.
+    let rolesList = ["Loading Roles..."];
 
     const userTable = new Tabulator(document.getElementById('userTable'),
       {
@@ -293,10 +294,12 @@
             headerSort: false,
             editor: 'list',
             width: 400,
-            editorParams: {
+            // Function form so rolesList is read fresh each time the editor
+            // opens, picking up the scopes response whenever it arrives.
+            editorParams: () => ({
               values: rolesList,
               multiselect: true
-            },
+            }),
             cellEdited: rolesEdited,
             resizable: false,
             responsive: 0 // Never hide
@@ -394,6 +397,15 @@
         || user.roles.some(role => role.includes(e.target.value))))
     }
 
+    // Get the roles from the scopes endpoint and update the rolesList variable. 
+    // This will update the dropdown list of roles in the user table.
+    xhrPromise(`${document.head.dataset.dir}/api/workspace/scopes`).then(response => {
+      
+      if (response.err) return console.error(response.err);
+
+      rolesList = response.map(scope => scope);
+    });
+    
 
     function expiryEdit(cell, onRendered, success, cancel) {
 
