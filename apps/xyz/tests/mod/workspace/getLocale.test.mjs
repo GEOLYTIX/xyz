@@ -69,7 +69,7 @@ describe('getLocale', async () => {
     expect(locale.key === 'locale_a').toBeTruthy();
   });
 
-  it('locale as object with 2 templates with role; user with roles; user only has permission to one', async () => {
+  it('locale as object with 2 layers with roles; user with roles; user only has permission to one', async () => {
     const params = {
       layers: true,
       locale: {
@@ -85,9 +85,11 @@ describe('getLocale', async () => {
 
     const locale = await getLocale(params);
 
-    // Expect locale.layers to contain a layer with the key 'layer' and not contain a layer with the key 'layer_b'
-    expect(locale.layers.layer).toBeTruthy();
-    expect(locale.layers.layer_b).toBeFalsy();
+    // The locale.layers are returned as an array. The 'layer' key has a Super accessRole. The 'layer_b' key only has a Test accessRole and must not leak to a Super user.
+    const layerKeys = locale.layers.map((layer) => layer.key);
+
+    expect(layerKeys).toContain('layer');
+    expect(layerKeys).not.toContain('layer_b');
   });
 
   it('nested locales with role[s]; user with first level role', async () => {
