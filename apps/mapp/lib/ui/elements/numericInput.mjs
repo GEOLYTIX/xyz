@@ -97,7 +97,7 @@ function oninput(e, params) {
   if (e.type === 'change') {
     e.target.value = mapp.utils.formatNumericValue(params);
   }
-  
+
   if (params.dynamicWidth) {
     e.target.style.width = e.target.value.length + 1.3 + 'ch';
   }
