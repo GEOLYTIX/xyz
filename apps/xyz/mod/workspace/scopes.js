@@ -5,6 +5,8 @@ The scopes module exports the getScopes method which returns the complete set of
 
 A templateScope is only recorded in workspace.scopes{} when the object which defines it is composed. The getScopes method therefore composes every locale, nested locale, and layer with role checks bypassed before the scopes are read.
 
+The composition is expensive. The composition promise is stored against the cached workspace object so repeat requests share one composition until the workspace cache is rebuilt.
+
 @requires /provider/getSrc
 @requires /workspace/cache
 @requires /workspace/getLocale
@@ -17,19 +19,54 @@ import workspaceCache from './cache.js';
 import getLocale from './getLocale.js';
 
 /**
+Module scope map of composition promises keyed by the cached workspace object. A rebuilt workspace cache is a new object which does not have an entry in the map. Entries for discarded workspace objects are garbage collected.
+*/
+const compositionMap = new WeakMap();
+
+/**
 @function getScopes
 @async
 
 @description
-The workspace cache is rebuilt and all sources are cached before every locale is composed. Composition is required to populate the workspace.scopes{} set.
+The cached workspace is retrieved from the workspace cache. The cache is only rebuilt with the force param flag or when the WORKSPACE_AGE is exceeded.
+
+All sources are cached before every locale is composed. Composition is required to populate the workspace.scopes{} set.
+
+The composition promise is stored in the compositionMap against the workspace object. Repeat requests for the same cached workspace await the stored promise and do not compose the workspace again. A failed composition is removed from the map so a subsequent request will retry the composition.
 
 Locales are composed with the roles parameter set to true so that every templateScope is recorded regardless of role access. The composed locales are discarded; only the scopes recorded during composition are returned.
 
+@param {boolean} [force] The workspace cache will be rebuilt with the force param flag.
 @returns {Promise<Set<string>>} The set of templateScopes defined in the workspace.
 */
-export async function getScopes() {
-  const workspace = await workspaceCache(true);
+export async function getScopes(force) {
+  const workspace = await workspaceCache(force);
 
+  let composition = compositionMap.get(workspace);
+
+  if (!composition) {
+    composition = composeWorkspaceScopes(workspace).catch((err) => {
+      compositionMap.delete(workspace);
+      throw err;
+    });
+
+    compositionMap.set(workspace, composition);
+  }
+
+  return await composition;
+}
+
+/**
+@function composeWorkspaceScopes
+@async
+
+@description
+All sources are cached before every locale, nested locale, and layer is composed with role checks bypassed.
+
+@param {Object} workspace The cached workspace.
+@returns {Promise<Set<string>>} The workspace.scopes{} set.
+*/
+async function composeWorkspaceScopes(workspace) {
   const errors = await cacheSources(workspace);
 
   if (errors.length) {
