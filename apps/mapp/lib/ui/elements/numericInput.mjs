@@ -90,6 +90,14 @@ function oninput(e, params) {
   // Pass valid newValue to callback method.
   params.callback(params.newValue);
 
+  // Re-format the value once editing is committed, ie. on blur (native 'change')
+  // or when the range slider dispatches a synthetic 'change' event. The value
+  // must not be re-formatted on every 'input' keystroke or prefix/suffix chars
+  // would corrupt the value while the user is still typing.
+  if (e.type === 'change') {
+    e.target.value = mapp.utils.formatNumericValue(params);
+  }
+  
   if (params.dynamicWidth) {
     e.target.style.width = e.target.value.length + 1.3 + 'ch';
   }
