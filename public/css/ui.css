@@ -1283,6 +1283,12 @@ label.radio {
     & > .label-row {
       display: flex;
       justify-content: space-between;
+      gap: 0.25em;
+
+      input {
+        flex: 1 1 0px;
+        min-width: 0;
+      }
 
       & > div {
         flex-grow: 1;
