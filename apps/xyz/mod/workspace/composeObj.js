@@ -69,7 +69,8 @@ export default async function composeObj(obj, user) {
     );
   }
 
-  const rolesCheck = await parseTemplates(obj, user, templateScope);
+  // The obj is the root object of the composition. The root obj is gated by every role key in a roles object.
+  const rolesCheck = await parseTemplates(obj, user, templateScope, true);
 
   if (rolesCheck instanceof Error) {
     return rolesCheck;
@@ -180,14 +181,15 @@ If an array of templates is found, each template will be merged into the object 
 @param {Object} obj
 @param {User} [user] The requesting user from request params.
 @param {array} templateScope
+@param {boolean} [root] Whether the obj is the root object of the composeObj method.
 */
-async function parseTemplates(obj, user, templateScope) {
+async function parseTemplates(obj, user, templateScope, root = false) {
   if (typeof obj !== 'object') return;
 
   if (obj === null) return;
 
   for (const key of Object.keys(obj)) {
-    const parseKeyCheck = await parseKey(key, obj, user, templateScope);
+    const parseKeyCheck = await parseKey(key, obj, user, templateScope, root);
 
     if (parseKeyCheck instanceof Error) {
       return parseKeyCheck;
@@ -208,10 +210,11 @@ The key value is checked against the queryTemplate, templatesArray, rolesTemplat
 @param {Object} obj
 @param {User} [user] The requesting user from request params.
 @param {array} templateScope
+@param {boolean} [root] Whether the obj is the root object of the composeObj method.
 
 @returns {Promise<Error|undefined>} Returns an Error if the roles check for the obj fails.
 */
-async function parseKey(key, obj, user, templateScope) {
+async function parseKey(key, obj, user, templateScope, root = false) {
   // The value must be read fresh on each iteration rather than destructured from a snapshot. Earlier keys in the parseTemplates loop (eg. a templates array) can merge into and reassign a not-yet-processed property (eg. infoj), and a stale val would overwrite that merge when this key is reached.
   const val = obj[key];
 
@@ -228,6 +231,7 @@ async function parseKey(key, obj, user, templateScope) {
     obj,
     user,
     templateScope,
+    root,
   );
 
   if (rolesTemplatesCheck === true) return;
@@ -352,7 +356,11 @@ async function templatesArray(key, val, obj, user, templateScope) {
 @description
 The rolesTemplates method processes the 'roles' property of an object. It iterates over each role and merges the corresponding template into the object if the role value is true or an object.
 
-The role as defined by the key in the roles object will be added to the accessRoles array. Access to the obj will be denied if none of the accessRoles are included in the user.roles array.
+The role as defined by the key in the roles object will be added to the accessRoles array. This applies to true/null role values as well as object role values which merge role specific properties into the obj.
+
+The root obj of the composeObj method (eg. a layer or locale) is gated by every accessRole. Access to the root obj will be denied if none of the accessRoles are included in the user.roles array. This matches the legacy roles check which gated a layer or locale by every role key.
+
+A nested obj is only gated by the gateRoles defined with a true/null value. Object role values merge role specific properties into a nested obj which remains visible to a user without the role. This allows for a role specific property (eg. skipEntry) to be merged into an infoj entry for some users without hiding the entry from other users.
 
 The user.roles gate does not apply to a user with an authorization_provider property. Scope access for such a user is decided by the provider in the authorizeScope method.
 
@@ -361,10 +369,11 @@ The user.roles gate does not apply to a user with an authorization_provider prop
 @param {Object} obj
 @param {User} [user] The requesting user from request params.
 @param {array} templateScope
+@param {boolean} [root] Whether the obj is the root object of the composeObj method.
 @property {array|boolean} [user.roles] An array of user roles.
 @returns {Promise<boolean>}
 */
-async function rolesTemplates(key, val, obj, user, templateScope) {
+async function rolesTemplates(key, val, obj, user, templateScope, root) {
   if (key !== 'roles') return false;
 
   const roles = user?.roles;
@@ -374,9 +383,10 @@ async function rolesTemplates(key, val, obj, user, templateScope) {
 
   delete obj.roles;
 
+  // Every roleKey in the roles object is an accessRole.
   const accessRoles = [];
 
-  // gateRoles are roleKeys defined with a plain true/null value. Their presence means the obj itself is only visible to a user holding one of these roles. Object roleVal entries merge role specific properties into obj conditionally but do not gate the obj's own visibility.
+  // gateRoles are roleKeys defined with a plain true/null value. A nested obj is only gated by these roles.
   const gateRoles = [];
 
   for (const [roleKey, roleVal] of Object.entries(val)) {
@@ -408,8 +418,11 @@ async function rolesTemplates(key, val, obj, user, templateScope) {
   // A user with an authorization_provider property is not gated by the user.roles array. Scope access for the user is decided by the provider in the authorizeScope method.
   if (user?.authorization_provider) return true;
 
-  // The roles object has no gateRoles, so the obj itself is not gated and remains visible regardless of the roles provided by the user.
-  if (!gateRoles.length) return true;
+  // The root obj is gated by every accessRole. A nested obj is only gated by the gateRoles.
+  const requiredRoles = root ? accessRoles : gateRoles;
+
+  // The obj is not gated and remains visible regardless of the roles provided by the user.
+  if (!requiredRoles.length) return true;
 
   // Access to the object is granted if the accessRoles array includes a wildcard role '*'. This allows for unrestricted access to the object regardless of the user's roles.
   if (accessRoles.includes('*')) return true;
@@ -420,12 +433,12 @@ async function rolesTemplates(key, val, obj, user, templateScope) {
     );
   }
 
-  // At least one of the gateRoles must be included in the roles array provided by the user. If not, access to the obj will be denied.
-  if (gateRoles.some((role) => roles.includes(role))) {
+  // At least one of the requiredRoles must be included in the roles array provided by the user. If not, access to the obj will be denied.
+  if (requiredRoles.some((role) => roles.includes(role))) {
     return true;
   } else {
     return new Error(
-      `Access to the object with the roles property is denied. User does not have any of the required accessRoles: ${gateRoles.join(', ')}`,
+      `Access to the object with the roles property is denied. User does not have any of the required accessRoles: ${requiredRoles.join(', ')}`,
     );
   }
 }
