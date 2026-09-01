@@ -3,6 +3,8 @@
 
 The styleParser module exports the styleParser method as default which is intended to check the consistency of layer styles and issue console warnings in regards to backwards compatibility.
 
+@requires /utils/svgToBitmap
+
 @module /layer/styleParser
 */
 
@@ -10,6 +12,7 @@ The styleParser module exports the styleParser method as default which is intend
 @global
 @typedef {Object} layer-style
 @property {Boolean} [cache] The feature style should be retrieved from the feature 'Styles' property.
+@property {Boolean} [bitmap_icons] Icons should be rendered from rasterized bitmaps.
 @property {object} theme The current theme to be rendered.
 @property {feature-style} [default] The default style for features.
 @property {feature-style} [highlight] The style for highlighted features.
@@ -48,6 +51,8 @@ The styleParser method parses and validates the mapp.style object and its proper
 The styleParser method checks the highlight features style and calls the warnings method.
 
 The clusterStyle method is called to ensure that cluster layer have a cluster style.
+
+The redrawStyleIcons method is called to redraw the layer as the icon bitmaps of the style configuration become available.
 
 Individual themes in the themes object are parsed and a theme is assigned to the
 
@@ -153,6 +158,8 @@ export default function styleParser(layer) {
       layer.style.icon_scaling.fields,
     )[0]?.field;
   }
+
+  redrawStyleIcons(layer);
 }
 
 /**
@@ -601,4 +608,95 @@ function handleHovers(layer) {
   if (layer.style?.hover) {
     layer.style.hover.method ??= mapp.layer.featureHover;
   }
+}
+
+/**
+@function redrawStyleIcons
+
+@description
+The redrawStyleIcons method requests a redraw of the layer as icon bitmaps become available.
+
+The bitmap render is opt in with the `layer.style.bitmap_icons` flag. A layer without the flag renders its icons from the src and has no bitmap to wait for.
+
+An icon variant is rasterized on demand by the feature style render, which substitutes a fallback symbol for a variant which is not yet available. The layer must be redrawn once the bitmap has been rasterized in order for the icon to replace the fallback symbol.
+
+The variants of the style configuration are not rasterized ahead of the render. A configuration may hold thousands of variants of which only those of the features in the mapview are rendered, and the bitmap cache is bounded and is not evicted.
+
+The redraw is only registered for a style configuration which has icons. The layer.L Openlayers layer is created by the layer format method after the styleParser has been called, and is therefore only referenced from the redraw callback.
+
+The callback holds the layer, and the svgToBitmap listeners are held for the lifetime of the session. The layer.offBitmapReady method removes the callback and is called as the layer is removed, so that a layer which is no longer in a mapview is not retained by the listener.
+
+@param {layer} layer A json layer object.
+@property {layer-style} layer.style The mapp-layer style configuration.
+@property {function} layer.offBitmapReady The method which removes the redraw callback.
+*/
+function redrawStyleIcons(layer) {
+  if (!layer.style.bitmap_icons) return;
+
+  if (!styleIcons(layer.style).length) return;
+
+  const registered = typeof layer.offBitmapReady === 'function';
+
+  // A layer which is decorated again must not be registered a second time.
+  layer.offBitmapReady?.();
+
+  layer.offBitmapReady = mapp.utils.svgBitmap.onBitmapReady(() =>
+    layer.L?.changed(),
+  );
+
+  // The remove callback removes whichever registration is current, so it is only pushed for the first.
+  if (registered) return;
+
+  // The layer decorator assigns the removeCallbacks array after the format method has called the styleParser.
+  layer.removeCallbacks ??= [];
+
+  layer.removeCallbacks.push((layer) => {
+    layer.offBitmapReady?.();
+    delete layer.offBitmapReady;
+  });
+}
+
+/**
+@function styleIcons
+
+@description
+The styleIcons method collects the icon style objects from a layer style configuration.
+
+The styleParser assigns self references between the style, theme, and label objects, so objects which have already been walked must be tracked.
+
+@param {layer-style} style The mapp-layer style configuration.
+
+@returns {array} An array of mapp icon style objects.
+*/
+export function styleIcons(style) {
+  const icons = [];
+  const walked = new WeakSet();
+
+  function walk(node) {
+    if (node === null || typeof node !== 'object') return;
+
+    if (walked.has(node)) return;
+
+    walked.add(node);
+
+    if (Array.isArray(node)) {
+      node.forEach(walk);
+      return;
+    }
+
+    // Only the plain objects of the JSON style configuration are walked. A style property may hold a DOM node or an Openlayers object.
+    if (node.constructor !== Object) return;
+
+    if (node.icon) {
+      Array.isArray(node.icon)
+        ? icons.push(...node.icon)
+        : icons.push(node.icon);
+    }
+
+    Object.values(node).forEach(walk);
+  }
+
+  walk(style);
+
+  return icons.filter((icon) => icon !== null && typeof icon === 'object');
 }

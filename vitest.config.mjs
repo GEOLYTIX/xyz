@@ -7,6 +7,7 @@ export default defineConfig({
   root: rootDir,
   test: {
     include: [
+      './apps/xyz/tests/mapp/**/*.test.mjs',
       './apps/xyz/tests/mod/**/*.test.mjs',
       './apps/xyz/tests/plugins/**/*.test.mjs',
       './apps/xyz/tests/utils/**/*.test.mjs',

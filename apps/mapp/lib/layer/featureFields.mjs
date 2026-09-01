@@ -42,6 +42,10 @@ export function reset(layer) {
 @description
 The featureFields.process(layer) method will calculate the distribution of featureFields fields.values[] for featureStyle methods.
 
+The legend of a theme with a distribution is built from the processed featureFields, and is not built prior to the layer data being received.
+
+The legend of a theme with a distribution is built from the processed featureFields, and is not built prior to the layer data being received.
+
 @param {layer} layer A decorated mapp layer object.
 @property {layer-style} layer.style The layer style configuration.
 @property {Object} style.icon_scaling Configuration to scale style icons for point features.
@@ -63,7 +67,7 @@ export async function process(layer) {
 
     layer.L.changed();
 
-    // The legend method renders into the layer.style.legend
+    // The legend method renders into the layer.style.legend node. The legend of a theme with a distribution is only built here, once the data has been received. node. The legend of a theme with a distribution is only built here, once the data has been received.
     mapp.ui.layers.legends[layer.style.theme.type](layer);
   }
 }

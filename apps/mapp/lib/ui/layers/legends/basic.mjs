@@ -28,6 +28,7 @@ export default function basicTheme(layer) {
   layer.style.theme.style ??= {};
   layer.style.theme.style.width ??= 24;
   layer.style.theme.style.height ??= 24;
+  layer.style.theme.style.bitmap_icons ??= layer.style.bitmap_icons;
 
   const legendIcon = mapp.ui.elements.legendIcon(layer.style.theme.style);
 

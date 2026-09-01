@@ -38,6 +38,7 @@ export default function graduatedTheme(layer) {
       }`;
 
       const catIcon = mapp.ui.elements.legendIcon({
+        bitmap_icons: layer.style.bitmap_icons,
         height: 24,
         width: 24,
         ...(cat._style || cat.style),

@@ -45,6 +45,7 @@ export function catElement(cat, theme, layer) {
   }
 
   const catLegendIcon = mapp.ui.elements.legendIcon({
+    bitmap_icons: layer.style.bitmap_icons,
     height: 24,
     width: 24,
     ...(cat._style || cat.style),
@@ -234,6 +235,7 @@ export function clusterLegend(layer) {
   const icon = mapp.utils.html`<div
     style="height: 40px; width: 40px;">
     ${mapp.ui.elements.legendIcon({
+      bitmap_icons: layer.style.bitmap_icons,
       height: 40,
       icon: layer.style.cluster.icon,
       width: 40,

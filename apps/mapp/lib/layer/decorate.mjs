@@ -47,7 +47,11 @@ export default async function decorate(layer) {
   await mapp.layer.formats[layer.format](layer);
 
   // If layer does not exist, return.
-  if (!layer.L) return;
+  if (!layer.L) {
+    // A format method may have registered callbacks for a layer which could not be created.
+    layer.offBitmapReady?.();
+    return;
+  }
 
   // Assign show, hide, and other methods to the layer object.
   Object.assign(layer, {
@@ -57,7 +61,6 @@ export default async function decorate(layer) {
     hide,
     hideCallbacks: [],
     remove,
-    removeCallbacks: [],
     show,
     showCallbacks: [],
     tableCurrent,
@@ -69,6 +72,9 @@ export default async function decorate(layer) {
 
   // Format methods, eg mvt may already assign a changeEnd callback method.
   layer.changeEndCallbacks ??= [];
+
+  // The styleParser may already assign a remove callback method to deregister the icon bitmap listener.
+  layer.removeCallbacks ??= [];
 
   // Warn if outdated layer.draw.delete configuration is used.
   if (layer.draw?.delete) {
