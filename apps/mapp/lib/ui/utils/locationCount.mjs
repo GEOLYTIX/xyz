@@ -38,6 +38,7 @@ export default async function locationCount(layer) {
     filter: layer.filter?.current,
     layer: layer.key,
     table: layer.tableCurrent(),
+    geom: layer.geomCurrent(),
     qID: layer.qID,
     template: 'location_count',
   });
