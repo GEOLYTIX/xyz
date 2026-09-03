@@ -90,26 +90,25 @@ The deleteFilter function deletes the filter in the layer.filter.current object.
 @property {String} filter.type The filters' type e.g like, in, etc.
 */
 function deleteFilter(layer, filter) {
-  if (layer.filter.current[filter.field]) {
-    if (Object.hasOwn(layer.filter.current[filter.field], filter.type)) {
-      // Delete type property from filter
-      delete layer.filter.current[filter.field][filter.type];
-    }
+  // The layer must not be reloaded for a filter which is not current.
+  if (!layer.filter.current[filter.field]) return;
 
-    if (Object.hasOwn(layer.filter.current, filter.field)) {
-      // Delete [filter] field property.
-      delete layer.filter.current[filter.field];
-    }
+  if (Object.hasOwn(layer.filter.current[filter.field], filter.type)) {
+    // Delete type property from filter
+    delete layer.filter.current[filter.field][filter.type];
+  }
 
-    // Delete [filter] min if not fixed as Min.
-    if (Number.isNaN(Number(filter.Min))) {
-      delete filter.min;
-    }
+  // Delete [filter] field property.
+  delete layer.filter.current[filter.field];
 
-    // Delete [filter] max if not fixed as Max.
-    if (Number.isNaN(Number(filter.Max))) {
-      delete filter.max;
-    }
+  // Delete [filter] min if not fixed as Min.
+  if (Number.isNaN(Number(filter.Min))) {
+    delete filter.min;
+  }
+
+  // Delete [filter] max if not fixed as Max.
+  if (Number.isNaN(Number(filter.Max))) {
+    delete filter.max;
   }
 
   mapp.ui.layers.filters.applyFilter(layer);
@@ -359,7 +358,10 @@ async function filter_numeric(layer, filter) {
     layer.filter.current[filter.field],
   );
 
-  filterMethods.applyFilter(layer);
+  // A range which matches the min and max values of the data does not filter the layer. The layer must only be reloaded for a filter with configured bounds.
+  if (filter.Min !== undefined || filter.Max !== undefined) {
+    filterMethods.applyFilter(layer);
+  }
 
   // Create affix for rangeslider input label.
   const affix =
@@ -473,6 +475,26 @@ A list of checkbox elements will be returned as default interface without a `dro
 @property {Boolean} [filter.searchbox] Create searchbox [pills] filter interface.
 @returns {Promise<HTMLElement>} Filter interface elements.
 */
+/**
+@function filterTable
+
+@description
+Returns the layer table for a filter query.
+
+The tableCurrent method returns the table for the current mapview zoom level. A layer which is out of its zoom range, eg. a layer with a null table for the current zoom level, has no current table. The first table configured for the layer is returned as fallback. The filter query would otherwise be sent without a table param and fail.
+
+@param {layer} layer MAPP layer typedef object.
+@property {Object} [layer.tables] Layer tables for zoom levels.
+
+@returns {string} Table for the filter query.
+*/
+function filterTable(layer) {
+  return (
+    layer.tableCurrent() ||
+    Object.values(layer.tables ?? {}).find((table) => !!table)
+  );
+}
+
 async function filter_in(layer, filter) {
   // Existing filter on the same field [eg from legend toggle] should be deleted.
   deleteFilter(layer, filter);
@@ -492,12 +514,13 @@ async function filter_in(layer, filter) {
           filter: filter_current,
           layer: layer.key,
           locale: layer.mapview.locale.key,
-          table: layer.tableCurrent(),
+          table: filterTable(layer),
           template: 'distinct_values',
         }),
     );
 
-    if (!response) {
+    // The xhr method returns an Error for a failed request. The response is null for a query which returned no rows.
+    if (!response || response instanceof Error) {
       console.warn(
         `Distinct values query did not return any values for field ${filter.field}`,
       );
@@ -514,8 +537,8 @@ async function filter_in(layer, filter) {
       // Map the entry field from response records.
       .map((record) => record[filter.field])
 
-      // Filter out null values.
-      .filter((val) => val !== null);
+      // Filter out records without a value for the filter field.
+      .filter((val) => val !== null && val !== undefined);
   }
 
   // Create set to check for current values in the filter array.

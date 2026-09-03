@@ -203,6 +203,9 @@ function changeEnd(layer) {
 
     // Enable all drawer elements in array.
     nestedElements.forEach((el) => {
+      // A drawer which is disabled with the layer display must remain disabled for a layer which is not displayed.
+      if (!layer.display && el.classList.contains('disable-on-hide')) return;
+
       el.disabled = false;
       el.classList.remove('disabled');
     });

@@ -64,10 +64,15 @@ export default function MVT(layer) {
   @description
   The reload method executes the wktPropertiesLoad method for MVT layer with wkt_properties features.
 
+  The MVT tiles of a wkt_properties layer hold feature geometries and ID only. The tile source is not affected by a change of the layer filter, style, or params. Clearing the tile source would render the layer blank before the wktPropertiesLoad method has returned the feature properties for the current layer filter. The layer is instead rendered from the wktPropertiesLoad method which will clear and refresh the tile sources itself for a feature which has not been rendered before, eg. after a location geometry has been created.
+
   Otherwise the source and featureSource [Openlayers VectorTile]{@link https://openlayers.org/en/latest/apidoc/module-ol_source_VectorTile.html} sources are cleared and refreshed.
   */
   function reload() {
-    wktPropertiesLoad(layer);
+    if (layer.wkt_properties) {
+      wktPropertiesLoad(layer, true);
+      return;
+    }
 
     layer.source.clear();
     layer.source.refresh();
@@ -221,10 +226,13 @@ The wktPropertiesLoad method send a query to the wkt template. The response is p
 
 Finally the layer.L.changed() method is called to trigger the [layer.featureStyle]{@link module:/layer/featureStyle~featureProperties} method which assigns feature properties from the layer.featuresObject.
 
+The tile sources are cleared and refreshed if the method has been called from the layer.reload method and the response holds a feature which has not been rendered before, eg. after a location geometry has been created. The tile geometries are otherwise requested by the tile source itself for the current mapview.
+
 @param {layer} layer A decorated format:mvt mapp layer.
+@param {boolean} [reload] The method has been called from the layer.reload method.
 @property {boolean} [layer.wkt_properties] A flag whether feature properties should be loaded independent from MVT geometries.
 */
-async function wktPropertiesLoad(layer) {
+async function wktPropertiesLoad(layer, reload) {
   if (!layer.wkt_properties) return;
 
   const table = layer.tableCurrent();
@@ -276,10 +284,11 @@ async function wktPropertiesLoad(layer) {
     },
   });
 
-  if (!response) return;
-
   // The method must shortcircuit on debounce other no features would be rendered.
-  if (response.debounce) return;
+  if (response?.debounce) return;
+
+  // The feature IDs prior to the response determine whether the tile geometries must be requested again.
+  const featureIds = new Set(Object.keys(layer.featuresObject ?? {}));
 
   // The featuresObject should be reset before being populated by the featureFormats.wkt_properties method for use in the featureStyle method.
   // The featuresObject should be empty if the xhr query fails to provide an array response.
@@ -292,4 +301,18 @@ async function wktPropertiesLoad(layer) {
 
   // Triggers the featureStyle method.
   layer.L.changed();
+
+  // The tile geometries are requested by the tile source itself on a mapview change.
+  if (!reload) return;
+
+  // Features which are no longer in the featuresObject are not rendered by the featureStyle method. Only a feature which has not been rendered before requires its geometry to be requested.
+  const geometry = Object.keys(layer.featuresObject).some(
+    (id) => !featureIds.has(id),
+  );
+
+  if (!geometry) return;
+
+  layer.source.clear();
+  layer.source.refresh();
+  layer.featureSource.refresh();
 }
