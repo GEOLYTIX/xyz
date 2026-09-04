@@ -116,7 +116,7 @@ function createRouter(middleWare = []) {
     register,
   );
 
-  router.get(`${xyzEnv.DIR}/api/user/verify`, verify);
+  router.get(`${xyzEnv.DIR}/api/user/verify{/:key}`, verify);
 
   router.get(`${xyzEnv.DIR}/api/user{/:method}{/:key}`, middleWare, user);
 
