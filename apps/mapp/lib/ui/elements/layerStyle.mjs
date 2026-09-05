@@ -352,6 +352,15 @@ function theme(layer) {
     layer.style.legend = mapp.utils.html.node`<div class="legend">`;
 
     layer.style.legend && content.push(layer.style.legend);
+
+    // A layer displayed by default has already run show() (and its
+    // showCallbacks) before this panel is built, since the layer list/style
+    // panel is only constructed after mapview.addLayer() resolves. show()
+    // will not run again for an already-displayed layer, so render the
+    // legend directly here instead of waiting on the queued showCallback.
+    if (layer.display) {
+      mapp.ui.layers.legends[layer.style.theme.type](layer);
+    }
   }
 
   return mapp.utils.html.node`<div data-id="layerTheme">${content}`;
@@ -410,6 +419,13 @@ function themes(layer) {
     layer.view
       ?.querySelector('[data-id=style-drawer]')
       .replaceChildren(...stylePanel.children);
+
+    // The legend for the new theme is only queued onto layer.showCallbacks
+    // by theme(), which only run from layer.show(). Since reload() does not
+    // trigger showCallbacks, render the legend directly here.
+    if (Object.hasOwn(mapp.ui.layers.legends, layer.style.theme?.type)) {
+      mapp.ui.layers.legends[layer.style.theme.type](layer);
+    }
 
     layer.reload();
   }
