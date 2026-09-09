@@ -66,6 +66,9 @@ export function drawer(params) {
       <div class="notranslate material-symbols-outlined caret">`;
 
   if (params.drawer === 'disableOnHide' && params.layer?.showCallbacks) {
+    // The class flags the drawer as being disabled with the layer display.
+    params.class += ' disable-on-hide';
+
     params.class += params.layer.display ? '' : ' disabled';
     params.layer.showCallbacks.push(() => {
       params.drawer.classList.remove('disabled');
