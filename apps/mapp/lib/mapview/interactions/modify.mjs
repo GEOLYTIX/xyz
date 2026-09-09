@@ -95,8 +95,11 @@ export default function modify(params, mapview = this) {
     e.key === 'Escape' && mapview.interaction.finish();
   }
 
+  // Store the handler on the interaction so finish() can remove the exact listener that was added.
+  mapview.interaction.escape = escape;
+
   //End the modification on escape key.
-  document.addEventListener('keyup', escape);
+  document.addEventListener('keyup', mapview.interaction.escape);
 
   mapview.interaction.interaction = new ol.interaction.Modify(
     mapview.interaction,
@@ -129,7 +132,7 @@ Ends the modification interaction, cleans up event listeners, and removes the in
 */
 function finish(feature) {
   //Remove the escape key event listener
-  document.removeEventListener('keyup', escape);
+  document.removeEventListener('keyup', this.interaction.escape);
 
   // Remove snap interaction.
   this.interaction.snap?.remove?.();
