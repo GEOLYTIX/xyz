@@ -40,6 +40,8 @@ Please refer to the [wiki pages](https://github.com/GEOLYTIX/xyz/wiki) for detai
 
 For repository setup and local development, see [SETUP.md](./SETUP.md).
 
+For creating a versioned GitHub release, see [RELEASING.md](./RELEASING.md).
+
 For Vercel and self-hosted deployment workflows, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 
 For environment validation, vanilla Varlock examples, and frozen Vercel deployments, see [varlock/README.md](./varlock/README.md).
