@@ -72,10 +72,10 @@ export default async function getLocale(params, parentLocale) {
     return locale;
   }
 
-  // Merge the default workspace locale
-  if (!parentLocale && locale.key !== 'locale') {
-    locale = merge(structuredClone(workspace.locale), locale);
-  }
+  const defaults =
+    !parentLocale && locale.key !== 'locale'
+      ? structuredClone(workspace.locale)
+      : undefined;
 
   if (parentLocale) {
     locale.parentRoles = parentLocale.parentRoles.length
@@ -83,7 +83,7 @@ export default async function getLocale(params, parentLocale) {
       : [parentLocale.role];
   }
 
-  locale = await composeObj(locale, params.user);
+  locale = await composeObj(locale, params.user, defaults);
 
   if (locale instanceof Error) {
     return locale;
