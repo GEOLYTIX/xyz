@@ -1,4 +1,4 @@
-**v5.0.3**
+**v5.0.4**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Unit Tests](https://github.com/GEOLYTIX/xyz/actions/workflows/unit_tests.yml/badge.svg)
@@ -39,6 +39,8 @@ A bundled MAPP library is provided in the public directory. It is not required t
 Please refer to the [wiki pages](https://github.com/GEOLYTIX/xyz/wiki) for detailed interface references.
 
 For repository setup and local development, see [SETUP.md](./SETUP.md).
+
+For creating a versioned GitHub release, see [RELEASING.md](./RELEASING.md).
 
 For Vercel and self-hosted deployment workflows, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 

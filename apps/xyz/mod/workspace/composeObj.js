@@ -25,14 +25,21 @@ The composeObj method is the main entry point for composing an object with templ
 
 @param {Object} obj
 @param {User} [user] The requesting user from request params.
+@param {Object} [defaults] Defaults merged before the object's prototype and own properties.
 
 @property {string} [obj.template] Key of template for the object.
 @property {array} [obj.templates] An array of template keys to be merged into the object.
 @property {array<string>|boolean} [user.roles] An array of user roles. Admin endpoints set the roles property to true to bypass role checks.
 */
-export default async function composeObj(obj, user) {
+export default async function composeObj(obj, user, defaults) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
+
+  // Without its own prototype, the object inherits the defaults' prototype.
+  if (defaults && !obj.template) {
+    obj = merge(defaults, obj);
+    defaults = undefined;
+  }
 
   if (obj.template) {
     let template = await getTemplate(obj.template);
@@ -45,9 +52,10 @@ export default async function composeObj(obj, user) {
 
     delete obj.template;
     delete template.src;
+    if (defaults) delete defaults.template;
 
-    // Merge obj --> template
-    obj = merge(template, obj);
+    // The locale defaults precede the prototype, which precedes explicit properties.
+    obj = defaults ? merge(defaults, template, obj) : merge(template, obj);
   }
 
   obj.parentRoles ??= [];
