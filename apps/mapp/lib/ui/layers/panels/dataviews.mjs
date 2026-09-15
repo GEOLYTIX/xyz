@@ -42,6 +42,12 @@ export default function dataviews(layer) {
       layer,
     });
 
+    // Reinstate target from the snapshot if it was lost (eg. saved as an HTMLElement and stripped by jsonParser).
+    dataview.target ??= dataview._target;
+
+    // Snapshot the original target before it is overwritten with a render element below.
+    dataview._target ??= dataview.target;
+
     // Find tabview element from data-id attribute.
     populateTabview(dataview);
 

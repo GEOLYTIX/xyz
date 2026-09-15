@@ -234,6 +234,17 @@ async function layerQuery(req, res) {
 
   // Create viewport condition for SQL query.
   if (req.params.viewport) {
+    // The viewport condition requires a geom and srid to be substituted in the query string.
+    if (!req.params.geom || !req.params.srid) {
+      res
+        .status(400)
+        .setHeader('Content-Type', 'text/plain')
+        .send(
+          `Viewport param requires geom and srid params on ${req.params.layer.key} layer.`,
+        );
+      return;
+    }
+
     const viewport = req.params.viewport.split(',');
 
     req.params.viewport = `AND

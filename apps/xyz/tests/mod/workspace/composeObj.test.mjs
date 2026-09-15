@@ -269,6 +269,42 @@ describe('composeObj', async () => {
     expect(response instanceof Error).toBeTruthy();
   });
 
+  it('root roles object with object role values only; user without the role', async () => {
+    const obj = {
+      root: true,
+      roles: {
+        Test: {
+          name: 'Test',
+        },
+      },
+    };
+
+    // The root obj is gated by every role key. The object role value must not leak the obj to a user without the Test role.
+    const response = await composeObj(obj, { roles: ['Super'] });
+
+    expect(response instanceof Error).toBeTruthy();
+  });
+
+  it('nested roles object with object role values only; user without the role', async () => {
+    const obj = {
+      root: true,
+      nested: {
+        nested: true,
+        roles: {
+          Test: {
+            skipEntry: true,
+          },
+        },
+      },
+    };
+
+    // A nested obj is not gated by an object role value. The nested obj remains visible without the role specific property.
+    const response = await composeObj(obj, { roles: ['Super'] });
+
+    expect(response.nested.nested).toBeTruthy();
+    expect(response.nested.skipEntry).toBeFalsy();
+  });
+
   it('nested roles object with roles which do not match the accessRoles', async () => {
     const obj = {
       root: true,

@@ -82,11 +82,14 @@ export default async function languageTemplates(params) {
     return template;
   }
 
-  template = await getSrc({ src: template });
+  // Only resolve template as a src reference if it has a provider prefix, eg. 'file:', 'https:'.
+  if (/^[a-z]+:/i.test(template)) {
+    template = await getSrc({ src: template });
 
-  if (template instanceof Error) {
-    // Return the template string value if the template is not available in workspace.
-    return params.template;
+    if (template instanceof Error) {
+      // Return the template string value if the template is not available in workspace.
+      return params.template;
+    }
   }
 
   return template;

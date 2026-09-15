@@ -8,11 +8,13 @@ Exports the [user] verify method for the /api/user/verify route.
 @requires module:/utils/mailer
 @requires module:/utils/languageTemplates
 @requires module:/utils/processEnv
+@requires module:/utils/reqHost
 
 @module /user/verify
 */
 
 import languageTemplates from '../utils/languageTemplates.js';
+import reqHost from '../utils/reqHost.js';
 import mailer from '../utils/resend.js';
 import acl from './acl.js';
 import login from './login.js';
@@ -50,6 +52,8 @@ export default async function verify(req, res) {
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
   }
+
+  req.params.host = reqHost(req);
 
   // Find user record with matching verificationtoken.
   let rows = await acl(

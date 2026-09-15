@@ -33,6 +33,7 @@ The method will shortcircuit if the filter panel is set to be hidden or if the l
 @property {object} layer.filter Configuration object for layer filter.
 @property {boolean} [filter.hidden] The filter panel should not be displayed.
 @property {boolean} [filter.popout] Whether the drawer can be popped out into a dialog.
+@property {string|boolean} [filter.drawer] The drawer flag for the filter panel. The drawer will be disabled with the layer display by default.
 @property {string} [filter.classList] The string will be appended to the drawer element classlist.
 @returns {HTMLElement} The filter panel drawer element or filter dialog button.
 */
@@ -43,6 +44,9 @@ export default function filterPanel(layer) {
 
   if (!layer.infoj) return;
 
+  // The filter drawer must be disabled for a layer which is not displayed.
+  layer.filter.drawer ??= 'disableOnHide';
+
   layer.filter.list = listFilter(layer);
 
   if (!layer.filter.list.length) return;
@@ -50,8 +54,8 @@ export default function filterPanel(layer) {
   layer.filter.dropdown = mapp.ui.elements.dropdown({
     callback: async (e, options, filter) => {
       if (!filter.selected) {
+        // The removeFilter method will update the panel if the filter was current.
         mapp.ui.layers.filters.removeFilter(layer, filter);
-        updatePanel(layer);
         return;
       }
 
@@ -62,7 +66,7 @@ export default function filterPanel(layer) {
       layer.filter.clearAll.style.display = 'inline-block';
       layer.filter.resetAll.style.display = 'inline-block';
 
-      updatePanel(layer);
+      // The panel must not be updated for a filter card without a filter value.
 
       // Get interface content for filter card.
       filter.content = [
@@ -228,49 +232,77 @@ function listFilter(layer) {
 
   for (const entry of layer.infoj) {
     entry.type ??= 'text';
-    if (
-      entry.skipEntry === true ||
-      entry.field === undefined ||
-      layer.filter.exclude.includes(entry.field) ||
-      !Object.hasOwn(filterByType, entry.type)
-    )
-      continue;
 
-    if (
-      layer.filter.includeAll ||
-      layer.filter.include.includes(entry.field) ||
-      entry.filter === true
-    ) {
-      entry.type ??= 'text';
+    if (excludeEntry(layer, entry)) continue;
 
-      if (!Object.keys(entry.filter || {}).length)
-        entry.filter = filterByType[entry.type];
+    // The filter type must be derived from the entry type if not configured.
+    const derived =
+      entry.filter === true ||
+      entry.filter === undefined ||
+      !Object.keys(entry.filter).length;
 
-      // The filter is defined as a string e.g. "like"
-      if (typeof entry.filter === 'string') {
-        entry.filter = {
-          type: entry.filter,
-        };
-      }
-
-      if (
-        !entry.filter?.type ||
-        !Object.hasOwn(mapp.ui.layers.filters, entry.filter.type)
-      ) {
-        entry.filter ??= { type: entry.type };
-        console.warn(`${entry.filter.type} is not a valid filter type`);
-        continue;
-      }
-
-      entry.filter.title ??= entry.title;
-
-      entry.filter.field ??= entry.field;
-
-      list.push(structuredClone(entry.filter));
+    if (derived) {
+      entry.filter = filterByType[entry.type];
     }
+
+    // The filter is defined as a string e.g. "like"
+    if (typeof entry.filter === 'string') {
+      entry.filter = {
+        type: entry.filter,
+      };
+    }
+
+    if (
+      !entry.filter?.type ||
+      !Object.hasOwn(mapp.ui.layers.filters, entry.filter.type)
+    ) {
+      // Entry types without a matching filter type are skipped silently.
+      !derived &&
+        console.warn(
+          `${entry.field}: ${entry.filter?.type} is not a valid filter type`,
+        );
+      continue;
+    }
+
+    entry.filter.title ??= entry.title;
+
+    entry.filter.field ??= entry.field;
+
+    list.push(structuredClone(entry.filter));
   }
 
   return list;
+}
+
+/**
+@function excludeEntry
+
+@description
+The excludeEntry method determines whether an infoj entry must be excluded from the filter list.
+
+Entries which are skipped, have no field, or which are excluded in the layer.filter.exclude[] array, or on the entry itself with `filter: false` are always excluded.
+
+Entries without a filter configuration are only included with the layer.filter.includeAll flag or if the entry.field is in the layer.filter.include[] array.
+
+@param {Object} layer
+@param {Object} entry An infoj entry.
+
+@returns {Boolean} The entry must be excluded from the filter list.
+*/
+function excludeEntry(layer, entry) {
+  if (entry.skipEntry === true) return true;
+
+  if (entry.field === undefined) return true;
+
+  if (entry.filter === false) return true;
+
+  if (layer.filter.exclude.includes(entry.field)) return true;
+
+  if (entry.filter !== undefined) return false;
+
+  return (
+    !layer.filter.includeAll && !layer.filter.include.includes(entry.field)
+  );
 }
 
 /**

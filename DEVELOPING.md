@@ -61,6 +61,7 @@ Many editors have Biome extensions or plugins for on-the-fly error highlighting 
 ## Related Docs
 
 - [SETUP.md](./SETUP.md): clone, configuration, and local startup
+- [RELEASING.md](./RELEASING.md): version bumps, release notes, and publishing a GitHub release
 - [DEPLOYMENT.md](./DEPLOYMENT.md): Vercel and self-hosted deployment workflows
 - [TESTING.md](./TESTING.md): test structure and commands
 - [DOCUMENTATION.md](./DOCUMENTATION.md): JSDoc and documentation notes

@@ -271,12 +271,16 @@ function roles(req, res) {
 @description
 The scopes method returns an array of scopes which are the templateScopes assigned to each template in the workspace.templates{} object.
 
+The scopes are resolved from the cached workspace. The workspace cache is rebuilt with the force request param.
+
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 
 @property {Object} req.params HTTP request parameter.
 @property {Object} params.user User requesting the scopes.
 @property {boolean} params.user.admin Whether user has admin privileges (required).
+@property {boolean} [params.force] Rebuild the workspace cache before the scopes are resolved.
+@property {boolean} [params.tree] Respond with the scopes as a nested tree.
 */
 async function scopes(req, res) {
   if (!req.params.user?.admin) {
@@ -289,7 +293,7 @@ async function scopes(req, res) {
   // TODO check why the scopes array is different from composedWorkspace
   // const cachedWorkspace = await composeWorkspace();
 
-  const workspaceScopes = await getScopes();
+  const workspaceScopes = await getScopes(req.params.force);
 
   if (req.params.tree) {
     res.send(scopesTree(workspaceScopes));
@@ -460,12 +464,13 @@ The nestedLocales() method is called for each locale in the cached workspace to 
 @returns {Promise<Object>} The fully composed workspace object.
 */
 async function composeWorkspace() {
-  const cachedWorkspace = await workspaceCache(true);
+  const workspace = await workspaceCache(true);
+  const cachedWorkspace = { ...workspace, locales: {} };
 
-  cachedWorkspace.err = await cacheSources(cachedWorkspace);
+  cachedWorkspace.err = await cacheSources(workspace);
 
   // The nestedLocales method will be called for each locale in the cached workspace to ensure that all nested locales are loaded and checked for user access.
-  for (const localeKey of Object.keys(cachedWorkspace.locales)) {
+  for (const localeKey of Object.keys(workspace.locales)) {
     const locale = await getLocale({
       locale: localeKey,
       layers: true,
