@@ -464,12 +464,13 @@ The nestedLocales() method is called for each locale in the cached workspace to 
 @returns {Promise<Object>} The fully composed workspace object.
 */
 async function composeWorkspace() {
-  const cachedWorkspace = await workspaceCache(true);
+  const workspace = await workspaceCache(true);
+  const cachedWorkspace = { ...workspace, locales: {} };
 
-  cachedWorkspace.err = await cacheSources(cachedWorkspace);
+  cachedWorkspace.err = await cacheSources(workspace);
 
   // The nestedLocales method will be called for each locale in the cached workspace to ensure that all nested locales are loaded and checked for user access.
-  for (const localeKey of Object.keys(cachedWorkspace.locales)) {
+  for (const localeKey of Object.keys(workspace.locales)) {
     const locale = await getLocale({
       locale: localeKey,
       layers: true,
