@@ -14,6 +14,7 @@ Exports the [user] cookie method for the /api/user/cookie route.
 import jwt from 'jsonwebtoken';
 import acl from './acl.js';
 import login from './login.js';
+import sessionClaims from './sessionClaims.js';
 
 /**
 @function cookie
@@ -133,7 +134,7 @@ export default async function cookie(req, res) {
         user.nameID = decodedCookie.nameID;
       }
 
-      const token = jwt.sign(user, xyzEnv.SECRET, {
+      const token = jwt.sign({ ...user, ...sessionClaims() }, xyzEnv.SECRET, {
         expiresIn: xyzEnv.COOKIE_TTL,
         algorithm: xyzEnv.SECRET_ALGORITHM,
       });
