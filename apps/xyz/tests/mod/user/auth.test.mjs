@@ -274,6 +274,9 @@ describe('auth:', async () => {
       globalThis.xyzEnv = {
         SECRET: secret,
         SECRET_ALGORITHM: 'HS256',
+        SESSION_TYP: 'session',
+        SESSION_ISS: 'xyz',
+        SESSION_AUD: 'xyz',
         TITLE: 'TEST',
       };
 
@@ -284,6 +287,53 @@ describe('auth:', async () => {
       const result = await auth(req, res);
 
       expect(result.email).toEqual('test@geolytix.co.uk');
+    });
+
+    it('the re-issued browser cookie carries the session claims', async () => {
+      const user = {
+        email: 'test@geolytix.co.uk',
+        admin: true,
+        roles: [],
+        api: true,
+      };
+
+      const secret = 'i-am-a-secret';
+
+      const token = jwt.sign(JSON.stringify(user), secret);
+      user.api = token;
+
+      const { req, res } = createMocks({
+        headers: {
+          host: 'http://localhost:3000',
+        },
+        params: {
+          token: token,
+        },
+      });
+
+      globalThis.xyzEnv = {
+        SECRET: secret,
+        SECRET_ALGORITHM: 'HS256',
+        SESSION_TYP: 'session',
+        SESSION_ISS: 'xyz',
+        SESSION_AUD: 'xyz',
+        TITLE: 'TEST',
+      };
+
+      aclFn.mockImplementation(() => {
+        return [user];
+      });
+
+      await auth(req, res);
+
+      const header = res.getHeader('Set-Cookie');
+      const cookieToken = header.match(/^TEST=([^;]+)/)[1];
+
+      expect(jwt.decode(cookieToken)).toMatchObject({
+        typ: 'session',
+        iss: 'xyz',
+        aud: ['xyz'],
+      });
     });
   });
 

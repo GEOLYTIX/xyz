@@ -13,6 +13,7 @@ The module exports the default redirect method called from the default or a cust
 import jsonwebtoken from 'jsonwebtoken';
 const { sign } = jsonwebtoken;
 import acl from './acl.js';
+import sessionClaims from './sessionClaims.js';
 
 /**
 @function redirect
@@ -85,12 +86,12 @@ export default async function redirect(req, res, user) {
   //If the user is granted from external providers,
   //These properties may already exist.
   if (!user.exp)
-    token = sign(user, xyzEnv.SECRET, {
+    token = sign({ ...user, ...sessionClaims() }, xyzEnv.SECRET, {
       expiresIn: xyzEnv.COOKIE_TTL,
       algorithm: xyzEnv.SECRET_ALGORITHM,
     });
 
-  token ??= sign(user, xyzEnv.SECRET, {
+  token ??= sign({ ...user, ...sessionClaims() }, xyzEnv.SECRET, {
     algorithm: xyzEnv.SECRET_ALGORITHM,
   });
 
@@ -114,9 +115,33 @@ function redirectLocation(redirect) {
     if (location.startsWith('/') && !location.startsWith('//')) {
       return location;
     }
+
+    if (trustedReturnOrigin(location)) {
+      return location;
+    }
   } catch {
     // Fall through to the safe default for malformed cookie values.
   }
 
   return `${xyzEnv.DIR}/`;
+}
+
+/**
+@function trustedReturnOrigin
+
+@description
+Checks whether an absolute redirect location's origin is present in the comma-separated TRUSTED_RETURN_HOSTS xyzEnvironment variable.
+
+An absolute redirect target needs an explicit host allowlist rather than a broadened blanket rule, so this returns false whenever TRUSTED_RETURN_HOSTS is not configured.
+
+@param {string} location Absolute URL to check.
+
+@returns {boolean} Whether the location's origin is in the trusted host allowlist.
+*/
+function trustedReturnOrigin(location) {
+  const trustedHosts = xyzEnv.TRUSTED_RETURN_HOSTS?.split(',');
+  if (!trustedHosts) return false;
+
+  const { origin } = new URL(location);
+  return trustedHosts.includes(origin);
 }

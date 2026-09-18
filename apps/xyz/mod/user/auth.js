@@ -13,10 +13,10 @@ A user_sessions{} object is declared in the module to store user sessions.
 @module /user/auth
 */
 
-import crypto from 'node:crypto';
 import jwt from 'jsonwebtoken';
 import acl from './acl.js';
 import fromACL from './fromACL.js';
+import sessionClaims from './sessionClaims.js';
 
 const user_sessions = {};
 
@@ -179,7 +179,7 @@ async function checkParamToken(req, res, user) {
   // Check whether the token matches cookie.
   if (req.cookies?.[xyzEnv.TITLE] !== req.params.token) {
     // Create and assign a new cookie for the user.
-    const cookie = jwt.sign(user, xyzEnv.SECRET, {
+    const cookie = jwt.sign({ ...user, ...sessionClaims() }, xyzEnv.SECRET, {
       algorithm: xyzEnv.SECRET_ALGORITHM,
     });
 

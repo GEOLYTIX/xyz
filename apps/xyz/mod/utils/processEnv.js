@@ -110,6 +110,9 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SAML_PROVIDER_NAME] Display name for your service
 @property {String} [SLO_CALLBACK] URL for handling logout callbacks
 @property {Boolean} [LEGACY_ROLES] Enable legacy role checks
+@property {String} [SESSION_TYP='session'] The `typ` claim [sessionClaims module]{@link module:/user/sessionClaims} adds to the session JWT.
+@property {String} [SESSION_ISS='xyz'] The `iss` claim [sessionClaims module]{@link module:/user/sessionClaims} adds to the session JWT.
+@property {String} [SESSION_AUD='xyz'] Comma-separated `aud` claim [sessionClaims module]{@link module:/user/sessionClaims} adds to the session JWT.
 */
 
 const defaults = {
@@ -158,6 +161,11 @@ function pathCheck(key) {
 process.env.COOKIE_TTL ||= defaults.COOKIE_TTL;
 process.env.DIR ||= defaults.DIR;
 process.env.COOKIE_PROPS ??= `Secure; HttpOnly; SameSite=Strict; Path=${process.env.DIR || '/'}`;
+// Session JWT claims — defaults name this deployment "xyz"; a service
+// verifying against a fixed name needs SESSION_ISS/SESSION_AUD set to match.
+process.env.SESSION_TYP ??= 'session';
+process.env.SESSION_ISS ??= 'xyz';
+process.env.SESSION_AUD ??= 'xyz';
 process.env.FAILED_ATTEMPTS ||= defaults.FAILED_ATTEMPTS;
 process.env.PORT ||= defaults.PORT;
 process.env.RATE_LIMIT_WINDOW ||= defaults.RATE_LIMIT_WINDOW;

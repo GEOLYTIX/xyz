@@ -90,6 +90,7 @@ WORKSPACE=file:./public/workspace.json
 - `SECRET_KEY`: path to a key file if you want the app to load the signing secret from disk instead of `.env`
 - `TRANSPORT_EMAIL`, `TRANSPORT_PASSWORD`, `TRANSPORT_PORT`, `TRANSPORT_TLS`: email transport configuration
 - `SAML_*`: SAML identity provider and certificate settings for the optional SAML flow
+- `TRUSTED_RETURN_HOSTS`: comma-separated origins allowed as an absolute `return_to` on `/api/user/login`
 
 ### Varlock
 
