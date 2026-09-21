@@ -8,9 +8,9 @@ globalThis.xyzEnv = {
   ...globalThis.xyzEnv,
   SECRET: secret,
   SECRET_ALGORITHM: 'HS256',
-  SESSION_TYPE: 'session',
-  SESSION_ISSUER: 'xyz',
-  SESSION_AUDIENCE: 'xyz',
+  JWT_TYPE: 'session',
+  JWT_ISSUER: 'xyz',
+  JWT_AUDIENCE: 'xyz',
   TITLE: 'TEST',
 };
 

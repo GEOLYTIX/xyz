@@ -13,7 +13,7 @@ The module exports the default redirect method called from the default or a cust
 import jsonwebtoken from 'jsonwebtoken';
 const { sign } = jsonwebtoken;
 import acl from './acl.js';
-import sessionClaims from './sessionClaims.js';
+import jwtClaims from './jwtClaims.js';
 
 /**
 @function redirect
@@ -86,12 +86,12 @@ export default async function redirect(req, res, user) {
   //If the user is granted from external providers,
   //These properties may already exist.
   if (!user.exp)
-    token = sign({ ...user, ...sessionClaims() }, xyzEnv.SECRET, {
+    token = sign({ ...user, ...jwtClaims() }, xyzEnv.SECRET, {
       expiresIn: xyzEnv.COOKIE_TTL,
       algorithm: xyzEnv.SECRET_ALGORITHM,
     });
 
-  token ??= sign({ ...user, ...sessionClaims() }, xyzEnv.SECRET, {
+  token ??= sign({ ...user, ...jwtClaims() }, xyzEnv.SECRET, {
     algorithm: xyzEnv.SECRET_ALGORITHM,
   });
 

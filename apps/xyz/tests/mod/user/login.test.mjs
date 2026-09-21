@@ -18,9 +18,9 @@ globalThis.xyzEnv = {
   SECRET: 'super_secret_key',
   COOKIE_TTL: 3600,
   SECRET_ALGORITHM: 'HS256',
-  SESSION_TYPE: 'session',
-  SESSION_ISSUER: 'xyz',
-  SESSION_AUDIENCE: 'xyz',
+  JWT_TYPE: 'session',
+  JWT_ISSUER: 'xyz',
+  JWT_AUDIENCE: 'xyz',
 };
 
 describe('login', async () => {

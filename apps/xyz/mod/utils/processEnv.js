@@ -110,9 +110,9 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SAML_PROVIDER_NAME] Display name for your service
 @property {String} [SLO_CALLBACK] URL for handling logout callbacks
 @property {Boolean} [LEGACY_ROLES] Enable legacy role checks
-@property {String} [SESSION_TYPE='session'] The `typ` [type] claim [sessionClaims module]{@link module:/user/sessionClaims} adds to the session JWT, letting an external service tell a real session token apart from a key.js API-key token, which carries no `typ` claim.
-@property {String} [SESSION_ISSUER='xyz'] The `iss` [issuer] claim [sessionClaims module]{@link module:/user/sessionClaims} adds to the session JWT, identifying this xyz instance as the token's issuer so an external service can verify the token came from the expected xyz deployment.
-@property {String} [SESSION_AUDIENCE='xyz'] Comma-separated `aud` [audience] claim [sessionClaims module]{@link module:/user/sessionClaims} adds to the session JWT, listing the service(s) the token is intended for, so an external service can reject a token that was not issued for it.
+@property {String} [JWT_TYPE='session'] The typ (type) claim in a JSON Web Token (JWT) is an optional header parameter that declares the media type or category of the token. Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}
+@property {String} [JWT_ISSUER='xyz'] The iss (issuer) claim in a JSON Web Token (JWT) is a case-sensitive string or URI that identifies the principal or authorization server that created and signed the token. Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}
+@property {String} [JWT_AUDIENCE='xyz'] The aud (audience) claim in a JSON Web Token (JWT) identifies the specific recipient or resource server that the token is intended for. The string property will be split into an array of audiences.Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}
 */
 
 const defaults = {
@@ -162,10 +162,10 @@ process.env.COOKIE_TTL ||= defaults.COOKIE_TTL;
 process.env.DIR ||= defaults.DIR;
 process.env.COOKIE_PROPS ??= `Secure; HttpOnly; SameSite=Strict; Path=${process.env.DIR || '/'}`;
 // Session JWT claims — defaults name this deployment "xyz"; a service
-// verifying against a fixed name needs SESSION_ISSUER/SESSION_AUDIENCE set to match.
-process.env.SESSION_TYPE ??= 'session';
-process.env.SESSION_ISSUER ??= 'xyz';
-process.env.SESSION_AUDIENCE ??= 'xyz';
+// verifying against a fixed name needs JWT_ISSUER/JWT_AUDIENCE set to match.
+process.env.JWT_TYPE ??= 'session';
+process.env.JWT_ISSUER ??= 'xyz';
+process.env.JWT_AUDIENCE ??= 'xyz';
 process.env.FAILED_ATTEMPTS ||= defaults.FAILED_ATTEMPTS;
 process.env.PORT ||= defaults.PORT;
 process.env.RATE_LIMIT_WINDOW ||= defaults.RATE_LIMIT_WINDOW;
