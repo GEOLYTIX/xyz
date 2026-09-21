@@ -13,8 +13,8 @@ Exports the [user] cookie method for the /api/user/cookie route.
 
 import jwt from 'jsonwebtoken';
 import acl from './acl.js';
-import login from './login.js';
 import jwtClaims from './jwtClaims.js';
+import login from './login.js';
 
 /**
 @function cookie
