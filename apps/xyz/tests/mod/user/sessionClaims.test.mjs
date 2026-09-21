@@ -7,9 +7,9 @@ describe('sessionClaims:', async () => {
 
   it('defaults to typ session, iss xyz, and a single-value aud', () => {
     globalThis.xyzEnv = {
-      SESSION_TYP: 'session',
-      SESSION_ISS: 'xyz',
-      SESSION_AUD: 'xyz',
+      SESSION_TYPE: 'session',
+      SESSION_ISSUER: 'xyz',
+      SESSION_AUDIENCE: 'xyz',
     };
 
     expect(sessionClaims()).toEqual({
@@ -19,11 +19,11 @@ describe('sessionClaims:', async () => {
     });
   });
 
-  it('splits a comma-separated SESSION_AUD into multiple audiences', () => {
+  it('splits a comma-separated SESSION_AUDIENCE into multiple audiences', () => {
     globalThis.xyzEnv = {
-      SESSION_TYP: 'session',
-      SESSION_ISS: 'xyz',
-      SESSION_AUD: 'xyz,other-service',
+      SESSION_TYPE: 'session',
+      SESSION_ISSUER: 'xyz',
+      SESSION_AUDIENCE: 'xyz,other-service',
     };
 
     expect(sessionClaims()).toEqual({

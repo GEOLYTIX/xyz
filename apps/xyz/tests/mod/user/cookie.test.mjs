@@ -13,9 +13,9 @@ globalThis.xyzEnv = {
   TRANSPORT_EMAIL: 'xyz@gmail.com',
   TRANSPORT_PASSWORD: 'IAMANEMAILPASSWORD',
   SECRET_ALGORITHM: 'HS256',
-  SESSION_TYP: 'session',
-  SESSION_ISS: 'xyz',
-  SESSION_AUD: 'xyz',
+  SESSION_TYPE: 'session',
+  SESSION_ISSUER: 'xyz',
+  SESSION_AUDIENCE: 'xyz',
 };
 
 describe('cookie:', async () => {

@@ -292,7 +292,7 @@ node apps/xyz/server.js                            # without
   `TRUSTED_RETURN_HOSTS=https://admin.geolytix.dev`. Unset (path topology,
   where `return_to` is always relative) means no absolute URL is ever
   accepted.
-- **`SESSION_ISS`/`SESSION_AUD`.** The `iss`/`aud` claims the session JWT
+- **`SESSION_ISSUER`/`SESSION_AUDIENCE`.** The `iss`/`aud` claims the session JWT
   carries (defaults `xyz`/`xyz`, naming this deployment itself).
 
 ## Troubleshooting
