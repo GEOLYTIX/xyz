@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "v5.0.4",
+  "version": "v5.0.5",
   "type": "module",
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
     "test:xyz:coverage": "turbo run test:coverage --filter=@geolytix/xyz-app",
     "build": "turbo run build",
     "generate-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose && jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
+    "login-public-key": "varlock run -- node ./utils/printLoginPublicKey.js",
     "mapp-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose",
     "xyz-docs": "jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
     "push-env": "node ./utils/sync-vercel-env.js",
