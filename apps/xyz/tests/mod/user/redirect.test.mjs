@@ -12,6 +12,9 @@ globalThis.xyzEnv = {
   DIR: '/app',
   SECRET: 'test-secret',
   SECRET_ALGORITHM: 'HS256',
+  JWT_TYPE: 'session',
+  JWT_ISSUER: 'xyz',
+  JWT_AUDIENCE: 'xyz',
   TITLE: 'TEST_APP',
 };
 
@@ -57,6 +60,9 @@ describe('redirect:', async () => {
       email: 'test@example.com',
       language: 'en',
       roles: ['admin'],
+      typ: 'session',
+      iss: 'xyz',
+      aud: ['xyz'],
     });
     expect(cookies[1]).toEqual('TEST_APP_redirect=null; Max-Age=0; undefined');
     expect(res.statusCode).toBe(302);
@@ -109,5 +115,42 @@ describe('redirect:', async () => {
     await redirect(req, res, { email: 'test@example.com' });
 
     expect(res.getHeader('location')).toBe('/app/');
+  });
+
+  it('falls back to DIR for an absolute return_to whose origin is not trusted', async () => {
+    const { req, res } = createMocks({
+      cookies: {
+        TEST_APP_redirect: encodeURIComponent('https://evil.example/steal'),
+      },
+      headers: { host: 'localhost:3000' },
+    });
+
+    await redirect(req, res, { email: 'test@example.com' });
+
+    expect(res.getHeader('location')).toBe('/app/');
+  });
+
+  it('accepts an absolute return_to whose origin is in TRUSTED_RETURN_HOSTS', async () => {
+    globalThis.xyzEnv = {
+      ...globalThis.xyzEnv,
+      TRUSTED_RETURN_HOSTS: 'https://admin.geolytix.dev,https://other.test',
+    };
+
+    const { req, res } = createMocks({
+      cookies: {
+        TEST_APP_redirect: encodeURIComponent(
+          'https://admin.geolytix.dev/tenant/list',
+        ),
+      },
+      headers: { host: 'localhost:3000' },
+    });
+
+    await redirect(req, res, { email: 'test@example.com' });
+
+    expect(res.getHeader('location')).toBe(
+      'https://admin.geolytix.dev/tenant/list',
+    );
+
+    delete globalThis.xyzEnv.TRUSTED_RETURN_HOSTS;
   });
 });

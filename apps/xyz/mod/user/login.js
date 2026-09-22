@@ -51,6 +51,16 @@ export default function login(req, res) {
     return;
   }
 
+  // This route has no middleWare (router.js), so req.query — not
+  // req.params — is where an external return_to lands.
+  const returnTo = req.params.return_to || req.query?.return_to;
+  if (returnTo) {
+    res.setHeader(
+      'Set-Cookie',
+      `${xyzEnv.TITLE}_redirect=${encodeURIComponent(returnTo)}; Max-Age=300; ${xyzEnv.COOKIE_PROPS}`,
+    );
+  }
+
   req.params.template = 'login_view';
   view(req, res);
 }
