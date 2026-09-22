@@ -347,13 +347,10 @@ The theme() style element method will returns a content array with elements for 
 @param {layer} layer A decorated mapp layer with a style object.
 
 @property {layer-style} layer.style The layer style configuration.
-@property {Object} [style.labels] Available label configurations.
-@property {Object} [style.hovers] Availabel hover configurations.
+@property {HTMLElement} [style.legend] The legend node created by the theme method into which the drawLegend method renders.
 @property {Object} style.theme The current theme.
-@property {string} [theme.title] Theme title for legend.
 @property {string} [theme.meta] Meta text to display.
-@property {string} [theme.setLabel] Key for label from style.labels{} to assign.
-@property {string} [theme.setHover] Key for hover from style.hovers{} to assign.
+@property {HTMLElement} [theme.meta_node] The node created for the theme.meta text.
 
 @returns {HTMLElement} <div> with contents array for the theme meta and legend.
 */
@@ -386,13 +383,19 @@ function theme(layer) {
 @description
 The themes() style element method will return a dropdown to change the current theme assigned to a layer.
 
+The dropdown callback assigns the theme selected from the style.themes{} configuration and recreates the style panel for the current theme.
+
+A location layer entry has no style drawer. The elements from the panel method replace the children of the entry style.panel. The children of a new style drawer replace those of the style drawer in the layer.view otherwise. The targets are exclusive since a node can only be moved into one parent.
+
 @param {layer} layer A decorated mapp layer with a style object.
 
 @property {layer-style} layer.style The layer style configuration.
+@property {HTMLElement} [style.panel] The style panel element of a location layer entry.
 @property {Object} style.theme The current theme.
 @property {Object} style.themes Object where each property represents a theme.
-@property {Object} [style.label] The current label.
-@property {Object} [style.hover] The current hover.
+@property {string} [theme.title] Theme title for the dropdown placeholder and entries.
+@property {HTMLElement} [layer.view] The layer view containing the style drawer element.
+@property {Function} layer.reload The layer reload method called after the theme has been set.
 
 @returns {HTMLElement} A dropdown element to switch the current theme.
 */
@@ -412,17 +415,20 @@ function themes(layer) {
     layer.style.theme = layer.style.themes[entry.option];
 
     // The style panel is recreated for the current theme. The panel method applies the theme and the theme method draws the legend.
-    const stylePanel = mapp.ui.layers.panels.style(layer);
-
     if (layer.style.panel) {
-      // Replace children in location layer entry style.panel
-      layer.style.panel.replaceChildren(...stylePanel.children);
-    }
+      // A location layer entry has no style drawer. The style elements replace the children of the entry style.panel.
+      const stylePanel = panel(layer);
 
-    // Replace the children of the style panel.
-    layer.view
-      ?.querySelector('[data-id=style-drawer]')
-      .replaceChildren(...stylePanel.children);
+      stylePanel && layer.style.panel.replaceChildren(...stylePanel.children);
+    } else {
+      // The children of the new style drawer replace those of the style drawer in the layer.view.
+      const styleDrawer = mapp.ui.layers.panels.style(layer);
+
+      styleDrawer &&
+        layer.view
+          ?.querySelector('[data-id=style-drawer]')
+          ?.replaceChildren(...styleDrawer.children);
+    }
 
     layer.reload();
   }
