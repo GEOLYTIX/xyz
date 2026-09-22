@@ -281,6 +281,20 @@ node apps/xyz/server.js                            # without
 - `PORT` (default `3000`) applies; put a TLS-terminating proxy in front.
 - Set `XYZ_CWD` if the working directory is not the repository root, so `resources`, `*.pem`, and `file:` workspace references resolve.
 
+## Using XYZ for login
+- **`COOKIE_PROPS`.** Subdomains (`admin.geolytix.dev` / `mapp.geolytix.dev`)
+  need `Domain=.geolytix.dev` added, eg
+  `COOKIE_PROPS="Secure; HttpOnly; SameSite=Strict; Domain=.geolytix.dev; Path=/"`.
+  One domain with paths (`geolytix.dev/admin` / `geolytix.dev/demo`) needs no
+  change — the existing default already omits `Domain`.
+- **`TRUSTED_RETURN_HOSTS`.** Only needed for the subdomain topology, where
+  `return_to` is an absolute URL: eg
+  `TRUSTED_RETURN_HOSTS=https://admin.geolytix.dev`. Unset (path topology,
+  where `return_to` is always relative) means no absolute URL is ever
+  accepted.
+- **`JWT_ISSUER`/`JWT_AUDIENCE`.** The `iss`/`aud` claims the session JWT
+  carries (defaults `xyz`/`xyz`, naming this deployment itself).
+
 ## Troubleshooting
 
 **Variables missing, defaults used instead**

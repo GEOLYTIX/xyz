@@ -18,6 +18,9 @@ globalThis.xyzEnv = {
   SECRET: 'super_secret_key',
   COOKIE_TTL: 3600,
   SECRET_ALGORITHM: 'HS256',
+  JWT_TYPE: 'session',
+  JWT_ISSUER: 'xyz',
+  JWT_AUDIENCE: 'xyz',
 };
 
 describe('login', async () => {
@@ -56,6 +59,24 @@ describe('login', async () => {
     // Verify view rendering behavior
     expect(req.params.template).toEqual('login_view');
     expect(view).toHaveBeenCalledWith(req, res);
+  });
+
+  it('stashes an external return_to as the redirect cookie', () => {
+    // The login route runs with no middleWare (router.js), so this arrives
+    // via req.query in real requests, not req.params.
+    const { req, res } = createMocks({
+      params: {},
+      query: { return_to: 'https://admin.geolytix.dev/tenant/list' },
+    });
+
+    delete req.body;
+    login(req, res);
+
+    expect(res.getHeader('Set-Cookie')).toEqual(
+      `TEST_APP_redirect=${encodeURIComponent(
+        'https://admin.geolytix.dev/tenant/list',
+      )}; Max-Age=300; undefined`,
+    );
   });
 
   it('loginBody: returns 401 if ACL throws an error and no redirect cookie exists', async () => {
