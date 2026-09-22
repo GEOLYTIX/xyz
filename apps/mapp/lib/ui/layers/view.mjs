@@ -3,14 +3,10 @@
 
 The module exports a method to create layer.view elements.
 
-@requires /ui/layers/drawLegend
-
 @requires /ui/layers/viewHeader
 
 @module /ui/layers/view
 */
-
-import drawLegend from './drawLegend.mjs';
 
 /**
 @function view
@@ -43,7 +39,6 @@ export default function view(layer) {
     popout: layer.viewConfig.popoutBtn,
   });
 
-  layer.showCallbacks.push(drawLegend);
   layer.changeEndCallbacks.push(changeEnd);
 }
 

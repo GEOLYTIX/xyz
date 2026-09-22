@@ -69,11 +69,7 @@ export default function graduatedTheme(layer) {
       <div class=${theme.legend.classList}>
         ${catElements}`;
 
-  layer.style.legend ??= theme.legend.node;
-
-  if (layer.style.legend) {
-    layer.style.legend.replaceChildren(...theme.legend.node.children);
-  }
+  layer.style.legend.replaceChildren(...theme.legend.node.children);
 
   return theme.legend.node;
 }

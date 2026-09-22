@@ -50,6 +50,8 @@ The layer.style.view is returned for the style drawer shown in the default mapp 
 
 @property {layer-style} layer.style The layer style configuration.
 @property {Array} [style.elements] Array of method keys to order elements in the layer.style.view.
+@property {HTMLElement} [style.legend] The legend node created by the theme element method.
+@property {Array} layer.showCallbacks Array of methods executed on layer.show().
 
 @returns {HTMLElement} The layer.style.view element.
 */
@@ -73,6 +75,11 @@ function panel(layer) {
   }
 
   if (!content.length) return;
+
+  // The theme element method creates the style.legend node into which the drawLegend method renders. The panel method may be called repeatedly, eg. when the theme is changed, but the stable drawLegend reference must only be registered once.
+  if (!layer.showCallbacks.includes(mapp.ui.layers.drawLegend)) {
+    layer.showCallbacks.push(mapp.ui.layers.drawLegend);
+  }
 
   layer.style.view = mapp.utils.html.node`<div>${content}`;
 
@@ -367,7 +374,7 @@ function theme(layer) {
 
   content.push(layer.style.legend);
 
-  // The drawLegend method is registered once as a layer.showCallbacks method in the layerView method. The legend must be drawn here for the new legend node, since the theme method may be called after the layer has been shown and neither show() nor reload() will run the showCallbacks.
+  // The drawLegend method is registered once as a layer.showCallbacks method in the panel method. The legend must be drawn here for the new legend node, since the theme method may be called after the layer has been shown and neither show() nor reload() will run the showCallbacks.
   mapp.ui.layers.drawLegend(layer);
 
   return mapp.utils.html.node`<div data-id="layerTheme">${content}`;

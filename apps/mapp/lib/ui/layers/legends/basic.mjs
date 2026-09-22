@@ -40,11 +40,7 @@ export default function basicTheme(layer) {
     <div class="legend">
     <div class="contents-wrapper grid">${theme.legend.grid}`;
 
-  layer.style.legend ??= theme.legend.node;
-
-  if (layer.style.legend) {
-    layer.style.legend.replaceChildren(...theme.legend.node.children);
-  }
+  layer.style.legend.replaceChildren(...theme.legend.node.children);
 
   return theme.legend.node;
 }

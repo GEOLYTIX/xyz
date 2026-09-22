@@ -48,11 +48,7 @@ export default function categorizedTheme(layer) {
       <div class=${theme.legend.classList}>
         ${theme.legend.grid}`;
 
-  layer.style.legend ??= theme.legend.node;
-
-  if (layer.style.legend) {
-    layer.style.legend.replaceChildren(...theme.legend.node.children);
-  }
+  layer.style.legend.replaceChildren(...theme.legend.node.children);
 
   return theme.legend.node;
 }

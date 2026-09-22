@@ -51,11 +51,7 @@ export default function distributedTheme(layer) {
       <div class=${theme.legend.classList}>
         ${theme.legend.grid}`;
 
-  layer.style.legend ??= theme.legend.node;
-
-  if (layer.style.legend) {
-    layer.style.legend.replaceChildren(...theme.legend.node.children);
-  }
+  layer.style.legend.replaceChildren(...theme.legend.node.children);
 
   // The method to rebuild the legend must be called after each render is complete.
   layer.L.once('postrender', () => {
