@@ -13,6 +13,9 @@ globalThis.xyzEnv = {
   TRANSPORT_EMAIL: 'xyz@gmail.com',
   TRANSPORT_PASSWORD: 'IAMANEMAILPASSWORD',
   SECRET_ALGORITHM: 'HS256',
+  JWT_TYPE: 'session',
+  JWT_ISSUER: 'xyz',
+  JWT_AUDIENCE: 'xyz',
 };
 
 describe('cookie:', async () => {
@@ -99,9 +102,15 @@ describe('cookie:', async () => {
 
     const header = res.getHeader('set-cookie');
     const resUser = res._getData();
+    const token = header.match(/^TEST=([^;]+)/)[1];
 
     expect(header !== null).toBeTruthy();
     expect(resUser).toEqual(expUser);
+    expect(jwt.decode(token)).toMatchObject({
+      typ: 'session',
+      iss: 'xyz',
+      aud: ['xyz'],
+    });
   });
 
   it('acl error', async () => {
