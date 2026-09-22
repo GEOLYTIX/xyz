@@ -65,8 +65,7 @@ function applyFilter(layer) {
     layer.reload();
 
     // Recreate legend with filter applied.
-    if (layer.style?.theme)
-      mapp.ui.layers.legends[layer.style.theme.type]?.(layer);
+    mapp.ui.layers.drawLegend(layer);
 
     layer.filter.list?.forEach((filter) => {
       filter.histogram?.update?.();

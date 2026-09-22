@@ -64,7 +64,7 @@ export async function process(layer) {
     layer.L.changed();
 
     // The legend method renders into the layer.style.legend
-    mapp.ui.layers.legends[layer.style.theme.type](layer);
+    mapp.ui.layers.drawLegend(layer);
   }
 }
 

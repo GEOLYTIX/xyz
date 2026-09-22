@@ -3,24 +3,28 @@
 
 The module exports a method to create layer.view elements.
 
+@requires /ui/layers/drawLegend
+
 @requires /ui/layers/viewHeader
 
 @module /ui/layers/view
 */
 
+import drawLegend from './drawLegend.mjs';
+
 /**
-@function layerView
+@function view
 
 @description
-The layerView method will create and assign a layer.view node to the layer object.
+The view method will create and assign a layer.view node to the layer object.
 
 Specifying `layer.drawer: false` create a drawer card for the layer view. The drawer cannot be collapsed.
 
 @param {layer} layer
-@property {Object} [layer.view] The layerView method will shortcircuit if the layer.view property is null.
-@property {Object} [layer.drawer] The layerView method will shortcircuit after executing the viewConfig method is the layer.drawer property is null.
+@property {Object} [layer.view] The view method will shortcircuit if the layer.view property is null.
+@property {Object} [layer.drawer] The view method will shortcircuit after executing the viewConfig method is the layer.drawer property is null.
 */
-export default function layerView(layer) {
+export default function view(layer) {
   // Do not create a layer view.
   if (layer.view === null) return;
 
@@ -39,6 +43,7 @@ export default function layerView(layer) {
     popout: layer.viewConfig.popoutBtn,
   });
 
+  layer.showCallbacks.push(drawLegend);
   layer.changeEndCallbacks.push(changeEnd);
 }
 
