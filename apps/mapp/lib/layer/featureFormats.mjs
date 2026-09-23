@@ -74,7 +74,7 @@ export function geojson(layer, features) {
 
   mapp.layer.featureFields.reset(layer);
 
-  return features.map((feature) => {
+  const olFeatures = features.map((feature) => {
     // Populate featureFields values array with feature property values.
     layer.params.fields?.forEach((field) => {
       layer.featureFields[field].values.push(feature.properties[field]);
@@ -89,6 +89,11 @@ export function geojson(layer, features) {
       ...feature.properties,
     });
   });
+
+  // Process featureFields for dynamic theming.
+  mapp.layer.featureFields.process(layer);
+
+  return olFeatures;
 }
 
 /**

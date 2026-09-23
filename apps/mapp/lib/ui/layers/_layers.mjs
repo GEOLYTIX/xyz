@@ -3,6 +3,7 @@
 
 The module requires and exports methods to build a MAPP layers listview and layer.view elements for the MAPP.UI.
 
+@requires /ui/layers/drawLegend
 @requires /ui/layers/filters
 @requires /ui/layers/legends
 @requires /ui/layers/listview
@@ -13,6 +14,7 @@ The module requires and exports methods to build a MAPP layers listview and laye
 @module /ui/layers
 */
 
+import drawLegend from './drawLegend.mjs';
 import filters from './filters.mjs';
 import legends from './legends/_legends.mjs';
 import listview from './listview.mjs';
@@ -21,6 +23,7 @@ import view from './view.mjs';
 import viewHeader from './viewHeader.mjs';
 
 export default {
+  drawLegend,
   filters,
   legends,
   listview,

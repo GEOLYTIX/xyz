@@ -50,11 +50,16 @@ The layer.style.view is returned for the style drawer shown in the default mapp 
 
 @property {layer-style} layer.style The layer style configuration.
 @property {Array} [style.elements] Array of method keys to order elements in the layer.style.view.
+@property {HTMLElement} [style.legend] The legend node created by the theme element method.
+@property {Array} layer.showCallbacks Array of methods executed on layer.show().
 
 @returns {HTMLElement} The layer.style.view element.
 */
 function panel(layer) {
   if (!layer.style) return;
+
+  // The theme must be applied before the label and hover elements are created.
+  applyTheme(layer);
 
   layer.style.elements ??= Object.keys(layer.style);
 
@@ -71,9 +76,46 @@ function panel(layer) {
 
   if (!content.length) return;
 
+  // The theme element method creates the style.legend node into which the drawLegend method renders. The panel method may be called repeatedly, eg. when the theme is changed, but the stable drawLegend reference must only be registered once.
+  if (!layer.showCallbacks.includes(mapp.ui.layers.drawLegend)) {
+    layer.showCallbacks.push(mapp.ui.layers.drawLegend);
+  }
+
   layer.style.view = mapp.utils.html.node`<div>${content}`;
 
   return layer.style.view;
+}
+
+/**
+@function applyTheme
+
+@description
+The applyTheme method assigns the label and hover configuration referenced by the setLabel and setHover keys of the current theme.
+
+The method is called from the panel method prior to the creation of the style elements. The label and hover elements are therefore created for the configuration assigned by the current theme.
+
+@param {layer} layer A decorated mapp layer with a style object.
+
+@property {layer-style} layer.style The layer style configuration.
+@property {Object} [style.theme] The current theme.
+@property {string} [theme.setLabel] Key for label from style.labels{} to assign.
+@property {string} [theme.setHover] Key for hover from style.hovers{} to assign.
+*/
+function applyTheme(layer) {
+  if (!layer.style.theme) return;
+
+  // Handle setLabel and labels in layer style.
+  if (Object.hasOwn(layer.style.labels ?? {}, layer.style.theme.setLabel)) {
+    layer.style.label = layer.style.labels[layer.style.theme.setLabel];
+  }
+
+  // Handle setHover and hovers in layer style.
+  if (Object.hasOwn(layer.style.hovers ?? {}, layer.style.theme.setHover)) {
+    layer.style.hover = layer.style.hovers[layer.style.theme.setHover];
+
+    // Assign default featureHover method if non is provided.
+    layer.style.hover.method ??= mapp.layer.featureHover;
+  }
 }
 
 /**
@@ -305,63 +347,32 @@ The theme() style element method will returns a content array with elements for 
 @param {layer} layer A decorated mapp layer with a style object.
 
 @property {layer-style} layer.style The layer style configuration.
-@property {Object} [style.labels] Available label configurations.
-@property {Object} [style.hovers] Availabel hover configurations.
+@property {HTMLElement} [style.legend] The legend node created by the theme method into which the drawLegend method renders.
 @property {Object} style.theme The current theme.
-@property {string} [theme.title] Theme title for legend.
 @property {string} [theme.meta] Meta text to display.
-@property {string} [theme.setLabel] Key for label from style.labels{} to assign.
-@property {string} [theme.setHover] Key for hover from style.hovers{} to assign.
+@property {HTMLElement} [theme.meta_node] The node created for the theme.meta text.
 
 @returns {HTMLElement} <div> with contents array for the theme meta and legend.
 */
 function theme(layer) {
   if (!layer.style.theme) return;
 
-  // Handle setLabel and labels in layer style.
-  if (
-    layer.style.labels &&
-    Object.hasOwn(layer.style.labels, layer.style.theme?.setLabel)
-  ) {
-    layer.style.label = layer.style.labels[layer.style.theme.setLabel];
-  }
-
-  // Handle setHover and hovers in layer style.
-  if (
-    layer.style.hovers &&
-    Object.hasOwn(layer.style.hovers, layer.style.theme?.setHover)
-  ) {
-    layer.style.hover = layer.style.hovers[layer.style.theme.setHover];
-  }
-
   const content = [];
 
-  if (layer.style.theme?.meta) {
+  if (layer.style.theme.meta) {
     layer.style.theme.meta_node = mapp.utils.html
       .node`<p>${layer.style.theme.meta}`;
 
     content.push(layer.style.theme.meta_node);
   }
 
-  if (Object.hasOwn(mapp.ui.layers.legends, layer.style.theme?.type)) {
-    layer.showCallbacks.push(() => {
-      mapp.ui.layers.legends[layer.style.theme.type](layer);
-    });
+  // The legend methods replace the children of the layer.style.legend node with the legend content.
+  layer.style.legend = mapp.utils.html.node`<div class="legend">`;
 
-    // The legend methods replace the children of the layer.style.legend node with the legend content.
-    layer.style.legend = mapp.utils.html.node`<div class="legend">`;
+  content.push(layer.style.legend);
 
-    layer.style.legend && content.push(layer.style.legend);
-
-    // A layer displayed by default has already run show() (and its
-    // showCallbacks) before this panel is built, since the layer list/style
-    // panel is only constructed after mapview.addLayer() resolves. show()
-    // will not run again for an already-displayed layer, so render the
-    // legend directly here instead of waiting on the queued showCallback.
-    if (layer.display) {
-      mapp.ui.layers.legends[layer.style.theme.type](layer);
-    }
-  }
+  // The drawLegend method is registered once as a layer.showCallbacks method in the panel method. The legend must be drawn here for the new legend node, since the theme method may be called after the layer has been shown and neither show() nor reload() will run the showCallbacks.
+  mapp.ui.layers.drawLegend(layer);
 
   return mapp.utils.html.node`<div data-id="layerTheme">${content}`;
 }
@@ -372,13 +383,19 @@ function theme(layer) {
 @description
 The themes() style element method will return a dropdown to change the current theme assigned to a layer.
 
+The dropdown callback assigns the theme selected from the style.themes{} configuration and recreates the style panel for the current theme.
+
+A location layer entry has no style drawer. The elements from the panel method replace the children of the entry style.panel. The children of a new style drawer replace those of the style drawer in the layer.view otherwise. The targets are exclusive since a node can only be moved into one parent.
+
 @param {layer} layer A decorated mapp layer with a style object.
 
 @property {layer-style} layer.style The layer style configuration.
+@property {HTMLElement} [style.panel] The style panel element of a location layer entry.
 @property {Object} style.theme The current theme.
 @property {Object} style.themes Object where each property represents a theme.
-@property {Object} [style.label] The current label.
-@property {Object} [style.hover] The current hover.
+@property {string} [theme.title] Theme title for the dropdown placeholder and entries.
+@property {HTMLElement} [layer.view] The layer view containing the style drawer element.
+@property {Function} layer.reload The layer reload method called after the theme has been set.
 
 @returns {HTMLElement} A dropdown element to switch the current theme.
 */
@@ -397,34 +414,20 @@ function themes(layer) {
     // Set theme from dropdown option.
     layer.style.theme = layer.style.themes[entry.option];
 
-    if (layer.style.theme.setLabel && layer.style.labels) {
-      layer.style.label = layer.style.labels[layer.style.theme.setLabel];
-    }
-
-    if (layer.style.theme.setHover && layer.style.hovers) {
-      layer.style.hover = layer.style.hovers[layer.style.theme.setHover];
-
-      // Assign default featureHover method if non is provided.
-      layer.style.hover.method ??= mapp.layer.featureHover;
-    }
-
-    const stylePanel = mapp.ui.layers.panels.style(layer);
-
+    // The style panel is recreated for the current theme. The panel method applies the theme and the theme method draws the legend.
     if (layer.style.panel) {
-      // Replace children in location layer entry style.panel
-      layer.style.panel.replaceChildren(...stylePanel.children);
-    }
+      // A location layer entry has no style drawer. The style elements replace the children of the entry style.panel.
+      const stylePanel = panel(layer);
 
-    // Replace the children of the style panel.
-    layer.view
-      ?.querySelector('[data-id=style-drawer]')
-      .replaceChildren(...stylePanel.children);
+      stylePanel && layer.style.panel.replaceChildren(...stylePanel.children);
+    } else {
+      // The children of the new style drawer replace those of the style drawer in the layer.view.
+      const styleDrawer = mapp.ui.layers.panels.style(layer);
 
-    // The legend for the new theme is only queued onto layer.showCallbacks
-    // by theme(), which only run from layer.show(). Since reload() does not
-    // trigger showCallbacks, render the legend directly here.
-    if (Object.hasOwn(mapp.ui.layers.legends, layer.style.theme?.type)) {
-      mapp.ui.layers.legends[layer.style.theme.type](layer);
+      styleDrawer &&
+        layer.view
+          ?.querySelector('[data-id=style-drawer]')
+          ?.replaceChildren(...styleDrawer.children);
     }
 
     layer.reload();
