@@ -13,16 +13,27 @@ The featureFields.process() method will be called from the featureFormats method
 */
 
 /**
+The processedThemes WeakMap holds the theme for which the distribution of the current layer data has been processed.
+
+The legend of a theme with a data distribution must only be drawn once the distribution has been processed from the layer data. A legend drawn prior would create the icons for every category in the theme configuration, which may be thousands of categories not present in the data.
+*/
+const processedThemes = new WeakMap();
+
+/**
 @function reset
 
 @description
 featureFields.reset(layer) method will reset the layer.featureFields{} object and create empty field.values[] arrays each field in the layer.params.fields[] array.
+
+The processed distribution of the previous layer data is invalidated.
 
 @param {layer} layer A decorated mapp layer object.
 @property {Object} layer.params
 @property {Array} params.fields Array of strings for feature property fields.
 */
 export function reset(layer) {
+  processedThemes.delete(layer);
+
   if (!layer.params.fields) return;
 
   // Create featureFields object if nullish.
@@ -58,14 +69,40 @@ export async function process(layer) {
 
   // Check if the distribution method is defined in the distribution object.
   if (Object.hasOwn(distribution, layer.style?.theme?.distribution)) {
+    const theme = layer.style.theme;
+
     // Call the corresponding distribution function.
-    await distribution[layer.style.theme.distribution](layer);
+    await distribution[theme.distribution](layer);
+
+    processedThemes.set(layer, theme);
 
     layer.L.changed();
 
     // The legend method renders into the layer.style.legend
     mapp.ui.layers.drawLegend(layer);
   }
+}
+
+/**
+@function distributionReady
+
+@description
+The distributionReady method checks whether the legend for the current layer theme can be drawn.
+
+A theme without a data distribution can always be drawn. A theme with a data distribution can only be drawn once its distribution has been processed from the current layer data. The legend of such a theme is drawn by the process method once the data has been received.
+
+@param {layer} layer A decorated mapp layer object.
+@property {Object} [style.theme] The current theme.
+@property {string} [theme.distribution] The key of a featureFields distribution method.
+
+@returns {Boolean} The legend for the current theme can be drawn.
+*/
+export function distributionReady(layer) {
+  const theme = layer.style?.theme;
+
+  if (!Object.hasOwn(distribution, theme?.distribution)) return true;
+
+  return processedThemes.get(layer) === theme;
 }
 
 export const distribution = {

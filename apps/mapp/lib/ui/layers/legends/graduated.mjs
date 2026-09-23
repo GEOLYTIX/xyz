@@ -9,7 +9,12 @@ The graduated theme legend module exports the graduatedTheme to the `ui.layers.l
 @module /ui/layers/legends/graduated
 */
 
-import { catToggle, themeLegend, themeLegendSwitch } from './utils.mjs';
+import {
+  catToggle,
+  renderLegend,
+  themeLegend,
+  themeLegendSwitch,
+} from './utils.mjs';
 
 /**
 @function graduatedTheme
@@ -17,11 +22,15 @@ import { catToggle, themeLegend, themeLegendSwitch } from './utils.mjs';
 @description
 The graduatedTheme method creates a `catElements[]` array with icons for each graduated theme category. The elements array is passed into a legend element assigned as `layer.style.legend` and returned from the method.
 
+The legend of a theme with a data distribution is not created until the distribution has been processed from the layer data. The category values and labels of a jenks distribution are assigned from the layer data.
+
 @param {layer} layer The decorated mapp layer.
 
 @returns {HTMLElement} The graduated theme legend element.
 */
 export default function graduatedTheme(layer) {
+  if (!mapp.layer.featureFields.distributionReady(layer)) return;
+
   const theme = layer.style.theme;
 
   theme.filterOnly = true;
@@ -69,7 +78,7 @@ export default function graduatedTheme(layer) {
       <div class=${theme.legend.classList}>
         ${catElements}`;
 
-  layer.style.legend.replaceChildren(...theme.legend.node.children);
+  renderLegend(layer, theme.legend.node);
 
   return theme.legend.node;
 }

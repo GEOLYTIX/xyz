@@ -5,8 +5,12 @@ The basic theme legend module exports the basicTheme to the `ui.layers.legend{}`
 
 @requires /ui/elements/legendIcon
 
+@requires /ui/layers/legends/utils
+
 @module /ui/layers/legends/basic
 */
+
+import { renderLegend } from './utils.mjs';
 
 /**
 @function basicTheme
@@ -40,7 +44,7 @@ export default function basicTheme(layer) {
     <div class="legend">
     <div class="contents-wrapper grid">${theme.legend.grid}`;
 
-  layer.style.legend.replaceChildren(...theme.legend.node.children);
+  renderLegend(layer, theme.legend.node);
 
   return theme.legend.node;
 }

@@ -276,6 +276,26 @@ export function themeLegend(theme) {
 }
 
 /**
+@function renderLegend
+@description
+The method renders the theme legend node into the layer.style.legend node.
+
+The layer.style.legend node is created by the layerStyle theme element and the drawLegend method will not call a legend method for a layer without a legend node. A legend method may however be called directly, eg. from a plugin or test. The theme legend node is assigned as layer.style.legend if the layer has no legend node to render into.
+
+@param {layer} layer The decorated mapp layer.
+@param {HTMLElement} node The theme legend node.
+@property {HTMLElement} [layer.style.legend] The node into which the legend content is rendered.
+**/
+export function renderLegend(layer, node) {
+  if (!layer.style.legend) {
+    layer.style.legend = node;
+    return;
+  }
+
+  layer.style.legend.replaceChildren(...node.children);
+}
+
+/**
 @function themeLegendSwitch
 
 @description
