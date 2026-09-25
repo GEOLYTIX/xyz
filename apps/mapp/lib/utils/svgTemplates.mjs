@@ -1,4 +1,12 @@
 /**
+## /utils/svgTemplates
+
+The svgTemplates utility provides methods for loading and parsing SVG templates.
+
+The utility method is called if the an svg_templates object is defined in either the locale or layer configuration.
+
+Templates may be defined as local files, remote URLs, or data:image SVG strings.
+
 @module /utils/svgTemplates
 */
 
