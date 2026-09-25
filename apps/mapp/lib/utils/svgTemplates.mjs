@@ -7,6 +7,8 @@ The utility method is called if the an svg_templates object is defined in either
 
 Templates may be defined as local files, remote URLs, or data:image SVG strings.
 
+It is recommended to use url encoding instead of base64 encoding for SVG data:image strings.
+
 @module /utils/svgTemplates
 */
 
