@@ -603,7 +603,7 @@ import{t as e}from"./chunk-DK3Fl9T5.js";async function t(e){if(!(!e.dynamic&&typ
       src=${n}
       onclick=${mapp.ui.utils.imagePreview}>
       ${r}`)}),e.edit){let n=mapp.utils.html.node`<div
-      class="drag_and_drop_zone mobile-display-none"
+      class="drag_and_drop_zone"
       ondrop=${t=>{t.preventDefault(),I(t,e)}}>
       <p><span class="notranslate material-symbols-outlined add">add_a_photo</span>${mapp.dictionary.drag_and_drop_image}</p>
       <input
@@ -615,7 +615,7 @@ import{t as e}from"./chunk-DK3Fl9T5.js";async function t(e){if(!(!e.dynamic&&typ
       data-href=${n}
       onclick=${t=>R(t,e,mapp.dictionary.remove_document_confirm)}>delete`,i=n.replace(/^.*\//,``).replace(/\.([\w-]{3})/,``);t.push(mapp.utils.html`<div class="link-with-img">
       <a target="_blank" href=${n}>${i}</a>${r}`)}),e.edit){let n=mapp.utils.html.node`<div
-      class="drag_and_drop_zone mobile-display-none"
+      class="drag_and_drop_zone"
       ondrop=${t=>{t.preventDefault(),I(t,e)}}>
       <p><span class="notranslate material-symbols-outlined add-doc">add_notes</span>${mapp.dictionary.drag_and_drop_doc}</p>
       <input type="file"
