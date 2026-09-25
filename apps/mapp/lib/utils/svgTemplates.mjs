@@ -25,15 +25,55 @@ export async function svgTemplates(templates) {
 
     // The template key is not yet loaded into the templates
     .filter((key) => !Object.hasOwn(mapp.utils.svgSymbols.templates, key))
-    .map((key) => {
+    .map((key) =>
       // Fetch entry value.
-      return fetch(templates[key])
-        .then((response) => response.text())
-        .then((svgString) => {
-          // Assign parsed svgString as entry key to templates object.
-          mapp.utils.svgSymbols.templates[key] = svgString;
-        });
-    });
+      fetchSvgTemplate(templates[key]).then((svgString) => {
+        // Only assign valid svg document strings.
+        if (!svgString) return;
+
+        // Assign svgString as entry key to templates object.
+        mapp.utils.svgSymbols.templates[key] = svgString;
+      }),
+    );
 
   await Promise.all(promises);
+}
+
+/**
+@function fetchSvgTemplate
+@async
+
+@description
+Fetches the src and returns the response text if the response is ok and the text can be parsed as an svg document. Failed fetch requests, error responses, and non svg documents [eg. an html 404 page] will be logged as warning and return undefined.
+
+@param {string} src The svg template src.
+
+@returns {Promise<string|undefined>}
+*/
+async function fetchSvgTemplate(src) {
+  try {
+    const response = await fetch(src);
+
+    if (!response.ok) {
+      console.warn(`SVG template fetch failed [${response.status}]: ${src}`);
+      return;
+    }
+
+    const svgString = await response.text();
+
+    const doc = new DOMParser().parseFromString(svgString, 'image/svg+xml');
+
+    // A parser error or a non svg root element is not a valid svg document.
+    if (
+      doc.querySelector('parsererror') ||
+      doc.documentElement.localName !== 'svg'
+    ) {
+      console.warn(`SVG template is not a valid svg document: ${src}`);
+      return;
+    }
+
+    return svgString;
+  } catch (err) {
+    console.warn(`SVG template fetch failed: ${src}`, err);
+  }
 }
