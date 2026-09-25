@@ -315,11 +315,14 @@ The method will hide the location count prior to the debounce.
 
 Within the debounce the location count will be executed. The min max will be generated for current integer or numeric filter.
 
+The queries are skipped if the filter are not restricted to the viewport and the serialised current filter has not changed since the last location count. The last location count will be displayed instead.
+
 @param {Object} layer
 @property {Object} layer.filter The layer filter configuration.
 @property {Object} filter.current The filter currently applied to the layer.
 @property {Boolean} filter.viewport The filter are restricted to the mapview viewport.
 @property {HTMLElement} filter.count The location count element in the filter panel.
+@property {String} [filter.countedFilter] The serialised current filter of the last location count.
 */
 function updatePanel(layer) {
   if (!layer.display) return;
@@ -328,6 +331,14 @@ function updatePanel(layer) {
 
   // Debounce updatePanel queries by a second.
   layer.filter.debounce = setTimeout(async () => {
+    const current = JSON.stringify(layer.filter.current);
+
+    if (countUnchanged(layer, current)) {
+      // Show the location count in case the layer was hidden in between.
+      layer.filter.feature_count.style.setProperty('display', 'block');
+      return;
+    }
+
     for (const filter of layer.filter.list) {
       // Filter in list must be a current filter.
       if (!Object.hasOwn(layer.filter.current, filter.field)) continue;
@@ -349,6 +360,11 @@ function updatePanel(layer) {
     }
 
     mapp.ui.utils.locationCount(layer).then((feature_count) => {
+      // A failed location count must not be cached.
+      if (feature_count === undefined) return;
+
+      layer.filter.countedFilter = current;
+
       const value = mapp.utils.formatNumericValue({
         value: feature_count,
       });
@@ -357,6 +373,25 @@ function updatePanel(layer) {
       layer.filter.feature_count.style.setProperty('display', 'block');
     });
   }, 1000);
+}
+
+/**
+@function countUnchanged
+
+@description
+The countUnchanged method checks whether the location count can be skipped. The location count for filter restricted to the viewport must always be queried. Otherwise the location count is unchanged if the serialised current filter matches the serialised filter of the last location count.
+
+@param {Object} layer
+@param {String} current The serialised current filter.
+@property {Object} layer.filter The layer filter configuration.
+@property {Boolean} filter.viewport The filter are restricted to the mapview viewport.
+@property {String} [filter.countedFilter] The serialised current filter of the last location count.
+@returns {Boolean} The location count is unchanged.
+*/
+function countUnchanged(layer, current) {
+  if (layer.filter.viewport) return false;
+
+  return current === layer.filter.countedFilter;
 }
 
 /**
