@@ -420,9 +420,41 @@ describe('Query: Testing Query API', () => {
     });
   });
 
+  describe('Statement timeout', () => {
+    it('should pass the template statement_timeout to the dbs connection', async () => {
+      mockDbQuery.mockResolvedValueOnce([{ result: 1 }]);
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'timeout_query',
+          statement_timeout: '0',
+        },
+      });
+
+      await query(req, res);
+
+      expect(mockDbQuery.mock.calls[0][2]).toBe(9000);
+    });
+
+    it('should ignore the statement_timeout request param', async () => {
+      mockDbQuery.mockResolvedValueOnce([{ greeting: 'hello' }]);
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'simple_select',
+          statement_timeout: '0',
+        },
+      });
+
+      await query(req, res);
+
+      expect(mockDbQuery.mock.calls[0][2]).toBeUndefined();
+    });
+  });
+
   describe('Nonblocking queries', () => {
-    it('should return immediately for nonblocking queries', async () => {
-      mockDbQuery.mockResolvedValueOnce([]);
+    it('should return 202 once the nonblocking query is connected', async () => {
+      mockDbQuery.mockResolvedValueOnce(true);
 
       const { req, res } = createMocks({
         params: {
@@ -434,7 +466,30 @@ describe('Query: Testing Query API', () => {
       await query(req, res);
 
       expect(res.statusCode).toBe(202);
-      expect(mockDbQuery).toHaveBeenCalled();
+      expect(mockDbQuery).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.anything(),
+        undefined,
+        { nonblocking: true },
+      );
+    });
+
+    it('should return 503 when the nonblocking query fails to connect', async () => {
+      mockDbQuery.mockResolvedValueOnce(
+        new Error('timeout exceeded when trying to connect'),
+      );
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'nonblocking_query',
+          msg: 'test message',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(503);
+      expect(res._getData()).toBe('Failed to connect to database.');
     });
   });
 

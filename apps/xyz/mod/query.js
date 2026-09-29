@@ -44,7 +44,6 @@ The rows returned from the dbs_connection are then passed to the sendRows() meth
 @property {boolean} [params.value_only] Return a single value from one row.
 @property {boolean} [params.reduce] Reduce query response to a values array.
 @property {boolean} [params.nonblocking] Execute a nonblocking query.
-@property {integer} [params.statement_timeout] Timeout for database connection.
 */
 export default async function query(req, res) {
   Object.assign(req.params, req._params);
@@ -118,7 +117,7 @@ export default async function query(req, res) {
 
   template.nonblocking ??= req.params.nonblocking;
 
-  template.statement_timeout ??= req.params.statement_timeout;
+  // The statement_timeout can only be defined in the template, never as a request param.
 
   logger(req.params, 'query_params');
 
@@ -131,21 +130,33 @@ export default async function query(req, res) {
 
   logger(query, 'query');
 
-  const queryPromise = dbs_connections[template.dbs](
-    query,
-    req.params.SQL,
-    template.statement_timeout,
-  );
-
-  // Nonblocking queries will not wait for results but return immediately.
+  // Nonblocking queries will not wait for results but return once connected.
   if (template.nonblocking) {
+    const connected = await dbs_connections[template.dbs](
+      query,
+      req.params.SQL,
+      template.statement_timeout,
+      { nonblocking: true },
+    );
+
+    if (connected instanceof Error) {
+      return res
+        .status(503)
+        .setHeader('Content-Type', 'text/plain')
+        .send('Failed to connect to database.');
+    }
+
     return res
       .status(202)
       .send(`Non blocking request sent at ${new Date().toISOString()}.`);
   }
 
   // Run the query
-  const rows = await queryPromise;
+  const rows = await dbs_connections[template.dbs](
+    query,
+    req.params.SQL,
+    template.statement_timeout,
+  );
 
   sendRows(res, template, rows);
 }
