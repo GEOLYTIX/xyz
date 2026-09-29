@@ -108,6 +108,8 @@ The executeQuery method attempts a query up to RETRY_LIMIT times.
 
 Queries which fail with an error code in the RETRY_CODES set are retried with an exponential backoff delay. The backoff delay starts after the client from the failed attempt has been released.
 
+The reason for a retry and the backoff delay are logged with the `dbs_retry` key, as well as the last error once the retries are exhausted.
+
 @param {Pool} pool The connection pool to use for the query.
 @param {string} query SQL query to execute
 @param {Array} [variables] Parameters for the SQL query
@@ -115,15 +117,7 @@ Queries which fail with an error code in the RETRY_CODES set are retried with an
 @returns {Promise<Array|Error>} Query rows or the last error.
 */
 async function executeQuery(pool, query, variables, timeout) {
-  let lastError;
-
   for (let attempt = 1; attempt <= RETRY_LIMIT; attempt++) {
-    if (attempt > 1) {
-      // Exponential backoff
-      const delay = INITIAL_RETRY_DELAY * 2 ** (attempt - 2);
-      await new Promise((resolve) => setTimeout(resolve, delay));
-    }
-
     const result = await attemptQuery(pool, query, variables, timeout);
 
     if (!(result instanceof Error)) return result;
@@ -133,11 +127,39 @@ async function executeQuery(pool, query, variables, timeout) {
     // Return error if not in retry whitelist
     if (!RETRY_CODES.has(result.code)) return result;
 
-    lastError = result;
-  }
+    if (attempt === RETRY_LIMIT) {
+      logger(
+        {
+          attempts: attempt,
+          code: result.code,
+          dbs: pool.options.dbs,
+          message: 'Retries exhausted.',
+          reason: result.message,
+        },
+        'dbs_retry',
+      );
 
-  // If we've exhausted all retries, return the last error
-  return lastError;
+      // If we've exhausted all retries, return the last error
+      return result;
+    }
+
+    // Exponential backoff
+    const delay = INITIAL_RETRY_DELAY * 2 ** (attempt - 1);
+
+    logger(
+      {
+        attempt,
+        code: result.code,
+        dbs: pool.options.dbs,
+        delay,
+        message: `Retry ${attempt + 1} of ${RETRY_LIMIT} in ${delay}ms.`,
+        reason: result.message,
+      },
+      'dbs_retry',
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, delay));
+  }
 }
 
 /**

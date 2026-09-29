@@ -215,6 +215,126 @@ describe('dbs Module', () => {
     });
   });
 
+  describe('retry logging', () => {
+    // The mocked logger keeps calls from previous tests and must be cleared.
+    async function importLogger() {
+      const logger = (await import('../../../mod/utils/logger.js')).default;
+      logger.mockClear();
+      return logger;
+    }
+
+    it('logs the reason and backoff delay for each retry', async () => {
+      vi.useFakeTimers();
+      const dbs = await importDbs({ RETRY_LIMIT: '3' });
+      const logger = await importLogger();
+      pools[0].connect
+        .mockResolvedValueOnce(
+          mockClient(pgError('53300', 'too many connections')),
+        )
+        .mockResolvedValueOnce(
+          mockClient(pgError('57P01', 'terminating connection')),
+        )
+        .mockResolvedValueOnce(mockClient([{ id: 1 }]));
+
+      const promise = dbs.TEST('SELECT 1');
+      await vi.runAllTimersAsync();
+      await promise;
+
+      expect(logger.mock.calls).toEqual([
+        [
+          {
+            attempt: 1,
+            code: '53300',
+            dbs: 'TEST',
+            delay: 1000,
+            message: 'Retry 2 of 3 in 1000ms.',
+            reason: 'too many connections',
+          },
+          'dbs_retry',
+        ],
+        [
+          {
+            attempt: 2,
+            code: '57P01',
+            dbs: 'TEST',
+            delay: 2000,
+            message: 'Retry 3 of 3 in 2000ms.',
+            reason: 'terminating connection',
+          },
+          'dbs_retry',
+        ],
+      ]);
+    });
+
+    it('logs the backoff before waiting for the retry', async () => {
+      vi.useFakeTimers();
+      const dbs = await importDbs({ RETRY_LIMIT: '2' });
+      const logger = await importLogger();
+      pools[0].connect
+        .mockResolvedValueOnce(mockClient(pgError('53300')))
+        .mockResolvedValueOnce(mockClient([{ id: 1 }]));
+
+      const promise = dbs.TEST('SELECT 1');
+
+      await vi.advanceTimersByTimeAsync(0);
+      expect(logger).toHaveBeenCalledTimes(1);
+      expect(pools[0].connect).toHaveBeenCalledTimes(1);
+
+      await vi.runAllTimersAsync();
+      await promise;
+      expect(pools[0].connect).toHaveBeenCalledTimes(2);
+    });
+
+    it('logs when the retries are exhausted', async () => {
+      vi.useFakeTimers();
+      const dbs = await importDbs({ RETRY_LIMIT: '2' });
+      const logger = await importLogger();
+      pools[0].connect
+        .mockResolvedValueOnce(mockClient(pgError('53300')))
+        .mockResolvedValueOnce(
+          mockClient(pgError('57P03', 'cannot connect now')),
+        );
+
+      const promise = dbs.TEST('SELECT 1');
+      await vi.runAllTimersAsync();
+      await promise;
+
+      expect(logger).toHaveBeenCalledTimes(2);
+      expect(logger).toHaveBeenLastCalledWith(
+        {
+          attempts: 2,
+          code: '57P03',
+          dbs: 'TEST',
+          message: 'Retries exhausted.',
+          reason: 'cannot connect now',
+        },
+        'dbs_retry',
+      );
+    });
+
+    it('does not log a retry for non retryable errors', async () => {
+      const dbs = await importDbs({ RETRY_LIMIT: '3' });
+      const logger = await importLogger();
+      pools[0].connect.mockResolvedValueOnce(mockClient(pgError('42P01')));
+
+      await dbs.TEST('SELECT 1');
+
+      expect(logger).not.toHaveBeenCalled();
+    });
+
+    it('does not log a retry for nonblocking queries', async () => {
+      const dbs = await importDbs({ RETRY_LIMIT: '3' });
+      const logger = await importLogger();
+      const client = mockClient(pgError('53300'));
+      pools[0].connect.mockResolvedValueOnce(client);
+
+      await dbs.TEST('SELECT 1', [], undefined, { nonblocking: true });
+      await vi.waitFor(() => expect(client.release).toHaveBeenCalled());
+
+      expect(logger).not.toHaveBeenCalled();
+    });
+  });
+
   describe('nonblocking queries', () => {
     it('resolves true once the query is sent without waiting for the result', async () => {
       const dbs = await importDbs();
