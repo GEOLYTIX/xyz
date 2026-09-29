@@ -42,9 +42,9 @@ Object.keys(xyzEnv)
     const pool = new Pool({
       connectionString: xyzEnv[key],
       connectionTimeoutMillis: 5000,
+      idleTimeoutMillis: 10000,
+      keepAlive: true,
       dbs: id, // label for logging
-      // idleTimeoutMillis: 30000,
-      // keepAlive: true,
       max: 20, // Maximum number of clients in the pool
     });
 
@@ -68,15 +68,15 @@ The clientQuery method executes a query on the connection pool it is bound to.
 
 Blocking queries are passed to the executeQuery method, which retries queries that fail with an error code in the RETRY_CODES set.
 
-Nonblocking queries are attempted once without retry. The returned promise resolves true once a client is connected, without waiting for the query to complete. The promise resolves with the error if the client fails to connect. Errors from the query after the client has connected are logged, since the query result is not awaited.
+Nonblocking queries are attempted once without retry. The returned promise resolves true once the query has been sent to the database, without waiting for the query to complete. The query is sent before the caller can respond, so the database will execute the query even if a serverless process is frozen after the response. The promise resolves with the error if the client fails to connect or the statement timeout cannot be set. Errors from the query after it has been sent are logged, since the query result is not awaited.
 
 @this {Pool} The connection pool to use for the query.
 @param {string} query SQL query to execute
 @param {Array} [variables] Parameters for the SQL query
 @param {number} [timeout] Statement timeout in milliseconds. Defaults to xyzEnv.STATEMENT_TIMEOUT.
 @param {Object} [options]
-@property {boolean} [options.nonblocking] Resolve once connected without waiting for the query result.
-@returns {Promise<Array|boolean|Error>} Query rows, true for a connected nonblocking query, or an error.
+@property {boolean} [options.nonblocking] Resolve once the query is sent without waiting for the query result.
+@returns {Promise<Array|boolean|Error>} Query rows, true for a sent nonblocking query, or an error.
 */
 async function clientQuery(query, variables, timeout, options = {}) {
   timeout ??= xyzEnv.STATEMENT_TIMEOUT;
@@ -89,7 +89,7 @@ async function clientQuery(query, variables, timeout, options = {}) {
   return new Promise((resolve) => {
     attemptQuery(this, query, variables, timeout, () => resolve(true)).then(
       (result) => {
-        // No-op if the promise was already resolved on connect.
+        // No-op if the promise was already resolved once the query was sent.
         resolve(result);
 
         // The result of a nonblocking query is not awaited and must be logged here.
@@ -153,23 +153,27 @@ The client is scoped to the attempt and is released exactly once, only if the cl
 @param {string} query SQL query to execute
 @param {Array} [variables] Parameters for the SQL query
 @param {number} [timeout] Statement timeout in milliseconds
-@param {Function} [onConnect] Called once the client is connected.
+@param {Function} [onSent] Called once the query has been sent to the database.
 @returns {Promise<Array|Error>} Query rows or error.
 */
-async function attemptQuery(pool, query, variables, timeout, onConnect) {
+async function attemptQuery(pool, query, variables, timeout, onSent) {
   let client;
 
   try {
     client = await pool.connect();
 
-    onConnect?.();
-
     // Set statement timeout if specified
-    if (timeout) {
+    if (timeout != null) {
       await client.query(`SET statement_timeout = ${Number.parseInt(timeout)}`);
     }
 
-    const { rows } = await client.query(query, variables);
+    // The idle client writes the query to the socket immediately.
+    const pending = client.query(query, variables);
+
+    // The database will execute the query even if the process is frozen after a nonblocking response.
+    onSent?.();
+
+    const { rows } = await pending;
 
     return rows;
   } catch (err) {

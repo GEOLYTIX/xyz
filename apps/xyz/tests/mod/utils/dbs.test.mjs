@@ -216,29 +216,84 @@ describe('dbs Module', () => {
   });
 
   describe('nonblocking queries', () => {
-    it('resolves true once connected without waiting for the query', async () => {
+    it('resolves true once the query is sent without waiting for the result', async () => {
       const dbs = await importDbs();
       let resolveQuery;
       const client = {
-        query: vi.fn(
-          () =>
-            new Promise((resolve) => {
-              resolveQuery = resolve;
-            }),
-        ),
+        query: vi.fn((sql) => {
+          if (sql.startsWith('SET statement_timeout')) return Promise.resolve();
+          return new Promise((resolve) => {
+            resolveQuery = resolve;
+          });
+        }),
         release: vi.fn(),
       };
       pools[0].connect.mockResolvedValueOnce(client);
 
-      const result = await dbs.TEST('SELECT 1', [], undefined, {
+      const result = await dbs.TEST('INSERT INTO log', [], 3000, {
         nonblocking: true,
       });
 
       expect(result).toBe(true);
+
+      // The statement timeout is set and the query is sent before resolving.
+      expect(client.query.mock.calls).toEqual([
+        ['SET statement_timeout = 3000'],
+        ['INSERT INTO log', []],
+      ]);
       expect(client.release).not.toHaveBeenCalled();
 
       resolveQuery({ rows: [] });
       await vi.waitFor(() => expect(client.release).toHaveBeenCalledTimes(1));
+    });
+
+    it('does not resolve before the statement timeout is set', async () => {
+      const dbs = await importDbs();
+      let resolveTimeout;
+      const client = {
+        query: vi.fn((sql) => {
+          if (sql.startsWith('SET statement_timeout')) {
+            return new Promise((resolve) => {
+              resolveTimeout = resolve;
+            });
+          }
+          return Promise.resolve({ rows: [] });
+        }),
+        release: vi.fn(),
+      };
+      pools[0].connect.mockResolvedValueOnce(client);
+
+      const onResolved = vi.fn();
+      const promise = dbs
+        .TEST('INSERT INTO log', [], 3000, { nonblocking: true })
+        .then(onResolved);
+
+      await vi.waitFor(() => expect(client.query).toHaveBeenCalledTimes(1));
+      expect(onResolved).not.toHaveBeenCalled();
+
+      resolveTimeout();
+      await promise;
+
+      expect(onResolved).toHaveBeenCalledWith(true);
+      expect(client.query).toHaveBeenCalledWith('INSERT INTO log', []);
+    });
+
+    it('resolves with the error if the statement timeout cannot be set', async () => {
+      const dbs = await importDbs();
+      const error = pgError('22023', 'invalid value for parameter');
+      const client = {
+        query: vi.fn(() => Promise.reject(error)),
+        release: vi.fn(),
+      };
+      pools[0].connect.mockResolvedValueOnce(client);
+
+      const result = await dbs.TEST('INSERT INTO log', [], 3000, {
+        nonblocking: true,
+      });
+
+      expect(result).toBe(error);
+      expect(client.query).toHaveBeenCalledTimes(1);
+      expect(client.release).toHaveBeenCalledTimes(1);
     });
 
     it('resolves with the error without retry if the connection fails', async () => {
@@ -256,7 +311,7 @@ describe('dbs Module', () => {
       expect(vi.getTimerCount()).toBe(0);
     });
 
-    it('logs query errors after the client is connected', async () => {
+    it('logs query errors after the query is sent', async () => {
       const dbs = await importDbs({ RETRY_LIMIT: '3' });
       const error = pgError('57P01');
       const client = mockClient(error);

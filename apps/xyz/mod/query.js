@@ -117,8 +117,6 @@ export default async function query(req, res) {
 
   template.nonblocking ??= req.params.nonblocking;
 
-  // The statement_timeout can only be defined in the template, never as a request param.
-
   logger(req.params, 'query_params');
 
   const query = getQueryFromTemplate(req, template);
@@ -130,7 +128,7 @@ export default async function query(req, res) {
 
   logger(query, 'query');
 
-  // Nonblocking queries will not wait for results but return once connected.
+  // Nonblocking queries will not wait for results but return once the query is sent.
   if (template.nonblocking) {
     const connected = await dbs_connections[template.dbs](
       query,
