@@ -87,7 +87,7 @@ WORKSPACE=file:./public/workspace.json
 - `PUBLIC`: enable optional authentication using an ACL connection
 - `DBS_*`: database connection strings used by query/provider modules
 - `CUSTOM_TEMPLATES`: merge additional templates into the workspace cache
-- `SECRET_KEY`: path to a key file if you want the app to load the signing secret from disk instead of `.env`
+- `SECRET_KEY`: a PEM private key for RS256 token signing, given either inline (a value starting with `-----BEGIN`, eg from a secret manager) or as the path of a key file in the root directory
 - `TRANSPORT_EMAIL`, `TRANSPORT_PASSWORD`, `TRANSPORT_PORT`, `TRANSPORT_TLS`: email transport configuration
 - `SAML_*`: SAML identity provider and certificate settings for the optional SAML flow
 - `TRUSTED_RETURN_HOSTS`: comma-separated origins allowed as an absolute `return_to` on `/api/user/login`

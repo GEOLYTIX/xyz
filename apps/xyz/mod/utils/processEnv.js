@@ -80,7 +80,7 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [PUBLIC] General requests to XYZ API do require authentication. The PUBLIC value represents an ACL connection for optional authentication.
 @property {String} [SECRET] A secret string is required to sign and [validate JWT]{@link module:/user/auth}.
 @property {String} [SECRET_ALGORITHM] The algorithm used to sign and validate token. Defaults to HS256.
-@property {String} [SECRET_KEY] A key in the root directory to be read as a string secret for token signatures and validation.
+@property {String} [SECRET_KEY] A PEM private key for token signatures and validation, given inline or as the path of a key file in the root directory.
 @property {String} [USER_SESSION] The [auth module]{@link module:/user/auth} will store and check a session key if the USER_SESSION xyzEnv is not undefined.
 @property {String} [AUTH_EXPIRY] The [user/fromACL module]{@link module:/user/fromACL} can expiry user authorization if the AUTH_EXPIRY xyzEnv is configured.
 @property {String} [FAILED_ATTEMPTS='3'] The [user/fromACL module]{@link module:/user/fromACL} will expire user validation if failed login attempts exceed the FAILED_ATTEMPTS value.
@@ -137,7 +137,13 @@ const workspaceRoot = fileURLToPath(new URL('../../../../', import.meta.url));
 const rootDir = process.env.XYZ_CWD || workspaceRoot;
 
 if (process.env.SECRET_KEY) {
-  const SECRET = String(readFileSync(resolve(rootDir, process.env.SECRET_KEY)));
+  // A secret manager holds the PEM itself; a local setup points at a key file.
+  // Leading whitespace from a pasted secret must not send the PEM down the file path branch.
+  const SECRET_KEY = process.env.SECRET_KEY.trimStart();
+
+  const SECRET = SECRET_KEY.startsWith('-----BEGIN')
+    ? SECRET_KEY
+    : String(readFileSync(resolve(rootDir, SECRET_KEY)));
 
   process.env.SECRET = SECRET;
   process.env.SECRET_ALGORITHM ||= 'RS256';
