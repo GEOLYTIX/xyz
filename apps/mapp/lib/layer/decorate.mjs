@@ -11,6 +11,8 @@ Common interface methods such as layer.show, and hide are assigned to the layer 
 
 A blank layer.filter object will be set if the filter has not been defined in the JSON layer.
 
+The layer.filter.viewport flag will be set if the layer.params or layer.queryparams are restricted to the viewport.
+
 Any plugins matching layer keys will be executed with the layer being passed as argument to the plugin method.
 
 The layer object is returned from the decorator.
@@ -82,6 +84,11 @@ export default async function decorate(layer) {
     current: {},
     ...layer.filter,
   };
+
+  // The filter must be restricted to the viewport if the layer features or the layer queryparams are restricted to the viewport.
+  if (layer.params?.viewport || layer.queryparams?.viewport) {
+    layer.filter.viewport = true;
+  }
 
   if (Array.isArray(layer.featureSet)) {
     layer.featureSet = new Set(layer.featureSet);
