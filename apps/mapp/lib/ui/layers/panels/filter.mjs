@@ -389,7 +389,7 @@ The countUnchanged method checks whether the location count can be skipped. The 
 @returns {Boolean} The location count is unchanged.
 */
 function countUnchanged(layer, current) {
-  if (layer.filter.viewport) return false;
+  if (layer.filter.viewport || layer.queryparams?.viewport) return false;
 
   return current === layer.filter.countedFilter;
 }
