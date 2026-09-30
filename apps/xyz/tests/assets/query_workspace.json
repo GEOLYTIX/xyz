@@ -35,6 +35,10 @@
       "template": "SELECT 1",
       "dbs": "BOGUS_DB"
     },
+    "timeout_query": {
+      "template": "SELECT 1",
+      "statement_timeout": 9000
+    },
     "nonblocking_query": {
       "template": "INSERT INTO log (msg) VALUES (%{msg})",
       "nonblocking": true
