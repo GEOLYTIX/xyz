@@ -85,7 +85,7 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [AUTH_EXPIRY] The [user/fromACL module]{@link module:/user/fromACL} can expiry user authorization if the AUTH_EXPIRY xyzEnv is configured.
 @property {String} [FAILED_ATTEMPTS='3'] The [user/fromACL module]{@link module:/user/fromACL} will expire user validation if failed login attempts exceed the FAILED_ATTEMPTS value.
 @property {String} [PASSWORD_REGEXP='(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$'] The [user/register module]{@link module:/user/register} will apply PASSWORD_REGEXP value to check the complexity of provided user passwords.
-@property {String} [STATEMENT_TIMEOUT] The [utils/dbs module]{@link module:/utils/dbs} will apply the STATEMENT_TIMEOUT to the query.client.
+@property {String} [STATEMENT_TIMEOUT='10000'] The [utils/dbs module]{@link module:/utils/dbs} will apply the STATEMENT_TIMEOUT in milliseconds to queries whose template does not define a statement_timeout.
 @property {String} [RETRY_LIMIT='3'] The [utils/dbs module]{@link module:/utils/dbs} will apply the RETRY_LIMIT to the query.client.
 @property {String} [WORKSPACE_AGE] The [workspace/cache module]{@link module:/mod/workspace/cache} flashes the workspace cache after the WORKSPACE_AGE is reached.
 @property {String} [CUSTOM_TEMPLATES] The [workspace/cache module]{@link module:/mod/workspace/cache} caches templates defined as a src in the CUSTOM_TEMPLATES xyzEnv.
@@ -124,6 +124,7 @@ const defaults = {
   RATE_LIMIT_WINDOW: 60 * 1000,
   RETRY_LIMIT: 3,
   SECRET_ALGORITHM: 'HS256',
+  STATEMENT_TIMEOUT: 10000,
   TITLE: 'GEOLYTIX | XYZ',
   TRANSPORT_PORT: 587,
   TRANSPORT_TLS: false,
@@ -178,6 +179,7 @@ process.env.RATE_LIMIT_WINDOW ||= defaults.RATE_LIMIT_WINDOW;
 process.env.RATE_LIMIT ||= defaults.RATE_LIMIT;
 process.env.RETRY_LIMIT ||= defaults.RETRY_LIMIT;
 process.env.SECRET_ALGORITHM ||= defaults.SECRET_ALGORITHM;
+process.env.STATEMENT_TIMEOUT ||= defaults.STATEMENT_TIMEOUT;
 process.env.TITLE ||= defaults.TITLE;
 process.env.TRANSPORT_PORT ||= defaults.TRANSPORT_PORT;
 process.env.TRANSPORT_TLS ||= defaults.TRANSPORT_TLS;
@@ -192,6 +194,7 @@ const xyzEnv = {
   RATE_LIMIT: process.env.RATE_LIMIT,
   RATE_LIMIT_WINDOW: process.env.RATE_LIMIT_WINDOW,
   RETRY_LIMIT: process.env.RETRY_LIMIT,
+  STATEMENT_TIMEOUT: process.env.STATEMENT_TIMEOUT,
   TITLE: process.env.TITLE,
   TRANSPORT_PORT: Number.parseInt(process.env.TRANSPORT_PORT),
   TRANSPORT_TLS: process.env.TRANSPORT_TLS,
