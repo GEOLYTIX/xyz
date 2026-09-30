@@ -137,9 +137,12 @@ const rootDir = process.env.XYZ_CWD || workspaceRoot;
 
 if (process.env.SECRET_KEY) {
   // A secret manager holds the PEM itself; a local setup points at a key file.
-  const SECRET = process.env.SECRET_KEY.startsWith('-----BEGIN')
-    ? process.env.SECRET_KEY
-    : String(readFileSync(resolve(rootDir, process.env.SECRET_KEY)));
+  // Leading whitespace from a pasted secret must not send the PEM down the file path branch.
+  const SECRET_KEY = process.env.SECRET_KEY.trimStart();
+
+  const SECRET = SECRET_KEY.startsWith('-----BEGIN')
+    ? SECRET_KEY
+    : String(readFileSync(resolve(rootDir, SECRET_KEY)));
 
   process.env.SECRET = SECRET;
   process.env.SECRET_ALGORITHM ||= 'RS256';
