@@ -65,6 +65,7 @@ export default function dropdown(params) {
     data-id=${params.data_id}
     onfocus=${selectReset}
     onblur=${selectReset}
+    onkeydown=${(e) => selectKeyDown(e, params)}
     onchange=${(e) => selectOnChange(e, params)}>
     ${params.options}`;
 
@@ -87,6 +88,28 @@ Resets the selectedIndex of the select element to the placeholder option on focu
 */
 function selectReset(e) {
   e.target.selectedIndex = 0;
+}
+
+/**
+@function selectKeyDown
+
+@description
+The keydown event handler for the select element.
+
+The native select type-ahead selects the first option beginning with a typed character and fires a change event. This would toggle an entry in a multi select dropdown. The default is prevented for printable characters in a multi select dropdown. The space key is allowed to open the select.
+
+@param {KeyboardEvent} e The keydown event from the select element.
+@param {Object} params The dropdown element object.
+@property {boolean} [params.multi] Allow multiple choice if true.
+*/
+function selectKeyDown(e, params) {
+  if (!params.multi) return;
+
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+  if (e.key.length === 1 && e.key !== ' ') {
+    e.preventDefault();
+  }
 }
 
 /**
