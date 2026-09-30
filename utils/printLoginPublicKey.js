@@ -1,23 +1,17 @@
-// Derives a public key for LOGIN_PUBLIC_KEY from the SECRET_KEY private key
-// file, the one thing today's RS256 setup doesn't already produce.
+// Derives a public key for LOGIN_PUBLIC_KEY from the SECRET_KEY private key,
+// given inline or as a key file. processEnv resolves it exactly as the app does.
 import { createPublicKey } from 'node:crypto';
-import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+import '../apps/xyz/mod/utils/processEnv.js';
 
 if (!process.env.SECRET_KEY) {
   console.error(
-    'SECRET_KEY is not set — RS256 signing needs a private key file to derive a public key from.',
+    'SECRET_KEY is not set — RS256 signing needs a private key to derive a public key from.',
   );
   process.exit(1);
 }
 
-const privateKey = readFileSync(resolve(root, process.env.SECRET_KEY));
-
 console.log(
-  createPublicKey(privateKey)
+  createPublicKey(xyzEnv.SECRET)
     .export({ type: 'spki', format: 'pem' })
     .toString(),
 );

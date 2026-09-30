@@ -213,13 +213,15 @@ Runtime file reads, all resolved from `XYZ_CWD` or the workspace root:
 
 | Variable | File read |
 |---|---|
-| `SECRET_KEY` | the path you set |
+| `SECRET_KEY` | the path you set, unless the value is the PEM itself |
 | `SIGN_<KEY>` | `<KEY>.pem` |
 | `KEY_CLOUDFRONT` | matching `*.pem` |
 | `FILE_RESOURCES` (default `resources`) | resource files |
 | `WORKSPACE=file:...` | the workspace JSON |
 
 The root `vercel.json` covers `public/**` and `resources/**`. Using `SECRET_KEY`, `SIGN_*`, or `KEY_CLOUDFRONT` means adding those `*.pem` files to `includeFiles` — they are gitignored, so they upload from your working copy rather than from Git.
+
+`SECRET_KEY` does not have to be a file. A value starting with `-----BEGIN` is used as the private key itself, so a key held in a secret manager (eg `SECRET_KEY=gsm("...")` through Varlock) needs no `*.pem` in `includeFiles`. Any other value is still read as a path.
 
 ## Rollback and promotion
 
