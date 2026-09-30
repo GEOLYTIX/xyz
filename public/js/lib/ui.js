@@ -604,7 +604,7 @@ import{t as e}from"./chunk-DK3Fl9T5.js";async function t(e){if(!(!e.dynamic&&typ
       onclick=${mapp.ui.utils.imagePreview}>
       ${r}`)}),e.edit){let n=mapp.utils.html.node`<div
       class="drag_and_drop_zone"
-      ondrop=${t=>{t.preventDefault(),I(t,e)}}>
+      ondrop=${t=>{t.preventDefault(),B(t,e)}}>
       <p><span class="notranslate material-symbols-outlined add">add_a_photo</span>${mapp.dictionary.drag_and_drop_image}</p>
       <input
         type="file"
@@ -616,7 +616,7 @@ import{t as e}from"./chunk-DK3Fl9T5.js";async function t(e){if(!(!e.dynamic&&typ
       onclick=${t=>H(t,e,mapp.dictionary.remove_document_confirm)}>delete`,i=n.replace(/^.*\//,``).replace(/\.([\w-]{3})/,``);t.push(mapp.utils.html`<div class="link-with-img">
       <a target="_blank" href=${n}>${i}</a>${r}`)}),e.edit){let n=mapp.utils.html.node`<div
       class="drag_and_drop_zone"
-      ondrop=${t=>{t.preventDefault(),I(t,e)}}>
+      ondrop=${t=>{t.preventDefault(),B(t,e)}}>
       <p><span class="notranslate material-symbols-outlined add-doc">add_notes</span>${mapp.dictionary.drag_and_drop_doc}</p>
       <input type="file"
         accept=".txt,.pdf,.doc,.docx,.xls,.xlsx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document;"
