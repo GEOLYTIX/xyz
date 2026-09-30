@@ -16,7 +16,7 @@ import {
 } from './utils.mjs';
 
 /**
-The pendingRedraw WeakSet holds the layers for which a postrender listener to redraw the distributed legend is registered. Only a single listener must be registered for a layer, no matter how often the legend is drawn.
+The pendingRedraw WeakSet holds the distributed themes for which a postrender listener to redraw the legend is registered. Only a single listener must be registered for a theme, no matter how often the legend is drawn.
 */
 const pendingRedraw = new WeakSet();
 
@@ -84,7 +84,7 @@ export default function distributedTheme(layer) {
 @function redrawOnRender
 
 @description
-The redrawOnRender method registers a single postrender listener for the layer. The legend is redrawn once the render is complete if values have been assigned to the theme categories since the legend was last drawn.
+The redrawOnRender method registers a single postrender listener for the theme. The legend is redrawn once the render is complete if values have been assigned to the theme categories since the legend was last drawn.
 
 The listener is registered again after each render for as long as the distributed theme is the current layer theme.
 
@@ -92,12 +92,12 @@ The listener is registered again after each render for as long as the distribute
 @param {Object} theme The distributed theme for which the legend was drawn.
 */
 function redrawOnRender(layer, theme) {
-  if (pendingRedraw.has(layer)) return;
+  if (pendingRedraw.has(theme)) return;
 
-  pendingRedraw.add(layer);
+  pendingRedraw.add(theme);
 
   layer.L.once('postrender', () => {
-    pendingRedraw.delete(layer);
+    pendingRedraw.delete(theme);
 
     // The theme may have been changed. A theme without a key would pass a comparison of theme keys.
     if (theme !== layer.style.theme) return;
