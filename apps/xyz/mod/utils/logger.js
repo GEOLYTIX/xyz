@@ -10,6 +10,7 @@ Possible log values are:
 - mailer: Logs the sent mail template.
 - reqhost: Logs the host for the request.
 - workspace: Logs responses for requests made to /workspace.
+- dbs_retry: Logs the reason and backoff delay when a query is retried by the [dbs module]{@link module:/utils/dbs}, and when the retries are exhausted.
 
 By default the logs are only written to the stdout console.
 
@@ -168,6 +169,8 @@ function postgresql() {
     //This is to pull the short Error message from the stack
     const errorMessage = log.err?.toString().split('\n')[0];
 
+    // Nonblocking log inserts are not retried.
+    // A retried insert would log dbs_retry, which would insert another log into the failing dbs.
     dbs[params.dbs](
       `INSERT INTO ${table}
       (process, datetime, key, log, message)
@@ -180,6 +183,7 @@ function postgresql() {
         errorMessage,
       ],
       3000,
+      { nonblocking: true },
     );
   };
 }
