@@ -18,6 +18,16 @@ export default defineConfig({
 
 import { startDevDb } from './index.js';
 
+/**
+@function setup
+@async
+
+@description
+The setup method starts the database and provides the connection string to the Vitest project.
+
+@param {TestProject} project The Vitest test project.
+@returns {Promise<Function>} The teardown method which stops the database.
+*/
 export default async function setup(project) {
   const devdb = await startDevDb({ port: 0 });
 

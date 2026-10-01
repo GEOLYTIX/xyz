@@ -15,7 +15,7 @@ The package is excluded from Vercel deployments in the .vercelignore and must ne
 */
 
 import { existsSync } from 'node:fs';
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PGlite } from '@electric-sql/pglite';
@@ -33,7 +33,7 @@ export const SEED_DIR = join(packageDir, 'seed');
 @description
 The startDevDb method creates a PGlite database with the PostGIS extension and starts a socket server for the database.
 
-The database is kept in memory if no dataDir is provided. A new database is seeded by creating the postgis extension and executing the `*.sql` files in the seed directory in alphabetical order. A dataDir which has been seeded before is not seeded again.
+The database is kept in memory if no dataDir is provided. A new database is seeded by creating the postgis extension and executing the `*.sql` files in the seed directory in alphabetical order. A dataDir with a `.devdb_seeded` marker from a completed seed is not seeded again.
 
 PGlite is a single connection database. The socket server queues the queries from concurrent client connections.
 
@@ -50,11 +50,15 @@ export async function startDevDb({
   seed = SEED_DIR,
   maxConnections = 20,
 } = {}) {
-  const seeded = dataDir && existsSync(join(dataDir, 'PG_VERSION'));
+  // PGlite writes PG_VERSION before seeding. The marker is written once seeding has completed, so a failed or interrupted seed is not skipped on the next start.
+  const seededMarker = dataDir && join(dataDir, '.devdb_seeded');
 
   const db = await PGlite.create({ dataDir, extensions: { postgis } });
 
-  if (!seeded) await seedDatabase(db, seed);
+  if (!seededMarker || !existsSync(seededMarker)) {
+    await seedDatabase(db, seed);
+    if (seededMarker) await writeFile(seededMarker, '');
+  }
 
   const server = new PGLiteSocketServer({
     db,

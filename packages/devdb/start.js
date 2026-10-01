@@ -32,8 +32,11 @@ DBS_DEV=${devdb.connectionString}
 
 Press Ctrl+C to stop.`);
 
-process.on('SIGINT', async () => {
+async function shutdown() {
   // The database must be closed to flush the data directory.
   await devdb.stop();
   process.exit(0);
-});
+}
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
