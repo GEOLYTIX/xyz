@@ -10,15 +10,16 @@ The styleParser module exports the styleParser method as default which is intend
 @global
 @typedef {Object} layer-style
 @property {Boolean} [cache] The feature style should be retrieved from the feature 'Styles' property.
-@property {object} theme The current theme to be rendered.
 @property {feature-style} [default] The default style for features.
 @property {feature-style} [highlight] The style for highlighted features.
-@property {Object} [theme] The theme style configuration.
+@property {Object} [theme] The current theme to be rendered.
 @property {Object} [themes] Multiple theme style configurations.
 @property {Object} [hover] The hover style configuration.
 @property {Object} [hovers] Multiple hover style configurations.
 @property {Object} [label] The label style configuration.
 @property {Object} [labels] Multiple label style configurations.
+@property {HTMLElement} [legend] The legend node created by the theme element method into which the drawLegend method renders.
+@property {HTMLElement} [panel] The style panel element created for a location layer entry.
 @property {numeric} [zoomInScale] Icon scale is multiplied with mapview zoom level.
 @property {numeric} [zoomOutScale] Icon scale is divided by mapview zoom level.
 */
