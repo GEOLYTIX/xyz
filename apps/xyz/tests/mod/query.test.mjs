@@ -13,6 +13,9 @@ const mockLayerDb = vi.fn().mockResolvedValue([{ status: 'ok' }]);
 const mockWorkspaceDb = vi.fn().mockResolvedValue([{ status: 'ok' }]);
 const mockReqDb = vi.fn().mockResolvedValue([{ status: 'ok' }]);
 const mockTemplateDb = vi.fn().mockResolvedValue([{ status: 'ok' }]);
+const mockRlsDb = Object.assign(vi.fn().mockResolvedValue([{ status: 'ok' }]), {
+  rls: 'app_user',
+});
 
 // Mock dbs_connections so no real database is required.
 // Uses a Proxy to support both wildcard fallback (mockDbQuery) and specific DBs.
@@ -22,6 +25,7 @@ vi.mock('../../mod/utils/dbs.js', () => {
     workspace_db: mockWorkspaceDb,
     req_db: mockReqDb,
     template_db: mockTemplateDb,
+    rls_db: mockRlsDb,
   };
 
   return {
@@ -80,6 +84,7 @@ const { default: checkWorkspaceCache } = await import(
 const { default: getTemplate } = await import(
   '../../mod/workspace/getTemplate.js'
 );
+const { setTenantResolver } = await import('../../mod/utils/tenant.js');
 
 // Suppress console.error from getTemplate for missing template tests.
 mockConsole('error');
@@ -100,6 +105,8 @@ describe('Query: Testing Query API', () => {
     mockWorkspaceDb.mockClear();
     mockReqDb.mockClear();
     mockTemplateDb.mockClear();
+    mockRlsDb.mockClear();
+    setTenantResolver();
   });
 
   describe('queries registration', () => {
@@ -206,6 +213,85 @@ describe('Query: Testing Query API', () => {
 
       expect(mockLayerDb).toHaveBeenCalled();
       expect(mockWorkspaceDb).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('row level security connection', () => {
+    function rlsRequest() {
+      checkWorkspaceCache.mockResolvedValueOnce({ dbs: undefined });
+      getTemplate.mockResolvedValueOnce({
+        template: 'SELECT * FROM mock_table',
+        dbs: 'rls_db',
+      });
+
+      return createMocks({
+        params: {
+          template: 'mock_template',
+          user: { roles: ['admin'], admin: true },
+        },
+      });
+    }
+
+    it('passes the resolved tenant id to the connection', async () => {
+      const resolver = vi.fn().mockResolvedValue(7);
+      setTenantResolver(resolver);
+
+      const { req, res } = rlsRequest();
+
+      await query(req, res);
+
+      expect(resolver).toHaveBeenCalledWith(req);
+      expect(mockRlsDb).toHaveBeenCalledWith(
+        'SELECT * FROM mock_table',
+        [],
+        undefined,
+        7,
+      );
+      expect(res.statusCode).toBe(200);
+    });
+
+    it('returns 403 without querying when no tenant resolver is registered', async () => {
+      const { req, res } = rlsRequest();
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(403);
+      expect(res._getData()).toBe('mock_template query requires a tenant.');
+      expect(mockRlsDb).not.toHaveBeenCalled();
+    });
+
+    it('returns 403 without querying when the tenant does not resolve', async () => {
+      setTenantResolver(async () => undefined);
+
+      const { req, res } = rlsRequest();
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(403);
+      expect(mockRlsDb).not.toHaveBeenCalled();
+    });
+
+    it('does not resolve a tenant for a connection without rls', async () => {
+      const resolver = vi.fn().mockResolvedValue(7);
+      setTenantResolver(resolver);
+
+      checkWorkspaceCache.mockResolvedValueOnce({ dbs: undefined });
+      getTemplate.mockResolvedValueOnce({
+        template: 'SELECT * FROM mock_table',
+        dbs: 'template_db',
+      });
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'mock_template',
+          user: { roles: ['admin'], admin: true },
+        },
+      });
+
+      await query(req, res);
+
+      expect(resolver).not.toHaveBeenCalled();
+      expect(mockTemplateDb.mock.calls[0][3]).toBeUndefined();
     });
   });
 

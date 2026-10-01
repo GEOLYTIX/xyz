@@ -4,6 +4,7 @@ The query module exports the [SQL] query method to pass queries to dbs connectio
 @requires /utils/dbs
 @requires /utils/logger
 @requires /utils/sqlFilter
+@requires /utils/tenant
 @requires /workspace/cache
 @requires /workspace/getLayer
 @requires /workspace/getTemplate
@@ -14,6 +15,7 @@ The query module exports the [SQL] query method to pass queries to dbs connectio
 import dbs_connections from './utils/dbs.js';
 import logger from './utils/logger.js';
 import sqlFilter from './utils/sqlFilter.js';
+import { resolveTenantId } from './utils/tenant.js';
 import workspaceCache from './workspace/cache.js';
 import composeObj from './workspace/composeObj.js';
 import getLayer from './workspace/getLayer.js';
@@ -31,6 +33,8 @@ The layerQuery() method must be awaited to check whether params are referenced i
 The query method assigns and checks the dbs connection for the query template.
 
 A query string must returned from the getQueryFromTemplate() method.
+
+A row level security dbs_connection requires the tenant id from the resolveTenantId method. The method shortcircuits with a 403 response if no tenant id resolves.
 
 The query and SQL params to be substituted in the database process are send to the dbs_connection.
 
@@ -131,10 +135,24 @@ export default async function query(req, res) {
 
   logger(query, 'query');
 
+  // A row level security connection must only be queried for a resolved tenant.
+  const tenant_id = dbs_connections[template.dbs].rls
+    ? await resolveTenantId(req)
+    : undefined;
+
+  if (dbs_connections[template.dbs].rls && tenant_id === undefined) {
+    res
+      .status(403)
+      .setHeader('Content-Type', 'text/plain')
+      .send(`${req.params.template} query requires a tenant.`);
+    return;
+  }
+
   const queryPromise = dbs_connections[template.dbs](
     query,
     req.params.SQL,
     template.statement_timeout,
+    tenant_id,
   );
 
   // Nonblocking queries will not wait for results but return immediately.
