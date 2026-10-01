@@ -72,8 +72,18 @@ Object.keys(xyzEnv)
 // Export dbs constant
 export default dbs;
 
-// Splits only a trailing `|rls=<role>` off a DBS value, so any other value is used as
-// before. The role is an Error unless a plain identifier, as SET ROLE interpolates it.
+/**
+@function splitRlsRole
+
+@description
+The method splits only a trailing `|rls=<role>` off a DBS value, so a pipe elsewhere, eg. in a password, stays in the connectionString.
+The role must be a plain Postgres identifier since it is interpolated into the SET ROLE statement; any other role is returned as an error.
+
+@param {string} value The DBS_* connection value from the xyzEnv.
+@returns {Object} The connectionString and the rls role.
+@property {string} connectionString The connection value without the rls suffix.
+@property {string|Error} [rls] The rls role; undefined without the suffix, an Error for an invalid role.
+*/
 function splitRlsRole(value) {
   const match = /\|rls=([^|]*)$/.exec(value);
 
