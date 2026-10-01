@@ -59,7 +59,7 @@ import{t as e}from"./chunk-DK3Fl9T5.js";async function t(e){if(!(!e.dynamic&&typ
     title=${e.title}
     onclick=${t=>e.onClick(t,e)}
     class=${e.classList}>
-    ${e.icon}`,this.tabs.append(e.tab),this.panels.append(e.panel)}function ae(e,t){for(let e of Array.from(t.parent.tabs.children))e.classList.remove(`active`);t.tab.classList.add(`active`);for(let e of Array.from(t.parent.panels.children))e.classList.remove(`active`);t.panel.classList.add(`active`),t.focus&&(t.focus=t.focus instanceof HTMLElement?t.focus:document.querySelector(`[name=${t.focus}]`),t.focus.focus())}function oe(e){if(!e.new&&typeof e.show==`function`){e.show();return}if(e.show=d,!e.target)e.modal=!0;else if(e.target instanceof HTMLElement)e.show=d;else return;document.querySelector(`dialog.modal`)?.close(),e.minimizeBtn&&=mapp.utils.html`<button
+    ${e.icon}`,this.tabs.append(e.tab),this.panels.append(e.panel)}function ae(e,t){for(let e of Array.from(t.parent.tabs.children))e.classList.remove(`active`);t.tab.classList.add(`active`);for(let e of Array.from(t.parent.panels.children))e.classList.remove(`active`);t.panel.classList.add(`active`),t.focus&&(t.focus=t.focus instanceof HTMLElement?t.focus:document.querySelector(`[name=${t.focus}]`),t.focus.focus())}function oe(e){if(!e.new&&typeof e.show==`function`){e.show();return}if(e.show=le,!e.target)e.modal=!0;else if(e.target instanceof HTMLElement)e.show=le;else return;document.querySelector(`dialog.modal`)?.close(),e.minimizeBtn&&=mapp.utils.html`<button
     data-id="minimize"
     class="minimize-btn notranslate material-symbols-outlined"
     onclick=${e=>{e.target.closest(`dialog`).classList.toggle(`minimized`)}}>`;function t(t){typeof e.onClose==`function`&&e.onClose(t),e.node.remove()}e.close=t,e.closeBtn&&=mapp.utils.html`<button
@@ -93,7 +93,7 @@ import{t as e}from"./chunk-DK3Fl9T5.js";async function t(e){if(!(!e.dynamic&&typ
     </div>
     <div class="content">
       ${e.content}
-    </div>`,ue(e),e.drawer;function n(e){e.target.parentElement.classList.contains(`empty`)||e.target.parentElement.classList.toggle(`expanded`)}}function ue(e){if(e.popout){if(e.popout={},e.originalTarget=e.drawer.querySelector(`.content`),e.popoutBtn=e.drawer.querySelector(`.header`).querySelector(`[data-id=popout-btn]`),!e.popoutBtn){e.popoutBtn=mapp.utils.html.node`<button
+    </div>`,de(e),e.drawer;function n(e){e.target.parentElement.classList.contains(`empty`)||e.target.parentElement.classList.toggle(`expanded`)}}function de(e){if(e.popout){if(e.popout={},e.originalTarget=e.drawer.querySelector(`.content`),e.popoutBtn=e.drawer.querySelector(`.header`).querySelector(`[data-id=popout-btn]`),!e.popoutBtn){e.popoutBtn=mapp.utils.html.node`<button
       data-id="popout-btn"
       class="notranslate material-symbols-outlined">
       open_in_new`;let t=e.drawer.querySelector(`.header`).querySelector(`.caret`);e.drawer.querySelector(`.header`).insertBefore(e.popoutBtn,t)}e.popoutBtn.onclick=()=>{e.drawer.style.display=`none`,e.view=e.drawer.parentElement,de(e),e.view&&(e.viewChildren=Array.from(e.view.children||[]).filter(e=>e.checkVisibility())),e.viewChildren&&!e.viewChildren.length&&(e.view.previousElementSibling.dispatchEvent(new Event(`click`)),e.view.parentElement.classList.add(`empty`),e.view.previousElementSibling.querySelector(`.caret`).style.setProperty(`display`,`none`))}}}function de(e){if(e.popout?.dialog)return e.popout.node.querySelector(`.content`).appendChild(mapp.utils.html.node`${Array.from(e.drawer.querySelector(`.content`).children)}`),e.popout.node.querySelector(`header`).replaceChildren(mapp.utils.html.node`${Array.from(e.drawer.querySelector(`.header`).children)}${e.popout.minimizeBtn}${e.popout.closeBtn}`),e.popout.show();e.popout={data_id:`${e.data_id}-popout`,target:document.getElementById(`Map`),height:`auto`,left:`5%`,top:`0.5em`,class:`box-shadow popout`,css_style:`width: 300px; height 300px`,containedCentre:!0,contained:!0,headerDrag:!0,closeBtn:!0,minimizeBtn:!0,onClose:()=>{e.viewChildren&&!e.viewChildren.length&&(e.view.parentElement.classList.remove(`empty`),e.view.previousElementSibling.dispatchEvent(new Event(`click`)),e.view.previousElementSibling.querySelector(`.caret`).style.removeProperty(`display`)),e.drawer.style.removeProperty(`display`),e.drawer.querySelector(`.header`).replaceChildren(mapp.utils.html.node`${Array.from(e.popout.node.querySelector(`header`).children).filter(e=>![`close`,`minimize`].includes(e.dataset.id))}`),e.originalTarget.appendChild(mapp.utils.html.node`${Array.from(e.popout.node.querySelector(`.content`).children)}`)},...e.popout},mapp.ui.elements.dialog(e.popout),e.popout.node.querySelector(`header`).replaceChildren(mapp.utils.html.node`${Array.from(e.drawer.querySelector(`.header`).children)}${e.popout.minimizeBtn}${e.popout.closeBtn}`),e.popout.node.querySelector(`.content`).appendChild(mapp.utils.html.node`${Array.from(e.drawer.querySelector(`.content`).children)}`),e.popout.view=e.popout.node.querySelector(`.content`)}function fe(e){e.dialog===!0&&(e.dialog={}),e.dialog.btn_label??=`Open dialog`,e.dialog.btn_title??=e.dialog.btn_label;let t=e.dialog.icon_name||e.dialog.btnIcon||e.dialog.icon;return e.dialog.btn=mapp.utils.html.node`<button
@@ -198,7 +198,7 @@ import{t as e}from"./chunk-DK3Fl9T5.js";async function t(e){if(!(!e.dynamic&&typ
       fill="none"
       stroke=${e.strokeColor}
       stroke-width=${e.strokeWidth}
-      stroke-dasharray=${e.lineDash} />`,r=`data:image/svg+xml,${encodeURIComponent(v.serializeToString(n))}`,i=`
+      stroke-dasharray=${e.lineDash} />`,r=`data:image/svg+xml,${encodeURIComponent(_.serializeToString(n))}`,i=`
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -220,7 +220,7 @@ import{t as e}from"./chunk-DK3Fl9T5.js";async function t(e){if(!(!e.dynamic&&typ
       fill-opacity=${e.fillOpacity}
       stroke=${e.strokeColor}
       stroke-width=${e.strokeWidth}
-      stroke-dasharray=${e.lineDash} >`,n=`data:image/svg+xml,${encodeURIComponent(v.serializeToString(t))}`,r=`
+      stroke-dasharray=${e.lineDash} >`,n=`data:image/svg+xml,${encodeURIComponent(_.serializeToString(t))}`,r=`
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -275,7 +275,7 @@ import{t as e}from"./chunk-DK3Fl9T5.js";async function t(e){if(!(!e.dynamic&&typ
     style=${n}
     placeholder=${e.placeholder}
     value=${t}
-    onchange=${t=>x(t,e)}
+    onchange=${t=>b(t,e)}
     onfocus=${t=>t.target.value=mapp.utils.unformatStringValue({...e,stringValue:t.target.value})}
     oninput=${t=>x(t,e)}>`}function x(e,t){if(t.stringValue=e.target.value,t.numericChecks(e.target.value,t)?(t.newValue=t.onRangeInput?t.stringValue:mapp.utils.unformatStringValue(t),delete t.invalid,e.target.classList.remove(`invalid`),t.sliderElement&&(t.sliderElement.style.setProperty(`--${e.target.dataset.id}`,t.newValue),t.sliderElement.querySelector(`[name=${t.rangeInput}]`).value=t.newValue)):(t.invalid=!0,e.target.classList.add(`invalid`)),t.invalid)return t.callback();t.callback(t.newValue),e.type===`change`&&(e.target.value=mapp.utils.formatNumericValue(t)),t.dynamicWidth&&(e.target.style.width=e.target.value.length+1.3+`ch`),t.onRangeInput=!1}function Je(e,t){return t.onRangeInput&&e===null||Number.isNaN(Number(e))||t.min&&e<t.min?!1:t.max?e<=t.max:!0}function Ye(e={}){return e.container=mapp.utils.html.node`<div class="pill-container">`,e.pills=Array.isArray(e.pills)?new Set(e.pills):new Set,e.add=Xe,e.remove=Ze,e.pills.forEach(t=>e.add(t)),e.target instanceof HTMLElement&&e.target.append(e.container),e}function Xe(e){let t=this,n=mapp.utils.html.node`<div
     class="pill"
@@ -483,7 +483,7 @@ import{t as e}from"./chunk-DK3Fl9T5.js";async function t(e){if(!(!e.dynamic&&typ
     <input
       data-id="inputBefore"
       onchange=${i}
-      type=${t.type===`datetime`&&`datetime-local`||`date`}>`;function i(n){n.target.dataset.id===`inputAfter`&&(e.filter.current[t.field]=Object.assign(e.filter.current[t.field]||{},{gt:new Date(n.target.value).getTime()/1e3})),n.target.dataset.id===`inputBefore`&&(e.filter.current[t.field]=Object.assign(e.filter.current[t.field]||{},{lt:new Date(n.target.value).getTime()/1e3})),C.applyFilter(e)}return mapp.utils.html`
+      type=${t.type===`datetime`&&`datetime-local`||`date`}>`;function i(n){n.target.dataset.id===`inputAfter`&&(e.filter.current[t.field]=Object.assign(e.filter.current[t.field]||{},{gt:new Date(n.target.value).getTime()/1e3})),n.target.dataset.id===`inputBefore`&&(e.filter.current[t.field]=Object.assign(e.filter.current[t.field]||{},{lt:new Date(n.target.value).getTime()/1e3})),S.applyFilter(e)}return mapp.utils.html`
     <div style="
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
