@@ -68,7 +68,7 @@ patchGlobalResponse();
 @typedef {Object} xyzEnv
 The process.ENV object holds configuration provided to the node process from the launch environment. The environment configuration allows the provision of keys and secrets which must not be accessible from the client. All xyzEnv properties are limited to string type.
 @property {String} [DIR=''] The XYZ API path which concatenated with the domain for all requests.
-@property {String} [DBS_=''] DBS_* values are the connections used to establish connections to pg servers with the [dbs]{@link module:/utils/dbs} module.
+@property {String} [DBS_=''] DBS_* values are the connections used to establish connections to pg servers with the [dbs]{@link module:/utils/dbs} module. A `|rls=<role>` suffix makes the connection a row level security connection.
 @property {String} [PORT='3000'] The port on which the express app listens to for requests.
 @property {Integer} [COOKIE_TTL=36000] The Time To Live for all cookies issued by the XYZ API.
 @property {String} [TITLE='GEOLYTIX | XYZ'] The TITLE value is used to identify cookies and is provided to as a param to Application View templates.
