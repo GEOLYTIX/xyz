@@ -178,8 +178,23 @@ async function clientQuery(query, variables, timeout, tenant_id, pool = this) {
   return lastError;
 }
 
-// Fences one query to the tenant. Settings are transaction-local, and a failed
-// transaction is rolled back when clientQuery destroys the client on release.
+/**
+@function rlsQuery
+@async
+
+@description
+The method runs one query in a transaction as the rls role with the tenant_id set as `app.tenant_id`; every setting is transaction-local.
+A failed transaction is not committed and is rolled back when clientQuery destroys the client on release.
+
+@param {Object} client The client connected from the row level security Pool.
+@param {string} role The rls role of the connection.
+@param {number} tenant_id The tenant id the query is fenced to.
+@param {Object} params The query params.
+@property {string} params.query SQL query to execute.
+@property {number} [params.timeout] Statement timeout in milliseconds.
+@property {Array} [params.variables] Parameters for the SQL query.
+@returns {Promise<Array>} Query results.
+*/
 async function rlsQuery(
   client,
   role,
