@@ -57,7 +57,9 @@ export async function startDevDb({
 
   if (!seededMarker || !existsSync(seededMarker)) {
     await seedDatabase(db, seed);
-    if (seededMarker) await writeFile(seededMarker, '');
+
+    // A database created without seed files must still be seeded by a later start with seed files.
+    if (seededMarker && seed) await writeFile(seededMarker, '');
   }
 
   const server = new PGLiteSocketServer({
