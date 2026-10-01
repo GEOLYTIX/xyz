@@ -60,6 +60,26 @@ describe('dbs Module', () => {
     ]);
   });
 
+  it('keeps a connection string with a pipe but no trailing rls suffix whole', async () => {
+    const dbs = await importDbs({ DBS_PIPE: 'postgres://user:pa|ss@host/db' });
+
+    expect(dbs.PIPE.rls).toBeUndefined();
+    expect(pools[0].options.connectionString).toBe(
+      'postgres://user:pa|ss@host/db',
+    );
+  });
+
+  it('strips only the trailing rls suffix from a connection string with a pipe', async () => {
+    const dbs = await importDbs({
+      DBS_PIPE: 'postgres://user:pa|ss@host/db|rls=app_user',
+    });
+
+    expect(dbs.PIPE.rls).toBe('app_user');
+    expect(pools[0].options.connectionString).toBe(
+      'postgres://user:pa|ss@host/db',
+    );
+  });
+
   it('strips the rls suffix from the connection string', async () => {
     const dbs = await importDbs({
       DBS_FENCED: 'postgres://fenced|rls=app_user',

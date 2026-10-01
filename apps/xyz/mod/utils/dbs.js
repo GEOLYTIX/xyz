@@ -40,9 +40,7 @@ Object.keys(xyzEnv)
   .forEach((key) => {
     const id = key.split('_')[1];
 
-    const [connectionString, ...options] = xyzEnv[key].split('|');
-
-    const rls = getRlsRole(options);
+    const { connectionString, rls } = splitRlsRole(xyzEnv[key]);
 
     // A connection with an invalid rls role must not be created since its queries would run unfenced.
     if (rls instanceof Error) {
@@ -74,20 +72,21 @@ Object.keys(xyzEnv)
 // Export dbs constant
 export default dbs;
 
-// Returns the role of an `rls=<role>` option, or an Error for anything but a plain
-// identifier, since the role is interpolated into the SET ROLE statement.
-function getRlsRole(options) {
-  const option = options.find((option) => option.startsWith('rls='));
+// Splits only a trailing `|rls=<role>` off a DBS value, so any other value is used as
+// before. The role is an Error unless a plain identifier, as SET ROLE interpolates it.
+function splitRlsRole(value) {
+  const match = /\|rls=([^|]*)$/.exec(value);
 
-  if (!option) return;
+  if (!match) return { connectionString: value };
 
-  const role = option.slice(4);
+  const role = match[1];
 
-  if (!/^[a-z_][a-z0-9_]*$/.test(role)) {
-    return new Error(`Invalid rls role: ${role}`);
-  }
-
-  return role;
+  return {
+    connectionString: value.slice(0, match.index),
+    rls: /^[a-z_][a-z0-9_]*$/.test(role)
+      ? role
+      : new Error(`Invalid rls role: ${role}`),
+  };
 }
 
 /**
