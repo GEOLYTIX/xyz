@@ -18,6 +18,7 @@ import workspaceCache from './cache.js';
 @property {String} src The source is a location from which a template object is loaded when required.
 @property {String} template The string representation of a template, eg. html, sql.
 @property {Function} render A method which resolves in a template string.
+@property {Integer} [statement_timeout] Timeout in milliseconds for the SQL query statement after connection to the DBS. Overrides the xyzEnv.STATEMENT_TIMEOUT. The statement_timeout can not be set as a request param.
 @property {Boolean} module The template is a module.
 */
 

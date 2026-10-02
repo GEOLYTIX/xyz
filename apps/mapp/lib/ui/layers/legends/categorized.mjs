@@ -11,6 +11,7 @@ The categorized theme legend module exports the categorizedTheme to the `ui.laye
 import {
   catElement,
   clusterLegend,
+  renderLegend,
   themeLegend,
   themeLegendSwitch,
 } from './utils.mjs';
@@ -21,11 +22,15 @@ import {
 @description
 The categorizedTheme method creates and returns a categorized theme legend for the current layer.style.theme.
 
+The legend of a theme with a data distribution is not created until the distribution has been processed from the layer data. The legend would otherwise create the icons for every category in the theme configuration, which may be thousands of categories not present in the data. The check is made here rather than only in the drawLegend method, since a legend method may be called directly, eg. from a plugin.
+
 @param {layer} layer The decorated mapp layer.
 
 @returns {HTMLElement} The categorized theme legend element.
 */
 export default function categorizedTheme(layer) {
+  if (!mapp.layer.featureFields.distributionReady(layer)) return;
+
   const theme = layer.style.theme;
 
   themeLegend(theme);
@@ -48,11 +53,7 @@ export default function categorizedTheme(layer) {
       <div class=${theme.legend.classList}>
         ${theme.legend.grid}`;
 
-  layer.style.legend ??= theme.legend.node;
-
-  if (layer.style.legend) {
-    layer.style.legend.replaceChildren(...theme.legend.node.children);
-  }
+  renderLegend(layer, theme.legend.node);
 
   return theme.legend.node;
 }
