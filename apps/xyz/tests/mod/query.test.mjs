@@ -207,6 +207,30 @@ describe('Query: Testing Query API', () => {
       expect(mockLayerDb).toHaveBeenCalled();
       expect(mockWorkspaceDb).not.toHaveBeenCalled();
     });
+
+    it('passes the request to the dbs connection as options.req', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'mock_template',
+          user: { roles: ['admin'], admin: true },
+        },
+      });
+
+      checkWorkspaceCache.mockResolvedValueOnce({ dbs: undefined });
+      getTemplate.mockResolvedValueOnce({
+        template: 'SELECT * FROM mock_table',
+        dbs: 'template_db',
+      });
+
+      await query(req, res);
+
+      expect(mockTemplateDb).toHaveBeenCalledWith(
+        'SELECT * FROM mock_table',
+        [],
+        undefined,
+        { req },
+      );
+    });
   });
 
   describe('Template resolution', () => {
@@ -470,7 +494,7 @@ describe('Query: Testing Query API', () => {
         expect.any(String),
         expect.anything(),
         undefined,
-        { nonblocking: true },
+        { nonblocking: true, req },
       );
     });
 
