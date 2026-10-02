@@ -208,7 +208,28 @@ describe('Query: Testing Query API', () => {
       expect(mockWorkspaceDb).not.toHaveBeenCalled();
     });
 
-    it('passes the request to the dbs connection as options.req', async () => {
+    it('passes res.locals.dbs to the dbs connection as options.context', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'mock_template',
+          user: { roles: ['admin'], admin: true },
+        },
+      });
+
+      res.locals.dbs = { foo: 'bar' };
+
+      checkWorkspaceCache.mockResolvedValueOnce({ dbs: undefined });
+      getTemplate.mockResolvedValueOnce({
+        template: 'SELECT * FROM mock_table',
+        dbs: 'template_db',
+      });
+
+      await query(req, res);
+
+      expect(mockTemplateDb.mock.calls[0][3].context).toBe(res.locals.dbs);
+    });
+
+    it('passes no context without res.locals.dbs', async () => {
       const { req, res } = createMocks({
         params: {
           template: 'mock_template',
@@ -224,12 +245,8 @@ describe('Query: Testing Query API', () => {
 
       await query(req, res);
 
-      expect(mockTemplateDb).toHaveBeenCalledWith(
-        'SELECT * FROM mock_table',
-        [],
-        undefined,
-        { req },
-      );
+      expect(mockTemplateDb.mock.calls[0][3]).toEqual({ context: undefined });
+      expect(Object.values(mockTemplateDb.mock.calls[0][3])).not.toContain(req);
     });
   });
 
@@ -487,6 +504,8 @@ describe('Query: Testing Query API', () => {
         },
       });
 
+      res.locals.dbs = { foo: 'bar' };
+
       await query(req, res);
 
       expect(res.statusCode).toBe(202);
@@ -494,7 +513,7 @@ describe('Query: Testing Query API', () => {
         expect.any(String),
         expect.anything(),
         undefined,
-        { nonblocking: true, req },
+        { context: res.locals.dbs, nonblocking: true },
       );
     });
 
