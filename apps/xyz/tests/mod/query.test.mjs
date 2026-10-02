@@ -208,7 +208,7 @@ describe('Query: Testing Query API', () => {
       expect(mockWorkspaceDb).not.toHaveBeenCalled();
     });
 
-    it('passes res.locals to the dbs connection as options.locals', async () => {
+    it('passes res.locals to the dbs connection as params.locals', async () => {
       const { req, res } = createMocks({
         params: {
           template: 'mock_template',
@@ -226,8 +226,8 @@ describe('Query: Testing Query API', () => {
 
       await query(req, res);
 
-      expect(mockTemplateDb.mock.calls[0][3]).toEqual({ locals: res.locals });
-      expect(mockTemplateDb.mock.calls[0][3].locals).toBe(res.locals);
+      expect(mockTemplateDb.mock.calls[0]).toHaveLength(1);
+      expect(mockTemplateDb.mock.calls[0][0].locals).toBe(res.locals);
     });
 
     it('does not pass the request to the dbs connection', async () => {
@@ -246,8 +246,8 @@ describe('Query: Testing Query API', () => {
 
       await query(req, res);
 
-      expect(mockTemplateDb.mock.calls[0]).not.toContain(req);
-      expect(Object.values(mockTemplateDb.mock.calls[0][3])).not.toContain(req);
+      expect(mockTemplateDb.mock.calls[0]).toHaveLength(1);
+      expect(Object.values(mockTemplateDb.mock.calls[0][0])).not.toContain(req);
     });
   });
 
@@ -425,7 +425,8 @@ describe('Query: Testing Query API', () => {
       await query(req, res);
 
       expect(mockDbQuery).toHaveBeenCalled();
-      const [queryStr, sqlParams] = mockDbQuery.mock.calls[0];
+      const { query: queryStr, variables: sqlParams } =
+        mockDbQuery.mock.calls[0][0];
 
       // ${field} and ${table} are replaced inline.
       expect(queryStr).toContain('SELECT age FROM users');
@@ -475,7 +476,7 @@ describe('Query: Testing Query API', () => {
 
       await query(req, res);
 
-      expect(mockDbQuery.mock.calls[0][2]).toBe(9000);
+      expect(mockDbQuery.mock.calls[0][0].timeout).toBe(9000);
     });
 
     it('should ignore the statement_timeout request param', async () => {
@@ -490,7 +491,7 @@ describe('Query: Testing Query API', () => {
 
       await query(req, res);
 
-      expect(mockDbQuery.mock.calls[0][2]).toBeUndefined();
+      expect(mockDbQuery.mock.calls[0][0].timeout).toBeUndefined();
     });
   });
 
@@ -511,10 +512,12 @@ describe('Query: Testing Query API', () => {
 
       expect(res.statusCode).toBe(202);
       expect(mockDbQuery).toHaveBeenCalledWith(
-        expect.any(String),
-        expect.anything(),
-        undefined,
-        { locals: res.locals, nonblocking: true },
+        expect.objectContaining({
+          locals: res.locals,
+          nonblocking: true,
+          query: expect.any(String),
+          variables: expect.any(Array),
+        }),
       );
     });
 
@@ -552,7 +555,7 @@ describe('Query: Testing Query API', () => {
       await query(req, res);
 
       expect(mockDbQuery).toHaveBeenCalled();
-      const [queryStr] = mockDbQuery.mock.calls[0];
+      const { query: queryStr } = mockDbQuery.mock.calls[0][0];
       expect(queryStr).toContain('SELECT distinct(name)');
       expect(queryStr).toContain('FROM users');
       expect(queryStr).toContain('ORDER BY name');
@@ -572,7 +575,7 @@ describe('Query: Testing Query API', () => {
       await query(req, res);
 
       expect(mockDbQuery).toHaveBeenCalled();
-      const [queryStr] = mockDbQuery.mock.calls[0];
+      const { query: queryStr } = mockDbQuery.mock.calls[0][0];
       expect(queryStr).toContain('max(price)');
       expect(queryStr).toContain('FROM products');
     });

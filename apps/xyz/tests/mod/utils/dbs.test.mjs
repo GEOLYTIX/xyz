@@ -80,7 +80,7 @@ describe('dbs Module', () => {
       const client = mockClient([{ id: 1 }]);
       pools[0].connect.mockResolvedValueOnce(client);
 
-      const rows = await dbs.TEST('SELECT 1', [1]);
+      const rows = await dbs.TEST({ query: 'SELECT 1', variables: [1] });
 
       expect(rows).toEqual([{ id: 1 }]);
       expect(client.query).toHaveBeenCalledWith('SELECT 1', [1]);
@@ -95,8 +95,8 @@ describe('dbs Module', () => {
         .mockResolvedValueOnce(defaultClient)
         .mockResolvedValueOnce(argClient);
 
-      await dbs.TEST('SELECT 1');
-      await dbs.TEST('SELECT 1', [], 3000);
+      await dbs.TEST({ query: 'SELECT 1' });
+      await dbs.TEST({ query: 'SELECT 1', timeout: 3000 });
 
       expect(defaultClient.query).toHaveBeenCalledWith(
         'SET statement_timeout = 1000',
@@ -111,7 +111,7 @@ describe('dbs Module', () => {
       const client = mockClient([]);
       pools[0].connect.mockResolvedValueOnce(client);
 
-      await dbs.TEST('SELECT 1');
+      await dbs.TEST({ query: 'SELECT 1' });
 
       expect(client.query).toHaveBeenCalledTimes(1);
     });
@@ -122,7 +122,7 @@ describe('dbs Module', () => {
       const client = mockClient(error);
       pools[0].connect.mockResolvedValueOnce(client);
 
-      const result = await dbs.TEST('SELECT * FROM missing');
+      const result = await dbs.TEST({ query: 'SELECT * FROM missing' });
 
       expect(result).toBe(error);
       expect(pools[0].connect).toHaveBeenCalledTimes(1);
@@ -134,7 +134,7 @@ describe('dbs Module', () => {
       const error = new Error('timeout exceeded when trying to connect');
       pools[0].connect.mockRejectedValueOnce(error);
 
-      const result = await dbs.TEST('SELECT 1');
+      const result = await dbs.TEST({ query: 'SELECT 1' });
 
       expect(result).toBe(error);
     });
@@ -151,7 +151,7 @@ describe('dbs Module', () => {
         pools[0].connect.mockResolvedValueOnce(client),
       );
 
-      const promise = dbs.TEST('SELECT 1');
+      const promise = dbs.TEST({ query: 'SELECT 1' });
 
       await vi.advanceTimersByTimeAsync(0);
       expect(pools[0].connect).toHaveBeenCalledTimes(1);
@@ -182,7 +182,7 @@ describe('dbs Module', () => {
         .mockResolvedValueOnce(mockClient(pgError('53300')))
         .mockResolvedValueOnce(mockClient(lastError));
 
-      const promise = dbs.TEST('SELECT 1');
+      const promise = dbs.TEST({ query: 'SELECT 1' });
       await vi.runAllTimersAsync();
 
       await expect(promise).resolves.toBe(lastError);
@@ -198,7 +198,7 @@ describe('dbs Module', () => {
         .mockResolvedValueOnce(client)
         .mockRejectedValueOnce(connectError);
 
-      const promise = dbs.TEST('SELECT 1');
+      const promise = dbs.TEST({ query: 'SELECT 1' });
       await vi.runAllTimersAsync();
 
       await expect(promise).resolves.toBe(connectError);
@@ -210,7 +210,7 @@ describe('dbs Module', () => {
       const error = pgError('53300');
       pools[0].connect.mockResolvedValueOnce(mockClient(error));
 
-      await expect(dbs.TEST('SELECT 1')).resolves.toBe(error);
+      await expect(dbs.TEST({ query: 'SELECT 1' })).resolves.toBe(error);
       expect(pools[0].connect).toHaveBeenCalledTimes(1);
     });
   });
@@ -236,7 +236,7 @@ describe('dbs Module', () => {
         )
         .mockResolvedValueOnce(mockClient([{ id: 1 }]));
 
-      const promise = dbs.TEST('SELECT 1');
+      const promise = dbs.TEST({ query: 'SELECT 1' });
       await vi.runAllTimersAsync();
       await promise;
 
@@ -274,7 +274,7 @@ describe('dbs Module', () => {
         .mockResolvedValueOnce(mockClient(pgError('53300')))
         .mockResolvedValueOnce(mockClient([{ id: 1 }]));
 
-      const promise = dbs.TEST('SELECT 1');
+      const promise = dbs.TEST({ query: 'SELECT 1' });
 
       await vi.advanceTimersByTimeAsync(0);
       expect(logger).toHaveBeenCalledTimes(1);
@@ -295,7 +295,7 @@ describe('dbs Module', () => {
           mockClient(pgError('57P03', 'cannot connect now')),
         );
 
-      const promise = dbs.TEST('SELECT 1');
+      const promise = dbs.TEST({ query: 'SELECT 1' });
       await vi.runAllTimersAsync();
       await promise;
 
@@ -317,7 +317,7 @@ describe('dbs Module', () => {
       const logger = await importLogger();
       pools[0].connect.mockResolvedValueOnce(mockClient(pgError('42P01')));
 
-      await dbs.TEST('SELECT 1');
+      await dbs.TEST({ query: 'SELECT 1' });
 
       expect(logger).not.toHaveBeenCalled();
     });
@@ -328,7 +328,7 @@ describe('dbs Module', () => {
       const client = mockClient(pgError('53300'));
       pools[0].connect.mockResolvedValueOnce(client);
 
-      await dbs.TEST('SELECT 1', [], undefined, { nonblocking: true });
+      await dbs.TEST({ nonblocking: true, query: 'SELECT 1' });
       await vi.waitFor(() => expect(client.release).toHaveBeenCalled());
 
       expect(logger).not.toHaveBeenCalled();
@@ -350,8 +350,11 @@ describe('dbs Module', () => {
       };
       pools[0].connect.mockResolvedValueOnce(client);
 
-      const result = await dbs.TEST('INSERT INTO log', [], 3000, {
+      const result = await dbs.TEST({
         nonblocking: true,
+        query: 'INSERT INTO log',
+        timeout: 3000,
+        variables: [],
       });
 
       expect(result).toBe(true);
@@ -385,7 +388,12 @@ describe('dbs Module', () => {
 
       const onResolved = vi.fn();
       const promise = dbs
-        .TEST('INSERT INTO log', [], 3000, { nonblocking: true })
+        .TEST({
+          nonblocking: true,
+          query: 'INSERT INTO log',
+          timeout: 3000,
+          variables: [],
+        })
         .then(onResolved);
 
       await vi.waitFor(() => expect(client.query).toHaveBeenCalledTimes(1));
@@ -407,8 +415,10 @@ describe('dbs Module', () => {
       };
       pools[0].connect.mockResolvedValueOnce(client);
 
-      const result = await dbs.TEST('INSERT INTO log', [], 3000, {
+      const result = await dbs.TEST({
         nonblocking: true,
+        query: 'INSERT INTO log',
+        timeout: 3000,
       });
 
       expect(result).toBe(error);
@@ -422,9 +432,7 @@ describe('dbs Module', () => {
       const error = pgError('53300');
       pools[0].connect.mockRejectedValueOnce(error);
 
-      const result = await dbs.TEST('SELECT 1', [], undefined, {
-        nonblocking: true,
-      });
+      const result = await dbs.TEST({ nonblocking: true, query: 'SELECT 1' });
 
       expect(result).toBe(error);
       expect(pools[0].connect).toHaveBeenCalledTimes(1);
@@ -437,9 +445,7 @@ describe('dbs Module', () => {
       const client = mockClient(error);
       pools[0].connect.mockResolvedValueOnce(client);
 
-      const result = await dbs.TEST('SELECT 1', [], undefined, {
-        nonblocking: true,
-      });
+      const result = await dbs.TEST({ nonblocking: true, query: 'SELECT 1' });
 
       expect(result).toBe(true);
       await vi.waitFor(() => expect(console.error).toHaveBeenCalledWith(error));
