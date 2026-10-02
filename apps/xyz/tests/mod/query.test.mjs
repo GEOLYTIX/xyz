@@ -208,7 +208,7 @@ describe('Query: Testing Query API', () => {
       expect(mockWorkspaceDb).not.toHaveBeenCalled();
     });
 
-    it('passes res.locals.dbs to the dbs connection as options.context', async () => {
+    it('passes res.locals to the dbs connection as options.locals', async () => {
       const { req, res } = createMocks({
         params: {
           template: 'mock_template',
@@ -216,7 +216,7 @@ describe('Query: Testing Query API', () => {
         },
       });
 
-      res.locals.dbs = { foo: 'bar' };
+      res.locals.foo = 'bar';
 
       checkWorkspaceCache.mockResolvedValueOnce({ dbs: undefined });
       getTemplate.mockResolvedValueOnce({
@@ -226,10 +226,11 @@ describe('Query: Testing Query API', () => {
 
       await query(req, res);
 
-      expect(mockTemplateDb.mock.calls[0][3].context).toBe(res.locals.dbs);
+      expect(mockTemplateDb.mock.calls[0][3]).toEqual({ locals: res.locals });
+      expect(mockTemplateDb.mock.calls[0][3].locals).toBe(res.locals);
     });
 
-    it('passes no context without res.locals.dbs', async () => {
+    it('does not pass the request to the dbs connection', async () => {
       const { req, res } = createMocks({
         params: {
           template: 'mock_template',
@@ -245,7 +246,7 @@ describe('Query: Testing Query API', () => {
 
       await query(req, res);
 
-      expect(mockTemplateDb.mock.calls[0][3]).toEqual({ context: undefined });
+      expect(mockTemplateDb.mock.calls[0]).not.toContain(req);
       expect(Object.values(mockTemplateDb.mock.calls[0][3])).not.toContain(req);
     });
   });
@@ -504,7 +505,7 @@ describe('Query: Testing Query API', () => {
         },
       });
 
-      res.locals.dbs = { foo: 'bar' };
+      res.locals.foo = 'bar';
 
       await query(req, res);
 
@@ -513,7 +514,7 @@ describe('Query: Testing Query API', () => {
         expect.any(String),
         expect.anything(),
         undefined,
-        { context: res.locals.dbs, nonblocking: true },
+        { locals: res.locals, nonblocking: true },
       );
     });
 

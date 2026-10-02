@@ -34,7 +34,7 @@ A query string must returned from the getQueryFromTemplate() method.
 
 The query and SQL params to be substituted in the database process are send to the dbs_connection.
 
-The res.locals.dbs object is passed as options.context, so that a composing host can hand values set by its middleware to a dbs_connection it replaced. Clients cannot write to res.locals.
+The res.locals object is passed as options.locals, so that a composing host can hand values set by its middleware to a dbs_connection it replaced. Clients cannot write to res.locals.
 
 The rows returned from the dbs_connection are then passed to the sendRows() method.
 
@@ -136,7 +136,7 @@ export default async function query(req, res) {
       query,
       req.params.SQL,
       template.statement_timeout,
-      { context: res.locals?.dbs, nonblocking: true },
+      { locals: res.locals, nonblocking: true },
     );
 
     if (connected instanceof Error) {
@@ -151,12 +151,12 @@ export default async function query(req, res) {
       .send(`Non blocking request sent at ${new Date().toISOString()}.`);
   }
 
-  // The dbs module ignores options.context, which a connection replaced by the host may read.
+  // The dbs module ignores options.locals, which a connection replaced by the host may read.
   const rows = await dbs_connections[template.dbs](
     query,
     req.params.SQL,
     template.statement_timeout,
-    { context: res.locals?.dbs },
+    { locals: res.locals },
   );
 
   sendRows(res, template, rows);
