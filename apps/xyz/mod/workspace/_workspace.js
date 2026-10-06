@@ -42,6 +42,7 @@ const keyMethods = {
   roles, // deprecated, use scopes instead
   test,
   compose,
+  templates,
 };
 
 let workspace;
@@ -448,6 +449,34 @@ async function compose(req, res) {
   res.setHeader('content-type', 'application/json');
 
   res.send(composedWorkspace);
+}
+
+/**
+@function templates
+
+@description
+The templates method is an admin-only endpoint which returns the workspace.templates{} object from the cached workspace.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+
+@property {Object} req.params HTTP request params.
+@property {Object} params.user User requesting the templates method.
+@property {boolean} params.user.admin Whether user has admin privileges (required).
+*/
+function templates(req, res) {
+  if (!req.params.user?.admin) {
+    res
+      .status(403)
+      .send(
+        `Admin credentials are required to access the workspace templates.`,
+      );
+    return;
+  }
+
+  res.setHeader('content-type', 'application/json');
+
+  res.send(workspace.templates ?? {});
 }
 
 /**
