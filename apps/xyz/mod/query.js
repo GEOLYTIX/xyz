@@ -34,6 +34,8 @@ A query string must returned from the getQueryFromTemplate() method.
 
 The query and SQL params to be substituted in the database process are send to the dbs_connection.
 
+The dbs_connection is called with a params object holding the query, variables, statement timeout, and nonblocking flag. The res.locals object is assigned as params.locals, so that a composing host can hand values set by its middleware to a dbs_connection it replaced. Clients cannot write to res.locals.
+
 The rows returned from the dbs_connection are then passed to the sendRows() method.
 
 @param {req} req HTTP request.
@@ -128,14 +130,18 @@ export default async function query(req, res) {
 
   logger(query, 'query');
 
+  // The dbs module ignores params.locals, which a connection replaced by the host may read.
+  const params = {
+    locals: res.locals,
+    nonblocking: template.nonblocking,
+    query,
+    timeout: template.statement_timeout,
+    variables: req.params.SQL,
+  };
+
   // Nonblocking queries will not wait for results but return once the query is sent.
   if (template.nonblocking) {
-    const connected = await dbs_connections[template.dbs](
-      query,
-      req.params.SQL,
-      template.statement_timeout,
-      { nonblocking: true },
-    );
+    const connected = await dbs_connections[template.dbs](params);
 
     if (connected instanceof Error) {
       return res
@@ -149,12 +155,7 @@ export default async function query(req, res) {
       .send(`Non blocking request sent at ${new Date().toISOString()}.`);
   }
 
-  // Run the query
-  const rows = await dbs_connections[template.dbs](
-    query,
-    req.params.SQL,
-    template.statement_timeout,
-  );
+  const rows = await dbs_connections[template.dbs](params);
 
   sendRows(res, template, rows);
 }
