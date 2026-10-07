@@ -4,6 +4,7 @@ The query module exports the [SQL] query method to pass queries to dbs connectio
 @requires /utils/dbs
 @requires /utils/logger
 @requires /utils/sqlFilter
+@requires /utils/telemetry
 @requires /workspace/cache
 @requires /workspace/getLayer
 @requires /workspace/getTemplate
@@ -14,6 +15,7 @@ The query module exports the [SQL] query method to pass queries to dbs connectio
 import dbs_connections from './utils/dbs.js';
 import logger from './utils/logger.js';
 import sqlFilter from './utils/sqlFilter.js';
+import { setRequestAttributes } from './utils/telemetry.js';
 import workspaceCache from './workspace/cache.js';
 import composeObj from './workspace/composeObj.js';
 import getLayer from './workspace/getLayer.js';
@@ -116,6 +118,12 @@ export default async function query(req, res) {
   template.reduce ??= req.params.reduce;
 
   template.nonblocking ??= req.params.nonblocking;
+
+  setRequestAttributes({
+    'xyz.query.template': template.key ?? req.params.template,
+    'xyz.layer': req.params.layer?.key,
+    'xyz.dbs': template.dbs,
+  });
 
   logger(req.params, 'query_params');
 

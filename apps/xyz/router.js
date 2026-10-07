@@ -7,6 +7,7 @@ Creates an express router object with base xyz endpoints.
 @requires cookie-parser HTTP cookie parsing middleware
 @requires express-rate-limit Rate limiting middleware
 @requires /utils/processEnv
+@requires /utils/telemetry
 
 @module router
 */
@@ -23,6 +24,7 @@ import login from './mod/user/login.js';
 import logout from './mod/user/logout.js';
 import register from './mod/user/register.js';
 import verify from './mod/user/verify.js';
+import { requestSpan } from './mod/utils/telemetry.js';
 import view from './mod/view.js';
 import workspace from './mod/workspace/_workspace.js';
 
@@ -84,6 +86,9 @@ function createRouter(middleWare = []) {
 
   router.use(`${xyzEnv.DIR}/public`, express.static(publicDir, staticOptions));
   router.use(xyzEnv.DIR, express.static(publicDir, staticOptions));
+
+  // Requests not served as static files are traced with a root span.
+  router.use(requestSpan);
 
   router.get(`${xyzEnv.DIR}/api/provider{/:provider}`, middleWare, provider);
 

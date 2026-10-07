@@ -4,6 +4,7 @@ The getLayer module exports the getLayer method which is required by the query a
 
 @requires /utils/envReplace
 @requires /utils/merge
+@requires /utils/telemetry
 @requires /workspace/composeObj
 @requires /workspace/getLocale
 @requires /workspace/getTemplate
@@ -13,6 +14,7 @@ The getLayer module exports the getLayer method which is required by the query a
 
 import envReplace from '../utils/envReplace.js';
 import merge from '../utils/merge.js';
+import { withSpan } from '../utils/telemetry.js';
 import composeObj from './composeObj.js';
 import getLocale from './getLocale.js';
 import getTemplate from './getTemplate.js';
@@ -51,7 +53,29 @@ Template properties will be removed as these are not required by the MAPP API bu
 
 @returns {Promise<Object|Error>} JSON Layer.
 */
-export default async function getLayer(params, locale) {
+export default function getLayer(params, locale) {
+  return withSpan(
+    'workspace.getLayer',
+    {
+      'xyz.layer': typeof params.layer === 'string' ? params.layer : undefined,
+      'xyz.locale': locale?.key,
+    },
+    () => resolveLayer(params, locale),
+  );
+}
+
+/**
+@function resolveLayer
+@async
+
+@description
+Resolves the layer for the getLayer method.
+
+@param {Object} params
+@param {locale} [locale] An optional workspace locale.
+@returns {Promise<Object|Error>} JSON Layer.
+*/
+async function resolveLayer(params, locale) {
   if (/[^a-zA-Z0-9 :_-]/.exec(params.layer)) {
     return new Error(
       'The layer [key] property may only contain whitelisted character [^a-zA-Z0-9 :_-]',

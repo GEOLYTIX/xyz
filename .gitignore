@@ -28,4 +28,7 @@ docs/*
 
 .vercel
 
+# Trace reports written by utils/traces.js
+.traces/
+
 .claude/settings.local.json

@@ -5,15 +5,21 @@ The module exports the default checkWorkspaceCache method which returns the asyn
 Default templates can be overwritten in the workspace or by providing a CUSTOM_TEMPLATES xyzEnvironment variable which references a JSON with templates to be merged into the workspace.
 
 @requires /provider/getSrc
-@requires /utils/merge
 @requires /utils/processEnv
+@requires /utils/telemetry
 
 @module /workspace/cache
 */
 
+import { SpanStatusCode } from '@opentelemetry/api';
 import { clearSrcMap, getSrc } from '../provider/getSrc.js';
 import logger from '../utils/logger.js';
-import merge from '../utils/merge.js';
+
+import {
+  setRequestAttributes,
+  srcAttribute,
+  withSpan,
+} from '../utils/telemetry.js';
 
 let timestamp = 0;
 let workspacePromise = null;
@@ -30,12 +36,51 @@ The async cacheWorkspace method is assigned to the module scope workspacePromise
 export default function checkWorkspaceCache(force) {
   // A WORKSPACE_AGE of 0 invalidates the cache on every check.
   if (force || Date.now() - timestamp >= +xyzEnv.WORKSPACE_AGE) {
-    workspacePromise = cacheWorkspace();
+    workspacePromise = tracedCacheWorkspace(cacheReason(force));
   }
 
-  workspacePromise ??= cacheWorkspace();
+  // The workspacePromise is reset if the workspace could not be fetched.
+  workspacePromise ??= tracedCacheWorkspace('retry');
 
   return workspacePromise;
+}
+
+/**
+@function cacheReason
+
+@description
+Returns the reason for the workspace to be cached. The workspace has not been cached yet if the timestamp is 0.
+
+@param {boolean} [force] The workspace cache is cleared with the force param flag.
+@returns {string} The reason [force, expired, initial].
+*/
+function cacheReason(force) {
+  if (force) return 'force';
+
+  return timestamp ? 'expired' : 'initial';
+}
+
+/**
+@function tracedCacheWorkspace
+
+@description
+Calls the cacheWorkspace method within a workspace.cache span. The reason for the workspace to be cached is assigned to the span and the root span of the request which triggered the cache.
+
+@param {string} reason The reason for the workspace to be cached [initial, expired, force, retry].
+@returns {Promise<workspace>} Resolves to the JSON workspace.
+*/
+function tracedCacheWorkspace(reason) {
+  setRequestAttributes({ 'xyz.workspace.cache': reason });
+
+  return withSpan(
+    'workspace.cache',
+    {
+      'xyz.workspace.cache': reason,
+      'xyz.workspace.age': timestamp ? Date.now() - timestamp : undefined,
+      'xyz.workspace.src': srcAttribute(xyzEnv.WORKSPACE),
+    },
+    cacheWorkspace,
+  );
 }
 
 import mail_templates from './templates/_mails.js';
@@ -58,9 +103,10 @@ Locale objects get their key and name properties assigned if falsy.
 
 The workspace is assigned to the module scope workspacePromise variable and the timestamp is recorded.
 
+@param {Span} span The workspace.cache span.
 @returns {Promise<workspace>} Resolves to the JSON workspace.
 */
-async function cacheWorkspace() {
+async function cacheWorkspace(span) {
   // The timestamp is recorded before the workspace is fetched to determine the cache age.
   timestamp = Date.now();
 
@@ -75,6 +121,8 @@ async function cacheWorkspace() {
     // The getSrc would not be retried otherwise.
     workspacePromise = null;
     console.error(workspace);
+    span.recordException(workspace);
+    span.setStatus({ code: SpanStatusCode.ERROR, message: workspace.message });
     return {
       error: true,
       message: workspace.message,
@@ -130,6 +178,12 @@ async function cacheWorkspace() {
   logger(`Workspace cached;`, 'workspace');
 
   workspace.timestamp = cache_timestamp;
+
+  span.setAttributes({
+    'xyz.workspace.templates': Object.keys(workspace.templates).length,
+    'xyz.workspace.locales': Object.keys(workspace.locales).length,
+    'xyz.workspace.errors': workspace.errors.size,
+  });
 
   return workspace;
 }
