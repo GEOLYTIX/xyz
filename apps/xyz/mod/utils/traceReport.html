@@ -163,7 +163,15 @@
     display: grid;
     grid-template-columns: minmax(200px, 34%) 1fr;
     align-items: center;
+    width: 100%;
     min-height: 30px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
     cursor: pointer;
     outline: none;
   }
@@ -183,7 +191,7 @@
   .wf-name .label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .wf-name .err { color: var(--error); font-weight: 600; }
   .wf-name .key { color: var(--fg-3); }
-  .wf-track { position: relative; height: 30px; margin-right: 16px; }
+  .wf-track { display: block; position: relative; height: 30px; margin-right: 16px; }
   .wf-bar {
     position: absolute;
     top: 9px;
@@ -338,7 +346,18 @@
           <span class="muted" style="font-size:12px" id="req-count"></span>
         </div>
         <div class="requests-scroll">
-          <table id="requests"></table>
+          <table id="requests">
+            <thead>
+              <tr>
+                <th scope="col">Time</th>
+                <th scope="col" class="num">Status</th>
+                <th scope="col" class="num">Duration</th>
+                <th scope="col">Path</th>
+                <th scope="col">Cold</th>
+              </tr>
+            </thead>
+            <tbody id="requests-body"></tbody>
+          </table>
         </div>
       </section>
 
@@ -348,7 +367,7 @@
           <div class="legend" id="legend"></div>
         </div>
         <div class="waterfall-scroll">
-          <div class="waterfall" id="waterfall" role="list"></div>
+          <div class="waterfall" id="waterfall"></div>
         </div>
       </section>
 
@@ -369,7 +388,17 @@
             >
           </div>
           <div class="table-scroll">
-            <table id="summary"></table>
+            <table id="summary">
+              <thead>
+                <tr>
+                  <th scope="col">Span</th>
+                  <th scope="col" class="num">Count</th>
+                  <th scope="col" class="num">Total</th>
+                  <th scope="col" class="num">Share</th>
+                </tr>
+              </thead>
+              <tbody id="summary-body"></tbody>
+            </table>
           </div>
         </section>
       </div>
@@ -401,7 +430,7 @@
               >
             </label>
             <button type="button" id="load-sample">Show sample</button>
-            <span class="status" id="status" role="status"></span>
+            <output class="status" id="status"></output>
           </div>
         </form>
       </section>
@@ -468,8 +497,21 @@
   function tickStep(max, target = 6) {
     const raw = max / target;
     const pow = 10 ** Math.floor(Math.log10(raw));
-    const n = raw / pow;
-    return (n < 1.5 ? 1 : n < 3 ? 2 : n < 7 ? 5 : 10) * pow;
+    return niceFactor(raw / pow) * pow;
+  }
+
+  function niceFactor(n) {
+    if (n < 1.5) return 1;
+    if (n < 3) return 2;
+    if (n < 7) return 5;
+    return 10;
+  }
+
+  // Chip class for the response status code.
+  function statusClass(status) {
+    if (status >= 500) return 'bad';
+    if (status >= 400) return 'warn';
+    return '';
   }
 
   // Accepts the JSON logged in the terminal and the object literal copied from the debug console.
@@ -482,10 +524,10 @@
       return JSON.parse(text);
     } catch {
       const json = text
-        .replace(/\[Object: null prototype\]\s*/g, '')
-        .replace(/'((?:[^'\\]|\\.)*)'/g, (_, s) => JSON.stringify(s.replace(/\\'/g, "'")))
-        .replace(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":')
-        .replace(/,\s*([}\]])/g, '$1');
+        .replaceAll(/\[Object: null prototype\]\s*/g, '')
+        .replaceAll(/'((?:[^'\\]|\\.)*)'/g, (_, s) => JSON.stringify(s.replaceAll(String.raw`\'`, "'")))
+        .replaceAll(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":')
+        .replaceAll(/,\s*([}\]])/g, '$1');
       try {
         return JSON.parse(json);
       } catch {
@@ -496,10 +538,13 @@
 
   // Depth first rows in start order.
   function flatten(node, depth = 0, prefix = '', last = true, rows = []) {
-    rows.push({ node, depth, prefix: depth ? prefix + (last ? '└ ' : '├ ') : '' });
+    const branch = last ? '└ ' : '├ ';
+    const indent = last ? '  ' : '│ ';
+    rows.push({ node, depth, prefix: depth ? prefix + branch : '' });
+    const childPrefix = depth ? prefix + indent : '';
     const children = [...(node.children ?? [])].sort((a, b) => (a.start ?? 0) - (b.start ?? 0));
     children.forEach((child, i) =>
-      flatten(child, depth + 1, depth ? prefix + (last ? '  ' : '│ ') : '', i === children.length - 1, rows),
+      flatten(child, depth + 1, childPrefix, i === children.length - 1, rows),
     );
     return rows;
   }
@@ -513,38 +558,48 @@
       throw new Error('The object has no duration. Paste a trace logged by the ConsoleTraceProcessor.');
     }
 
-    const attrs = trace.attributes ?? {};
     $('source-label').textContent = sourceLabel;
     $('req-name').textContent = trace.name ?? 'Unnamed trace';
 
-    // Header chips
+    renderChips(trace);
+
+    const rows = flatten(trace);
+    rowsCache = rows;
+
+    renderLegend(rows);
+    renderWaterfall(trace, rows);
+    renderSummary(trace, rows);
+    select(0);
+  }
+
+  function renderChips(trace) {
+    const attrs = trace.attributes ?? {};
     const meta = $('req-meta');
     meta.replaceChildren();
+
+    const [value, unit] = fmt(trace.duration).split(' ');
     const total = el('span', 'total');
-    total.append(fmt(trace.duration).replace(/ (ms|s)$/, ''), el('small', null, fmt(trace.duration).split(' ')[1]));
+    total.append(value, el('small', null, unit));
     meta.append(total);
-    const chip = (label, value, cls = '') => {
+
+    const chip = (label, chipValue, cls = '') => {
       const c = el('span', `chip ${cls}`);
-      c.append(`${label} `, el('strong', null, String(value)));
+      c.append(`${label} `, el('strong', null, String(chipValue)));
       meta.append(c);
     };
+
     const status = attrs['http.response.status_code'];
-    if (status != null) chip('status', status, status >= 500 ? 'bad' : status >= 400 ? 'warn' : '');
-    if (attrs['faas.coldstart'] != null) chip('cold start', attrs['faas.coldstart'] ? 'yes' : 'no', attrs['faas.coldstart'] ? 'warn' : '');
+    const cold = attrs['faas.coldstart'];
+    if (status != null) chip('status', status, statusClass(status));
+    if (cold != null) chip('cold start', cold ? 'yes' : 'no', cold ? 'warn' : '');
     if (attrs['xyz.workspace.cache']) chip('workspace cache', attrs['xyz.workspace.cache'], 'warn');
     if (attrs['url.path']) chip('path', attrs['url.path']);
     if (attrs['process.memory.rss']) chip('rss', fmtBytes(attrs['process.memory.rss']));
     if (trace.traceId) chip('trace', trace.traceId.slice(0, 8));
+  }
 
-    const rows = flatten(trace);
-    rowsCache = rows;
-    const origin = trace.start ?? 0;
-    const span = Math.max(trace.duration, ...rows.map((r) => (r.node.start ?? 0) - origin + (r.node.duration ?? 0)));
-    const step = tickStep(span);
-    const axisMax = Math.ceil(span / step) * step;
-    const pct = (ms) => `${(ms / axisMax) * 100}%`;
-
-    // Legend, only categories present
+  // Legend with the categories present in the trace.
+  function renderLegend(rows) {
     const present = new Set(rows.map((r) => category(r.node.name, r.depth).key));
     const legend = $('legend');
     legend.replaceChildren();
@@ -556,14 +611,27 @@
       item.append(sw, c.label);
       legend.append(item);
     }
+  }
 
-    // Axis
+  function renderWaterfall(trace, rows) {
+    const origin = trace.start ?? 0;
+    const span = Math.max(trace.duration, ...rows.map((r) => (r.node.start ?? 0) - origin + (r.node.duration ?? 0)));
+    const step = tickStep(span);
+    const axisMax = Math.ceil(span / step) * step;
+    const scale = { origin, axisMax, pct: (ms) => `${(ms / axisMax) * 100}%` };
+
     const wf = $('waterfall');
-    wf.replaceChildren();
+    const body = el('div', 'wf-body');
+    wf.replaceChildren(renderAxis(scale, step, body), body);
+
+    rows.forEach((row, i) => body.append(renderRow(row, i, scale)));
+  }
+
+  // The time axis ticks and the vertical grid lines in the waterfall body.
+  function renderAxis({ axisMax, pct }, step, body) {
     const axis = el('div', 'wf-axis');
     axis.append(el('div', 'wf-name muted', 'span'));
     const ticks = el('div', 'ticks');
-    const body = el('div', 'wf-body');
     const grid = el('div', 'wf-grid');
     for (let t = 0; t <= axisMax + step / 2; t += step) {
       const tick = el('span', 'tick', t === 0 ? '0' : fmt(t));
@@ -575,58 +643,54 @@
       grid.append(line);
     }
     axis.append(ticks);
-    wf.append(axis);
     body.append(grid);
+    return axis;
+  }
 
-    rows.forEach((row, i) => {
-      const { node, depth, prefix } = row;
-      const cat = category(node.name, depth);
-      const start = (node.start ?? 0) - origin;
-      const r = el('div', 'wf-row');
-      r.setAttribute('role', 'listitem');
-      r.tabIndex = 0;
-      r.dataset.index = i;
+  // A row is a button to select the span. The arrow keys move the focus between rows.
+  function renderRow({ node, depth, prefix }, i, { origin, axisMax, pct }) {
+    const cat = category(node.name, depth);
+    const start = (node.start ?? 0) - origin;
+    const r = el('button', 'wf-row');
+    r.type = 'button';
+    r.dataset.index = i;
 
-      const name = el('div', 'wf-name');
-      if (prefix) name.append(el('span', 'tree', prefix));
-      const key = spanKey(node);
-      const label = el('span', 'label', node.name);
-      if (key) label.append(' ', el('span', 'key', key));
-      label.title = key ? `${node.name} ${key}` : node.name;
-      name.append(label);
-      if (node.error) name.append(el('span', 'err', '!'));
+    const name = el('span', 'wf-name');
+    if (prefix) name.append(el('span', 'tree', prefix));
+    const key = spanKey(node);
+    const label = el('span', 'label', node.name);
+    if (key) label.append(' ', el('span', 'key', key));
+    label.title = key ? `${node.name} ${key}` : node.name;
+    name.append(label);
+    if (node.error) name.append(el('span', 'err', '!'));
 
-      const track = el('div', 'wf-track');
-      const bar = el('div', `wf-bar${node.error ? ' error' : ''}`);
-      bar.style.left = pct(start);
-      bar.style.width = pct(node.duration ?? 0);
-      bar.style.background = `var(--cat-${cat.key})`;
-      const dur = el('span', 'wf-dur', fmt(node.duration));
-      const end = start + (node.duration ?? 0);
-      // Duration label sits after the bar, or before it when the bar reaches the right edge.
-      if (end / axisMax > 0.82) {
-        dur.style.right = `calc(${100 - (start / axisMax) * 100}% + 6px)`;
-      } else {
-        dur.style.left = `calc(${pct(end)} + 6px)`;
-      }
-      track.append(bar, dur);
-      r.append(name, track);
-      r.setAttribute('aria-label', `${node.name}, starts at ${fmt(start)}, takes ${fmt(node.duration)}`);
+    const track = el('span', 'wf-track');
+    const bar = el('span', node.error ? 'wf-bar error' : 'wf-bar');
+    bar.style.left = pct(start);
+    bar.style.width = pct(node.duration ?? 0);
+    bar.style.background = `var(--cat-${cat.key})`;
+    const dur = el('span', 'wf-dur', fmt(node.duration));
+    const end = start + (node.duration ?? 0);
+    // Duration label sits after the bar, or before it when the bar reaches the right edge.
+    if (end / axisMax > 0.82) {
+      dur.style.right = `calc(${100 - (start / axisMax) * 100}% + 6px)`;
+    } else {
+      dur.style.left = `calc(${pct(end)} + 6px)`;
+    }
+    track.append(bar, dur);
+    r.append(name, track);
+    r.setAttribute('aria-label', `${label.title}, starts at ${fmt(start)}, takes ${fmt(node.duration)}`);
 
-      r.addEventListener('click', () => select(i));
-      r.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(i); }
-        if (e.key === 'ArrowDown') { e.preventDefault(); wf.querySelector(`[data-index="${i + 1}"]`)?.focus(); }
-        if (e.key === 'ArrowUp') { e.preventDefault(); wf.querySelector(`[data-index="${i - 1}"]`)?.focus(); }
-      });
-      r.addEventListener('pointermove', (e) => showTip(e, node, start, cat));
-      r.addEventListener('pointerleave', () => { tip.hidden = true; });
-      body.append(r);
+    r.addEventListener('click', () => select(i));
+    r.addEventListener('keydown', (e) => {
+      const next = { ArrowDown: i + 1, ArrowUp: i - 1 }[e.key];
+      if (next === undefined) return;
+      e.preventDefault();
+      $('waterfall').querySelector(`[data-index="${next}"]`)?.focus();
     });
-    wf.append(body);
-
-    renderSummary(trace, rows);
-    select(0);
+    r.addEventListener('pointermove', (e) => showTip(e, node, start, cat));
+    r.addEventListener('pointerleave', () => { tip.hidden = true; });
+    return r;
   }
 
   function showTip(e, node, start, cat) {
@@ -693,13 +757,8 @@
     }
     const entries = Object.entries(summary).sort((a, b) => b[1].duration - a[1].duration);
     const max = Math.max(...entries.map(([, s]) => s.duration), 0.0001);
-    const table = $('summary');
-    table.replaceChildren();
-    const head = el('tr');
-    head.append(el('th', null, 'Span'), el('th', 'num', 'Count'), el('th', 'num', 'Total'), el('th', 'num', 'Share'));
-    const thead = el('thead');
-    thead.append(head);
-    const tbody = el('tbody');
+    const tbody = $('summary-body');
+    tbody.replaceChildren();
     for (const [name, s] of entries) {
       const tr = el('tr');
       const nameCell = el('td');
@@ -722,7 +781,6 @@
       tr.append(td);
       tbody.append(tr);
     }
-    table.append(thead, tbody);
   }
 
   function requestLabel({ meta = {} }) {
@@ -733,12 +791,8 @@
   function renderRequests(items) {
     $('requests-panel').hidden = false;
     $('req-count').textContent = `${items.length} traces, newest first`;
-    const table = $('requests');
-    const head = el('tr');
-    head.append(el('th', null, 'Time'), el('th', 'num', 'Status'), el('th', 'num', 'Duration'), el('th', null, 'Path'), el('th', null, 'Cold'));
-    const thead = el('thead');
-    thead.append(head);
-    const tbody = el('tbody');
+    const tbody = $('requests-body');
+    tbody.replaceChildren();
     let current = null;
     const show = (tr, item) => {
       current?.classList.remove('selected');
@@ -773,7 +827,6 @@
       tbody.append(tr);
       if (i === 0) show(tr, item);
     });
-    table.replaceChildren(thead, tbody);
   }
 
   function setStatus(text, isError = false) {
@@ -802,12 +855,13 @@
   $('trace-file').addEventListener('change', (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      $('trace-input').value = reader.result;
-      load(reader.result, `File ${file.name}`);
-    };
-    reader.readAsText(file);
+    file.text().then(
+      (text) => {
+        $('trace-input').value = text;
+        load(text, `File ${file.name}`);
+      },
+      (err) => setStatus(`The file could not be read: ${err.message}`, true),
+    );
   });
 
   $('load-sample').addEventListener('click', () => {

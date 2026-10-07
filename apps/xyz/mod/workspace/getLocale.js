@@ -82,32 +82,7 @@ Resolves the locale for the getLocale method.
 async function resolveLocale(params, parentLocale) {
   const workspace = await workspaceCache();
 
-  if (typeof params.locale === 'string') {
-    params.locale = params.locale.split(',');
-  }
-
-  let localeKey = Array.isArray(params.locale)
-    ? params.locale.shift()
-    : params.locale;
-
-  localeKey ??= 'locale';
-
-  let locale;
-
-  if (localeKey === 'locale') {
-    locale = structuredClone(workspace.locale);
-    locale.key ??= localeKey;
-  } else if (Object.hasOwn(workspace.locales, localeKey)) {
-    locale = structuredClone(workspace.locales[localeKey]);
-    locale.key ??= localeKey;
-  } else if (typeof localeKey === 'string') {
-    locale = await getTemplate(localeKey);
-    locale.key ??= localeKey;
-  }
-
-  if (typeof localeKey === 'object') {
-    locale = structuredClone(localeKey);
-  }
+  let locale = await workspaceLocale(workspace, params);
 
   // Failed to getTemplate localeKey.
   if (locale instanceof Error) {
@@ -152,6 +127,50 @@ async function resolveLocale(params, parentLocale) {
   }
 
   await localeLayers(locale, params);
+
+  return locale;
+}
+
+/**
+@function workspaceLocale
+@async
+
+@description
+Returns a clone of the locale for the first locale key in the params.locale. The first key is removed from a params.locale array, the remaining keys are nested locales.
+
+The locale is looked up in the workspace.locale, the workspace.locales, or the workspace templates. A locale object provided as locale key is cloned.
+
+@param {workspace} workspace The cached workspace.
+@param {Object} params
+@property {string|array|object} [params.locale] Locale key, array of locale keys, or locale object.
+@returns {Promise<Object|Error>} JSON Locale or the getTemplate error.
+*/
+async function workspaceLocale(workspace, params) {
+  if (typeof params.locale === 'string') {
+    params.locale = params.locale.split(',');
+  }
+
+  let localeKey = Array.isArray(params.locale)
+    ? params.locale.shift()
+    : params.locale;
+
+  localeKey ??= 'locale';
+
+  if (typeof localeKey === 'object') {
+    return structuredClone(localeKey);
+  }
+
+  let locale;
+
+  if (localeKey === 'locale') {
+    locale = structuredClone(workspace.locale);
+  } else if (Object.hasOwn(workspace.locales, localeKey)) {
+    locale = structuredClone(workspace.locales[localeKey]);
+  } else {
+    locale = await getTemplate(localeKey);
+  }
+
+  locale.key ??= localeKey;
 
   return locale;
 }

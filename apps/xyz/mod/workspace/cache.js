@@ -36,15 +36,28 @@ The async cacheWorkspace method is assigned to the module scope workspacePromise
 export default function checkWorkspaceCache(force) {
   // A WORKSPACE_AGE of 0 invalidates the cache on every check.
   if (force || Date.now() - timestamp >= +xyzEnv.WORKSPACE_AGE) {
-    workspacePromise = tracedCacheWorkspace(
-      force ? 'force' : timestamp ? 'expired' : 'initial',
-    );
+    workspacePromise = tracedCacheWorkspace(cacheReason(force));
   }
 
   // The workspacePromise is reset if the workspace could not be fetched.
   workspacePromise ??= tracedCacheWorkspace('retry');
 
   return workspacePromise;
+}
+
+/**
+@function cacheReason
+
+@description
+Returns the reason for the workspace to be cached. The workspace has not been cached yet if the timestamp is 0.
+
+@param {boolean} [force] The workspace cache is cleared with the force param flag.
+@returns {string} The reason [force, expired, initial].
+*/
+function cacheReason(force) {
+  if (force) return 'force';
+
+  return timestamp ? 'expired' : 'initial';
 }
 
 /**

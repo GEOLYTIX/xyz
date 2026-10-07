@@ -99,15 +99,16 @@ async function clientQuery(query, variables, timeout, options = {}) {
   // Nonblocking queries make a single attempt without retry.
   // The span ends once the query completes, which may be after the response has been sent.
   return new Promise((resolve) => {
+    // The result of a nonblocking query is not awaited and must be logged here.
+    // Resolving is a no-op if the promise was already resolved once the query was sent.
+    const settle = (result) => {
+      resolve(result);
+      if (result instanceof Error) console.error(result);
+    };
+
     withSpan('dbs.query', attributes, () =>
       attemptQuery(this, query, variables, timeout, () => resolve(true)),
-    ).then((result) => {
-      // No-op if the promise was already resolved once the query was sent.
-      resolve(result);
-
-      // The result of a nonblocking query is not awaited and must be logged here.
-      if (result instanceof Error) console.error(result);
-    });
+    ).then(settle, settle);
   });
 }
 
