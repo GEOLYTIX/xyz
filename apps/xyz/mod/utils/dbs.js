@@ -17,7 +17,7 @@ import pg from 'pg';
 const { Pool } = pg;
 
 import logger from './logger.js';
-import { activeSpan, withSpan } from './telemetry.js';
+import { activeSpan, flushAfter, withSpan } from './telemetry.js';
 
 // At least one attempt is made if the RETRY_LIMIT is not a positive number.
 const RETRY_LIMIT = Number.parseInt(xyzEnv.RETRY_LIMIT) || 1;
@@ -106,9 +106,14 @@ async function clientQuery(query, variables, timeout, options = {}) {
       if (result instanceof Error) console.error(result);
     };
 
-    withSpan('dbs.query', attributes, () =>
+    const querySpan = withSpan('dbs.query', attributes, () =>
       attemptQuery(this, query, variables, timeout, () => resolve(true)),
-    ).then(settle, settle);
+    );
+
+    // The span ends after the response has been sent and must be flushed once the query completes.
+    flushAfter(querySpan);
+
+    querySpan.then(settle, settle);
   });
 }
 

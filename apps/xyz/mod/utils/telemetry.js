@@ -147,7 +147,10 @@ async function register() {
     tracer = provider.getTracer('xyz');
 
     if (process.env.VERCEL) {
-      flush = () => waitUntil(provider.forceFlush());
+      // Spans are flushed once the promise settles, eg. a span which ends after the response.
+      const forceFlush = () => provider.forceFlush();
+      flush = (promise = Promise.resolve()) =>
+        waitUntil(promise.then(forceFlush, forceFlush));
     } else {
       process.once('SIGTERM', () => provider.shutdown());
     }
@@ -346,6 +349,22 @@ Returns the src reference without query string to prevent keys and signatures be
 */
 export function srcAttribute(src) {
   return typeof src === 'string' ? src.split('?')[0] : undefined;
+}
+
+/**
+@function flushAfter
+
+@description
+Keeps a Vercel function alive until the promise settles and flushes the spans afterwards. The response is not delayed.
+
+The request span is flushed when the response is closed. A span which ends after the response, eg. a nonblocking query, would not be exported if the function is frozen before the next flush.
+
+The method is a no-op unless tracing is enabled in a Vercel deployment. It must be called within the request, eg. when the nonblocking query is started.
+
+@param {Promise} promise The promise of a span which may end after the response.
+*/
+export function flushAfter(promise) {
+  flush?.(promise);
 }
 
 /**

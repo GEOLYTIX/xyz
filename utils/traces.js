@@ -554,7 +554,9 @@ function truncate(text, width) {
   return text.length > width ? `${text.slice(0, width - 1)}…` : text;
 }
 
+// A span logged on its own or a malformed log message may have no duration.
 function fmt(ms) {
+  if (typeof ms !== 'number' || Number.isNaN(ms)) return '–';
   if (ms >= 1000) return `${(ms / 1000).toFixed(2)} s`;
   if (ms >= 100) return `${ms.toFixed(0)} ms`;
   if (ms >= 10) return `${ms.toFixed(1)} ms`;
