@@ -41,7 +41,7 @@ export function traceReport(items) {
     throw new Error('The traces placeholder is missing in traceReport.html.');
   }
 
-  const json = JSON.stringify(items).replaceAll('<', String.raw`<`);
+  const json = JSON.stringify(items).replaceAll('<', String.raw`\u003c`);
 
   return template.replace(
     PLACEHOLDER,
