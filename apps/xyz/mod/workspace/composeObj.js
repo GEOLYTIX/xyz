@@ -2,6 +2,7 @@
 ## /workspace/composeObj
 
 @requires /utils/merge
+@requires /utils/telemetry
 @requires /workspace/authorization
 @requires /workspace/cache
 @requires /workspace/getTemplate
@@ -10,6 +11,7 @@
 */
 
 import merge from '../utils/merge.js';
+import { withSpan } from '../utils/telemetry.js';
 import { authorizeScope } from './authorization.js';
 import workspaceCache from './cache.js';
 import getTemplate from './getTemplate.js';
@@ -31,7 +33,31 @@ The composeObj method is the main entry point for composing an object with templ
 @property {array} [obj.templates] An array of template keys to be merged into the object.
 @property {array<string>|boolean} [user.roles] An array of user roles. Admin endpoints set the roles property to true to bypass role checks.
 */
-export default async function composeObj(obj, user, defaults) {
+export default function composeObj(obj, user, defaults) {
+  return withSpan(
+    'workspace.composeObj',
+    {
+      'xyz.key': typeof obj?.key === 'string' ? obj.key : undefined,
+      'xyz.template':
+        typeof obj?.template === 'string' ? obj.template : undefined,
+    },
+    () => composeObject(obj, user, defaults),
+  );
+}
+
+/**
+@function composeObject
+@async
+
+@description
+Composes the object with templates and roles for the composeObj method.
+
+@param {Object} obj
+@param {User} [user] The requesting user from request params.
+@param {Object} [defaults] Defaults merged before the object's prototype and own properties.
+@returns {Promise<Object|Error>} The composed object.
+*/
+async function composeObject(obj, user, defaults) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 

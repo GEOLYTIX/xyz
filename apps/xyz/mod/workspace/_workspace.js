@@ -6,6 +6,7 @@ The Workspace API module exports the getKeyMethod() which returns a method from 
 @requires /workspace/getLocale
 @requires /workspace/getLayer
 @requires /workspace/getTemplate
+@requires /utils/telemetry
 @requires crypto
 
 @module /workspace
@@ -28,7 +29,7 @@ if (!process.env.VITEST) Object.freeze(Object.prototype);
 
 import { createHash } from 'node:crypto';
 import { cacheSources } from '../provider/getSrc.js';
-import logger from '../utils/logger.js';
+import { setRequestAttributes } from '../utils/telemetry.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
 import getLocale from './getLocale.js';
@@ -62,6 +63,12 @@ The method checks whether the req.params.key matches a keyMethods property and r
 */
 export default async function getKeyMethod(req, res) {
   Object.assign(req.params, req._params);
+
+  setRequestAttributes({
+    'xyz.workspace.key': req.params.key,
+    'xyz.locale': req.params.locale,
+    'xyz.layer': req.params.layer,
+  });
 
   workspace = await workspaceCache();
 

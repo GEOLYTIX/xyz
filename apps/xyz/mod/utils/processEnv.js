@@ -113,6 +113,17 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [JWT_TYPE='session'] The typ (type) claim in a JSON Web Token (JWT) is an optional header parameter that declares the media type or category of the token. Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}
 @property {String} [JWT_ISSUER='xyz'] The iss (issuer) claim in a JSON Web Token (JWT) is a case-sensitive string or URI that identifies the principal or authorization server that created and signed the token. Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}
 @property {String} [JWT_AUDIENCE='xyz'] The aud (audience) claim in a JSON Web Token (JWT) identifies the specific recipient or resource server that the token is intended for. The string property will be split into an array of audiences.Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}
+@property {String} [OTEL_EXPORTER_OTLP_ENDPOINT] Enables tracing in the [telemetry module]{@link module:/utils/telemetry} with spans exported to the OTLP/HTTP collector endpoint, eg. http://localhost:4318. See the [OTLP exporter configuration]{@link https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/}.
+@property {String} [OTEL_EXPORTER_OTLP_TRACES_ENDPOINT] Enables tracing in the [telemetry module]{@link module:/utils/telemetry} with a traces specific OTLP/HTTP endpoint which takes precedence over the OTEL_EXPORTER_OTLP_ENDPOINT.
+@property {String} [OTEL_EXPORTER_OTLP_HEADERS] Comma separated key=value headers sent with OTLP export requests, eg. an authorization header for a hosted collector.
+@property {String} [OTEL_TRACES_EXPORTER] The exporter for the [telemetry module]{@link module:/utils/telemetry}. Supported values are otlp, console, and none. Defaults to otlp if an OTLP endpoint is configured.
+@property {String} [OTEL_CONSOLE_MIN_DURATION] Requests shorter than the duration in milliseconds are not logged with the console exporter of the [telemetry module]{@link module:/utils/telemetry}. Specific to XYZ, not an OpenTelemetry SDK variable.
+@property {String} [OTEL_CONSOLE_HTML] Path relative to the workspace root, eg. .traces/local.html, of an HTML report with the most recent traces logged by the console exporter of the [telemetry module]{@link module:/utils/telemetry}. Ignored in a Vercel deployment. Specific to XYZ, not an OpenTelemetry SDK variable.
+@property {String} [OTEL_SERVICE_NAME='xyz'] The service.name resource attribute assigned to spans from the [telemetry module]{@link module:/utils/telemetry}.
+@property {String} [OTEL_RESOURCE_ATTRIBUTES] Comma separated key=value resource attributes which take precedence over the process metadata assigned by the [telemetry module]{@link module:/utils/telemetry}.
+@property {String} [OTEL_TRACES_SAMPLER] The trace sampler, eg. parentbased_traceidratio. All traces are sampled by default.
+@property {String} [OTEL_TRACES_SAMPLER_ARG] The sampler argument, eg. 0.1 to sample 10% of traces with a traceidratio sampler.
+@property {String} [OTEL_SDK_DISABLED] Disables tracing in the [telemetry module]{@link module:/utils/telemetry} if true, regardless of the configured exporter. See the [SDK configuration]{@link https://opentelemetry.io/docs/languages/sdk-configuration/} for all OTEL_* variables.
 */
 
 const defaults = {

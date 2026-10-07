@@ -13,6 +13,7 @@
     "dev:auth": "turbo run dev --filter=@geolytix/xyz-auth-app",
     "dev:saml": "turbo run dev --filter=@geolytix/xyz-saml-app",
     "deploy:vercel": "node utils/deploy-vercel.js",
+    "traces": "node utils/traces.js",
     "bump:patch": "node utils/bump-version.js patch",
     "bump:minor": "node utils/bump-version.js minor",
     "bump:major": "node utils/bump-version.js major",

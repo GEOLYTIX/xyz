@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>XYZ Trace Waterfall</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+    >
+    <style>
+  /* Layout: a tool page. Request header with chips, the span waterfall as the main figure, summary table and the paste panel below. */
+  :root {
+    --bg: #f6f7f9;
+    --surface: #fcfcfd;
+    --fg: #14171c;
+    --fg-2: #4d5562;
+    --fg-3: #7a8290;
+    --line: #dfe3e9;
+    --grid: #eceff3;
+    --accent: #2a5fb0;
+    --row-hover: #eef2f8;
+    --cat-request: #8b93a1;
+    --cat-workspace: #2a78d6;
+    --cat-src: #eb6834;
+    --cat-dbs: #1baf7a;
+    --cat-template: #eda100;
+    --error: #c7362f;
+    --chip-bg: #e9edf3;
+    --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121418;
+      --surface: #1a1d22;
+      --fg: #eef1f5;
+      --fg-2: #b8c0cc;
+      --fg-3: #8a93a1;
+      --line: #2c3139;
+      --grid: #23272e;
+      --accent: #7aa7ee;
+      --row-hover: #222833;
+      --cat-request: #7d8594;
+      --cat-workspace: #3987e5;
+      --cat-src: #d95926;
+      --cat-dbs: #199e70;
+      --cat-template: #c98500;
+      --error: #f07a74;
+      --chip-bg: #262b33;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121418;
+    --surface: #1a1d22;
+    --fg: #eef1f5;
+    --fg-2: #b8c0cc;
+    --fg-3: #8a93a1;
+    --line: #2c3139;
+    --grid: #23272e;
+    --accent: #7aa7ee;
+    --row-hover: #222833;
+    --cat-request: #7d8594;
+    --cat-workspace: #3987e5;
+    --cat-src: #d95926;
+    --cat-dbs: #199e70;
+    --cat-template: #c98500;
+    --error: #f07a74;
+    --chip-bg: #262b33;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+  main {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding-inline: 16px;
+    padding-block: 24px 48px;
+    display: grid;
+    gap: 20px;
+  }
+
+  header.request { display: grid; gap: 8px; }
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+    font-weight: 500;
+  }
+  h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: var(--chip-bg);
+    color: var(--fg-2);
+    font-size: 12px;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+  }
+  .chip strong { color: var(--fg); font-weight: 500; }
+  .chip.warn::before, .chip.bad::before {
+    content: '';
+    width: 7px; height: 7px; border-radius: 50%;
+  }
+  .chip.warn::before { background: var(--cat-template); }
+  .chip.bad::before { background: var(--error); }
+  .total {
+    font-family: var(--font-mono);
+    font-size: 28px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .total small { font-size: 14px; color: var(--fg-3); margin-left: 2px; }
+
+  section.panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    min-width: 0;
+  }
+  .panel-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px 16px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .panel-head h2 { margin: 0; font-size: 14px; font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12px; color: var(--fg-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+
+  /* Waterfall */
+  .waterfall-scroll { overflow-x: auto; }
+  .waterfall { min-width: 640px; padding-bottom: 8px; }
+  .wf-row {
+    display: grid;
+    grid-template-columns: minmax(200px, 34%) 1fr;
+    align-items: center;
+    min-height: 30px;
+    cursor: pointer;
+    outline: none;
+  }
+  .wf-row:hover, .wf-row:focus-visible, .wf-row.selected { background: var(--row-hover); }
+  .wf-row:focus-visible { box-shadow: inset 2px 0 0 var(--accent); }
+  .wf-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px 4px 16px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--fg);
+    min-width: 0;
+  }
+  .wf-name .tree { color: var(--fg-3); white-space: pre; }
+  .wf-name .label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .wf-name .err { color: var(--error); font-weight: 600; }
+  .wf-name .key { color: var(--fg-3); }
+  .wf-track { position: relative; height: 30px; margin-right: 16px; }
+  .wf-bar {
+    position: absolute;
+    top: 9px;
+    height: 12px;
+    min-width: 2px;
+    border-radius: 2px;
+  }
+  .wf-bar.error { outline: 2px solid var(--error); outline-offset: 1px; }
+  .wf-dur {
+    position: absolute;
+    top: 6px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--fg-2);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .wf-axis {
+    display: grid;
+    grid-template-columns: minmax(200px, 34%) 1fr;
+    border-bottom: 1px solid var(--line);
+  }
+  .wf-axis .ticks { position: relative; height: 28px; margin-right: 16px; }
+  .wf-axis .tick {
+    position: absolute;
+    bottom: 6px;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--fg-3);
+    white-space: nowrap;
+  }
+  .wf-axis .tick:first-child { transform: none; }
+  .wf-body { position: relative; }
+  .wf-grid {
+    position: absolute;
+    inset: 0 16px 0 calc(max(200px, 34%));
+    pointer-events: none;
+  }
+  .wf-grid i { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--grid); }
+
+  /* Details */
+  .details { padding: 12px 16px 16px; display: grid; gap: 10px; }
+  .details h3 { margin: 0; font-family: var(--font-mono); font-size: 13px; font-weight: 500; }
+  .details .when { color: var(--fg-3); font-family: var(--font-mono); font-size: 12px; }
+  .kv {
+    display: grid;
+    grid-template-columns: minmax(140px, max-content) 1fr;
+    gap: 3px 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    margin: 0;
+  }
+  .kv dt { color: var(--fg-3); }
+  .kv dd { margin: 0; color: var(--fg); overflow-wrap: anywhere; }
+  .muted { color: var(--fg-3); }
+
+  .two-col { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+  @media (max-width: 820px) { .two-col { grid-template-columns: minmax(0, 1fr); } }
+
+  /* Summary table */
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { padding: 7px 16px; text-align: left; border-bottom: 1px solid var(--grid); }
+  th { font-weight: 500; color: var(--fg-3); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+  td { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  td.num, th.num { text-align: right; }
+  td .sw { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 8px; }
+  .share { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+  .share b { display: block; height: 6px; border-radius: 2px; background: var(--fg-3); opacity: 0.45; }
+
+  /* Request list */
+  .requests-scroll { overflow: auto; max-height: 320px; }
+  #requests tbody tr { cursor: pointer; outline: none; }
+  #requests tbody tr:hover, #requests tbody tr:focus-visible, #requests tbody tr.selected { background: var(--row-hover); }
+  #requests tbody tr:focus-visible { box-shadow: inset 2px 0 0 var(--accent); }
+  #requests td.path { max-width: 360px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .status-bad { color: var(--error); }
+
+  /* Paste panel */
+  .paste { padding: 12px 16px 16px; display: grid; gap: 10px; }
+  .paste p { margin: 0; color: var(--fg-2); max-width: 65ch; }
+  .paste code { font-family: var(--font-mono); font-size: 12px; background: var(--chip-bg); padding: 1px 5px; border-radius: 4px; }
+  textarea {
+    width: 100%;
+    min-height: 160px;
+    resize: vertical;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  textarea:focus-visible, button:focus-visible, label.file:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  button, label.file {
+    font: inherit;
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--fg);
+    cursor: pointer;
+  }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); font-weight: 500; }
+  label.file input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .status { font-size: 12.5px; color: var(--fg-2); }
+  .status.error { color: var(--error); }
+
+  /* Tooltip */
+  .tip {
+    position: fixed;
+    z-index: 10;
+    pointer-events: none;
+    background: var(--fg);
+    color: var(--bg);
+    padding: 6px 9px;
+    border-radius: 5px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    line-height: 1.5;
+    max-width: 320px;
+  }
+
+  @media (max-width: 520px) {
+    .total { font-size: 24px; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .wf-bar { transition: opacity 120ms; }
+  }
+</style>
+  </head>
+  <body>
+    <main>
+      <header class="request" aria-live="polite">
+        <div class="eyebrow" id="source-label">Sample trace</div>
+        <h1 id="req-name">–</h1>
+        <div class="meta" id="req-meta"></div>
+      </header>
+
+      <section
+        class="panel"
+        aria-labelledby="req-title"
+        id="requests-panel"
+        hidden
+      >
+        <div class="panel-head">
+          <h2 id="req-title">Requests</h2>
+          <span class="muted" style="font-size:12px" id="req-count"></span>
+        </div>
+        <div class="requests-scroll">
+          <table id="requests"></table>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="wf-title">
+        <div class="panel-head">
+          <h2 id="wf-title">Span waterfall</h2>
+          <div class="legend" id="legend"></div>
+        </div>
+        <div class="waterfall-scroll">
+          <div class="waterfall" id="waterfall" role="list"></div>
+        </div>
+      </section>
+
+      <div class="two-col">
+        <section class="panel" aria-labelledby="details-title">
+          <div class="panel-head">
+            <h2 id="details-title">Span details</h2>
+            <span class="muted" style="font-size:12px">Select a row</span>
+          </div>
+          <div class="details" id="details"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="sum-title">
+          <div class="panel-head">
+            <h2 id="sum-title">Time by span name</h2>
+            <span class="muted" style="font-size:12px"
+              >Share of request duration</span
+            >
+          </div>
+          <div class="table-scroll">
+            <table id="summary"></table>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel" aria-labelledby="paste-title">
+        <div class="panel-head">
+          <h2 id="paste-title">Load a trace</h2>
+        </div>
+        <form class="paste" id="paste-form">
+          <p>
+            Run xyz with <code>OTEL_TRACES_EXPORTER=console</code>and copy one
+            logged trace object from the terminal or the debug console. Paste it
+            here, or open a saved <code>.json</code>file.
+          </p>
+          <textarea
+            id="trace-input"
+            spellcheck="false"
+            aria-label="Trace JSON"
+            placeholder='{ "traceId": "…", "name": "GET /api/workspace{/:key}", "start": 0, "duration": 7.67, "children": [ … ] }'
+          ></textarea>
+          <div class="actions">
+            <button type="submit" class="primary">Draw chart</button>
+            <label class="file">
+              Open file
+              <input
+                type="file"
+                id="trace-file"
+                accept=".json,.txt,application/json"
+              >
+            </label>
+            <button type="button" id="load-sample">Show sample</button>
+            <span class="status" id="status" role="status"></span>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <div class="tip" id="tip" hidden></div>
+
+    <!-- Traces are injected here by the traceReport module. -->
+    <script type="application/json" id="traces">[]</script>
+
+    <script
+      type="application/json"
+      id="sample"
+    >{"traceId":"1fccff51f3eb5438660b6514e3d70eec","name":"GET /api/workspace{/:key}","start":0,"duration":7.67,"attributes":{"faas.coldstart":true,"http.request.method":"GET","url.path":"/api/workspace/locale","process.uptime":0.645616,"xyz.workspace.key":"locale","xyz.workspace.cache":"initial","http.route":"/api/workspace{/:key}","http.response.status_code":200,"process.memory.rss":93937664,"process.memory.heap_used":30883296,"process.memory.external":4386790},"children":[{"name":"workspace.cache","start":1.23,"duration":1.33,"attributes":{"xyz.workspace.cache":"initial","xyz.workspace.src":"file:./public/workspace.json","xyz.workspace.templates":65,"xyz.workspace.locales":1,"xyz.workspace.errors":0},"children":[{"name":"getSrc","start":1.54,"duration":0.86,"attributes":{"xyz.src":"file:./public/workspace.json","xyz.src.cache_hit":false},"children":[{"name":"src.provider","start":1.72,"duration":0.49,"attributes":{"xyz.src":"file:./public/workspace.json","xyz.src.provider":"file","xyz.src.type":"object"}}]}]},{"name":"workspace.getLocale","start":2.69,"duration":1.07,"attributes":{"xyz.locale.layers":true,"xyz.locale.nested":false},"children":[{"name":"workspace.composeObj","start":2.91,"duration":0.41,"attributes":{"xyz.key":"locale"}},{"name":"workspace.getLayer","start":3.48,"duration":0.26,"attributes":{"xyz.layer":"OSM","xyz.locale":"locale"},"children":[{"name":"workspace.composeObj","start":3.65,"duration":0.06,"attributes":{"xyz.key":"OSM"}}]}]}],"summary":{"src.provider":{"count":1,"duration":0.49},"getSrc":{"count":1,"duration":0.86},"workspace.cache":{"count":1,"duration":1.33},"workspace.composeObj":{"count":2,"duration":0.47},"workspace.getLayer":{"count":1,"duration":0.26},"workspace.getLocale":{"count":1,"duration":1.07}},"resource":{"service.name":"xyz","service.version":"v5.0.6","service.instance.id":"83e2de","deployment.environment.name":"development","process.pid":27816,"process.runtime.name":"nodejs","process.runtime.version":"24.18.0","telemetry.sdk.language":"nodejs","telemetry.sdk.name":"opentelemetry","telemetry.sdk.version":"2.11.0"}}</script>
+
+    <script>
+(() => {
+  // Span categories by span name. The colour carries the category, the row label carries the name.
+  const CATEGORIES = [
+    { key: 'request', label: 'Request', test: (n, depth) => depth === 0 },
+    { key: 'workspace', label: 'Workspace', test: (n) => n.startsWith('workspace.') },
+    { key: 'src', label: 'Source', test: (n) => n === 'getSrc' || n.startsWith('src.') || n === 'cacheSources' },
+    { key: 'dbs', label: 'Database', test: (n) => n.startsWith('dbs.') },
+    { key: 'template', label: 'Template', test: (n) => n.startsWith('template.') },
+  ];
+  const OTHER = { key: 'request', label: 'Other' };
+
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, cls, text) => {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  };
+
+  // Span attributes which identify what a span worked on, in order of precedence.
+  const KEY_ATTRIBUTES = ['xyz.layer', 'xyz.locale', 'xyz.key', 'xyz.template', 'xyz.src', 'xyz.dbs'];
+
+  // Returns the key of what the span worked on, eg. the layer of a getLayer span. A src is shortened to its file name.
+  function spanKey(node) {
+    const attrs = node.attributes ?? {};
+    const key = KEY_ATTRIBUTES.find((attr) => attrs[attr] !== undefined);
+    if (!key) return '';
+    return key === 'xyz.src' ? String(attrs[key]).split('/').at(-1) : String(attrs[key]);
+  }
+
+  function category(name, depth) {
+    return CATEGORIES.find((c) => c.test(name, depth)) ?? OTHER;
+  }
+
+  function fmt(ms) {
+    if (ms == null || Number.isNaN(ms)) return '–';
+    if (ms >= 1000) return `${(ms / 1000).toFixed(2)} s`;
+    if (ms >= 100) return `${ms.toFixed(0)} ms`;
+    if (ms >= 10) return `${ms.toFixed(1)} ms`;
+    return `${ms.toFixed(2)} ms`;
+  }
+
+  function fmtBytes(b) {
+    return `${(b / 1048576).toFixed(1)} MB`;
+  }
+
+  // Nice tick step for the time axis.
+  function tickStep(max, target = 6) {
+    const raw = max / target;
+    const pow = 10 ** Math.floor(Math.log10(raw));
+    const n = raw / pow;
+    return (n < 1.5 ? 1 : n < 3 ? 2 : n < 7 ? 5 : 10) * pow;
+  }
+
+  // Accepts the JSON logged in the terminal and the object literal copied from the debug console.
+  function parseTrace(text) {
+    text = text.trim();
+    const first = text.indexOf('{');
+    if (first < 0) throw new Error('No object found. Paste one trace object starting with {.');
+    text = text.slice(first);
+    try {
+      return JSON.parse(text);
+    } catch {
+      const json = text
+        .replace(/\[Object: null prototype\]\s*/g, '')
+        .replace(/'((?:[^'\\]|\\.)*)'/g, (_, s) => JSON.stringify(s.replace(/\\'/g, "'")))
+        .replace(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":')
+        .replace(/,\s*([}\]])/g, '$1');
+      try {
+        return JSON.parse(json);
+      } catch {
+        throw new Error('The text could not be read as a trace object. Copy the whole logged object, from the first { to the last }.');
+      }
+    }
+  }
+
+  // Depth first rows in start order.
+  function flatten(node, depth = 0, prefix = '', last = true, rows = []) {
+    rows.push({ node, depth, prefix: depth ? prefix + (last ? '└ ' : '├ ') : '' });
+    const children = [...(node.children ?? [])].sort((a, b) => (a.start ?? 0) - (b.start ?? 0));
+    children.forEach((child, i) =>
+      flatten(child, depth + 1, depth ? prefix + (last ? '  ' : '│ ') : '', i === children.length - 1, rows),
+    );
+    return rows;
+  }
+
+  const tip = $('tip');
+  let selected = null;
+  let rowsCache = [];
+
+  function render(trace, sourceLabel) {
+    if (!trace || typeof trace !== 'object' || typeof trace.duration !== 'number') {
+      throw new Error('The object has no duration. Paste a trace logged by the ConsoleTraceProcessor.');
+    }
+
+    const attrs = trace.attributes ?? {};
+    $('source-label').textContent = sourceLabel;
+    $('req-name').textContent = trace.name ?? 'Unnamed trace';
+
+    // Header chips
+    const meta = $('req-meta');
+    meta.replaceChildren();
+    const total = el('span', 'total');
+    total.append(fmt(trace.duration).replace(/ (ms|s)$/, ''), el('small', null, fmt(trace.duration).split(' ')[1]));
+    meta.append(total);
+    const chip = (label, value, cls = '') => {
+      const c = el('span', `chip ${cls}`);
+      c.append(`${label} `, el('strong', null, String(value)));
+      meta.append(c);
+    };
+    const status = attrs['http.response.status_code'];
+    if (status != null) chip('status', status, status >= 500 ? 'bad' : status >= 400 ? 'warn' : '');
+    if (attrs['faas.coldstart'] != null) chip('cold start', attrs['faas.coldstart'] ? 'yes' : 'no', attrs['faas.coldstart'] ? 'warn' : '');
+    if (attrs['xyz.workspace.cache']) chip('workspace cache', attrs['xyz.workspace.cache'], 'warn');
+    if (attrs['url.path']) chip('path', attrs['url.path']);
+    if (attrs['process.memory.rss']) chip('rss', fmtBytes(attrs['process.memory.rss']));
+    if (trace.traceId) chip('trace', trace.traceId.slice(0, 8));
+
+    const rows = flatten(trace);
+    rowsCache = rows;
+    const origin = trace.start ?? 0;
+    const span = Math.max(trace.duration, ...rows.map((r) => (r.node.start ?? 0) - origin + (r.node.duration ?? 0)));
+    const step = tickStep(span);
+    const axisMax = Math.ceil(span / step) * step;
+    const pct = (ms) => `${(ms / axisMax) * 100}%`;
+
+    // Legend, only categories present
+    const present = new Set(rows.map((r) => category(r.node.name, r.depth).key));
+    const legend = $('legend');
+    legend.replaceChildren();
+    for (const c of CATEGORIES) {
+      if (!present.has(c.key)) continue;
+      const item = el('span');
+      const sw = el('i');
+      sw.style.background = `var(--cat-${c.key})`;
+      item.append(sw, c.label);
+      legend.append(item);
+    }
+
+    // Axis
+    const wf = $('waterfall');
+    wf.replaceChildren();
+    const axis = el('div', 'wf-axis');
+    axis.append(el('div', 'wf-name muted', 'span'));
+    const ticks = el('div', 'ticks');
+    const body = el('div', 'wf-body');
+    const grid = el('div', 'wf-grid');
+    for (let t = 0; t <= axisMax + step / 2; t += step) {
+      const tick = el('span', 'tick', t === 0 ? '0' : fmt(t));
+      tick.style.left = pct(t);
+      if (t >= axisMax - step / 2 && t > 0) tick.style.transform = 'translateX(-100%)';
+      ticks.append(tick);
+      const line = el('i');
+      line.style.left = pct(t);
+      grid.append(line);
+    }
+    axis.append(ticks);
+    wf.append(axis);
+    body.append(grid);
+
+    rows.forEach((row, i) => {
+      const { node, depth, prefix } = row;
+      const cat = category(node.name, depth);
+      const start = (node.start ?? 0) - origin;
+      const r = el('div', 'wf-row');
+      r.setAttribute('role', 'listitem');
+      r.tabIndex = 0;
+      r.dataset.index = i;
+
+      const name = el('div', 'wf-name');
+      if (prefix) name.append(el('span', 'tree', prefix));
+      const key = spanKey(node);
+      const label = el('span', 'label', node.name);
+      if (key) label.append(' ', el('span', 'key', key));
+      label.title = key ? `${node.name} ${key}` : node.name;
+      name.append(label);
+      if (node.error) name.append(el('span', 'err', '!'));
+
+      const track = el('div', 'wf-track');
+      const bar = el('div', `wf-bar${node.error ? ' error' : ''}`);
+      bar.style.left = pct(start);
+      bar.style.width = pct(node.duration ?? 0);
+      bar.style.background = `var(--cat-${cat.key})`;
+      const dur = el('span', 'wf-dur', fmt(node.duration));
+      const end = start + (node.duration ?? 0);
+      // Duration label sits after the bar, or before it when the bar reaches the right edge.
+      if (end / axisMax > 0.82) {
+        dur.style.right = `calc(${100 - (start / axisMax) * 100}% + 6px)`;
+      } else {
+        dur.style.left = `calc(${pct(end)} + 6px)`;
+      }
+      track.append(bar, dur);
+      r.append(name, track);
+      r.setAttribute('aria-label', `${node.name}, starts at ${fmt(start)}, takes ${fmt(node.duration)}`);
+
+      r.addEventListener('click', () => select(i));
+      r.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(i); }
+        if (e.key === 'ArrowDown') { e.preventDefault(); wf.querySelector(`[data-index="${i + 1}"]`)?.focus(); }
+        if (e.key === 'ArrowUp') { e.preventDefault(); wf.querySelector(`[data-index="${i - 1}"]`)?.focus(); }
+      });
+      r.addEventListener('pointermove', (e) => showTip(e, node, start, cat));
+      r.addEventListener('pointerleave', () => { tip.hidden = true; });
+      body.append(r);
+    });
+    wf.append(body);
+
+    renderSummary(trace, rows);
+    select(0);
+  }
+
+  function showTip(e, node, start, cat) {
+    tip.replaceChildren(
+      el('div', null, node.name),
+      el('div', null, `${cat.label} · start ${fmt(start)} · ${fmt(node.duration)}`),
+    );
+    if (node.error) tip.append(el('div', null, `error: ${node.error}`));
+    tip.hidden = false;
+    const pad = 14;
+    const w = tip.offsetWidth;
+    const h = tip.offsetHeight;
+    let x = e.clientX + pad;
+    let y = e.clientY + pad;
+    if (x + w > window.innerWidth - 8) x = e.clientX - w - pad;
+    if (y + h > window.innerHeight - 8) y = e.clientY - h - pad;
+    tip.style.left = `${Math.max(8, x)}px`;
+    tip.style.top = `${Math.max(8, y)}px`;
+  }
+
+  function select(i) {
+    const row = rowsCache[i];
+    if (!row) return;
+    selected?.classList.remove('selected');
+    selected = $('waterfall').querySelector(`[data-index="${i}"]`);
+    selected?.classList.add('selected');
+
+    const { node, depth } = row;
+    const d = $('details');
+    d.replaceChildren();
+    const origin = rowsCache[0].node.start ?? 0;
+    const start = (node.start ?? 0) - origin;
+    d.append(el('h3', null, node.name));
+    d.append(el('div', 'when', `${category(node.name, depth).label} · starts at ${fmt(start)} · takes ${fmt(node.duration)} · ends at ${fmt(start + (node.duration ?? 0))}`));
+
+    const entries = Object.entries(node.attributes ?? {});
+    if (node.error) entries.unshift(['error', node.error]);
+    if (entries.length) {
+      const dl = el('dl', 'kv');
+      for (const [k, v] of entries) dl.append(el('dt', null, k), el('dd', null, String(v)));
+      d.append(dl);
+    } else {
+      d.append(el('div', 'muted', 'No attributes on this span.'));
+    }
+    for (const ev of node.events ?? []) {
+      const { name, ...rest } = ev;
+      d.append(el('div', 'eyebrow', `event · ${name}`));
+      const dl = el('dl', 'kv');
+      for (const [k, v] of Object.entries(rest)) dl.append(el('dt', null, k), el('dd', null, String(v)));
+      d.append(dl);
+    }
+  }
+
+  function renderSummary(trace, rows) {
+    // Use the logged summary or derive it from the span tree.
+    let summary = trace.summary;
+    if (!summary) {
+      summary = {};
+      rows.slice(1).forEach(({ node }) => {
+        summary[node.name] ??= { count: 0, duration: 0 };
+        summary[node.name].count++;
+        summary[node.name].duration += node.duration ?? 0;
+      });
+    }
+    const entries = Object.entries(summary).sort((a, b) => b[1].duration - a[1].duration);
+    const max = Math.max(...entries.map(([, s]) => s.duration), 0.0001);
+    const table = $('summary');
+    table.replaceChildren();
+    const head = el('tr');
+    head.append(el('th', null, 'Span'), el('th', 'num', 'Count'), el('th', 'num', 'Total'), el('th', 'num', 'Share'));
+    const thead = el('thead');
+    thead.append(head);
+    const tbody = el('tbody');
+    for (const [name, s] of entries) {
+      const tr = el('tr');
+      const nameCell = el('td');
+      const sw = el('span', 'sw');
+      sw.style.background = `var(--cat-${category(name, 1).key})`;
+      nameCell.append(sw, name);
+      const share = el('td', 'num');
+      const wrap = el('div', 'share');
+      const b = el('b');
+      b.style.width = `${Math.max(2, (s.duration / max) * 60)}px`;
+      wrap.append(b, `${((s.duration / trace.duration) * 100).toFixed(0)}%`);
+      share.append(wrap);
+      tr.append(nameCell, el('td', 'num', String(s.count)), el('td', 'num', fmt(s.duration)), share);
+      tbody.append(tr);
+    }
+    if (!entries.length) {
+      const tr = el('tr');
+      const td = el('td', 'muted', 'The trace has no child spans.');
+      td.colSpan = 4;
+      tr.append(td);
+      tbody.append(tr);
+    }
+    table.append(thead, tbody);
+  }
+
+  function requestLabel({ meta = {} }) {
+    const time = meta.timestamp ? new Date(meta.timestamp).toLocaleString() : '';
+    return [meta.source, meta.environment, meta.domain, time].filter(Boolean).join(' · ');
+  }
+
+  function renderRequests(items) {
+    $('requests-panel').hidden = false;
+    $('req-count').textContent = `${items.length} traces, newest first`;
+    const table = $('requests');
+    const head = el('tr');
+    head.append(el('th', null, 'Time'), el('th', 'num', 'Status'), el('th', 'num', 'Duration'), el('th', null, 'Path'), el('th', null, 'Cold'));
+    const thead = el('thead');
+    thead.append(head);
+    const tbody = el('tbody');
+    let current = null;
+    const show = (tr, item) => {
+      current?.classList.remove('selected');
+      current = tr;
+      tr.classList.add('selected');
+      try {
+        render(item.trace, requestLabel(item));
+      } catch (err) {
+        setStatus(err.message, true);
+      }
+    };
+    items.forEach((item, i) => {
+      const { trace, meta = {} } = item;
+      const attrs = trace.attributes ?? {};
+      const status = meta.responseStatusCode ?? attrs['http.response.status_code'];
+      const tr = el('tr');
+      tr.tabIndex = 0;
+      tr.append(
+        el('td', null, meta.timestamp ? new Date(meta.timestamp).toLocaleTimeString() : '–'),
+        el('td', `num${status >= 500 ? ' status-bad' : ''}`, status ?? '–'),
+        el('td', 'num', fmt(trace.duration)),
+        el('td', 'path', meta.requestPath ?? attrs['url.path'] ?? trace.name),
+        el('td', null, attrs['faas.coldstart'] ? 'yes' : ''),
+      );
+      tr.lastChild.previousSibling.title = meta.requestPath ?? '';
+      tr.addEventListener('click', () => show(tr, item));
+      tr.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(tr, item); }
+        if (e.key === 'ArrowDown') { e.preventDefault(); tr.nextSibling?.focus(); }
+        if (e.key === 'ArrowUp') { e.preventDefault(); tr.previousSibling?.focus(); }
+      });
+      tbody.append(tr);
+      if (i === 0) show(tr, item);
+    });
+    table.replaceChildren(thead, tbody);
+  }
+
+  function setStatus(text, isError = false) {
+    const s = $('status');
+    s.textContent = text;
+    s.classList.toggle('error', isError);
+  }
+
+  function load(text, label) {
+    try {
+      render(parseTrace(text), label);
+      setStatus(`Chart drawn for ${label.toLowerCase()}.`);
+      try { localStorage.setItem('xyz-trace', text); } catch {}
+    } catch (err) {
+      setStatus(err.message, true);
+    }
+  }
+
+  const sampleText = $('sample').textContent;
+
+  $('paste-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    load($('trace-input').value, 'Pasted trace');
+  });
+
+  $('trace-file').addEventListener('change', (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      $('trace-input').value = reader.result;
+      load(reader.result, `File ${file.name}`);
+    };
+    reader.readAsText(file);
+  });
+
+  $('load-sample').addEventListener('click', () => {
+    $('trace-input').value = JSON.stringify(JSON.parse(sampleText), null, 2);
+    load(sampleText, 'Sample trace');
+  });
+
+  // Traces injected by the traceReport module, newest first. Each item has the trace and the Vercel log meta.
+  const injected = JSON.parse($('traces').textContent);
+
+  if (injected.length) {
+    renderRequests(injected);
+    return;
+  }
+
+  // Open with the last pasted trace, or the sample.
+  let saved = null;
+  try { saved = localStorage.getItem('xyz-trace'); } catch {}
+  if (saved) {
+    $('trace-input').value = saved;
+    try { render(parseTrace(saved), 'Last pasted trace'); return; } catch {}
+  }
+  render(JSON.parse(sampleText), 'Sample trace · cold start of GET /api/workspace/locale in local dev');
+})();
+</script>
+  </body>
+</html>

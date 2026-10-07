@@ -8,6 +8,7 @@ The [node-postgres]{@link https://www.npmjs.com/package/pg} package is required 
 
 @requires pg
 @requires /utils/logger
+@requires /utils/telemetry
 @requires module:/utils/processEnv
 */
 
@@ -16,6 +17,7 @@ import pg from 'pg';
 const { Pool } = pg;
 
 import logger from './logger.js';
+import { activeSpan, withSpan } from './telemetry.js';
 
 // At least one attempt is made if the RETRY_LIMIT is not a positive number.
 const RETRY_LIMIT = Number.parseInt(xyzEnv.RETRY_LIMIT) || 1;
@@ -81,21 +83,31 @@ Nonblocking queries are attempted once without retry. The returned promise resol
 async function clientQuery(query, variables, timeout, options = {}) {
   timeout ??= xyzEnv.STATEMENT_TIMEOUT;
 
+  const attributes = {
+    'db.system.name': 'postgresql',
+    'xyz.dbs': this.options.dbs,
+    'xyz.dbs.statement_timeout': timeout == null ? undefined : String(timeout),
+    'xyz.dbs.nonblocking': !!options.nonblocking,
+  };
+
   if (!options.nonblocking) {
-    return executeQuery(this, query, variables, timeout);
+    return withSpan('dbs.query', attributes, () =>
+      executeQuery(this, query, variables, timeout),
+    );
   }
 
   // Nonblocking queries make a single attempt without retry.
+  // The span ends once the query completes, which may be after the response has been sent.
   return new Promise((resolve) => {
-    attemptQuery(this, query, variables, timeout, () => resolve(true)).then(
-      (result) => {
-        // No-op if the promise was already resolved once the query was sent.
-        resolve(result);
+    withSpan('dbs.query', attributes, () =>
+      attemptQuery(this, query, variables, timeout, () => resolve(true)),
+    ).then((result) => {
+      // No-op if the promise was already resolved once the query was sent.
+      resolve(result);
 
-        // The result of a nonblocking query is not awaited and must be logged here.
-        if (result instanceof Error) console.error(result);
-      },
-    );
+      // The result of a nonblocking query is not awaited and must be logged here.
+      if (result instanceof Error) console.error(result);
+    });
   });
 }
 
@@ -117,10 +129,24 @@ The reason for a retry and the backoff delay are logged with the `dbs_retry` key
 @returns {Promise<Array|Error>} Query rows or the last error.
 */
 async function executeQuery(pool, query, variables, timeout) {
+  const span = activeSpan();
+
   for (let attempt = 1; attempt <= RETRY_LIMIT; attempt++) {
+    span.setAttribute('xyz.dbs.attempts', attempt);
+
     const result = await attemptQuery(pool, query, variables, timeout);
 
+    if (Array.isArray(result)) {
+      span.setAttribute('xyz.dbs.rows', result.length);
+    }
+
     if (!(result instanceof Error)) return result;
+
+    span.addEvent('dbs.error', {
+      attempt,
+      'error.type': result.code ?? result.name,
+      'error.message': result.message,
+    });
 
     console.error(result);
 
@@ -182,7 +208,17 @@ async function attemptQuery(pool, query, variables, timeout, onSent) {
   let client;
 
   try {
-    client = await pool.connect();
+    // The pool counts before connecting show whether the client must wait for a connection.
+    client = await withSpan(
+      'dbs.connect',
+      {
+        'xyz.dbs': pool.options.dbs,
+        'xyz.dbs.pool.total': pool.totalCount,
+        'xyz.dbs.pool.idle': pool.idleCount,
+        'xyz.dbs.pool.waiting': pool.waitingCount,
+      },
+      () => pool.connect(),
+    );
 
     // Set statement timeout if specified
     if (timeout != null) {
