@@ -1,26 +1,80 @@
 name: Release
 
+# The MAPP bundles in public/js/lib and public/css are gitignored on every
+# branch. A push to main with an untagged package.json version builds the
+# bundles, commits them on top of main without pushing that commit to any
+# branch, and tags it. The tag is the only ref which carries the build output.
+
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
 
 permissions:
   contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Resolve version
+        id: version
+        run: |
+          tag=$(node -p "require('./package.json').version")
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" > /dev/null; then
+            echo "Tag $tag already exists, nothing to release."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            test -f "release-notes/$tag.md"
+          fi
+
+      - name: Install pnpm
+        if: steps.version.outputs.exists != 'true'
+        uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        if: steps.version.outputs.exists != 'true'
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        if: steps.version.outputs.exists != 'true'
+        run: pnpm install --ignore-scripts
+
+      - name: Test
+        if: steps.version.outputs.exists != 'true'
+        run: pnpm test
+
+      - name: Build MAPP bundles
+        if: steps.version.outputs.exists != 'true'
+        run: pnpm build --filter=@geolytix/mapp --force
+
+      - name: Commit build and push tag
+        if: steps.version.outputs.exists != 'true'
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add --force public/js/lib public/css/mapp.css public/css/ui.css
+          git commit -m "Build $TAG"
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "refs/tags/$TAG"
 
       - name: Create GitHub release
+        if: steps.version.outputs.exists != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
         run: |
-          notes="release-notes/${GITHUB_REF_NAME}.md"
-          test -f "$notes"
-          gh release create "$GITHUB_REF_NAME" \
+          gh release create "$TAG" \
             --verify-tag \
-            --title "$GITHUB_REF_NAME" \
-            --notes-file "$notes"
+            --title "$TAG" \
+            --notes-file "release-notes/$TAG.md"

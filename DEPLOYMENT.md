@@ -25,7 +25,7 @@ The root `vercel.json` builds one entry point and routes everything to it:
 }
 ```
 
-- **No build command runs on Vercel.** The MAPP bundles in `public/js/lib` are committed and shipped as-is. Rebuild and commit after changing `apps/mapp`.
+- **No build command runs on Vercel.** The MAPP bundles in `public/js/lib`, `public/css/mapp.css` and `public/css/ui.css` are gitignored on every branch and are uploaded from the local working tree. `pnpm deploy:vercel` builds them before deploying. Release tags are the only refs which contain the bundles, see [Build artefacts](#build-artefacts).
 - **`server.js` skips `app.listen()`** when `process.env.VERCEL` is set, exporting the Express app for `@vercel/node` instead.
 
 ## Configuration
@@ -145,7 +145,7 @@ pnpm deploy:vercel --env=production
 pnpm deploy:vercel --env=preview
 ```
 
-`utils/deploy-vercel.js` generates a key, freezes the blob with it, stores it in the target Vercel environment, then deploys. The order matters — the key must exist before the build starts.
+`utils/deploy-vercel.js` builds the MAPP bundles, generates a key, freezes the blob with it, stores it in the target Vercel environment, then deploys. The order matters — the key must exist before the build starts.
 
 Vercel CLI flags pass through (`--scope`, `--token`, `--local-config`, `--force`). Use `--varlock-env=<name>` when the Varlock environment (`APP_ENV`) differs from the Vercel target:
 
@@ -156,6 +156,7 @@ pnpm deploy:vercel --env=preview --varlock-env=staging
 To keep the existing key instead, freeze and deploy separately with `_VARLOCK_ENV_KEY` already set locally and in the project:
 
 ```bash
+pnpm build --filter=@geolytix/mapp
 pnpm freeze-env --env=production
 vercel --prod
 ```
@@ -177,6 +178,7 @@ Smoke routes: `/`, `/api/workspace/locale`, `/public/js/lib/mapp.js`. Prefix the
 `apps/auth` and `apps/saml` import the XYZ app and mount extra routes. Each has its own `vercel.json` with paths relative to the **repository root**, so deploy from the root with `--local-config`:
 
 ```bash
+pnpm build --filter=@geolytix/mapp
 vercel --prod --local-config=apps/saml/vercel.json
 ```
 
@@ -186,11 +188,15 @@ Deploy each to its **own Vercel project** — they all claim `/(.*)`. The SAML c
 
 ### MAPP bundles
 
-Vercel ships whatever is in `public/js/lib`, so rebuild and commit after changing `apps/mapp`:
+The bundles in `public/js/lib`, `public/css/mapp.css` and `public/css/ui.css` are gitignored, so changes to `apps/mapp` never cause merge conflicts in build output. Vercel ships whatever is in the local `public` directory, so build before any deployment which does not go through `pnpm deploy:vercel`:
 
 ```bash
 pnpm build --filter=@geolytix/mapp
 ```
+
+Turbo restores the bundles from its cache when `apps/mapp` is unchanged, so deleting `public/js/lib` and building again is safe. Use `--force` to skip the cache.
+
+Release tags carry the bundles. The release workflow builds them on top of `main`, commits them without pushing that commit to any branch, and tags it (see [RELEASING.md](./RELEASING.md)). A checkout of a release tag, or its source archive, is deployable without a build.
 
 `node utils/version.js` stamps the bundle with the current commit SHA and then builds — useful for identifying which framework version a deployment runs. `NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp` produces an unminified bundle for debugging; do not deploy one.
 
@@ -242,12 +248,13 @@ No workflow deploys the app. The existing ones are:
 | `unit_tests.yml` | push/PR on `main`, `major`, `minor`, `patch` | `pnpm test` |
 | `build.yml` | push/PR on the same branches | coverage + SonarQube (skipped for fork PRs) |
 | `deploy-docs.yml` | push to `main`, manual | JSDoc to GitHub Pages |
-| `release.yml` | `v*` tag | GitHub release from `release-notes/<tag>.md` |
+| `release.yml` | push to `main` with an untagged version | builds the bundles, tags a build commit, GitHub release from `release-notes/<tag>.md` |
 
-Without Varlock no deploy workflow is needed — use Git integration. To deploy with a frozen blob, freeze before deploying and give the job credentials for any `gsm()` references:
+Vercel Git integration deploys a branch checkout, which has no MAPP bundles because no build command runs on Vercel. Deploy with `pnpm deploy:vercel`, or from a workflow which builds first. A workflow also needs to freeze the blob when using Varlock, with credentials for any `gsm()` references: To deploy with a frozen blob, freeze before deploying and give the job credentials for any `gsm()` references:
 
 ```yaml
 - run: pnpm install --ignore-scripts
+- run: pnpm build --filter=@geolytix/mapp
 - run: pnpm freeze-env --env=production
   env:
     _VARLOCK_ENV_KEY: ${{ secrets.VARLOCK_ENV_KEY }}
@@ -312,7 +319,7 @@ The key in Vercel does not match the one used to freeze. Re-run `pnpm deploy:ver
 Run `gcloud auth application-default login`, and check `GCP_PROJECT_ID` and the secret names in `.env`.
 
 **Stale frontend**
-`public/js/lib` was not rebuilt or not committed.
+`public/js/lib` was not rebuilt before deploying. Run `pnpm build --filter=@geolytix/mapp --force` and deploy again.
 
 **404s on every route**
 Check `DIR` — routes mount under it and `COOKIE_PROPS` derives its `Path` from it.
