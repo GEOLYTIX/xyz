@@ -23,7 +23,7 @@ The Vite build has two library entry points:
 - `apps/mapp/lib/mapp.mjs` becomes `public/js/lib/mapp.js`
 - `apps/mapp/lib/ui.mjs` becomes `public/js/lib/ui.js`
 
-Shared code may be emitted as additional chunk files in `public/js/lib`. The sourcemaps beside the generated files should be committed with the bundle output.
+Shared code may be emitted as additional chunk files in `public/js/lib`. The generated files and their sourcemaps are gitignored and must not be committed to a branch. The release workflow commits them on the release tag only, see [RELEASING.md](../../RELEASING.md).
 
 To build against an environment-specific Varlock file, set the environment before running the build:
 
@@ -43,7 +43,7 @@ NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
 
 ## CSS Bundles
 
-The MAPP build also bundles `apps/mapp/css/_mapp.css` and `apps/mapp/css/_ui.css` through `apps/mapp/vite.css.config.mjs`. The generated CSS and font assets are written to the root `public/css` directory.
+The MAPP build also bundles `apps/mapp/css/_mapp.css` and `apps/mapp/css/_ui.css` through `apps/mapp/vite.css.config.mjs`. The generated CSS and font assets are written to the root `public/css` directory. The generated `mapp.css` and `ui.css` are gitignored like the JavaScript bundles; the font files are committed.
 
 The root package also exposes CSS-only commands used by the host app:
 
