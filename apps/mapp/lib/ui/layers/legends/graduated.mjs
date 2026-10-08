@@ -11,6 +11,7 @@ The graduated theme legend module exports the graduatedTheme to the `ui.layers.l
 
 import {
   catToggle,
+  pendingLegend,
   renderLegend,
   themeLegend,
   themeLegendSwitch,
@@ -29,7 +30,8 @@ The legend of a theme with a data distribution is not created until the distribu
 @returns {HTMLElement} The graduated theme legend element.
 */
 export default function graduatedTheme(layer) {
-  if (!mapp.layer.featureFields.distributionReady(layer)) return;
+  if (!mapp.layer.featureFields.distributionReady(layer))
+    return pendingLegend(layer);
 
   const theme = layer.style.theme;
 
