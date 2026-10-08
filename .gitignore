@@ -18,6 +18,8 @@ yarn.lock
 .pnpm-store/
 .turbo/
 
+public/js/lib/
+
 resources
 coverage
 
