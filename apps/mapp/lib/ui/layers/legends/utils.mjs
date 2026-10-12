@@ -296,6 +296,21 @@ export function renderLegend(layer, node) {
 }
 
 /**
+@function pendingLegend
+@description
+The method returns the layer.style.legend node for a theme whose distribution has not yet been processed. An empty legend node is assigned as layer.style.legend if the layer has none. 
+The drawLegend method renders into this node once the distribution has been processed from the layer data.
+
+@param {layer} layer The decorated mapp layer.
+@returns {HTMLElement} The layer.style.legend node.
+**/
+export function pendingLegend(layer) {
+  layer.style.legend ??= mapp.utils.html.node`<div class="legend">`;
+
+  return layer.style.legend;
+}
+
+/**
 @function themeLegendSwitch
 
 @description
