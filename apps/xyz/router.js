@@ -59,6 +59,12 @@ function createRouter(middleWare = []) {
 
   router.use(cookieParser());
 
+  // API responses are user and role specific. Browsers may store them but must revalidate with the ETag (304) before reuse.
+  router.use(`${xyzEnv.DIR}/api`, (req, res, next) => {
+    res.setHeader('Cache-Control', 'private, no-cache');
+    next();
+  });
+
   const staticOptions = {
     redirect: false,
     setHeaders(res, path) {
