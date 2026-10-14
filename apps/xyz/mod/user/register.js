@@ -55,7 +55,7 @@ export default async function register(req, res) {
     'Set-Cookie',
     `${xyzEnv.TITLE}=null; Max-Age=0; ${xyzEnv.COOKIE_PROPS}`,
   );
-  
+
   // The reset flag indicates whether the user is requesting a password reset.
   req.params.reset ??= req.query.reset;
 
