@@ -3,6 +3,7 @@ packages:
   - apps/mapp
   - apps/saml
   - apps/xyz
+  - packages/devdb
 allowBuilds:
   bcrypt: true
   esbuild: true
@@ -11,6 +12,9 @@ catalog:
   "@aws-sdk/cloudfront-signer": ^3.621.0
   "@aws-sdk/s3-request-presigner": ^3.691.0
   "@biomejs/biome": 2.2.6
+  "@electric-sql/pglite": 0.5.8
+  "@electric-sql/pglite-postgis": 0.2.8
+  "@electric-sql/pglite-socket": 0.2.11
   "@node-saml/node-saml": ^5.0.1
   "@varlock/google-secret-manager-plugin": 1.2.0
   "@varlock/vite-integration": 1.1.3

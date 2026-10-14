@@ -10,3 +10,7 @@
 
 apps/mapp
 apps/xyz/tests
+
+# PGlite for local testing only. Excluding the workspace package means pnpm on
+# Vercel never installs PGlite or the PostGIS extension.
+packages/devdb
