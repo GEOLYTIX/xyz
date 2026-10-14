@@ -31,7 +31,11 @@ The maplibre format method will create a new MaplibreGL.Map() class object in a 
 */
 export default async function maplibre(layer) {
   if (!MaplibreGL) {
-    MaplibreGL = await mapp.utils.esmImport('maplibre-gl@5.23.0');
+    const mod = await mapp.utils.esmImport('maplibre-gl@5.23.0');
+
+    if (mod instanceof Error) return;
+
+    MaplibreGL = mod;
 
     MaplibreGL.setRTLTextPlugin(
       'https://cdn.jsdelivr.net/npm/@mapbox/mapbox-gl-rtl-text@0.3.0/dist/mapbox-gl-rtl-text.min.js',

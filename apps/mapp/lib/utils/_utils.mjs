@@ -14,7 +14,7 @@ import { html, render, svg } from './uhtml.mjs';
 @description
 The method import the [simple-statistics]{@link https://www.npmjs.com/package/simple-statistics} module through the esmImport utility.
 
-@returns {Promise<Module>} The promise resolves to the simple-statistics module.
+@returns {Promise<Module|Error>} The promise resolves to the simple-statistics module or an error if the import failed.
 */
 async function simpleStatistics() {
   return await esmImport('simple-statistics@7.8.8');
