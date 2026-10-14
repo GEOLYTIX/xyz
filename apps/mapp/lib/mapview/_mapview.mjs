@@ -494,16 +494,36 @@ async function mapviewPromise(mapview) {
   for (const key of mapview.locale.syncPlugins) {
     if (typeof mapp.plugins[key] !== 'function') continue;
 
-    await mapp.plugins[key](mapview.locale[key], mapview);
+    await executePlugin(key, mapview);
   }
 
   // Execute all other plugin methods async.
   const asyncPlugins = Object.keys(mapview.locale)
     .filter((key) => !syncPlugins.has(key))
     .filter((key) => typeof mapp.plugins[key] === 'function')
-    .map((key) => mapp.plugins[key](mapview.locale[key], mapview));
+    .map((key) => executePlugin(key, mapview));
 
   await Promise.all(asyncPlugins);
 
   return mapview;
+}
+
+/**
+@function executePlugin
+@async
+
+@description
+The executePlugin method calls the plugin method for the locale key with the locale[key] config and the mapview as arguments.
+
+Errors thrown by the plugin method are logged and will not prevent the mapview initialisation.
+
+@param {string} key The locale key of the plugin method.
+@param {object} mapview The mapview passed to the plugin method.
+*/
+async function executePlugin(key, mapview) {
+  try {
+    await mapp.plugins[key](mapview.locale[key], mapview);
+  } catch (err) {
+    console.error(`Plugin ${key} failed to execute.`, err);
+  }
 }
