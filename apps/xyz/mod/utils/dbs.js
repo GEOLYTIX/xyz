@@ -70,18 +70,22 @@ Blocking queries are passed to the executeQuery method, which retries queries th
 
 Nonblocking queries are attempted once without retry. The returned promise resolves true once the query has been sent to the database, without waiting for the query to complete. The query is sent before the caller can respond, so the database will execute the query even if a serverless process is frozen after the response. The promise resolves with the error if the client fails to connect or the statement timeout cannot be set. Errors from the query after it has been sent are logged, since the query result is not awaited.
 
+The params object may be extended with additional properties. These are ignored by the clientQuery method but can be read by a dbs connection method replaced by a composing host.
+
 @this {Pool} The connection pool to use for the query.
-@param {string} query SQL query to execute
-@param {Array} [variables] Parameters for the SQL query
-@param {number} [timeout] Statement timeout in milliseconds. Defaults to xyzEnv.STATEMENT_TIMEOUT.
-@param {Object} [options]
-@property {boolean} [options.nonblocking] Resolve once the query is sent without waiting for the query result.
+@param {Object} params
+@property {string} params.query SQL query to execute
+@property {Array} [params.variables] Parameters for the SQL query
+@property {number} [params.timeout] Statement timeout in milliseconds. Defaults to xyzEnv.STATEMENT_TIMEOUT.
+@property {boolean} [params.nonblocking] Resolve once the query is sent without waiting for the query result.
 @returns {Promise<Array|boolean|Error>} Query rows, true for a sent nonblocking query, or an error.
 */
-async function clientQuery(query, variables, timeout, options = {}) {
-  timeout ??= xyzEnv.STATEMENT_TIMEOUT;
+async function clientQuery(params) {
+  const { query, variables } = params;
 
-  if (!options.nonblocking) {
+  const timeout = params.timeout ?? xyzEnv.STATEMENT_TIMEOUT;
+
+  if (!params.nonblocking) {
     return executeQuery(this, query, variables, timeout);
   }
 
