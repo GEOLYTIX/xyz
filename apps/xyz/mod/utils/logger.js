@@ -171,19 +171,19 @@ function postgresql() {
 
     // Nonblocking log inserts are not retried.
     // A retried insert would log dbs_retry, which would insert another log into the failing dbs.
-    dbs[params.dbs](
-      `INSERT INTO ${table}
+    dbs[params.dbs]({
+      nonblocking: true,
+      query: `INSERT INTO ${table}
       (process, datetime, key, log, message)
       VALUES ($1, $2, $3, $4, $5)`,
-      [
+      timeout: 3000,
+      variables: [
         process_id,
         Number.parseInt(Date.now() / 1000),
         key,
         logstring,
         errorMessage,
       ],
-      3000,
-      { nonblocking: true },
-    );
+    });
   };
 }
