@@ -71,4 +71,4 @@ Open a pull request into `main` and wait for the required checks and review. **M
 - Check the tag contains the bundles: `git fetch origin --tags && git ls-tree -r --name-only v5.0.3 public/js/lib`.
 - Deploy separately if needed, following [DEPLOYMENT.md](./DEPLOYMENT.md).
 
-If the workflow fails before the tag is pushed, fix the cause in a new commit to `main`, or re-run the failed job for a transient failure. The next push to `main` retries the release while the version is still untagged. If the tag was pushed but the GitHub release is missing, a re-run skips the existing tag, so create the release manually with `gh release create v5.0.3 --verify-tag --title v5.0.3 --notes-file release-notes/v5.0.3.md`. Never move or overwrite a published release tag.
+If the workflow fails before the tag is pushed, fix the cause in a new commit to `main`, or re-run the failed job for a transient failure. The next push to `main` retries the release while the version is still untagged. If the tag was pushed but the GitHub release is missing, re-run the job; it skips the build for the existing tag and only creates the release. Never move or overwrite a published release tag.

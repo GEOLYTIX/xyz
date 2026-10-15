@@ -25,12 +25,18 @@ jobs:
 
       - name: Resolve version
         id: version
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           tag=$(node -p "require('./package.json').version")
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           if git ls-remote --exit-code --tags origin "refs/tags/$tag" > /dev/null; then
-            echo "Tag $tag already exists, nothing to release."
+            echo "Tag $tag already exists, skipping build."
             echo "exists=true" >> "$GITHUB_OUTPUT"
+          fi
+          if gh release view "$tag" > /dev/null 2>&1; then
+            echo "Release $tag already exists, nothing to release."
+            echo "release_exists=true" >> "$GITHUB_OUTPUT"
           else
             test -f "release-notes/$tag.md"
           fi
@@ -68,8 +74,10 @@ jobs:
           git tag -a "$TAG" -m "Release $TAG"
           git push origin "refs/tags/$TAG"
 
+      # Checked separately from the tag so a rerun creates the release
+      # when a previous run pushed the tag but failed to create the release.
       - name: Create GitHub release
-        if: steps.version.outputs.exists != 'true'
+        if: steps.version.outputs.release_exists != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}

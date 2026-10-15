@@ -145,7 +145,7 @@ pnpm deploy:vercel --env=production
 pnpm deploy:vercel --env=preview
 ```
 
-`utils/deploy-vercel.js` builds the MAPP bundles, generates a key, freezes the blob with it, stores it in the target Vercel environment, then deploys. The order matters — the key must exist before the build starts.
+`utils/deploy-vercel.js` builds the MAPP bundles, generates a key, freezes the blob with it, stores it in the target Vercel environment, then deploys. The order matters — the key must exist before the blob is frozen.
 
 Vercel CLI flags pass through (`--scope`, `--token`, `--local-config`, `--force`). Use `--varlock-env=<name>` when the Varlock environment (`APP_ENV`) differs from the Vercel target:
 
