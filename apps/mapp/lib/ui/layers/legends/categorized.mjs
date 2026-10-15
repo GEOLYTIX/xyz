@@ -11,6 +11,7 @@ The categorized theme legend module exports the categorizedTheme to the `ui.laye
 import {
   catElement,
   clusterLegend,
+  pendingLegend,
   renderLegend,
   themeLegend,
   themeLegendSwitch,
@@ -29,7 +30,8 @@ The legend of a theme with a data distribution is not created until the distribu
 @returns {HTMLElement} The categorized theme legend element.
 */
 export default function categorizedTheme(layer) {
-  if (!mapp.layer.featureFields.distributionReady(layer)) return;
+  if (!mapp.layer.featureFields.distributionReady(layer))
+    return pendingLegend(layer);
 
   const theme = layer.style.theme;
 

@@ -581,6 +581,36 @@ describe('workspace: errs', () => {
     expect(Object.keys(composedWorkspace.locales).length).toEqual(3);
   });
 
+  it('templates denied', async () => {
+    const { req, res } = createMocks({
+      params: {
+        key: 'templates',
+      },
+    });
+
+    await getKeyMethod(req, res);
+
+    expect(res.statusCode).toEqual(403);
+  });
+
+  it('templates', async () => {
+    const { req, res } = createMocks({
+      params: {
+        key: 'templates',
+        user: {
+          admin: true,
+        },
+      },
+    });
+
+    await getKeyMethod(req, res);
+
+    const workspace = await checkWorkspaceCache();
+
+    expect(res.statusCode).toEqual(200);
+    expect(res._getData()).toEqual(workspace.templates);
+  });
+
   it('Gone roles', async () => {
     const { req, res } = createMocks({
       params: {

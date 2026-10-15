@@ -1,55 +1,162 @@
 {
-  "dbs": "NEON",
+  "dbs": "DEVDB",
   "templates": {
-    "login_required_query": {
-      "template": "SELECT 1"
+    "simple_select": {
+      "template": "SELECT 'hello' AS greeting"
     },
-    "admin_only_query": {
-      "template": "SELECT 1",
+    "admin_only": {
+      "template": "SELECT 'admin' AS access",
       "admin": true
     },
-    "role_restricted_query": {
-      "template": "SELECT 'ok' as result",
+    "role_restricted": {
+      "template": "SELECT 'analyst' AS access",
       "roles": {
         "analyst": true
       }
     },
-    "simple_select": {
-      "template": "SELECT 'hello' as greeting"
+    "offline_dbs": {
+      "template": "SELECT 1",
+      "dbs": "OFFLINE"
+    },
+    "bogus_dbs": {
+      "template": "SELECT 1",
+      "dbs": "BOGUS"
+    },
+    "template_dbs": {
+      "template": "SELECT 'template' AS dbs",
+      "dbs": "DEVDB",
+      "layer": true
+    },
+    "layer_dbs": {
+      "template": "SELECT 'layer' AS dbs",
+      "layer": true
+    },
+    "no_template_string": {
+      "dbs": "DEVDB"
+    },
+    "locations": {
+      "template": "SELECT id, name FROM example.locations ORDER BY id"
+    },
+    "no_rows": {
+      "template": "SELECT name FROM example.locations WHERE false"
+    },
+    "null_row": {
+      "template": "SELECT NULL AS nothing"
+    },
+    "sql_error": {
+      "template": "SELECT * FROM example.missing_table"
     },
     "reduce_query": {
-      "template": "SELECT name, value FROM ${table} WHERE true ${filter}",
+      "template": "SELECT name, category FROM example.locations ORDER BY id",
       "reduce": true
     },
-    "value_only_query": {
-      "template": "SELECT count(*) as cnt FROM ${table}",
+    "count_value": {
+      "template": "SELECT count(*)::int FROM example.locations",
+      "value_only": true
+    },
+    "name_value": {
+      "template": "SELECT name FROM example.locations WHERE id = 1",
       "value_only": true
     },
     "param_query": {
       "template": "SELECT ${field} FROM ${table} WHERE name = %{name}"
     },
-    "injection_query": {
-      "template": "SELECT ${field} FROM ${table}"
+    "body_query": {
+      "template": "SELECT %{body.name}::text AS name"
     },
-    "bogus_dbs_query": {
-      "template": "SELECT 1",
-      "dbs": "BOGUS_DB"
+    "stringify_body_query": {
+      "template": "SELECT %{body}::json->>'name' AS name"
     },
-    "timeout_query": {
-      "template": "SELECT 1",
+    "like_query": {
+      "template": "SELECT name FROM example.locations WHERE name LIKE %{name}"
+    },
+    "ids_query": {
+      "template": "SELECT name FROM example.locations WHERE id = ANY(%{ids}) ORDER BY id"
+    },
+    "text_query": {
+      "template": "SELECT %{value}::text AS value"
+    },
+    "filter_query": {
+      "template": "SELECT name FROM example.locations WHERE true ${filter} ORDER BY id"
+    },
+    "template_timeout": {
+      "template": "SELECT current_setting('statement_timeout') AS timeout",
       "statement_timeout": 9000
     },
+    "default_timeout": {
+      "template": "SELECT current_setting('statement_timeout') AS timeout"
+    },
     "nonblocking_query": {
-      "template": "INSERT INTO log (msg) VALUES (%{msg})",
+      "template": "INSERT INTO example.log (msg) VALUES (%{msg})",
       "nonblocking": true
+    },
+    "log_query": {
+      "template": "SELECT msg FROM example.log WHERE msg = %{msg}"
+    },
+    "offline_nonblocking_query": {
+      "template": "SELECT 1",
+      "dbs": "OFFLINE",
+      "nonblocking": true
+    },
+    "name_length": {
+      "template": "length(name)"
+    },
+    "name_upper": {
+      "field": "upper(name)"
+    },
+    "template_layer": {
+      "table": "example.locations",
+      "qID": "id",
+      "geom": "geom",
+      "srid": 4326,
+      "infoj": [{ "field": "name" }]
     }
   },
   "locale": {
-    "layers": {}
-  },
-  "locales": {
-    "locale": {
-      "layers": {}
+    "layers": {
+      "locations": {
+        "table": "example.locations",
+        "qID": "id",
+        "geom": "geom",
+        "srid": 4326,
+        "infoj": [
+          { "field": "name" },
+          { "field": "category" },
+          { "field": "name_upper", "fieldfx": "upper(name)" },
+          { "field": "name_length", "template": "name_length" },
+          { "field": "nearby", "query": "nearby_query" }
+        ]
+      },
+      "cities": {
+        "tables": { "0": "example.locations" },
+        "qID": "id",
+        "geom": "geom",
+        "srid": 4326,
+        "filter": { "default": { "category": { "match": "city" } } },
+        "cluster": { "label": "category" },
+        "style": { "theme": { "fields": ["name_upper"] } },
+        "infoj": [
+          { "field": "name" },
+          { "field": "distinct_values", "template": "distinct_values" }
+        ]
+      },
+      "offline": {
+        "table": "example.locations",
+        "qID": "id",
+        "dbs": "OFFLINE"
+      },
+      "no_geom": {
+        "table": "example.locations",
+        "qID": "id"
+      },
+      "features": {
+        "table": "example.features",
+        "qID": "id",
+        "geom": "geom",
+        "srid": 3857,
+        "infoj": [{ "field": "name" }, { "field": "category" }]
+      }
     }
-  }
+  },
+  "locales": {}
 }
