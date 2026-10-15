@@ -135,6 +135,8 @@ async function jenks(layer) {
 
   const simpleStatistics = await mapp.utils.simpleStatistics();
 
+  if (simpleStatistics instanceof Error) return;
+
   // Compute Jenks natural breaks.
   layer.featureFields[theme.field].jenks = simpleStatistics.jenks(
     layer.featureFields[theme.field].values,

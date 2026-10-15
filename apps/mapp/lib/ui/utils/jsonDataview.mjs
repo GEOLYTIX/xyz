@@ -43,6 +43,8 @@ async function create(dataview) {
 
   dataview.jsoneditor = await mapp.ui.elements.jsoneditor(dataview);
 
+  if (dataview.jsoneditor instanceof Error) return;
+
   dataview.setData = setData;
 
   if (dataview.data) {
@@ -193,6 +195,8 @@ function sqlinsert(dataview) {
   };
 
   const button = mapp.utils.html.node`<button onclick=${() => {
+    if (dataview.jsoneditor instanceof Error) return;
+
     const content = dataview.jsoneditor.get();
 
     // The jsoneditor is empty.
