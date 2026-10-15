@@ -7,7 +7,7 @@ const args = process.argv.slice(2);
 if (args.includes('--help') || args.includes('-h')) {
   console.log(`Usage: pnpm deploy:vercel --env=<production|preview> [vercel flags]
 
-    Generates a new _VARLOCK_ENV_KEY, freezes .varlock.blob with that key, stores the key in the selected Vercel environment, then deploys.
+    Builds the MAPP bundles, generates a new _VARLOCK_ENV_KEY, freezes .varlock.blob with that key, stores the key in the selected Vercel environment, then deploys.
 
     Examples:
     pnpm deploy:vercel --env=production
@@ -24,6 +24,10 @@ if (!['production', 'preview'].includes(environment)) {
   console.error('Invalid --env. Use --env=production or --env=preview.');
   process.exit(1);
 }
+
+// The MAPP bundles are gitignored and must be built before public/** is
+// uploaded with the deployment.
+runPnpm(['build', '--filter=@geolytix/mapp']);
 
 const key = generateVarlockKey();
 

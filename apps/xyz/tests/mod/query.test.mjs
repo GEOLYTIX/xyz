@@ -1,5 +1,5 @@
 import { createMocks } from 'node-mocks-http';
-import { afterAll, describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it, vi } from 'vitest';
 import { startDevDb } from '../../../../packages/devdb/index.js';
 import { mockConsole } from '../scaffold.mjs';
 
@@ -49,6 +49,7 @@ globalThis.xyzEnv = {
 };
 
 const { default: query } = await import('../../mod/query.js');
+const { default: dbs } = await import('../../mod/utils/dbs.js');
 const { default: checkWorkspaceCache } = await import(
   '../../mod/workspace/cache.js'
 );
@@ -128,6 +129,24 @@ describe('Query: dbs connection', () => {
 
     // The connection to the OFFLINE layer dbs is refused.
     expect(res.status).toBe(500);
+  });
+
+  it('passes res.locals as params.locals without the request', async () => {
+    const spy = vi.spyOn(dbs, 'DEVDB');
+
+    const { req, res } = createMocks({ params: { template: 'simple_select' } });
+
+    res.locals.foo = 'bar';
+
+    await query(req, res);
+
+    expect(res._getData()).toEqual({ greeting: 'hello' });
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy.mock.calls[0]).toHaveLength(1);
+    expect(spy.mock.calls[0][0].locals).toBe(res.locals);
+    expect(Object.values(spy.mock.calls[0][0])).not.toContain(req);
+
+    spy.mockRestore();
   });
 });
 

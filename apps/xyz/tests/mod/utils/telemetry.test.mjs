@@ -247,7 +247,11 @@ describe('dbs', () => {
 
     pools[0].connect.mockRejectedValueOnce(busy).mockResolvedValueOnce(client);
 
-    const result = dbs.TEST('SELECT 1', [], 1000);
+    const result = dbs.TEST({
+      query: 'SELECT 1',
+      variables: [],
+      timeout: 1000,
+    });
 
     await vi.runAllTimersAsync();
 

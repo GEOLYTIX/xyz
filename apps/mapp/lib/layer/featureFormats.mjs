@@ -245,6 +245,8 @@ const cellGeomMap = new Map();
 export async function wkth3(layer, features) {
   const h3js = await mapp.utils.esmImport('h3-js@4.4.0');
 
+  if (h3js instanceof Error) return [];
+
   if (!Array.isArray(features)) return;
 
   mapp.layer.featureFields.reset(layer);

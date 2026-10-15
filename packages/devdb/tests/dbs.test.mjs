@@ -11,11 +11,12 @@ describe('xyz dbs module', () => {
   });
 
   it('queries PGlite through a DBS connection', async () => {
-    const rows = await dbs.DEVDB(
-      'SELECT name, ST_AsGeoJSON(geom)::json AS geom FROM example.locations WHERE name = $1',
-      ['Berlin'],
-      5000,
-    );
+    const rows = await dbs.DEVDB({
+      query:
+        'SELECT name, ST_AsGeoJSON(geom)::json AS geom FROM example.locations WHERE name = $1',
+      timeout: 5000,
+      variables: ['Berlin'],
+    });
 
     expect(rows).toEqual([
       { name: 'Berlin', geom: { type: 'Point', coordinates: [13.405, 52.52] } },
@@ -25,7 +26,7 @@ describe('xyz dbs module', () => {
   it('runs concurrent queries from the pool', async () => {
     const results = await Promise.all(
       Array.from({ length: 10 }, (_, i) =>
-        dbs.DEVDB('SELECT $1::int AS i', [i]),
+        dbs.DEVDB({ query: 'SELECT $1::int AS i', variables: [i] }),
       ),
     );
 

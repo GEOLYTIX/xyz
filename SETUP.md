@@ -36,6 +36,14 @@ Use `git clone https://github.com/GEOLYTIX/xyz.git` to clone the repository into
 
 Change into the directory and use `pnpm install` to install any monorepo dependencies defined or referenced in the package.json
 
+The MAPP bundles in `public/js/lib` and the generated `public/css/mapp.css` and `public/css/ui.css` are not committed to the branches. Build them before starting the server:
+
+```bash
+pnpm build
+```
+
+A checkout of a release tag, eg. `git clone --branch v5.0.7 https://github.com/GEOLYTIX/xyz.git`, already contains the bundles.
+
 ## launch.json [VSCode]
 
 After the dependencies are installed on local the process can be launched in debug through the VSCode interface. A new node launch.json can be created through the debug interface panel.
@@ -118,7 +126,7 @@ http://localhost:3000/xyz
 
 ## What should work on first run
 
-With the minimal `.env` above, the server should boot and serve the built frontend assets from `public/`.
+With the minimal `.env` above and the MAPP bundles built, the server should boot and serve the built frontend assets from `public/`.
 
 Useful routes to test locally:
 

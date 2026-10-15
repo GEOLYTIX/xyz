@@ -35,6 +35,8 @@ mapp.utils.proj4.addProjection({
 async function addProjection(params) {
   const mod = await mapp.utils.esmImport('proj4@2.9.0');
 
+  if (mod instanceof Error) return;
+
   mod.default.defs(params.name, params.defs);
 
   // Create and add the projection to OpenLayers
