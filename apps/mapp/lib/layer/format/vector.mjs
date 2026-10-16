@@ -141,7 +141,7 @@ async function setSource(features) {
 @function clusterGeometry
 
 @description
-The clusterGeometry method is the geometryFunction for the OL cluster source. Features which are not displayed by a categorized or graduated layer theme [eg. a category toggled off in a filterOnly theme] return a null geometry and will not be considered for clustering.
+The clusterGeometry method is the geometryFunction for the OL cluster source. Features which are not displayed by the featureStyle method return a null geometry and will not be considered for clustering. These are features excluded by the layer featureSet or featureLookup, and features without a style from a categorized or graduated layer theme [eg. a category toggled off in a filterOnly theme].
 
 A cluster without displayed features will not be created and a cluster with a single displayed feature will be rendered as a single location.
 
@@ -152,12 +152,20 @@ A cluster without displayed features will not be created and a cluster with a si
 @returns {Object} The feature geometry or null if the feature is not displayed.
 */
 function clusterGeometry(F, layer) {
+  // Assign properties as the featureStyle method. The OL feature properties must not be mutated.
+  const properties = mapp.layer.featureProperties(layer, {
+    ...F.getProperties(),
+  });
+
+  // The feature is not displayed by the featureStyle method.
+  if (properties === null) return null;
+
   const theme = layer.style?.theme;
 
   // Only categorized and graduated themes can remove the style of a feature without side effects.
   if (['categorized', 'graduated'].includes(theme?.type)) {
     const feature = {
-      properties: F.getProperties(),
+      properties,
       style: {},
     };
 
