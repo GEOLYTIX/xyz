@@ -192,24 +192,22 @@ Remove the cat value to the current filter.
 async function filterRemove(layer, cat) {
   if (layer.style.theme.filterOnly) return;
 
-  if (Array.isArray(cat.keys)) {
-    for (const cat of cat.keys) {
-      // Splice key out of the NI array.
-      layer.filter.current[cat.field].ni.splice(
-        layer.filter.current[cat.field].ni.indexOf(key),
-        1,
-      );
-    }
-  } else {
-    // Splice value out of the NI array.
-    layer.filter.current[cat.field].ni.splice(
-      layer.filter.current[cat.field].ni.indexOf(cat.value),
-      1,
-    );
+  const ni = layer.filter.current[cat.field]?.ni;
+
+  // There is no NI filter for the cat field to remove the value from.
+  if (!ni) return;
+
+  const values = Array.isArray(cat.keys) ? cat.keys : [cat.value];
+
+  for (const value of values) {
+    const index = ni.indexOf(value);
+
+    // Splice value out of the NI array. A splice at -1 would remove the last value.
+    if (index !== -1) ni.splice(index, 1);
   }
 
   // Delete current field filter if NI array is empty.
-  if (!layer.filter.current[cat.field].ni.length) {
+  if (!ni.length) {
     delete layer.filter.current[cat.field].ni;
     if (!Object.keys(layer.filter.current[cat.field]).length) {
       delete layer.filter.current[cat.field];
