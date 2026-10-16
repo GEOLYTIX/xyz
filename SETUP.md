@@ -180,6 +180,8 @@ Use the exact connection and ACL values required by your workspace and auth setu
 ## SAML authentication
 Please refer to [apps/saml/README.md](./apps/saml/README.md) in regards to authenticating users with SAML.
 
+`SAML_LOGIN` was removed in v5.0.0. A `PRIVATE` SAML instance must set `AUTH_PATH=/saml` to redirect users to the SAML login.
+
 ## Troubleshooting
 
 ### Node version issues
