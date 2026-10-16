@@ -79,7 +79,8 @@ export async function process(layer) {
     layer.L.changed();
 
     // The legend method renders into the layer.style.legend
-    mapp.ui.layers.drawLegend(layer);
+    // The mapp library may be used without the mapp.ui library.
+    mapp.ui?.layers.drawLegend(layer);
   }
 }
 
