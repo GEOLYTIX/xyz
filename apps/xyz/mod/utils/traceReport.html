@@ -838,7 +838,10 @@
     try {
       render(parseTrace(text), label);
       setStatus(`Chart drawn for ${label.toLowerCase()}.`);
-      try { localStorage.setItem('xyz-trace', text); } catch {}
+      // The sample must not replace the last pasted trace.
+      if (text !== sampleText) {
+        try { localStorage.setItem('xyz-trace', text); } catch {}
+      }
     } catch (err) {
       setStatus(err.message, true);
     }
