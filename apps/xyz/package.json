@@ -25,16 +25,20 @@
     "@aws-sdk/client-s3": "catalog:",
     "@aws-sdk/cloudfront-signer": "catalog:",
     "@aws-sdk/s3-request-presigner": "catalog:",
+    "@opentelemetry/exporter-trace-otlp-http": "catalog:",
+    "@opentelemetry/resources": "catalog:",
+    "@opentelemetry/sdk-trace-node": "catalog:",
     "resend": "catalog:"
   },
   "dependencies": {
+    "@opentelemetry/api": "catalog:",
+    "@varlock/google-secret-manager-plugin": "catalog:",
     "bcrypt": "catalog:",
     "cookie-parser": "catalog:",
     "express": "catalog:",
     "express-rate-limit": "catalog:",
     "jsonwebtoken": "catalog:",
     "pg": "catalog:",
-    "@varlock/google-secret-manager-plugin": "catalog:",
     "varlock": "catalog:"
   }
 }
