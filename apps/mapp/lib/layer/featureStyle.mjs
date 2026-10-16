@@ -68,7 +68,7 @@ Returns a style function for OL vector layers.
 
 @returns {function} The style function for the layer.
 */
-export default function featureStyle(layer) {
+export function featureStyle(layer) {
   /**
   @function Style
   @description

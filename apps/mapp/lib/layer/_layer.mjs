@@ -35,7 +35,7 @@ import fade from './fade.mjs';
 import * as featureFields from './featureFields.mjs';
 import * as featureFormats from './featureFormats.mjs';
 import featureHover from './featureHover.mjs';
-import featureStyle, { featureProperties } from './featureStyle.mjs';
+import { featureProperties, featureStyle } from './featureStyle.mjs';
 import formats from './format/_format.mjs';
 import styleParser from './styleParser.mjs';
 import basic from './themes/basic.mjs';
