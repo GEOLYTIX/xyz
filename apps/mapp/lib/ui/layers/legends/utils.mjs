@@ -121,7 +121,13 @@ export function catToggle(e, layer, cat) {
     delete cat._style;
   }
 
-  layer.style.theme.filterOnly ? layer.L.changed() : layer.reload();
+  if (!layer.style.theme.filterOnly) {
+    layer.reload();
+    return;
+  }
+
+  // The source change will trigger the cluster source to be refreshed with the theme filter applied by the clusterGeometry method.
+  layer.cluster?.source ? layer.source.changed() : layer.L.changed();
 }
 
 /**
