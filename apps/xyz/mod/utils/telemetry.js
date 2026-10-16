@@ -216,15 +216,21 @@ The withSpan method calls the fn method within an active span. Spans created wit
 
 The span is ended when the fn method resolves. The span status is set to error if the fn method throws or resolves to an Error. The XYZ API commonly returns rather than throws errors.
 
+The error message and exception are not recorded if options.errorMessage is false, eg. for database errors whose message may contain query parameter values. The error code or name is recorded as the error.type attribute instead. The caller must log the error, since tracing is optional and traces may be sampled.
+
 The fn method is called with a non-recording span if tracing is disabled.
 
 @param {String} name The span name.
 @param {Object} [attributes] Span attributes.
 @param {Function} fn The method to call within the span. The span is provided as argument.
+@param {Object} [options]
+@property {Boolean} [options.errorMessage=true] Record the error message and exception.
 @returns {Promise} The fn method result.
 */
-export function withSpan(name, attributes, fn) {
+export function withSpan(name, attributes, fn, options = {}) {
   if (!enabled) return fn(NOOP_SPAN);
+
+  const errorMessage = options.errorMessage ?? true;
 
   return tracer.startActiveSpan(
     name,
@@ -233,12 +239,12 @@ export function withSpan(name, attributes, fn) {
       try {
         const result = await fn(span);
 
-        if (result instanceof Error) errorStatus(span, result);
+        if (result instanceof Error) errorStatus(span, result, errorMessage);
 
         return result;
       } catch (err) {
-        span.recordException(err);
-        errorStatus(span, err);
+        if (errorMessage) span.recordException(err);
+        errorStatus(span, err, errorMessage);
         throw err;
       } finally {
         span.end();
@@ -387,8 +393,14 @@ function waitUntil(promise) {
     ?.waitUntil?.(promise);
 }
 
-function errorStatus(span, err) {
-  span.setStatus({ code: SpanStatusCode.ERROR, message: err?.message });
+function errorStatus(span, err, errorMessage = true) {
+  if (errorMessage) {
+    span.setStatus({ code: SpanStatusCode.ERROR, message: err?.message });
+    return;
+  }
+
+  span.setStatus({ code: SpanStatusCode.ERROR });
+  span.setAttribute('error.type', String(err?.code ?? err?.name ?? 'Error'));
 }
 
 // Span attribute values must be primitive. Request params may be parsed as arrays or objects.

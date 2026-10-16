@@ -95,8 +95,11 @@ async function clientQuery(params) {
   };
 
   if (!params.nonblocking) {
-    return withSpan('dbs.query', attributes, () =>
-      executeQuery(this, query, variables, timeout),
+    return withSpan(
+      'dbs.query',
+      attributes,
+      () => executeQuery(this, query, variables, timeout),
+      { errorMessage: false },
     );
   }
 
@@ -110,8 +113,11 @@ async function clientQuery(params) {
       if (result instanceof Error) console.error(result);
     };
 
-    const querySpan = withSpan('dbs.query', attributes, () =>
-      attemptQuery(this, query, variables, timeout, () => resolve(true)),
+    const querySpan = withSpan(
+      'dbs.query',
+      attributes,
+      () => attemptQuery(this, query, variables, timeout, () => resolve(true)),
+      { errorMessage: false },
     );
 
     // The span ends after the response has been sent and must be flushed once the query completes.
@@ -152,10 +158,10 @@ async function executeQuery(pool, query, variables, timeout) {
 
     if (!(result instanceof Error)) return result;
 
+    // Database error messages may contain query parameter values and are only logged.
     span.addEvent('dbs.error', {
       attempt,
       'error.type': result.code ?? result.name,
-      'error.message': result.message,
     });
 
     console.error(result);
@@ -228,6 +234,7 @@ async function attemptQuery(pool, query, variables, timeout, onSent) {
         'xyz.dbs.pool.waiting': pool.waitingCount,
       },
       () => pool.connect(),
+      { errorMessage: false },
     );
 
     // Set statement timeout if specified

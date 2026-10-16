@@ -93,6 +93,35 @@ describe('withSpan', () => {
     expect(span.events[0].name).toBe('exception');
   });
 
+  it('records only the error type without the error message', async () => {
+    const invalid = Object.assign(
+      new Error('invalid input syntax for type integer: "secret"'),
+      { code: '22P02' },
+    );
+
+    await telemetry.withSpan('returned', {}, () => invalid, {
+      errorMessage: false,
+    });
+
+    await expect(
+      telemetry.withSpan(
+        'thrown',
+        {},
+        () => {
+          throw invalid;
+        },
+        { errorMessage: false },
+      ),
+    ).rejects.toThrow(invalid);
+
+    for (const span of [...spans('returned'), ...spans('thrown')]) {
+      expect(span.status.code).toBe(SpanStatusCode.ERROR);
+      expect(span.status.message).toBeUndefined();
+      expect(span.attributes['error.type']).toBe('22P02');
+      expect(span.events).toHaveLength(0);
+    }
+  });
+
   it('omits non primitive attribute values', async () => {
     await telemetry.withSpan(
       'attributes',
@@ -271,9 +300,16 @@ describe('dbs', () => {
       'xyz.dbs.nonblocking': false,
     });
     expect(querySpan.events[0].attributes['error.type']).toBe('53300');
+    expect(querySpan.events[0].attributes).not.toHaveProperty('error.message');
+
+    // Database error messages are logged but not recorded in the trace.
+    expect(console.error).toHaveBeenCalledWith(busy);
 
     expect(connectSpans).toHaveLength(2);
     expect(connectSpans[0].status.code).toBe(SpanStatusCode.ERROR);
+    expect(connectSpans[0].status.message).toBeUndefined();
+    expect(connectSpans[0].attributes['error.type']).toBe('53300');
+    expect(connectSpans[0].events).toHaveLength(0);
     expect(connectSpans[1].attributes['xyz.dbs.pool.total']).toBe(1);
     expect(isChild(connectSpans[1], querySpan)).toBe(true);
   });
