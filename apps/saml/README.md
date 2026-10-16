@@ -16,6 +16,26 @@ That runs `apps/saml/server.js`, imports the XYZ app server, and mounts the SAML
 
 Add the required `SAML_*` variables to the repository root `.env` file. The exact identity provider URLs, certificates, and signing requirements depend on the target SAML provider.
 
+A `PRIVATE` instance must set `AUTH_PATH` to redirect unauthenticated requests to the SAML login:
+
+```env
+AUTH_PATH=/saml
+```
+
+Requests without a user are redirected to `${DIR}${AUTH_PATH}/login`, eg. `/app/saml/login`. The client login and logout links use the same `AUTH_PATH`. Without `AUTH_PATH` the redirect goes to the default `${DIR}/api/user/login`.
+
+### Migrating from `SAML_LOGIN`
+
+`SAML_LOGIN` was removed in v5.0.0 [#2790](https://github.com/GEOLYTIX/xyz/pull/2790) and is ignored. An instance which still sets `SAML_LOGIN=true` without `AUTH_PATH` will redirect users to `/api/user/login` instead of the SAML login.
+
+Replace `SAML_LOGIN=true` with `AUTH_PATH=/saml`.
+
+### Cookies
+
+The IdP posts the SAML response cross-site to `/saml/acs`. A redirect response from the ACS would keep the following request in that cross-site navigation, and the browser would not send the user cookie with the default `SameSite=Strict` [COOKIE_PROPS](../xyz/mod/utils/processEnv.js). The user would be redirected to the login again, in a loop for as long as the IdP holds a session.
+
+The ACS responds instead with a short HTML document which navigates to the redirect location. The navigation from that document is same-site and the user cookie is sent. `COOKIE_PROPS` does not need to be changed for SAML.
+
 ## Routes
 
 Mounted routes include:
