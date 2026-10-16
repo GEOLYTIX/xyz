@@ -16,6 +16,7 @@
     "testview": "pnpm --filter=@geolytix/xyz-testview start",
     "test:devdb": "turbo run test --filter=@geolytix/xyz-devdb",
     "deploy:vercel": "node utils/deploy-vercel.js",
+    "traces": "node utils/traces.js",
     "bump:patch": "node utils/bump-version.js patch",
     "bump:minor": "node utils/bump-version.js minor",
     "bump:major": "node utils/bump-version.js major",
