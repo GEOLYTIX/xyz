@@ -24,6 +24,10 @@ OTEL_CONSOLE_MIN_DURATION=500
 # Write the most recent console traces to an HTML report in a local process.
 OTEL_CONSOLE_HTML=.traces/local.html
 
+# Only write the HTML report without logging to the console.
+# The report path defaults to .traces/local.html.
+OTEL_TRACES_EXPORTER=html
+
 # Optional
 OTEL_SERVICE_NAME=xyz
 OTEL_RESOURCE_ATTRIBUTES=deployment.environment.name=dev
@@ -32,7 +36,7 @@ OTEL_TRACES_SAMPLER_ARG=0.1
 OTEL_SDK_DISABLED=true
 ```
 
-The optional environment variables are read by the OpenTelemetry SDK. Please refer to the [SDK configuration]{@link https://opentelemetry.io/docs/languages/sdk-configuration/} documentation for all available variables. The OTEL_TRACES_EXPORTER is read by the register method and only supports the otlp, console, and none values. The OTEL_CONSOLE_MIN_DURATION and OTEL_CONSOLE_HTML are specific to XYZ and only apply to the console exporter. The OTEL_CONSOLE_HTML is ignored in a Vercel deployment.
+The optional environment variables are read by the OpenTelemetry SDK. Please refer to the [SDK configuration]{@link https://opentelemetry.io/docs/languages/sdk-configuration/} documentation for all available variables. The OTEL_TRACES_EXPORTER is read by the register method and only supports the otlp, console, html, and none values. The OTEL_CONSOLE_MIN_DURATION and OTEL_CONSOLE_HTML are specific to XYZ and only apply to the console and html exporters. The OTEL_CONSOLE_HTML is ignored in a Vercel deployment, where the html exporter logs to the console like the console exporter.
 
 Every request which is not served as a static file is traced with a root span from the requestSpan middleware. The root span records the route, response status, process memory, and whether the request was the first request of the process (faas.coldstart).
 
@@ -112,19 +116,22 @@ async function register() {
       resourceFromAttributes,
     } = await import('@opentelemetry/resources');
 
+    // The local report path is relative to the workspace root. A Vercel function cannot write the report.
+    const html =
+      !process.env.VERCEL &&
+      (process.env.OTEL_CONSOLE_HTML ||
+        (exporterType === 'html' && '.traces/local.html'));
+
     // The console processor logs one span tree per trace instead of one log per span.
+    // The html exporter only writes the report, and logs to the console if the report cannot be written.
     const spanProcessor =
-      exporterType === 'console'
+      exporterType === 'console' || exporterType === 'html'
         ? new (await import('./telemetryConsole.js')).ConsoleTraceProcessor({
             minDuration: process.env.OTEL_CONSOLE_MIN_DURATION,
-            // The local report path is relative to the workspace root. A Vercel function cannot write the report.
-            html:
-              process.env.OTEL_CONSOLE_HTML && !process.env.VERCEL
-                ? resolve(
-                    globalThis.xyzEnv?.XYZ_CWD ?? process.cwd(),
-                    process.env.OTEL_CONSOLE_HTML,
-                  )
-                : undefined,
+            log: exporterType === 'console' || !html,
+            html: html
+              ? resolve(globalThis.xyzEnv?.XYZ_CWD ?? process.cwd(), html)
+              : undefined,
           })
         : new BatchSpanProcessor(
             new (

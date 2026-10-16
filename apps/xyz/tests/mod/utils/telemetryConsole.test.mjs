@@ -3,7 +3,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { NodeTracerProvider } from '@opentelemetry/sdk-trace-node';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
-import { ConsoleTraceProcessor } from '../../../mod/utils/telemetryConsole.js';
+import {
+  ConsoleTraceProcessor,
+  RETRY_DELAY,
+} from '../../../mod/utils/telemetryConsole.js';
 
 // The span tree is logged as an object while a debugger is attached.
 vi.mock('node:inspector', () => ({ default: { url: () => 'ws://debugger' } }));
@@ -232,10 +235,69 @@ describe('ConsoleTraceProcessor html', () => {
 
     rmSync(dir, { recursive: true, force: true });
   });
+
+  it('only writes the HTML report without log', async () => {
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    const dir = mkdtempSync(join(tmpdir(), 'xyz-traces-'));
+    const file = join(dir, 'local.html');
+
+    const reportTracer = new NodeTracerProvider({
+      spanProcessors: [new ConsoleTraceProcessor({ html: file, log: false })],
+    }).getTracer('test');
+
+    let late;
+
+    await reportTracer.startActiveSpan('root', async (span) => {
+      reportTracer.startSpan('child').end();
+      late = reportTracer.startSpan('nonblocking');
+      span.end();
+    });
+
+    late.end();
+
+    // Neither the trace nor the span ending after the root span is logged.
+    expect(log).not.toHaveBeenCalled();
+
+    const html = readFileSync(file, 'utf8');
+    const items = JSON.parse(
+      html.match(
+        /<script type="application\/json" id="traces">(.*?)<\/script>/s,
+      )[1],
+    );
+
+    expect(items.map((item) => item.trace.name)).toEqual(['root']);
+
+    // Empty children arrays are removed from the reported trace.
+    expect(items[0].trace.children[0].name).toBe('child');
+    expect(items[0].trace.children[0].children).toBeUndefined();
+
+    rmSync(dir, { recursive: true, force: true });
+  });
 });
 
 describe('ConsoleTraceProcessor html write errors', () => {
-  it('retries the report with the next trace after a failed write', async () => {
+  // Waits for the retry of a failed report write.
+  const retry = () => new Promise((r) => setTimeout(r, RETRY_DELAY + 50));
+
+  function reportItems(file) {
+    const html = readFileSync(file, 'utf8');
+    return JSON.parse(
+      html.match(
+        /<script type="application\/json" id="traces">(.*?)<\/script>/s,
+      )[1],
+    );
+  }
+
+  function reportTrace(file) {
+    const reportTracer = new NodeTracerProvider({
+      spanProcessors: [new ConsoleTraceProcessor({ html: file })],
+    }).getTracer('test');
+
+    return (name) => reportTracer.startActiveSpan(name, (span) => span.end());
+  }
+
+  it('retries a failed write without warning', async () => {
     vi.spyOn(console, 'log').mockImplementation(() => {});
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
@@ -245,15 +307,39 @@ describe('ConsoleTraceProcessor html write errors', () => {
     // A directory at the report path fails the write.
     mkdirSync(file);
 
-    const reportTracer = new NodeTracerProvider({
-      spanProcessors: [new ConsoleTraceProcessor({ html: file })],
-    }).getTracer('test');
+    const trace = reportTrace(file);
 
-    const trace = (name) =>
-      reportTracer.startActiveSpan(name, (span) => span.end());
+    trace('locked');
+
+    // The report path is released before the retry.
+    rmSync(file, { recursive: true });
+
+    await retry();
+
+    expect(warn).not.toHaveBeenCalled();
+    expect(reportItems(file).map((item) => item.trace.name)).toEqual([
+      'locked',
+    ]);
+
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it('warns once if the retry fails and writes the report with the next trace', async () => {
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    const dir = mkdtempSync(join(tmpdir(), 'xyz-traces-'));
+    const file = join(dir, 'local.html');
+
+    mkdirSync(file);
+
+    const trace = reportTrace(file);
 
     trace('failed');
+    await retry();
+
     trace('failed again');
+    await retry();
 
     // The same error is only warned about once.
     expect(warn).toHaveBeenCalledTimes(1);
@@ -262,14 +348,7 @@ describe('ConsoleTraceProcessor html write errors', () => {
 
     trace('written');
 
-    const html = readFileSync(file, 'utf8');
-    const items = JSON.parse(
-      html.match(
-        /<script type="application\/json" id="traces">(.*?)<\/script>/s,
-      )[1],
-    );
-
-    expect(items.map((item) => item.trace.name)).toEqual([
+    expect(reportItems(file).map((item) => item.trace.name)).toEqual([
       'written',
       'failed again',
       'failed',

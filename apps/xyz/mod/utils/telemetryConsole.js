@@ -33,6 +33,8 @@ The resource attributes with the process metadata are only logged with the first
 
 With the html option every logged trace is also written to an HTML report file with the most recent traces. The [telemetry module]{@link module:/utils/telemetry} assigns the html option from the OTEL_CONSOLE_HTML process environment variable in a local process. Keep the report open in a browser and reload the page after a request.
 
+Traces are only written to the HTML report and not logged to the console with the log option set to false. The [telemetry module]{@link module:/utils/telemetry} assigns the log option false with the OTEL_TRACES_EXPORTER=html process environment variable. Spans which end after their root span are not written to the report and therefore not shown at all.
+
 @requires node:fs
 @requires node:inspector
 @requires node:path
@@ -52,6 +54,9 @@ const COMPLETED_LIMIT = 100;
 // The number of most recent traces in the HTML report.
 const REPORT_LIMIT = 50;
 
+// Delay in milliseconds before a failed report write is retried.
+export const RETRY_DELAY = 100;
+
 // The span startTime is recorded with Date.now() at millisecond precision. Precise start times are recorded with performance.now() when the span starts.
 const startTimes = new WeakMap();
 
@@ -66,9 +71,12 @@ export class ConsoleTraceProcessor {
   @param {Object} [options]
   @property {number} [options.minDuration=0] Traces whose root span is shorter than the minDuration in milliseconds are not logged.
   @property {string} [options.html] Path of an HTML report file which is written with the most recent logged traces.
+  @property {boolean} [options.log=true] Whether traces are logged to the console. Traces are only written to the HTML report if false.
   */
   constructor(options = {}) {
     this.minDuration = Number(options.minDuration) || 0;
+
+    this.log = options.log !== false;
 
     this.html = options.html ? resolve(options.html) : undefined;
 
@@ -111,7 +119,7 @@ export class ConsoleTraceProcessor {
     const { traceId } = span.spanContext();
 
     if (this.completed.has(traceId)) {
-      if (this.completed.get(traceId)) log(spanNode(span));
+      if (this.log && this.completed.get(traceId)) log(spanNode(span));
       return;
     }
 
@@ -144,7 +152,7 @@ export class ConsoleTraceProcessor {
       this.resourceLogged = true;
     }
 
-    log(tree);
+    if (this.log) log(tree);
 
     if (this.html) this.writeReport(tree);
   }
@@ -155,11 +163,11 @@ export class ConsoleTraceProcessor {
   @description
   Adds the trace to the most recent traces and writes the HTML report file from the [traceReport module]{@link module:/utils/traceReport}. The report is written synchronously and is meant for a local process only.
 
-  A failed write is retried with the next trace. The file may be locked for a moment on Windows while another process, eg. a live server, reads the file. Each distinct error is only warned about once.
-
   @param {Object} tree The logged trace.
   */
   writeReport(tree) {
+    pruneChildren(tree);
+
     const attrs = tree.attributes ?? {};
 
     this.reportItems.unshift({
@@ -174,10 +182,37 @@ export class ConsoleTraceProcessor {
 
     this.reportItems.length = Math.min(this.reportItems.length, REPORT_LIMIT);
 
+    this.writeReportFile();
+  }
+
+  /**
+  @function writeReportFile
+
+  @description
+  Writes the HTML report file with the most recent traces. A failed write is retried once after the RETRY_DELAY. The file may be locked for a moment on Windows while another process, eg. a browser or live server, reads the file. A pending retry is cancelled by the next write.
+
+  A write which also fails on retry is warned about. Each distinct error is only warned about once.
+
+  @param {boolean} [retry] The write is a retry of a failed write.
+  */
+  writeReportFile(retry) {
+    clearTimeout(this.retryTimeout);
+
     try {
       mkdirSync(dirname(this.html), { recursive: true });
       writeFileSync(this.html, traceReport(this.reportItems));
     } catch (err) {
+      if (!retry) {
+        this.retryTimeout = setTimeout(
+          () => this.writeReportFile(true),
+          RETRY_DELAY,
+        );
+
+        // The retry does not keep the process alive.
+        this.retryTimeout.unref();
+        return;
+      }
+
       if (!this.reportErrors.has(err.message)) {
         this.reportErrors.add(err.message);
         console.warn(`Trace report: ${err.message}`);
@@ -190,6 +225,7 @@ export class ConsoleTraceProcessor {
   }
 
   shutdown() {
+    clearTimeout(this.retryTimeout);
     this.traces.clear();
     return Promise.resolve();
   }
