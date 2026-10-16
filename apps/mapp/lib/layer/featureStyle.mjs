@@ -7,6 +7,57 @@ This module exports a style function for a layer
 */
 
 /**
+@function featureProperties
+@description
+Assigns feature properties based on layer configuration.
+
+Features not in the layer featureSet, featuresObject, or featureLookup will not be displayed and return null.
+
+@param {layer} layer The decorated mapp layer.
+@param {Object} properties The feature properties.
+@property {Set} [layer.featureSet] A set of feature IDs to be displayed.
+@property {Object} [layer.featuresObject] MVT feature properties keyed by feature ID.
+@property {Array} [layer.featureLookup] An array of feature properties objects to be displayed.
+@returns {Object} The feature properties or null if the feature is not displayed.
+*/
+export function featureProperties(layer, properties) {
+  if (layer.featureSet?.size && !layer.featureSet.has(properties.id)) {
+    return null;
+  }
+
+  // Assign MVT feature properties from the layer featuresObject.
+  if (layer.featuresObject) {
+    if (!Object.hasOwn(layer.featuresObject, properties.id)) return null;
+
+    Object.assign(properties, layer.featuresObject[properties.id]);
+  }
+
+  // Check whether feature is in lookup.
+  if (Array.isArray(layer.featureLookup)) {
+    // Find feature with matching ID property in the featureLookup
+    const lookupFeature = layer.featureLookup.find(
+      (f) => f[layer.featureLookupId || 'id'] === properties.id,
+    );
+
+    // Do not style features not found in the lookup array.
+    if (!lookupFeature) return null;
+
+    // Assign feature.properties from the lookupFeature for subsequent styling
+    Object.assign(properties, lookupFeature);
+  }
+
+  // Geojson / WKT features may have a properties property
+  if (properties.properties) {
+    // This shouldn't happen anymore.
+    console.warn(`Feature with properties.properties`);
+    Object.assign(properties, properties.properties);
+    delete properties.properties;
+  }
+
+  return properties;
+}
+
+/**
 @function featureStyle
 @description
 Returns a style function for OL vector layers.
@@ -17,7 +68,7 @@ Returns a style function for OL vector layers.
 
 @returns {function} The style function for the layer.
 */
-export default function featureStyle(layer) {
+export function featureStyle(layer) {
   /**
   @function Style
   @description
@@ -33,7 +84,7 @@ export default function featureStyle(layer) {
     }
 
     // Assign feature properties.
-    featureProperties(feature);
+    feature.properties = featureProperties(layer, feature.getProperties());
 
     if (feature.properties === null) {
       // The feature will not be visible.
@@ -68,63 +119,6 @@ export default function featureStyle(layer) {
 
     return mapp.utils.style(feature.style, feature);
   };
-
-  /**
-  @function featureProperties
-  @description
-  Assigns feature properties based on layer configuration.
-
-  @param {Object} feature The feature object.
-  */
-  function featureProperties(feature) {
-    feature.properties = feature.getProperties();
-
-    if (
-      layer.featureSet?.size &&
-      !layer.featureSet.has(feature.properties.id)
-    ) {
-      feature.properties = null;
-      return;
-    }
-
-    // Assign MVT feature properties from the layer featuresObject.
-    if (layer.featuresObject) {
-      if (Object.hasOwn(layer.featuresObject, feature.properties.id)) {
-        Object.assign(
-          feature.properties,
-          layer.featuresObject[feature.properties.id],
-        );
-      } else {
-        feature.properties = null;
-        return;
-      }
-    }
-
-    // Check whether feature is in lookup.
-    if (Array.isArray(layer.featureLookup)) {
-      // Find feature with matching ID property in the featureLookup
-      const lookupFeature = layer.featureLookup.find(
-        (f) => f[layer.featureLookupId || 'id'] === feature.properties.id,
-      );
-
-      // Do not style features not found in the lookup array.
-      if (!lookupFeature) {
-        feature.properties = null;
-        return;
-      }
-
-      // Assign feature.properties from the lookupFeature for subsequent styling
-      Object.assign(feature.properties, lookupFeature);
-    }
-
-    // Geojson / WKT features may have a properties property
-    if (feature.properties?.properties) {
-      // This shouldn't happen anymore.
-      console.warn(`Feature with properties.properties`);
-      Object.assign(feature.properties, feature.properties.properties);
-      delete feature.properties.properties;
-    }
-  }
 
   /**
   @function clusterStyle
