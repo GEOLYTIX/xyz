@@ -8,6 +8,7 @@ All source responses are cached in a module scope source map regardless of their
 @requires /sign/file
 @requires /utils/envReplace
 @requires /utils/logger
+@requires /utils/telemetry
 @requires /provider/cloudfront
 @requires /provider/file
 
@@ -17,6 +18,7 @@ All source responses are cached in a module scope source map regardless of their
 import file_signer from '../sign/file.js';
 import envReplace from '../utils/envReplace.js';
 import logger from '../utils/logger.js';
+import { srcAttribute, withSpan } from '../utils/telemetry.js';
 import cloudfront from './cloudfront.js';
 import file from './file.js';
 
@@ -69,14 +71,35 @@ export async function getSrc(params) {
     return new Error(`No provider found for src: ${params.src}`);
   }
 
-  let response = await getSrcPromise(params.src);
+  return withSpan(
+    'getSrc',
+    {
+      'xyz.src': srcAttribute(params.src),
+      'xyz.src.cache_hit': srcMap.has(params.src),
+    },
+    () => getSrcResponse(params.src),
+  );
+}
+
+/**
+@function getSrcResponse
+@async
+
+@description
+Resolves the source response from the source map. Object responses are cloned to prevent the cached response being modified.
+
+@param {String} src Resolved source reference.
+@returns {Promise<String|Object|Error>} Cloned source response.
+*/
+async function getSrcResponse(src) {
+  let response = await getSrcPromise(src);
 
   if (response instanceof Error) {
     return response;
   }
 
   if (response === undefined) {
-    return new Error(`Unable to load src: ${params.src}`);
+    return new Error(`Unable to load src: ${src}`);
   }
 
   if (typeof response === 'object') {
@@ -106,16 +129,38 @@ All sources are fetched and inspected regardless of their provider. Sources nest
 
 Objects with the srcLoaded flag have their source response assembled in the cached workspace and their src is not read.
 
+The number of sources, the breadth depth of nested sources, and errors are assigned to the cacheSources span.
+
 @param {Object} workspace
 @returns {Promise<Array<String>>} Array of error messages for failed source requests.
 */
-export async function cacheSources(workspace) {
+export function cacheSources(workspace) {
+  return withSpan('cacheSources', {}, (span) =>
+    cacheWorkspaceSources(workspace, span),
+  );
+}
+
+/**
+@function cacheWorkspaceSources
+@async
+
+@description
+Discovers and caches the workspace sources breadth by breadth as described in the cacheSources method.
+
+@param {Object} workspace
+@param {Span} span The cacheSources span.
+@returns {Promise<Array<String>>} Array of error messages for failed source requests.
+*/
+async function cacheWorkspaceSources(workspace, span) {
   workspace.errors ??= new Set();
   const inspectedSrcs = new Set();
   const inspectedObjects = new WeakSet();
   let queue = [workspace];
+  let depth = 0;
 
   while (queue.length) {
+    depth++;
+
     const sources = new Set();
 
     queue.forEach((value) => collectSrcs(value, sources, inspectedObjects));
@@ -146,6 +191,12 @@ export async function cacheSources(workspace) {
       queue.push(response);
     }
   }
+
+  span.setAttributes({
+    'xyz.src.count': inspectedSrcs.size,
+    'xyz.src.depth': depth,
+    'xyz.src.errors': workspace.errors.size,
+  });
 
   return Array.from(workspace.errors);
 }
@@ -181,6 +232,8 @@ function getSrcPromise(src) {
 @description
 Creates a provider request promise for a resolved src. Provider errors are resolved rather than thrown.
 
+The provider request is traced in a src.provider span. The span is a child of the span which requested the src first. Concurrent requests for the same src share the provider request and span.
+
 @param {String} resolvedSrc Resolved source reference.
 @returns {Promise<String|Object|Error>} Provider response promise.
 */
@@ -193,9 +246,24 @@ function providerPromise(resolvedSrc) {
     );
   }
 
-  return Promise.resolve()
-    .then(() => providers[method](resolvedSrc))
-    .catch((err) => err);
+  return withSpan(
+    'src.provider',
+    {
+      'xyz.src': srcAttribute(resolvedSrc),
+      'xyz.src.provider': method,
+    },
+    async (span) => {
+      const response = await providers[method](resolvedSrc);
+
+      span.setAttribute('xyz.src.type', typeof response);
+
+      if (typeof response === 'string') {
+        span.setAttribute('xyz.src.length', response.length);
+      }
+
+      return response;
+    },
+  ).catch((err) => err);
 }
 
 /**

@@ -121,7 +121,13 @@ export function catToggle(e, layer, cat) {
     delete cat._style;
   }
 
-  layer.style.theme.filterOnly ? layer.L.changed() : layer.reload();
+  if (!layer.style.theme.filterOnly) {
+    layer.reload();
+    return;
+  }
+
+  // The source change will trigger the cluster source to be refreshed with the theme filter applied by the clusterGeometry method.
+  layer.cluster?.source ? layer.source.changed() : layer.L.changed();
 }
 
 /**
@@ -186,24 +192,22 @@ Remove the cat value to the current filter.
 async function filterRemove(layer, cat) {
   if (layer.style.theme.filterOnly) return;
 
-  if (Array.isArray(cat.keys)) {
-    for (const cat of cat.keys) {
-      // Splice key out of the NI array.
-      layer.filter.current[cat.field].ni.splice(
-        layer.filter.current[cat.field].ni.indexOf(key),
-        1,
-      );
-    }
-  } else {
-    // Splice value out of the NI array.
-    layer.filter.current[cat.field].ni.splice(
-      layer.filter.current[cat.field].ni.indexOf(cat.value),
-      1,
-    );
+  const ni = layer.filter.current[cat.field]?.ni;
+
+  // There is no NI filter for the cat field to remove the value from.
+  if (!ni) return;
+
+  const values = Array.isArray(cat.keys) ? cat.keys : [cat.value];
+
+  for (const value of values) {
+    const index = ni.indexOf(value);
+
+    // Splice value out of the NI array. A splice at -1 would remove the last value.
+    if (index !== -1) ni.splice(index, 1);
   }
 
   // Delete current field filter if NI array is empty.
-  if (!layer.filter.current[cat.field].ni.length) {
+  if (!ni.length) {
     delete layer.filter.current[cat.field].ni;
     if (!Object.keys(layer.filter.current[cat.field]).length) {
       delete layer.filter.current[cat.field];
@@ -293,6 +297,21 @@ export function renderLegend(layer, node) {
   }
 
   layer.style.legend.replaceChildren(...node.children);
+}
+
+/**
+@function pendingLegend
+@description
+The method returns the layer.style.legend node for a theme whose distribution has not yet been processed. An empty legend node is assigned as layer.style.legend if the layer has none. 
+The drawLegend method renders into this node once the distribution has been processed from the layer data.
+
+@param {layer} layer The decorated mapp layer.
+@returns {HTMLElement} The layer.style.legend node.
+**/
+export function pendingLegend(layer) {
+  layer.style.legend ??= mapp.utils.html.node`<div class="legend">`;
+
+  return layer.style.legend;
 }
 
 /**

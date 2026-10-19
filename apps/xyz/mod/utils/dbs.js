@@ -8,6 +8,7 @@ The [node-postgres]{@link https://www.npmjs.com/package/pg} package is required 
 
 @requires pg
 @requires /utils/logger
+@requires /utils/telemetry
 @requires module:/utils/processEnv
 */
 
@@ -16,6 +17,7 @@ import pg from 'pg';
 const { Pool } = pg;
 
 import logger from './logger.js';
+import { activeSpan, flushAfter, withSpan } from './telemetry.js';
 
 // At least one attempt is made if the RETRY_LIMIT is not a positive number.
 const RETRY_LIMIT = Number.parseInt(xyzEnv.RETRY_LIMIT) || 1;
@@ -70,32 +72,58 @@ Blocking queries are passed to the executeQuery method, which retries queries th
 
 Nonblocking queries are attempted once without retry. The returned promise resolves true once the query has been sent to the database, without waiting for the query to complete. The query is sent before the caller can respond, so the database will execute the query even if a serverless process is frozen after the response. The promise resolves with the error if the client fails to connect or the statement timeout cannot be set. Errors from the query after it has been sent are logged, since the query result is not awaited.
 
+The params object may be extended with additional properties. These are ignored by the clientQuery method but can be read by a dbs connection method replaced by a composing host.
+
 @this {Pool} The connection pool to use for the query.
-@param {string} query SQL query to execute
-@param {Array} [variables] Parameters for the SQL query
-@param {number} [timeout] Statement timeout in milliseconds. Defaults to xyzEnv.STATEMENT_TIMEOUT.
-@param {Object} [options]
-@property {boolean} [options.nonblocking] Resolve once the query is sent without waiting for the query result.
+@param {Object} params
+@property {string} params.query SQL query to execute
+@property {Array} [params.variables] Parameters for the SQL query
+@property {number} [params.timeout] Statement timeout in milliseconds. Defaults to xyzEnv.STATEMENT_TIMEOUT.
+@property {boolean} [params.nonblocking] Resolve once the query is sent without waiting for the query result.
 @returns {Promise<Array|boolean|Error>} Query rows, true for a sent nonblocking query, or an error.
 */
-async function clientQuery(query, variables, timeout, options = {}) {
-  timeout ??= xyzEnv.STATEMENT_TIMEOUT;
+async function clientQuery(params) {
+  const { query, variables } = params;
 
-  if (!options.nonblocking) {
-    return executeQuery(this, query, variables, timeout);
+  const timeout = params.timeout ?? xyzEnv.STATEMENT_TIMEOUT;
+
+  const attributes = {
+    'db.system.name': 'postgresql',
+    'xyz.dbs': this.options.dbs,
+    'xyz.dbs.statement_timeout': timeout == null ? undefined : String(timeout),
+    'xyz.dbs.nonblocking': !!params.nonblocking,
+  };
+
+  if (!params.nonblocking) {
+    return withSpan(
+      'dbs.query',
+      attributes,
+      () => executeQuery(this, query, variables, timeout),
+      { errorMessage: false },
+    );
   }
 
   // Nonblocking queries make a single attempt without retry.
+  // The span ends once the query completes, which may be after the response has been sent.
   return new Promise((resolve) => {
-    attemptQuery(this, query, variables, timeout, () => resolve(true)).then(
-      (result) => {
-        // No-op if the promise was already resolved once the query was sent.
-        resolve(result);
+    // The result of a nonblocking query is not awaited and must be logged here.
+    // Resolving is a no-op if the promise was already resolved once the query was sent.
+    const settle = (result) => {
+      resolve(result);
+      if (result instanceof Error) console.error(result);
+    };
 
-        // The result of a nonblocking query is not awaited and must be logged here.
-        if (result instanceof Error) console.error(result);
-      },
+    const querySpan = withSpan(
+      'dbs.query',
+      attributes,
+      () => attemptQuery(this, query, variables, timeout, () => resolve(true)),
+      { errorMessage: false },
     );
+
+    // The span ends after the response has been sent and must be flushed once the query completes.
+    flushAfter(querySpan);
+
+    querySpan.then(settle, settle);
   });
 }
 
@@ -117,10 +145,24 @@ The reason for a retry and the backoff delay are logged with the `dbs_retry` key
 @returns {Promise<Array|Error>} Query rows or the last error.
 */
 async function executeQuery(pool, query, variables, timeout) {
+  const span = activeSpan();
+
   for (let attempt = 1; attempt <= RETRY_LIMIT; attempt++) {
+    span.setAttribute('xyz.dbs.attempts', attempt);
+
     const result = await attemptQuery(pool, query, variables, timeout);
 
+    if (Array.isArray(result)) {
+      span.setAttribute('xyz.dbs.rows', result.length);
+    }
+
     if (!(result instanceof Error)) return result;
+
+    // Database error messages may contain query parameter values and are only logged.
+    span.addEvent('dbs.error', {
+      attempt,
+      'error.type': result.code ?? result.name,
+    });
 
     console.error(result);
 
@@ -182,7 +224,18 @@ async function attemptQuery(pool, query, variables, timeout, onSent) {
   let client;
 
   try {
-    client = await pool.connect();
+    // The pool counts before connecting show whether the client must wait for a connection.
+    client = await withSpan(
+      'dbs.connect',
+      {
+        'xyz.dbs': pool.options.dbs,
+        'xyz.dbs.pool.total': pool.totalCount,
+        'xyz.dbs.pool.idle': pool.idleCount,
+        'xyz.dbs.pool.waiting': pool.waitingCount,
+      },
+      () => pool.connect(),
+      { errorMessage: false },
+    );
 
     // Set statement timeout if specified
     if (timeout != null) {

@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "v5.0.6",
+  "version": "v5.0.7",
   "type": "module",
   "repository": {
     "type": "git",
@@ -12,7 +12,10 @@
     "freeze-env": "node utils/freeze-env.js",
     "dev:auth": "turbo run dev --filter=@geolytix/xyz-auth-app",
     "dev:saml": "turbo run dev --filter=@geolytix/xyz-saml-app",
+    "devdb": "pnpm --filter=@geolytix/xyz-devdb start",
+    "test:devdb": "turbo run test --filter=@geolytix/xyz-devdb",
     "deploy:vercel": "node utils/deploy-vercel.js",
+    "traces": "node utils/traces.js",
     "bump:patch": "node utils/bump-version.js patch",
     "bump:minor": "node utils/bump-version.js minor",
     "bump:major": "node utils/bump-version.js major",
