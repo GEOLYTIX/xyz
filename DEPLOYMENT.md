@@ -25,7 +25,7 @@ The root `vercel.json` builds one entry point and routes everything to it:
 }
 ```
 
-- **No build command runs on Vercel.** The MAPP bundles in `public/js/lib`, `public/css/mapp.css` and `public/css/ui.css` are gitignored on every branch and are uploaded from the local working tree. `pnpm deploy:vercel` builds them before deploying. Release tags are the only refs which contain the bundles, see [Build artefacts](#build-artefacts).
+- **No build command runs on Vercel.** The MAPP bundles in `public/js/lib`, `public/css/mapp.css` and `public/css/ui.css` are not tracked on the development branches and are uploaded from the local working tree. `pnpm deploy:vercel` builds them before deploying. Only `main` and the release tags contain the bundles, see [Build artefacts](#build-artefacts).
 - **`server.js` skips `app.listen()`** when `process.env.VERCEL` is set, exporting the Express app for `@vercel/node` instead.
 
 ## Configuration
@@ -188,7 +188,7 @@ Deploy each to its **own Vercel project** — they all claim `/(.*)`. The SAML c
 
 ### MAPP bundles
 
-The bundles in `public/js/lib`, `public/css/mapp.css` and `public/css/ui.css` are gitignored, so changes to `apps/mapp` never cause merge conflicts in build output. Vercel ships whatever is in the local `public` directory, so build before any deployment which does not go through `pnpm deploy:vercel`:
+The bundles in `public/js/lib`, `public/css/mapp.css` and `public/css/ui.css` are gitignored and not tracked on the development branches, so changes to `apps/mapp` never cause merge conflicts in build output. Vercel ships whatever is in the local `public` directory, so build before any deployment which does not go through `pnpm deploy:vercel`:
 
 ```bash
 pnpm build --filter=@geolytix/mapp
@@ -196,7 +196,7 @@ pnpm build --filter=@geolytix/mapp
 
 Turbo restores the bundles from its cache when `apps/mapp` is unchanged, so deleting `public/js/lib` and building again is safe. Use `--force` to skip the cache.
 
-Release tags carry the bundles. The release workflow builds them on top of `main`, commits them without pushing that commit to any branch, and tags it (see [RELEASING.md](./RELEASING.md)). A checkout of a release tag, or its source archive, is deployable without a build.
+`main` and the release tags carry the bundles. The release workflow builds them on top of `main`, commits them to `main`, and tags that commit (see [RELEASING.md](./RELEASING.md)). A checkout of `main` or a release tag, or a source archive, is deployable without a build.
 
 `node utils/version.js` stamps the bundle with the current commit SHA and then builds — useful for identifying which framework version a deployment runs. `NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp` produces an unminified bundle for debugging; do not deploy one.
 
