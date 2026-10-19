@@ -1,9 +1,10 @@
 name: Release
 
-# The MAPP bundles in public/js/lib and public/css are gitignored on every
-# branch. A push to main with an untagged package.json version builds the
-# bundles, commits them on top of main without pushing that commit to any
-# branch, and tags it. The tag is the only ref which carries the build output.
+# The MAPP bundles in public/js/lib and public/css are gitignored, so the
+# development branches never track them. A push to main with an untagged
+# package.json version builds the bundles, commits them to main, and tags that
+# commit. A squash merge from a development branch removes the bundles from
+# main; a push to main without the bundles rebuilds and commits them.
 
 on:
   push:
@@ -19,9 +20,14 @@ concurrency:
 
 jobs:
   release:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+      # The GITHUB_TOKEN cannot push to the protected main and patch branches.
+      # The full history is required to merge main into patch.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          fetch-depth: 0
 
       - name: Resolve version
         id: version
@@ -31,8 +37,15 @@ jobs:
           tag=$(node -p "require('./package.json').version")
           echo "tag=$tag" >> "$GITHUB_OUTPUT"
           if git ls-remote --exit-code --tags origin "refs/tags/$tag" > /dev/null; then
-            echo "Tag $tag already exists, skipping build."
+            echo "Tag $tag already exists."
             echo "exists=true" >> "$GITHUB_OUTPUT"
+            if git ls-files --error-unmatch public/js/lib/mapp.js > /dev/null 2>&1; then
+              echo "The bundles are committed to main, skipping build."
+            else
+              echo "build=true" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "build=true" >> "$GITHUB_OUTPUT"
           fi
           if gh release view "$tag" > /dev/null 2>&1; then
             echo "Release $tag already exists, nothing to release."
@@ -42,37 +55,44 @@ jobs:
           fi
 
       - name: Install pnpm
-        if: steps.version.outputs.exists != 'true'
-        uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
+        if: steps.version.outputs.build == 'true'
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
-        if: steps.version.outputs.exists != 'true'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: steps.version.outputs.build == 'true'
         with:
           node-version: '22'
 
       - name: Install dependencies
-        if: steps.version.outputs.exists != 'true'
+        if: steps.version.outputs.build == 'true'
         run: pnpm install --ignore-scripts
 
       - name: Test
-        if: steps.version.outputs.exists != 'true'
+        if: steps.version.outputs.build == 'true'
         run: pnpm test
 
       - name: Build MAPP bundles
-        if: steps.version.outputs.exists != 'true'
+        if: steps.version.outputs.build == 'true'
         run: pnpm build --filter=@geolytix/mapp --force
 
-      - name: Commit build and push tag
-        if: steps.version.outputs.exists != 'true'
+      # The tag is pushed atomically with main, so a tag always points at a
+      # commit on main which contains the bundles.
+      - name: Commit build, push main and tag
+        if: steps.version.outputs.build == 'true'
         env:
           TAG: ${{ steps.version.outputs.tag }}
+          EXISTS: ${{ steps.version.outputs.exists }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
           git add --force public/js/lib public/css/mapp.css public/css/ui.css
           git commit -m "Build $TAG"
-          git tag -a "$TAG" -m "Release $TAG"
-          git push origin "refs/tags/$TAG"
+          refs=("HEAD:refs/heads/main")
+          if [ "$EXISTS" != "true" ]; then
+            git tag -a "$TAG" -m "Release $TAG"
+            refs+=("refs/tags/$TAG")
+          fi
+          git push --atomic origin "${refs[@]}"
 
       # Checked separately from the tag so a rerun creates the release
       # when a previous run pushed the tag but failed to create the release.
@@ -86,3 +106,24 @@ jobs:
             --verify-tag \
             --title "$TAG" \
             --notes-file "release-notes/$TAG.md"
+
+      # Merging main adds the bundles to patch, or conflicts with patch not
+      # tracking them. Untracking the bundles resolves both cases. Any other
+      # conflict fails the step and patch must be synced manually.
+      - name: Sync patch with main
+        if: steps.version.outputs.build == 'true'
+        run: |
+          main_sha=$(git rev-parse HEAD)
+          git fetch origin patch
+          git switch --detach origin/patch
+          git merge --no-commit --no-ff "$main_sha" || true
+          git rm -r --cached --ignore-unmatch --quiet public/js/lib public/css/mapp.css public/css/ui.css
+          conflicts=$(git diff --name-only --diff-filter=U)
+          if [ -n "$conflicts" ]; then
+            echo "::error::Merging main into patch conflicts in:"
+            echo "$conflicts"
+            git merge --abort
+            exit 1
+          fi
+          git commit --no-edit -m "Merge main into patch"
+          git push origin HEAD:refs/heads/patch
