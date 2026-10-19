@@ -1,14 +1,19 @@
 # Releasing XYZ
 
-Merging a version bump into `main` releases it. The [release workflow](./.github/workflows/release.yml) runs on every push to `main` and does nothing unless the `package.json` version has no tag yet. For a new version it:
+Merging a version bump into `main` releases it. The [release workflow](./.github/workflows/release.yml) runs on every push to `main`. For a version which has no tag yet it:
 
 1. runs the tests,
 2. builds the MAPP bundles into `public/js/lib`, `public/css/mapp.css` and `public/css/ui.css`,
-3. commits the bundles on top of `main` in a `Build <tag>` commit, which is **not pushed to any branch**,
-4. tags that commit and pushes the tag,
-5. creates a GitHub release using `release-notes/<tag>.md`.
+3. commits the bundles on top of `main` in a `Build <tag>` commit,
+4. tags that commit and pushes `main` and the tag together,
+5. creates a GitHub release using `release-notes/<tag>.md`,
+6. merges `main` into `patch` without the bundles and pushes `patch`.
 
-The bundles are gitignored on every branch, so they never cause merge conflicts. The release tag is the only ref which contains them, which makes a tag checkout or source archive deployable without a build.
+The bundles are gitignored and are not tracked on the development branches (`patch`, `minor`, `major`), so they never cause merge conflicts there. Only `main` and the release tags track them, which makes a checkout of `main`, a release tag, or a source archive deployable without a build.
+
+A squash merge from a development branch removes the bundles from `main`, because the development branch does not track them. The workflow rebuilds and commits the bundles on any push to `main` which does not contain them, also when the version is already tagged.
+
+The workflow pushes to the protected `main` and `patch` branches with the `PAT_TOKEN` repository secret. The token owner must be allowed to push to `main` and to bypass the pull request rule on both branches.
 
 The workflow **does not deploy the app or publish an npm package**. For deployment, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 
@@ -53,7 +58,7 @@ pnpm build --filter=@geolytix/mapp
 git status --short
 ```
 
-Stop and resolve any failures. The build output is gitignored and must not show up in `git status`; the local build only checks that the bundles build.
+Stop and resolve any failures. The local build only checks that the bundles build. A branch from `main` tracks the bundles, so discard the rebuilt files before committing: `git restore public/js/lib public/css/mapp.css public/css/ui.css`. The workflow commits the release build.
 
 ```bash
 git add package.json README.md apps/mapp/lib/mapp.mjs release-notes/v5.0.3.md
@@ -68,7 +73,26 @@ Open a pull request into `main` and wait for the required checks and review. **M
 
 - Check [Actions → Release](https://github.com/GEOLYTIX/xyz/actions/workflows/release.yml) succeeds.
 - Check [Releases](https://github.com/GEOLYTIX/xyz/releases) shows the correct version and notes.
-- Check the tag contains the bundles: `git fetch origin --tags && git ls-tree -r --name-only v5.0.3 public/js/lib`.
+- Check `main` and the tag contain the bundles: `git fetch origin --tags && git ls-tree -r --name-only v5.0.3 public/js/lib && git ls-tree -r --name-only origin/main public/js/lib`.
 - Deploy separately if needed, following [DEPLOYMENT.md](./DEPLOYMENT.md).
 
-If the workflow fails before the tag is pushed, fix the cause in a new commit to `main`, or re-run the failed job for a transient failure. The next push to `main` retries the release while the version is still untagged. If the tag was pushed but the GitHub release is missing, re-run the job; it skips the build for the existing tag and only creates the release. Never move or overwrite a published release tag.
+## 5. Sync the development branch
+
+The workflow merges `main` into `patch` after each release; check `patch` has a new `Merge main into patch` commit. The sync step fails when the merge conflicts in files other than the bundles, eg. when `patch` received changes during the release. Sync `patch` manually in that case.
+
+Merging `main` either adds the bundles or stops with a modify/delete conflict on them; untracking them resolves both cases and keeps the built files in the working tree.
+
+```bash
+git switch patch
+git pull --ff-only origin patch
+git fetch origin main
+git merge --no-commit origin/main
+git rm -r --cached --ignore-unmatch --quiet public/js/lib public/css/mapp.css public/css/ui.css
+git status --short
+git commit -m "Merge main into patch"
+git push origin patch
+```
+
+`git status --short` must not list any other conflicts or bundle files before the commit.
+
+If the workflow fails before the tag is pushed, fix the cause in a new commit to `main`, or re-run the failed job for a transient failure. The next push to `main` retries the release while the version is still untagged. If the tag was pushed but the GitHub release is missing, re-run the job; it skips the build when `main` already contains the bundles and only creates the release. Never move or overwrite a published release tag.
