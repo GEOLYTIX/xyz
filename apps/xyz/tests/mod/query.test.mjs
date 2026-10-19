@@ -332,6 +332,83 @@ describe('Query: layer queries', () => {
   });
 });
 
+describe('Query: fields param', () => {
+  // The category infoj entry of the restricted_fields layer is gated by the analyst role.
+  const params = {
+    template: 'wkt',
+    layer: 'restricted_fields',
+    table: 'example.locations',
+    viewport: '10,50,15,55,4326',
+  };
+
+  it('permits fields which are accessible without roles', async () => {
+    const res = await request({ ...params, fields: 'name' });
+
+    expect(res).toEqual({
+      status: 200,
+      data: [[3, 'POINT(13.405 52.52)', 'Berlin']],
+    });
+  });
+
+  it('permits a role restricted field for a user with the role', async () => {
+    const res = await request({
+      ...params,
+      fields: 'name,category',
+      user: { roles: ['analyst'] },
+    });
+
+    expect(res).toEqual({
+      status: 200,
+      data: [[3, 'POINT(13.405 52.52)', 'Berlin', 'city']],
+    });
+  });
+
+  it.each([
+    ['without roles', undefined],
+    ['without the required role', { roles: ['viewer'] }],
+  ])('returns 403 for a role restricted field %s', async (_, user) => {
+    const res = await request({ ...params, fields: 'name,category', user });
+
+    expect(res).toEqual({
+      status: 403,
+      data: 'Fields [category] restricted by user roles on restricted_fields layer.',
+    });
+  });
+
+  it('returns 403 for a role restricted field in a locales layer', async () => {
+    // The getLocale method mutates the locale param before the fields check. The restricted_locale_fields layer is not in the default locale.
+    const res = await request({
+      ...params,
+      layer: 'restricted_locale_fields',
+      locale: 'restricted',
+      fields: 'category',
+    });
+
+    expect(res).toEqual({
+      status: 403,
+      data: 'Fields [category] restricted by user roles on restricted_locale_fields layer.',
+    });
+  });
+
+  it('returns 400 listing every field which is not in the layer', async () => {
+    const res = await request({ ...params, fields: 'foo,name,bar' });
+
+    expect(res).toEqual({
+      status: 400,
+      data: 'Fields [foo, bar] not accessible on restricted_fields layer.',
+    });
+  });
+
+  it('returns 400 listing missing and role restricted fields', async () => {
+    const res = await request({ ...params, fields: 'foo,category,bar' });
+
+    expect(res).toEqual({
+      status: 400,
+      data: 'Fields [foo, bar] not accessible on restricted_fields layer. Fields [category] restricted by user roles on restricted_fields layer.',
+    });
+  });
+});
+
 describe('Query: parameter substitution', () => {
   it('replaces ${} params and substitutes %{} params', async () => {
     const res = await request({
