@@ -23,7 +23,7 @@ The Vite build has two library entry points:
 - `apps/mapp/lib/mapp.mjs` becomes `public/js/lib/mapp.js`
 - `apps/mapp/lib/ui.mjs` becomes `public/js/lib/ui.js`
 
-Shared code may be emitted as additional chunk files in `public/js/lib`. The generated files and their sourcemaps are gitignored and must not be committed to a branch. The release workflow commits them on the release tag only, see [RELEASING.md](../../RELEASING.md).
+Shared code may be emitted as additional chunk files in `public/js/lib`. The generated files and their sourcemaps are gitignored and must not be committed to a development branch. The release workflow commits them to `main` and the release tag, see [RELEASING.md](../../RELEASING.md).
 
 To build against an environment-specific Varlock file, set the environment before running the build:
 
