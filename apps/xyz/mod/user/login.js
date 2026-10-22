@@ -87,10 +87,10 @@ async function loginBody(req, res) {
   const user = await fromACL(req);
 
   if (user instanceof Error) {
-    // Browser form posts render the login view, API clients get plain text.
+    // Browser form posts prefer html; API clients (*/*, no Accept, html;q=0) get plain text.
     if (
       req.cookies?.[`${xyzEnv.TITLE}_redirect`] ||
-      req.headers.accept?.includes('text/html')
+      req.accepts(['text/plain', 'html']) === 'html'
     ) {
       req.params.msg = user.message;
       req.params.template = 'login_view';
