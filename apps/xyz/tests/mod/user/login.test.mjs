@@ -137,26 +137,26 @@ describe('login', async () => {
     expect(view).toHaveBeenCalledWith(req, res);
   });
 
-  it.each([
-    ['*/*'],
-    ['application/json, text/html;q=0'],
-  ])('loginBody: returns plain text 401 for Accept: %s', async (accept) => {
-    fromACLFn.mockResolvedValueOnce(new Error('auth_failed'));
+  it.each([['*/*'], ['application/json, text/html;q=0']])(
+    'loginBody: returns plain text 401 for Accept: %s',
+    async (accept) => {
+      fromACLFn.mockResolvedValueOnce(new Error('auth_failed'));
 
-    const { req, res } = createMocks({
-      method: 'POST',
-      body: { email: 'test@email.com', password: 'wrong' },
-      params: {},
-      cookies: {},
-      headers: { accept },
-    });
+      const { req, res } = createMocks({
+        method: 'POST',
+        body: { email: 'test@email.com', password: 'wrong' },
+        params: {},
+        cookies: {},
+        headers: { accept },
+      });
 
-    await login(req, res);
+      await login(req, res);
 
-    expect(res.statusCode).toEqual(401);
-    expect(res._getData()).toEqual('auth_failed');
-    expect(view).not.toHaveBeenCalled();
-  });
+      expect(res.statusCode).toEqual(401);
+      expect(res._getData()).toEqual('auth_failed');
+      expect(view).not.toHaveBeenCalled();
+    },
+  );
 
   it('loginBody: successfully authenticates, generates tokens, and sets cookies', async () => {
     const mockUser = {
