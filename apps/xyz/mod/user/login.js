@@ -87,7 +87,11 @@ async function loginBody(req, res) {
   const user = await fromACL(req);
 
   if (user instanceof Error) {
-    if (req.cookies?.[`${xyzEnv.TITLE}_redirect`]) {
+    // Browser form posts render the login view, API clients get plain text.
+    if (
+      req.cookies?.[`${xyzEnv.TITLE}_redirect`] ||
+      req.headers.accept?.includes('text/html')
+    ) {
       req.params.msg = user.message;
       req.params.template = 'login_view';
       view(req, res);
