@@ -24,7 +24,6 @@ The module exports a collection of core mapp plugins.
 import { svgTemplates } from '../utils/svgTemplates.mjs';
 import { admin } from './admin.mjs';
 import { consent } from './consent.mjs';
-import { custom_theme, dark_mode } from './dark_mode.mjs';
 import { feature_info } from './feature_info.mjs';
 import { fullscreen } from './fullscreen.mjs';
 import { layer_order } from './layer_order.mjs';
@@ -55,8 +54,6 @@ import { zoomToArea } from './zoomToArea.mjs';
 const plugins = {
   admin,
   consent,
-  custom_theme,
-  dark_mode,
   feature_info,
   fullscreen,
   layer_order,
