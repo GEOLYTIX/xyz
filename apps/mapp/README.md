@@ -45,7 +45,7 @@ NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
 
 The MAPP build also bundles `apps/mapp/css/_mapp.css` and `apps/mapp/css/_ui.css` through `apps/mapp/vite.css.config.mjs`. The generated CSS and font assets are written to the root `public/css` directory. The generated `mapp.css` and `ui.css` are gitignored like the JavaScript bundles; the font files are committed.
 
-`mapp.css` only styles mapview elements like the popup, infotip, attribution and Openlayers controls. It doesn't load fonts or define the colour palette. The colour variables in `mapp.css` fall back to the default palette values. `ui.css` loads the fonts, the colour palette and the body styles, and a colour theme set with the ui overrides the mapp colours.
+`mapp.css` only styles mapview elements like the popup, infotip, attribution and Openlayers controls. It doesn't load fonts or define the colour palette. The colour variables in `mapp.css` fall back to the default palette values. `ui.css` loads the fonts, the colour palette and the body styles, and a colour theme set with the ui overrides the mapp colours. The layer legends are ui elements and are styled by `ui.css`.
 
 The root package also exposes CSS-only commands used by the host app:
 
