@@ -21,12 +21,12 @@ vi.mock('resend', () => ({
 
 vi.mock('../../../mod/provider/getSrc.js', () => ({
   getSrc: (params) => {
-    // The test param checks whether a provider exists for the src.
-    if (typeof params === 'object' && params?.test) {
-      return params.src.split(':')[0] === 'file';
-    }
-
     const src = typeof params === 'string' ? params : params?.src;
+
+    // Mirror getSrc returning an error for a src without provider.
+    if (src.split(':')[0] !== 'file') {
+      return new Error(`No provider found for src: ${src}`);
+    }
 
     return fileGet(src);
   },
@@ -86,6 +86,36 @@ describe('resend Module', () => {
       'welcome\nFrom: sender@example.com\nTo: user@example.com',
       'mailer',
     );
+  });
+
+  it('sends plain text template bodies which are not src references', async () => {
+    emailSend.mockResolvedValue({});
+    languageTemplates.mockResolvedValue({
+      subject: 'A failed login attempt was made on ${host}',
+      text: 'An incorrect password was entered from ${remote_address}',
+    });
+
+    const mailer = await importMailer({
+      TRANSPORT_EMAIL: 'sender@example.com',
+      TRANSPORT_PASSWORD: 'secret',
+    });
+
+    await mailer.send({
+      host: 'https://geolytix.com',
+      remote_address: '127.0.0.1',
+      template: 'login_incorrect',
+      to: 'user@example.com',
+    });
+
+    expect(fileGet).not.toHaveBeenCalled();
+    expect(emailSend).toHaveBeenCalledWith({
+      from: 'sender@example.com',
+      html: undefined,
+      sender: 'sender@example.com',
+      subject: 'A failed login attempt was made on https://geolytix.com',
+      text: 'An incorrect password was entered from 127.0.0.1',
+      to: 'user@example.com',
+    });
   });
 
   it('does not log a single email when resend returns an error', async () => {

@@ -156,11 +156,15 @@ async function getBody(template) {
   if (template.text) {
     // Prevent mail template from having text and html
     delete template.html;
-    template.text = await getSrc(template.text);
+
+    // getSrc returns an error if the text is not a src reference, eg. 'file:'.
+    const text = await getSrc(template.text);
+    if (!(text instanceof Error)) template.text = text;
   }
 
   if (template.html) {
-    template.html = await getSrc(template.html);
+    const html = await getSrc(template.html);
+    if (!(html instanceof Error)) template.html = html;
   }
 }
 
