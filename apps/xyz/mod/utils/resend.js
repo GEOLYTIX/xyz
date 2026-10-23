@@ -15,7 +15,7 @@ The send function sends one email. And the batch function queues a batch of emai
 @module /utils/resend
 */
 
-import { getSrc } from '../provider/getSrc.js';
+import { getSrc, hasProvider } from '../provider/getSrc.js';
 
 import languageTemplates from './languageTemplates.js';
 import logger from './logger.js';
@@ -57,7 +57,12 @@ async function send(params) {
 
   const template = await languageTemplates(params);
 
-  await getBody(template);
+  const err = await getBody(template);
+
+  if (err instanceof Error) {
+    console.error(err);
+    return;
+  }
 
   const mailTemplate = {
     from: xyzEnv.TRANSPORT_EMAIL,
@@ -108,7 +113,13 @@ async function batch(emails) {
   for (const params of Object.values(emails)) {
     const template = await languageTemplates(params);
 
-    await getBody(template);
+    const err = await getBody(template);
+
+    // Skip the email if the template body failed to load.
+    if (err instanceof Error) {
+      console.error(err);
+      continue;
+    }
 
     const mailTemplate = {
       from: xyzEnv.TRANSPORT_EMAIL,
@@ -125,6 +136,8 @@ async function batch(emails) {
 
     emailTemplates.push(mailTemplate);
   }
+
+  if (!emailTemplates.length) return;
 
   const { error } = await resend.batch.send(emailTemplates);
 
@@ -148,23 +161,27 @@ async function batch(emails) {
 @description
 Retrieves the body of the text from the provided url/file.
 
+Text and html values without a provider prefix are inline bodies and are kept as is. An error is returned if a src reference fails to load.
+
 @param {Object} template
-@property {String} template.text The url from which to retrieve the text content using {@link module:/provider/getSrc}.
-@property {String} template.html The url from which to retrieve the html content using {@link module:/provider/getSrc}.
+@property {String} template.text The inline text or the src reference from which to retrieve the text content using {@link module:/provider/getSrc}.
+@property {String} template.html The inline html or the src reference from which to retrieve the html content using {@link module:/provider/getSrc}.
+
+@returns {Promise<Error|undefined>} An error if a src reference failed to load.
 */
 async function getBody(template) {
-  if (template.text) {
-    // Prevent mail template from having text and html
-    delete template.html;
+  // Prevent mail template from having text and html
+  if (template.text) delete template.html;
 
-    // getSrc returns an error if the text is not a src reference, eg. 'file:'.
-    const text = await getSrc(template.text);
-    if (!(text instanceof Error)) template.text = text;
-  }
+  for (const key of ['text', 'html']) {
+    if (!hasProvider(template[key])) continue;
 
-  if (template.html) {
-    const html = await getSrc(template.html);
-    if (!(html instanceof Error)) template.html = html;
+    const body = await getSrc(template[key]);
+
+    // A failed src reference must not be sent as the body.
+    if (body instanceof Error) return body;
+
+    template[key] = body;
   }
 }
 

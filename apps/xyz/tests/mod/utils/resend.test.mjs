@@ -23,13 +23,10 @@ vi.mock('../../../mod/provider/getSrc.js', () => ({
   getSrc: (params) => {
     const src = typeof params === 'string' ? params : params?.src;
 
-    // Mirror getSrc returning an error for a src without provider.
-    if (src.split(':')[0] !== 'file') {
-      return new Error(`No provider found for src: ${src}`);
-    }
-
     return fileGet(src);
   },
+  // Only the file provider is available in the resend tests.
+  hasProvider: (src) => typeof src === 'string' && src.split(':')[0] === 'file',
 }));
 
 vi.mock('../../../mod/utils/languageTemplates.js', () => ({
@@ -116,6 +113,91 @@ describe('resend Module', () => {
       text: 'An incorrect password was entered from 127.0.0.1',
       to: 'user@example.com',
     });
+  });
+
+  it('does not send an email when the template src fails to load', async () => {
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    const error = new Error('Unable to load src: file:text-template');
+
+    fileGet.mockResolvedValue(error);
+    languageTemplates.mockResolvedValue({
+      subject: 'Welcome',
+      text: 'file:text-template',
+    });
+
+    const mailer = await importMailer({
+      TRANSPORT_EMAIL: 'sender@example.com',
+      TRANSPORT_PASSWORD: 'secret',
+    });
+
+    await mailer.send({ template: 'welcome', to: 'user@example.com' });
+
+    expect(consoleError).toHaveBeenCalledWith(error);
+    expect(emailSend).not.toHaveBeenCalled();
+    expect(logger).not.toHaveBeenCalled();
+  });
+
+  it('skips batch emails with a template src which fails to load', async () => {
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    const error = new Error('Unable to load src: file:html-template');
+
+    batchSend.mockResolvedValue({});
+    fileGet.mockResolvedValue(error);
+    languageTemplates
+      .mockResolvedValueOnce({
+        html: 'file:html-template',
+        subject: 'Welcome ${name}',
+      })
+      .mockResolvedValueOnce({
+        subject: 'Hello ${name}',
+        text: 'Second ${name}',
+      });
+
+    const mailer = await importMailer({
+      TRANSPORT_EMAIL: 'sender@example.com',
+      TRANSPORT_PASSWORD: 'secret',
+    });
+
+    await mailer.batch([
+      { name: 'Rob', template: 'welcome', to: 'rob@example.com' },
+      { name: 'Ada', template: 'hello', to: 'ada@example.com' },
+    ]);
+
+    expect(consoleError).toHaveBeenCalledWith(error);
+    expect(batchSend).toHaveBeenCalledWith([
+      {
+        from: 'sender@example.com',
+        html: undefined,
+        sender: 'sender@example.com',
+        subject: 'Hello Ada',
+        text: 'Second Ada',
+        to: 'ada@example.com',
+      },
+    ]);
+  });
+
+  it('does not send a batch when every template src fails to load', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    fileGet.mockResolvedValue(new Error('Unable to load src'));
+    languageTemplates.mockResolvedValue({
+      subject: 'Welcome',
+      text: 'file:text-template',
+    });
+
+    const mailer = await importMailer({
+      TRANSPORT_EMAIL: 'sender@example.com',
+      TRANSPORT_PASSWORD: 'secret',
+    });
+
+    await mailer.batch([{ template: 'welcome', to: 'rob@example.com' }]);
+
+    expect(batchSend).not.toHaveBeenCalled();
+    expect(logger).not.toHaveBeenCalled();
   });
 
   it('does not log a single email when resend returns an error', async () => {

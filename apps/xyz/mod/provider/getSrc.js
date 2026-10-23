@@ -67,7 +67,7 @@ export async function getSrc(params) {
 
   params.src = envReplace(params.src);
 
-  if (!Object.hasOwn(providers, params.src.split(':')[0])) {
+  if (!hasProvider(params.src)) {
     return new Error(`No provider found for src: ${params.src}`);
   }
 
@@ -79,6 +79,21 @@ export async function getSrc(params) {
     },
     () => getSrcResponse(params.src),
   );
+}
+
+/**
+@function hasProvider
+
+@description
+Checks whether a provider exists for the prefix of a src reference, eg. `file:`, `https:`, `cloudfront:`, or a signer provider from a SIGN_* xyzEnv key. Environment variables in the src are substituted before the prefix is checked.
+
+@param {String} src Source reference.
+@returns {Boolean} Whether a provider exists for the src prefix.
+*/
+export function hasProvider(src) {
+  if (typeof src !== 'string') return false;
+
+  return Object.hasOwn(providers, envReplace(src).split(':')[0]);
 }
 
 /**
