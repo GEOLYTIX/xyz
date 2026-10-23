@@ -1,5 +1,5 @@
 /**
-## /plugins/link_button
+## /ui/plugins/link_button
 The module exports the link_button plugin method to mapp.plugins{}
 
 Dictionary entries:
@@ -7,7 +7,7 @@ Dictionary entries:
 
 @requires /dictionary
 
-@module /plugins/link_button
+@module /ui/plugins/link_button
 */
 
 /**
