@@ -149,6 +149,16 @@
         "table": "example.locations",
         "qID": "id"
       },
+      "restricted_fields": {
+        "table": "example.locations",
+        "qID": "id",
+        "geom": "geom",
+        "srid": 4326,
+        "infoj": [
+          { "field": "name" },
+          { "field": "category", "roles": { "analyst": true } }
+        ]
+      },
       "features": {
         "table": "example.features",
         "qID": "id",
@@ -158,5 +168,20 @@
       }
     }
   },
-  "locales": {}
+  "locales": {
+    "restricted": {
+      "layers": {
+        "restricted_locale_fields": {
+          "table": "example.locations",
+          "qID": "id",
+          "geom": "geom",
+          "srid": 4326,
+          "infoj": [
+            { "field": "name" },
+            { "field": "category", "roles": { "analyst": true } }
+          ]
+        }
+      }
+    }
+  }
 }
