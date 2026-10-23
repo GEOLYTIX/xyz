@@ -14,9 +14,6 @@ The module exports a collection of core mapp plugins.
 @requires module:/plugins/locator
 @requires module:/plugins/login
 @requires module:/plugins/svg_templates
-@requires module:/plugins/userIDB
-@requires module:/plugins/userLayer
-@requires module:/plugins/userLocale
 @requires module:/plugins/zoomBtn
 @requires module:/plugins/zoomToArea
 */
@@ -31,9 +28,6 @@ import { link_button } from './link_button.mjs';
 import { locator } from './locator.mjs';
 import { login } from './login.mjs';
 import { test } from './test.mjs';
-import { userIDB } from './userIDB.mjs';
-import { userLayer } from './userLayer.mjs';
-import { userLocale } from './userLocale.mjs';
 import { zoomBtn } from './zoomBtn.mjs';
 import { zoomToArea } from './zoomToArea.mjs';
 
@@ -62,9 +56,6 @@ const plugins = {
   login,
   svg_templates: svgTemplates,
   test,
-  userIDB,
-  userLayer,
-  userLocale,
   zoomBtn,
   zoomToArea,
 };

@@ -7,6 +7,8 @@ The `ui{}` object will be assigned to the global `mapp{}` object if loaded prior
 
 The ui plugins are assigned to the `mapp.plugins{}` object.
 
+The alert and confirm ui elements are assigned as `mapp.utils.alert()` and `mapp.utils.confirm()`, replacing the window.alert() and window.confirm() bindings.
+
 The `ui.mjs` module is used as entry point for the Vite build process to bundle the MAPP/UI API.
 
 @requires /ui/elements
@@ -42,6 +44,11 @@ globalThis.ui = ui;
 globalThis.mapp ??= {};
 
 mapp.ui = ui;
+
+// The ui elements override the window.alert() and window.confirm() bindings of the mapp utils.
+mapp.utils ??= {};
+mapp.utils.alert = elements.alert;
+mapp.utils.confirm = elements.confirm;
 
 // The ui plugins are executed by the mapview like core mapp plugins.
 mapp.plugins ??= {};
