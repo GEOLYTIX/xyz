@@ -4,8 +4,11 @@
 The module exports the modify interaction method which is bound to a mapview in the [decorator]{@link module:/mapview~decorate} method.
 
 @requires /dictionary
+@requires /mapview/contextMenu
 @module /mapview/interactions/modify
 */
+
+import contextMenu from '../contextMenu.mjs';
 
 /**
 @function modify
@@ -31,7 +34,7 @@ export default function modify(params, mapview = this) {
       zIndex: Infinity,
     }),
 
-    modifyend: mapp.ui?.elements.contextMenu.modify.bind(mapview),
+    modifyend: contextMenu.modify.bind(mapview),
 
     Style: [
       new ol.style.Style({

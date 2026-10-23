@@ -138,7 +138,7 @@ export async function getInfoj(location) {
   if (!response || response instanceof Error) {
     const text = `Get location query for ID:${location.id} on layer: "${location.layer.name}" has failed.`;
     console.warn(text, response);
-    mapp.ui.elements.alert({ text });
+    mapp.utils.alert({ text });
     return;
   }
 
@@ -146,7 +146,7 @@ export async function getInfoj(location) {
   else if (Array.isArray(response)) {
     const text = `Get location query for ID:${location.id} on layer: "${location.layer.name}" returned ${response.length} records.`;
     console.warn(text, response);
-    mapp.ui.elements.alert({ text });
+    mapp.utils.alert({ text });
     return;
   }
 

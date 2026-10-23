@@ -63,7 +63,6 @@ export default async function decorate(layer) {
     show,
     showCallbacks: [],
     tableCurrent,
-    update,
     zoomToExtent,
   });
 
@@ -400,47 +399,6 @@ function changeEnd() {
   for (const fn of this.changeEndCallbacks) {
     if (typeof fn === 'function') fn(this);
   }
-}
-
-/**
-@function update
-@async
-
-@description
-The layer.update() method receives a json layer and attempts to decorate a new layer.
-
-The layer itself will be removed once the newly decorated layer view as been inserted before the existing layer view.
-
-The new layer will be returned from the method.
-
-@param {json} jsonLayer A json layer object.
-@returns {layer} A decorated mapp layer.
-*/
-async function update(jsonLayer) {
-  jsonLayer.mapview = this.mapview;
-
-  const newLayer = await mapp.this.decorate(jsonLayer);
-
-  if (!newLayer.L) {
-    console.warn('Updated layer could not be decorated');
-    return;
-  }
-
-  const layersnode = document.getElementById('layers');
-
-  if (layersnode) {
-    mapp.ui.layers.view(newLayer);
-
-    layersnode?.insertBefore(newLayer.view, this.view);
-  }
-
-  this.remove();
-
-  newLayer.mapview.layers[this.key] = newLayer;
-
-  newLayer.display && newLayer.show();
-
-  return newLayer;
 }
 
 /**

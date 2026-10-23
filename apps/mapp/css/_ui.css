@@ -52,6 +52,8 @@
 
 @import url('./layout/_layerview.css');
 
+@import url('./layout/_legend.css');
+
 @import url('./layout/_locationview.css');
 
 @import url('./layout/_scrollbar.css');
