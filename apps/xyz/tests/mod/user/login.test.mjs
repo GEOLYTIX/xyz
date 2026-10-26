@@ -116,6 +116,48 @@ describe('login', async () => {
     expect(view).toHaveBeenCalledWith(req, res);
   });
 
+  it('loginBody: returns to loginView with message for a browser form post without redirect cookie', async () => {
+    fromACLFn.mockResolvedValueOnce(new Error('auth_failed'));
+
+    const { req, res } = createMocks({
+      method: 'POST',
+      body: { email: 'test@email.com', password: 'wrong' },
+      params: {},
+      cookies: {},
+      headers: {
+        accept:
+          'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      },
+    });
+
+    await login(req, res);
+
+    expect(req.params.msg).toEqual('auth_failed');
+    expect(req.params.template).toEqual('login_view');
+    expect(view).toHaveBeenCalledWith(req, res);
+  });
+
+  it.each([['*/*'], ['application/json, text/html;q=0']])(
+    'loginBody: returns plain text 401 for Accept: %s',
+    async (accept) => {
+      fromACLFn.mockResolvedValueOnce(new Error('auth_failed'));
+
+      const { req, res } = createMocks({
+        method: 'POST',
+        body: { email: 'test@email.com', password: 'wrong' },
+        params: {},
+        cookies: {},
+        headers: { accept },
+      });
+
+      await login(req, res);
+
+      expect(res.statusCode).toEqual(401);
+      expect(res._getData()).toEqual('auth_failed');
+      expect(view).not.toHaveBeenCalled();
+    },
+  );
+
   it('loginBody: successfully authenticates, generates tokens, and sets cookies', async () => {
     const mockUser = {
       admin: true,
