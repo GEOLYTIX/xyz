@@ -20,9 +20,19 @@ The iteration will break if the field value exceeds the category value.
 @property {Object} feature.properties The properties of the feature.
 @property {Array} [properties.features] An array of sub-features.
 */
+// The match does not depend on category order since jenks distributions assign values in ascending index order after the styleParser sort.
+// A category without a value never matches.
 const graduated_breaks = {
-  greater_than: (val) => (cat) => val >= cat.value,
-  less_than: (val) => (cat) => val <= cat.value,
+  // The category with the highest value less than or equal to the field value.
+  greater_than: (val) => (match, cat) => {
+    if (!(val >= cat.value)) return match;
+    return match?.value > cat.value ? match : cat;
+  },
+  // The category with the lowest value greater than or equal to the field value.
+  less_than: (val) => (match, cat) => {
+    if (!(val <= cat.value)) return match;
+    return match?.value < cat.value ? match : cat;
+  },
 };
 export default function graduated(theme, feature) {
   // The graduated theme requires feature.properties.
@@ -38,11 +48,12 @@ export default function graduated(theme, feature) {
     : Number.parseFloat(feature.properties[theme.field]);
 
   if (!Number.isNaN(Number(catValue)) && catValue !== null) {
-    const index = theme.categories.findIndex(
-      graduated_breaks[theme.graduated_breaks](catValue),
-    );
-
-    const cat = theme.categories.at(index);
+    // A value outside the category range falls back to the first category in the legend.
+    const cat =
+      theme.categories.reduce(
+        graduated_breaks[theme.graduated_breaks](catValue),
+        undefined,
+      ) ?? theme.categories[0];
 
     if (cat.style === null) {
       feature.style = null;
