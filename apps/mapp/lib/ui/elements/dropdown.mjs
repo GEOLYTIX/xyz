@@ -296,9 +296,10 @@ function searchInput(params) {
   // The zero width space suffix ensures that selecting an option always changes the input value.
   params.searchOptions = [];
   for (const entry of params.entries) {
+    const value = entry.option + '​';
     const label = entry.title !== entry.option ? entry.title : '';
     const option = mapp.utils.html.node`
-      <option value=${`${entry.option}​`} data-title=${entry.title}>${label}`;
+      <option value=${value} data-title=${entry.title}>${label}`;
     params.searchOptions.push(option);
   }
   const datalist = mapp.utils.html
