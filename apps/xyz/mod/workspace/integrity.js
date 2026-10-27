@@ -69,17 +69,22 @@ export default async function integrity(workspace, params) {
     ? params.locale.join(',')
     : params.locale;
 
-  const { checks, dropped, localeKeys } = await collectChecks(
+  // The user may access all layers and templates for the check.
+  const user = { email: params.user?.email, admin: true, roles: true };
+
+  const { checks, locales, localeKeys } = collectChecks(
     workspace,
-    { ...params, locale: localeKey },
+    { locale: localeKey, layer: params.layer, user },
     result,
   );
+
+  const dropped = await droppedLayers(locales, params.layer, user);
 
   const tasks = checks.map((check, i) => () => runLayer(check, result, i));
 
   await runTasks(tasks, CONCURRENCY);
 
-  for (const { failed, error } of dropped.values()) {
+  for (const { failed, error } of dropped) {
     result.failed_layers.push(failed);
     result.errors.push(error);
   }
@@ -89,7 +94,7 @@ export default async function integrity(workspace, params) {
       locale: localeKey,
       error: `Locale not found. Locale keys: ${localeKeys.join(' | ')}`,
     });
-  } else if (params.layer && !checks.length && !dropped.size) {
+  } else if (params.layer && !checks.length && !dropped.length) {
     result.errors.push({
       locale: localeKey,
       layer: params.layer,
@@ -102,7 +107,7 @@ export default async function integrity(workspace, params) {
   result.end = end.toISOString();
   result.duration_ms = end - start;
 
-  result.checked = checks.length + dropped.size;
+  result.checked = checks.length + dropped.length;
 
   // Remove the empty slots of passed layers from the failed_layers array.
   result.failed_layers = result.failed_layers.filter(Boolean);
@@ -114,7 +119,6 @@ export default async function integrity(workspace, params) {
 
 /**
 @function collectChecks
-@async
 
 @description
 The collectChecks method collects the layer checks for the locales in the composed workspace which match the locale param.
@@ -124,22 +128,19 @@ A layer which matches the layer param is collected once. Nested locales inherit 
 Locales which failed to compose are added as errors to the integrity result.
 
 @param {Object} workspace A composed workspace with locales and layers.
-@param {Object} params Request params.
+@param {Object} params The check params.
 @property {string} [params.locale] The locale key.
 @property {string} [params.layer] Only check this layer.
+@property {Object} params.user The user for the checks.
 @param {Object} result The integrity result.
-@returns {Promise<Object>} The checks array, dropped layers map, and the locale keys in the workspace.
+@returns {Object} The checks array, the [locale, key] entries of the checked locales, and the locale keys in the workspace.
 */
-async function collectChecks(workspace, params, result) {
-  // The user may access all layers and templates for the check.
-  const user = { email: params.user?.email, admin: true, roles: true };
-
+function collectChecks(workspace, params, result) {
   const checked = new Set();
 
   const checks = [];
 
-  // Layers which failed to compose and are not in the composed locale.layers array.
-  const dropped = new Map();
+  const locales = [];
 
   const localeKeys = [];
 
@@ -160,37 +161,41 @@ async function collectChecks(workspace, params, result) {
       continue;
     }
 
-    await droppedLayers(locale, key, params.layer, user, dropped);
+    locales.push([locale, key]);
 
-    // The composed locale.layers is an array of JSON layers.
-    for (const layer of locale.layers ?? []) {
-      if (params.layer && params.layer !== layer.key) continue;
-
-      addCheck({ locale: key, layer, user }, checked, checks);
-    }
+    addChecks(locale, key, params, checked, checks);
   }
 
-  return { checks, dropped, localeKeys };
+  return { checks, locales, localeKeys };
 }
 
 /**
-@function addCheck
+@function addChecks
 
 @description
-Adds a layer check to the checks array if the same layer has not been added before.
+Adds a check for every layer of the locale which matches the layer param to the checks array. A layer is not added if the same layer has been added before.
 
-@param {Object} check The locale key, layer, and user for the check.
+@param {Object} locale A composed locale with a layers array.
+@param {string} key The locale key.
+@param {Object} params The check params.
+@property {string} [params.layer] Only check this layer.
+@property {Object} params.user The user for the checks.
 @param {Set} checked Set of stringified layers which have been added.
 @param {Array} checks The array of layer checks.
 */
-function addCheck(check, checked, checks) {
-  const layerString = JSON.stringify(check.layer);
+function addChecks(locale, key, params, checked, checks) {
+  // The composed locale.layers is an array of JSON layers.
+  for (const layer of locale.layers ?? []) {
+    if (params.layer && params.layer !== layer.key) continue;
 
-  if (checked.has(layerString)) return;
+    const layerString = JSON.stringify(layer);
 
-  checked.add(layerString);
+    if (checked.has(layerString)) continue;
 
-  checks.push(check);
+    checked.add(layerString);
+
+    checks.push({ locale: key, layer, user: params.user });
+  }
 }
 
 /**
@@ -198,55 +203,92 @@ function addCheck(check, checked, checks) {
 @async
 
 @description
-The droppedLayers method finds the layers of a locale which failed to compose.
+The droppedLayers method finds the layers of the checked locales which failed to compose.
 
-The getLocale method removes layers from the composed locale.layers array if the getLayer method returns an error. The layer keys of the locale without composed layers are compared with the composed layers. The getLayer error of a missing layer is added to the dropped map.
+The locales are checked concurrently. A layer which is dropped from a locale and its nested locales with the same error is only returned once for the first locale.
 
-A layer which is dropped from a locale and its nested locales with the same error is only added once.
+@param {Array} locales The [locale, key] entries of the checked locales.
+@param {string} [layerKey] Only check this layer.
+@param {Object} user The user for the getLocale and getLayer methods.
+@returns {Promise<Array>} The failed layer and error for each dropped layer.
+*/
+async function droppedLayers(locales, layerKey, user) {
+  const localeDropped = await Promise.all(
+    locales.map(([locale, key]) =>
+      localeDroppedLayers(locale, key, layerKey, user),
+    ),
+  );
+
+  const dropped = new Map();
+
+  for (const droppedLayer of localeDropped.flat()) {
+    const droppedKey = `${droppedLayer.error.layer} ${droppedLayer.error.error}`;
+
+    if (!dropped.has(droppedKey)) dropped.set(droppedKey, droppedLayer);
+  }
+
+  return Array.from(dropped.values());
+}
+
+/**
+@function localeDroppedLayers
+@async
+
+@description
+The localeDroppedLayers method finds the layers of a locale which failed to compose.
+
+The getLocale method removes layers from the composed locale.layers array if the getLayer method returns an error. The layer keys of the locale without composed layers are compared with the composed layers. The getLayer error is returned for each missing layer.
+
+The getLocale method shifts the first key from a locale keys array param. A copy of the locale keys must be provided for each request.
 
 @param {Object} locale A composed locale with a layers array.
 @param {string} key The locale key.
 @param {string} [layerKey] Only check this layer.
 @param {Object} user The user for the getLocale and getLayer methods.
-@param {Map} dropped Map of failed layers and errors for dropped layers.
+@returns {Promise<Array>} The failed layer and error for each dropped layer.
 */
-async function droppedLayers(locale, key, layerKey, user, dropped) {
+async function localeDroppedLayers(locale, key, layerKey, user) {
   const start = new Date();
 
-  const localeParam = locale.keys ?? key;
+  const localeParam = () => (locale.keys ? [...locale.keys] : key);
 
-  const rawLocale = await getLocale({ locale: localeParam, user });
+  const rawLocale = await getLocale({ locale: localeParam(), user });
 
-  if (rawLocale instanceof Error || !rawLocale.layers) return;
+  if (rawLocale instanceof Error || !rawLocale.layers) return [];
 
   const composed = new Set((locale.layers ?? []).map((layer) => layer.key));
 
-  for (const layer of Object.keys(rawLocale.layers)) {
-    if (composed.has(layer)) continue;
+  const missing = Object.keys(rawLocale.layers).filter(
+    (layer) => !composed.has(layer) && (!layerKey || layerKey === layer),
+  );
 
-    if (layerKey && layerKey !== layer) continue;
+  const layers = await Promise.all(
+    missing.map((layer) => getLayer({ locale: localeParam(), layer, user })),
+  );
 
-    const err = await getLayer({ locale: localeParam, layer, user });
+  const end = new Date();
 
-    if (!(err instanceof Error)) continue;
-
-    const droppedKey = `${layer} ${err.message}`;
-
-    if (dropped.has(droppedKey)) continue;
-
-    const end = new Date();
-
-    dropped.set(droppedKey, {
-      failed: {
-        locale: key,
-        layer,
-        start: start.toISOString(),
-        end: end.toISOString(),
-        duration_ms: end - start,
-      },
-      error: { locale: key, layer, template: 'getLayer', error: err.message },
-    });
-  }
+  return missing.flatMap((layer, i) =>
+    layers[i] instanceof Error
+      ? [
+          {
+            failed: {
+              locale: key,
+              layer,
+              start: start.toISOString(),
+              end: end.toISOString(),
+              duration_ms: end - start,
+            },
+            error: {
+              locale: key,
+              layer,
+              template: 'getLayer',
+              error: layers[i].message,
+            },
+          },
+        ]
+      : [],
+  );
 }
 
 /**
@@ -300,6 +342,8 @@ The checkLayer method checks the layer tables for layers with a query format.
 
 The location check is run for layers with an infoj on the first layer table. Layers without a table can not get a location from the location_get query.
 
+The queries of a layer are sent one at a time to limit the number of concurrent queries to the number of layers which are checked at the same time.
+
 @param {Object} check The locale key, layer, and user for the check.
 @param {Object} result The layer result with an errors array.
 */
@@ -308,23 +352,22 @@ async function checkLayer(check, result) {
 
   const tables = layerTables(layer);
 
-  if (QUERY_FORMATS.has(layer.format)) {
-    for (const [z, table] of tables) {
-      await checkTable(check, result, z, table);
-    }
-  }
+  const tasks = QUERY_FORMATS.has(layer.format)
+    ? tables.flatMap(([z, table]) => tableTasks(check, result, z, table))
+    : [];
 
   if (layer.infoj && layer.qID && tables.length) {
-    await checkLocation(check, result, tables[0][1]);
+    tasks.push(() => checkLocation(check, result, tables[0][1]));
   }
+
+  await runTasks(tasks, 1);
 }
 
 /**
-@function checkTable
-@async
+@function tableTasks
 
 @description
-The checkTable method sends an EXPLAIN query for the layer format template of every theme field set for the table.
+The tableTasks method returns a task for every theme field set of the table. A task sends an EXPLAIN query for the layer format template with the fields.
 
 Themes which require the same fields are only checked once.
 
@@ -332,8 +375,9 @@ Themes which require the same fields are only checked once.
 @param {Object} result The layer result with an errors array.
 @param {string} [z] The zoom level key for the table.
 @param {string} table The layer table.
+@returns {Array<Function>} Async task functions.
 */
-async function checkTable(check, result, z, table) {
+function tableTasks(check, result, z, table) {
   const { layer } = check;
 
   const fieldSets = new Map();
@@ -346,7 +390,7 @@ async function checkTable(check, result, z, table) {
     if (themeKey) fieldSets.get(fields).push(themeKey);
   }
 
-  for (const [fields, themes] of fieldSets) {
+  return Array.from(fieldSets, ([fields, themes]) => async () => {
     const err = await explainQuery(check, layerParams(layer, z, table, fields));
 
     if (err) {
@@ -358,7 +402,7 @@ async function checkTable(check, result, z, table) {
         error: err.message,
       });
     }
-  }
+  });
 }
 
 /**
@@ -631,20 +675,25 @@ function entry(check, template) {
 @description
 Runs async task functions with a limited number of tasks at the same time.
 
+Each worker runs the next task from the queue once its current task is complete.
+
 @param {Array<Function>} tasks Async task functions.
 @param {number} limit The number of tasks to run at the same time.
 */
 async function runTasks(tasks, limit) {
   const queue = [...tasks];
 
-  const workers = Array.from(
-    { length: Math.min(limit, queue.length) },
-    async () => {
-      while (queue.length) {
-        await queue.shift()();
-      }
-    },
-  );
+  async function worker() {
+    const task = queue.shift();
 
-  await Promise.all(workers);
+    if (!task) return;
+
+    await task();
+
+    return worker();
+  }
+
+  await Promise.all(
+    Array.from({ length: Math.min(limit, queue.length) }, worker),
+  );
 }

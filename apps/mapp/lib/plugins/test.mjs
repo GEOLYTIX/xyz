@@ -126,9 +126,9 @@ function logResult(result, plugin, locale) {
 
   const errorCount = srcErr.length + layers.errors.length;
 
-  console.group(
-    `Integrity test: ${locale}, ${errorCount ? `${errorCount} errors` : 'no errors'}`,
-  );
+  const errorSummary = errorCount ? `${errorCount} errors` : 'no errors';
+
+  console.group(`Integrity test: ${locale}, ${errorSummary}`);
 
   if (rows.length) {
     console.table(rows, [
