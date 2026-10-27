@@ -10,7 +10,7 @@ The layer theme module exports a method for graduated themes.
 @function graduated
 @description
 The graduated theme method assigns the style of the category which matches a numeric feature field value according to the theme's graduated_breaks.
-A value outside the category range is assigned the first category.
+A value outside the category range is assigned the nearest category by value: the lowest category for greater_than and the highest category for less_than.
 
 @param {Object} theme The theme configuration object.
 @param {Object} feature The feature object.
@@ -47,12 +47,20 @@ export default function graduated(theme, feature) {
     : Number.parseFloat(feature.properties[theme.field]);
 
   if (!Number.isNaN(Number(catValue)) && catValue !== null) {
-    // A value outside the category range falls back to the first category in the legend.
     const cat =
       theme.categories.reduce(
         graduated_breaks[theme.graduated_breaks](catValue),
         undefined,
-      ) ?? theme.categories[0];
+      ) ??
+      // A value outside the category range takes the nearest category by value.
+      // An unbounded value matches the highest category for less_than and the lowest for greater_than.
+      theme.categories.reduce(
+        theme.graduated_breaks === 'less_than'
+          ? graduated_breaks.greater_than(Infinity)
+          : graduated_breaks.less_than(-Infinity),
+        undefined,
+      ) ??
+      theme.categories[0];
 
     if (cat.style === null) {
       feature.style = null;
