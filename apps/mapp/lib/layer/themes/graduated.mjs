@@ -20,8 +20,6 @@ The iteration will break if the field value exceeds the category value.
 @property {Object} feature.properties The properties of the feature.
 @property {Array} [properties.features] An array of sub-features.
 */
-// The match does not depend on category order since jenks distributions assign values in ascending index order after the styleParser sort.
-// A category without a value never matches.
 const graduated_breaks = {
   // The category with the highest value less than or equal to the field value.
   greater_than: (val) => (match, cat) => {
