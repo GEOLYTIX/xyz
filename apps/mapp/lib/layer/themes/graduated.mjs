@@ -9,17 +9,18 @@ The layer theme module exports a method for graduated themes.
 /**
 @function graduated
 @description
-The graduated theme method iterates through the ordered categories array and compares a numeric feature field value with the category.
-The iteration will break if the field value exceeds the category value.
+The graduated theme method assigns the style of the category which matches a numeric feature field value according to the theme's graduated_breaks.
+A value outside the category range is assigned the first category.
 
 @param {Object} theme The theme configuration object.
 @param {Object} feature The feature object.
 @property {string} theme.field The field name used for determining the category.
 @property {Array} theme.categories An array of category objects.
-@property {string} theme.graduated_breaks The comparison operator ("less" or "more").
+@property {string} theme.graduated_breaks The comparison operator ("less_than" or "greater_than").
 @property {Object} feature.properties The properties of the feature.
 @property {Array} [properties.features] An array of sub-features.
 */
+// Matched by value, not order, since jenks assigns values in ascending order after the sort.
 const graduated_breaks = {
   // The category with the highest value less than or equal to the field value.
   greater_than: (val) => (match, cat) => {

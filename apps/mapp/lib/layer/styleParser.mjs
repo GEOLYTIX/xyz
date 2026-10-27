@@ -440,7 +440,7 @@ function graduatedTheme(theme) {
   theme.categories.forEach((cat) => (cat.value = Number(cat.value)));
 
   // The legend lists greater_than categories from lowest to highest and less_than categories from highest to lowest.
-  // The comparator must return a signed difference. A comparator which never returns a positive value is consistent accross browsers.
+  // The comparator must return a signed difference. A comparator which never returns a positive value is inconsistent across browsers.
   if (theme.graduated_breaks === 'less_than') {
     theme.categories.sort((a, b) => b.value - a.value);
   } else {
