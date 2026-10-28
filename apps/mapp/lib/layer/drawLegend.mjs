@@ -18,6 +18,8 @@ The method must be called as mapp.layer.drawLegend() for the replacement by the 
 
 The method doesn't render a legend if the ui library is not loaded.
 
-@param {layer} layer A decorated mapp layer.
+@param {layer} layer A decorated mapp layer. The layer argument is passed to the method which replaces mapp.layer.drawLegend.
 */
-export default function drawLegend(layer) {}
+export default function drawLegend() {
+  // The mapp library has no legend method. The ui library replaces mapp.layer.drawLegend to render the legend for the layer.
+}
