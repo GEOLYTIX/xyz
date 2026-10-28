@@ -43,6 +43,7 @@ The show method will be called on an existing dialog unless the creation is impl
 @property {boolean} [dialog.contained] A flag indicating whether to keep the dialog within the target element's boundaries.
 @property {boolean} [dialog.containedCentre] A flag indicating whether to keep the dialog centered within the target element's boundaries.
 @property {boolean} [dialog.headerDrag] A flag indicating whether the dialog can be dragged only by the header.By default, the dialog can be dragged from anywhere.
+@property {ResizeObserver} [dialog.resizeObserver] Observes the target to keep a non-modal dialog within its boundaries. Disconnected on close and observes the target again on show.
 @returns {Object} Decorated dialog configuration object
 */
 
@@ -78,6 +79,7 @@ export default function dialog(dialog) {
     if (typeof dialog.onClose === 'function') {
       dialog.onClose(e);
     }
+    dialog.resizeObserver?.disconnect();
     dialog.node.remove();
   }
 
@@ -132,8 +134,11 @@ export default function dialog(dialog) {
     dialog.node.addEventListener('touchstart', handleStartEvent);
 
     // Create a ResizeObserver to observe changes in the map's dimensions
-    const resizeObserver = new ResizeObserver(adjustDialogPosition);
-    resizeObserver.observe(dialog.target);
+    // The dialog position is adjusted in the next animation frame to prevent ResizeObserver loop errors.
+    dialog.resizeObserver = new ResizeObserver(() =>
+      requestAnimationFrame(adjustDialogPosition),
+    );
+    dialog.resizeObserver.observe(dialog.target);
   }
 
   // Function to handle the start of a drag event, setting up the necessary event listeners for moving and ending the drag
@@ -164,6 +169,9 @@ export default function dialog(dialog) {
   }
 
   function adjustDialogPosition() {
+    // The dialog may have been closed before the animation frame.
+    if (!dialog.node.isConnected) return;
+
     const { offsetWidth: mapWidth, offsetHeight: mapHeight } = dialog.target;
     const { offsetWidth: dialogWidth, offsetHeight: dialogHeight } =
       dialog.node;
@@ -362,4 +370,8 @@ function show() {
 
   //append the node to the target if there is one
   this.target instanceof HTMLElement && this.target.append(this.node);
+
+  // Observe the target again after the observer was disconnected on close.
+  this.target instanceof HTMLElement &&
+    this.resizeObserver?.observe(this.target);
 }
