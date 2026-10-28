@@ -419,11 +419,11 @@ The infoj fields, fieldfx, and field templates are validated without reading a l
 @param {string} table The layer table.
 */
 async function checkLocation(check, result, table) {
-  // Any id will do for a query which is not executed.
+  // A NULL id can be bound to any qID type for a query which is not executed.
   const err = await explainQuery(check, {
     template: 'location_get',
     table,
-    id: '0',
+    id: null,
   });
 
   if (err) {
@@ -443,6 +443,8 @@ async function checkLocation(check, result, table) {
 The explainQuery method renders a query with the buildQuery method and sends the query as an EXPLAIN statement to the dbs connection.
 
 The layer is cloned for the request params since query templates may assign properties to the layer.
+
+EXPLAIN only applies to the first statement of a query. A query with multiple statements is not sent to the database since any further statement would be executed. 
 
 @param {Object} check The locale key, layer, and user for the check.
 @param {Object} params The query params.
@@ -464,6 +466,12 @@ async function explainQuery(check, params) {
 
   if (built instanceof Error) return built;
 
+  if (statementCount(built.query) > 1) {
+    return new Error(
+      'The query has multiple statements and can not be checked with EXPLAIN.',
+    );
+  }
+
   const rows = await dbs_connections[built.template.dbs]({
     query: `EXPLAIN ${built.query}`,
     timeout: built.template.statement_timeout,
@@ -477,32 +485,84 @@ async function explainQuery(check, params) {
 }
 
 /**
+@function statementCount
+
+@description
+Returns the number of SQL statements in a query string.
+
+Quoted strings, quoted identifiers, dollar quoted strings, and comments are removed before the query is split at semicolons. Empty statements, eg. after a trailing semicolon, are not counted.
+
+@param {string} query SQL query string.
+@returns {number} The number of statements.
+*/
+export function statementCount(query) {
+  const unquoted = query.replace(
+    /'(?:[^']|'')*'|"(?:[^"]|"")*"|\$(\w*)\$[\s\S]*?\$\1\$|--[^\n]*|\/\*[\s\S]*?\*\//g,
+    ' ',
+  );
+
+  return unquoted.split(';').filter((statement) => statement.trim()).length;
+}
+
+/**
 @function layerTables
 
 @description
-Returns an array of [zoom, table] entries for the layer.table or the non-null tables in the layer.tables object.
+Returns an array of [zoom, table] entries for every table and geom combination which the layer can request.
 
-A table which is referenced for multiple zoom levels with the same geom is only returned for the first zoom level.
+The table and geom are looked up for every zoom level up to one level above the highest key of the layer.tables and layer.geoms objects, with the same lookup as the tableCurrent and geomCurrent methods of a mapp layer. Higher zoom levels have the same table and geom as the highest key.
+
+A table and geom combination is only returned for the first zoom level.
 
 @param {Object} layer A JSON layer.
 @returns {Array} Array of [zoom, table] entries.
 */
 function layerTables(layer) {
-  if (layer.table) return [[undefined, layer.table]];
+  const zoomKeys = [layer.tables, layer.geoms].flatMap((obj) =>
+    Object.keys(obj ?? {}).map(Number),
+  );
 
-  const tableGeoms = new Set();
+  const maxZoom = zoomKeys.length ? Math.max(...zoomKeys) + 1 : 0;
 
-  return Object.entries(layer.tables ?? {}).filter(([z, table]) => {
-    if (!table) return false;
+  const tableGeoms = new Map();
 
-    const tableGeom = `${table} ${layerGeom(layer, Number.parseInt(z))}`;
+  for (let zoom = 0; zoom <= maxZoom; zoom++) {
+    const table = layer.table || zoomValue(layer.tables, zoom);
 
-    if (tableGeoms.has(tableGeom)) return false;
+    if (!table) continue;
 
-    tableGeoms.add(tableGeom);
+    const tableGeom = `${table} ${layerGeom(layer, zoom)}`;
 
-    return true;
-  });
+    if (!tableGeoms.has(tableGeom)) tableGeoms.set(tableGeom, [zoom, table]);
+  }
+
+  return Array.from(tableGeoms.values());
+}
+
+/**
+@function zoomValue
+
+@description
+Returns the value for the zoom level from an object with zoom level keys, eg. layer.tables or layer.geoms.
+
+The value of the first or last key will be returned if the zoom level is outside the range of the object keys. A zoom level within the range which is not a key has no value.
+
+@param {Object} [obj] Object with zoom level keys.
+@param {number} zoom The zoom level.
+@returns {*} The value for the zoom level.
+*/
+function zoomValue(obj, zoom) {
+  if (!obj) return;
+
+  const zoomKeys = Object.keys(obj).map(Number);
+
+  const min = Math.min(...zoomKeys);
+  const max = Math.max(...zoomKeys);
+
+  if (zoom < min) return obj[min];
+  if (zoom > max) return obj[max];
+
+  return obj[zoom];
 }
 
 /**
@@ -632,26 +692,16 @@ function layerParams(layer, z, table, fields) {
 @function layerGeom
 
 @description
-Returns the layer.geom or the geom for the zoom level from the layer.geoms object.
+Returns the geom for the zoom level from the layer.geoms object.
 
-The first or last geom will be returned if the zoom level is outside the range of the geoms object keys.
+The layer.geom is returned if the layer has no geom for the zoom level. The query module assigns the layer.geom if the geom param is not provided.
 
 @param {Object} layer A JSON layer.
 @param {number} zoom The zoom level.
 @returns {string} The layer geom.
 */
 function layerGeom(layer, zoom) {
-  if (!layer.geoms) return layer.geom;
-
-  const zoomKeys = Object.keys(layer.geoms).map((key) => Number.parseInt(key));
-
-  const min = Math.min(...zoomKeys);
-  const max = Math.max(...zoomKeys);
-
-  if (zoom < min) return layer.geoms[min];
-  if (zoom > max) return layer.geoms[max];
-
-  return layer.geoms[zoom];
+  return zoomValue(layer.geoms, zoom) ?? layer.geom;
 }
 
 /**

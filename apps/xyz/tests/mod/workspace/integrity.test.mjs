@@ -17,6 +17,9 @@ import { mockConsole } from '../../scaffold.mjs';
  * | bad_fieldfx       | location_get error for an invalid fieldfx        |
  * | data_fieldfx      | valid, the fieldfx only fails on location values |
  * | unknown_dbs       | dbs validation error                             |
+ * | missing_geom      | wkt error for the zoom 10 geoms column           |
+ * | multi_statement   | params.template with two statements is rejected  |
+ * | uuid_qid          | valid, location_get with a uuid qID              |
  * | no_table          | infoj without a table is not checked             |
  * | bad.key           | getLayer error, the layer is not composed        |
  * | basemap           | tiles format is not checked                      |
@@ -43,7 +46,15 @@ const { default: getKeyMethod } = await import(
 const { default: checkWorkspaceCache } = await import(
   '../../../mod/workspace/cache.js'
 );
-const { fieldsArray } = await import('../../../mod/workspace/integrity.js');
+const { fieldsArray, statementCount } = await import(
+  '../../../mod/workspace/integrity.js'
+);
+const { default: dbs } = await import('../../../mod/utils/dbs.js');
+
+await dbs.DEVDB({
+  query:
+    'CREATE TABLE example.uuid_locations (id uuid PRIMARY KEY, name text, geom geometry(Point, 4326))',
+});
 
 await checkWorkspaceCache(true);
 
@@ -85,9 +96,9 @@ describe('Workspace test: layers', () => {
   it('checks every layer once', async () => {
     const { data } = await request({ layers: true, user: admin });
 
-    // 9 europe layers and 1 berlin layer. The europe layers inherited by the nested berlin locale are not checked again.
-    expect(data.layers.checked).toBe(10);
-    expect(data.layers.failed).toBe(5);
+    // 12 europe layers and 1 berlin layer. The europe layers inherited by the nested berlin locale are not checked again.
+    expect(data.layers.checked).toBe(13);
+    expect(data.layers.failed).toBe(7);
 
     expect(data.layers.errors).toEqual(
       expect.arrayContaining([
@@ -128,6 +139,22 @@ describe('Workspace test: layers', () => {
           table: 'example.locations',
           error: 'Failed to validate database connection method.',
         }),
+        // The geoms column for zoom level 10 and above.
+        expect.objectContaining({
+          locale: 'europe',
+          layer: 'missing_geom',
+          template: 'wkt',
+          table: 'example.locations',
+          error: 'column "missing_geom" does not exist',
+        }),
+        expect.objectContaining({
+          locale: 'europe',
+          layer: 'multi_statement',
+          template: 'multi_statement',
+          table: 'example.locations',
+          error:
+            'The query has multiple statements and can not be checked with EXPLAIN.',
+        }),
       ]),
     );
   });
@@ -141,6 +168,42 @@ describe('Workspace test: layers', () => {
 
     // The example.missing_table is referenced for zoom levels 12 and 14.
     expect(data.layers.errors).toHaveLength(1);
+  });
+
+  it('checks location_get for a uuid qID', async () => {
+    const { data } = await request({
+      layers: true,
+      layer: 'uuid_qid',
+      user: admin,
+    });
+
+    expect(data.layers.errors).toEqual([]);
+  });
+
+  it('does not execute a statement after the first statement', async () => {
+    await dbs.DEVDB({
+      query: 'INSERT INTO example.log (msg) VALUES ($1)',
+      variables: ['integrity'],
+    });
+
+    await request({ layers: true, layer: 'multi_statement', user: admin });
+
+    const [{ count }] = await dbs.DEVDB({
+      query: 'SELECT count(*)::int AS count FROM example.log',
+    });
+
+    expect(count).toBe(1);
+  });
+
+  it('executes the EXPLAIN query in a read only transaction', async () => {
+    const err = await dbs.DEVDB({
+      query: 'SELECT 1; DELETE FROM example.log',
+      readOnly: true,
+    });
+
+    expect(err.message).toBe(
+      'cannot execute DELETE in a read-only transaction',
+    );
   });
 
   it('does not read locations from the layer table', async () => {
@@ -179,6 +242,8 @@ describe('Workspace test: layers', () => {
       'missing_table',
       'bad_fieldfx',
       'unknown_dbs',
+      'missing_geom',
+      'multi_statement',
       'bad.key',
     ]);
 
@@ -233,7 +298,7 @@ describe('Workspace test: layers', () => {
       user: admin,
     });
 
-    expect(data.layers.checked).toBe(10);
+    expect(data.layers.checked).toBe(13);
     expect(
       data.layers.errors.every((err) => err.locale === 'europe,berlin'),
     ).toBe(true);
@@ -303,6 +368,22 @@ describe('Workspace test: layers', () => {
         error: 'Layer not found in the locale layers.',
       },
     ]);
+  });
+});
+
+describe('Workspace integrity: statementCount', () => {
+  it.each([
+    ['a single statement', 'SELECT 1', 1],
+    ['a trailing semicolon', 'SELECT 1;\n', 1],
+    ['two statements', 'SELECT 1; DELETE FROM t', 2],
+    ['a semicolon in a string', "SELECT 'a;b'", 1],
+    ['an escaped quote in a string', "SELECT 'it''s; fine'", 1],
+    ['a semicolon in an identifier', 'SELECT 1 AS "a;b"', 1],
+    ['a semicolon in a dollar quote', 'SELECT $tag$a;b$tag$', 1],
+    ['a semicolon in a line comment', 'SELECT 1 -- a; b\n', 1],
+    ['a semicolon in a block comment', 'SELECT 1 /* a; b */', 1],
+  ])('counts %s', (_, query, count) => {
+    expect(statementCount(query)).toBe(count);
   });
 });
 
