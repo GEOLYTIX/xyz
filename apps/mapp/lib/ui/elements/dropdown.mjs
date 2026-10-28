@@ -296,7 +296,7 @@ function searchInput(params) {
   // The zero width space suffix ensures that selecting an option always changes the input value.
   params.searchOptions = [];
   for (const entry of params.entries) {
-    const value = entry.option + '​';
+    const value = entry.option + '\u200B';
     const label = entry.title !== entry.option ? entry.title : '';
     const option = mapp.utils.html.node`
       <option value=${value} data-title=${entry.title}>${label}`;
@@ -335,29 +335,30 @@ function onSearchInput(e, params) {
     return;
   }
 
-  const value = e.target.value.replace(/​$/, '');
+  const value = e.target.value.replace(/\u200B$/, '');
 
-  params.entries.forEach((entry) => {
-    if (entry.title === value) {
-      entry.selected = !entry.selected;
+  // Only toggle the first entry matching the input value.
+  const entry = params.entries.find((entry) => entry.title === value);
 
-      if (entry.selected) {
-        params.selectedTitles.add(entry.title);
-        params.selectedOptions.add(entry.option);
-        params.pills?.add(entry.title);
-      } else {
-        params.selectedTitles.delete(entry.title);
-        params.selectedOptions.delete(entry.option);
-        params.pills?.remove(entry.title);
-      }
+  if (!entry) return;
 
-      e.target.value = '';
-      e.target.dispatchEvent(new Event('blur'));
+  entry.selected = !entry.selected;
 
-      // The pills method will fire a callback method for the option.
-      if (!params.pills) {
-        params.callback?.(e, [...params.selectedOptions]);
-      }
-    }
-  });
+  if (entry.selected) {
+    params.selectedTitles.add(entry.title);
+    params.selectedOptions.add(entry.option);
+    params.pills?.add(entry.title);
+  } else {
+    params.selectedTitles.delete(entry.title);
+    params.selectedOptions.delete(entry.option);
+    params.pills?.remove(entry.title);
+  }
+
+  e.target.value = '';
+  e.target.dispatchEvent(new Event('blur'));
+
+  // The pills method will fire a callback method for the option.
+  if (!params.pills) {
+    params.callback?.(e, [...params.selectedOptions]);
+  }
 }
