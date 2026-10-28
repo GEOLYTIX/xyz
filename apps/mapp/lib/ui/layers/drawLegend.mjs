@@ -18,7 +18,7 @@ The legend method is resolved from the current layer.style.theme at execution ti
 
 The method will shortcircuit if the layer has no style.legend node to render into, or if no legend method is available for the current theme type.
 
-The legend of a theme with a data distribution is not drawn until the distribution has been processed from the layer data. The legend would otherwise be drawn from every category in the theme configuration, creating icons for categories which are not in the data. The [featureFields.process]{@link module:/layer/featureFields~process} method calls drawLegend once the data has been received.
+The legend of a theme with a data distribution is not drawn until the distribution has been processed from the layer data. The legend would otherwise be drawn from every category in the theme configuration, creating icons for categories which are not in the data. The ui module assigns the drawLegend method as mapp.layer.drawLegend, which is called by the [featureFields.process]{@link module:/layer/featureFields~process} method once the data has been received.
 
 @param {layer} layer A decorated mapp layer with a style object.
 

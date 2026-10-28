@@ -9,6 +9,8 @@ The ui plugins are assigned to the `mapp.plugins{}` object.
 
 The alert and confirm ui elements are assigned as `mapp.utils.alert()` and `mapp.utils.confirm()`, replacing the window.alert() and window.confirm() bindings.
 
+The ui drawLegend method is assigned as `mapp.layer.drawLegend()`, replacing the mapp method which doesn't render a legend.
+
 The `ui.mjs` module is used as entry point for the Vite build process to bundle the MAPP/UI API.
 
 @requires /ui/elements
@@ -49,6 +51,10 @@ mapp.ui = ui;
 mapp.utils ??= {};
 mapp.utils.alert = elements.alert;
 mapp.utils.confirm = elements.confirm;
+
+// The ui drawLegend method replaces the mapp.layer.drawLegend method.
+mapp.layer ??= {};
+mapp.layer.drawLegend = layers.drawLegend;
 
 // The ui plugins are executed by the mapview like core mapp plugins.
 mapp.plugins ??= {};
