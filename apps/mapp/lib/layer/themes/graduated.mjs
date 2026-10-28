@@ -9,20 +9,29 @@ The layer theme module exports a method for graduated themes.
 /**
 @function graduated
 @description
-The graduated theme method iterates through the ordered categories array and compares a numeric feature field value with the category.
-The iteration will break if the field value exceeds the category value.
+The graduated theme method assigns the style of the category which matches a numeric feature field value according to the theme's graduated_breaks.
+A value outside the category range is assigned the nearest category by value: the lowest category for greater_than and the highest category for less_than.
 
 @param {Object} theme The theme configuration object.
 @param {Object} feature The feature object.
 @property {string} theme.field The field name used for determining the category.
 @property {Array} theme.categories An array of category objects.
-@property {string} theme.graduated_breaks The comparison operator ("less" or "more").
+@property {string} theme.graduated_breaks The comparison operator ("less_than" or "greater_than").
 @property {Object} feature.properties The properties of the feature.
 @property {Array} [properties.features] An array of sub-features.
 */
+// Matched by value, not order, since jenks assigns values in ascending order after the sort.
 const graduated_breaks = {
-  greater_than: (val) => (cat) => val >= cat.value,
-  less_than: (val) => (cat) => val <= cat.value,
+  // The category with the highest value less than or equal to the field value.
+  greater_than: (val) => (match, cat) => {
+    if (!(val >= cat.value)) return match;
+    return match?.value > cat.value ? match : cat;
+  },
+  // The category with the lowest value greater than or equal to the field value.
+  less_than: (val) => (match, cat) => {
+    if (!(val <= cat.value)) return match;
+    return match?.value < cat.value ? match : cat;
+  },
 };
 export default function graduated(theme, feature) {
   // The graduated theme requires feature.properties.
@@ -38,11 +47,20 @@ export default function graduated(theme, feature) {
     : Number.parseFloat(feature.properties[theme.field]);
 
   if (!Number.isNaN(Number(catValue)) && catValue !== null) {
-    const index = theme.categories.findIndex(
-      graduated_breaks[theme.graduated_breaks](catValue),
-    );
-
-    const cat = theme.categories.at(index);
+    const cat =
+      theme.categories.reduce(
+        graduated_breaks[theme.graduated_breaks](catValue),
+        undefined,
+      ) ??
+      // A value outside the category range takes the nearest category by value.
+      // An unbounded value matches the highest category for less_than and the lowest for greater_than.
+      theme.categories.reduce(
+        theme.graduated_breaks === 'less_than'
+          ? graduated_breaks.greater_than(Infinity)
+          : graduated_breaks.less_than(-Infinity),
+        undefined,
+      ) ??
+      theme.categories[0];
 
     if (cat.style === null) {
       feature.style = null;
