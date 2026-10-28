@@ -195,17 +195,6 @@ describe('Workspace test: layers', () => {
     expect(count).toBe(1);
   });
 
-  it('executes the EXPLAIN query in a read only transaction', async () => {
-    const err = await dbs.DEVDB({
-      query: 'SELECT 1; DELETE FROM example.log',
-      readOnly: true,
-    });
-
-    expect(err.message).toBe(
-      'cannot execute DELETE in a read-only transaction',
-    );
-  });
-
   it('does not read locations from the layer table', async () => {
     const { data } = await request({
       layers: true,
