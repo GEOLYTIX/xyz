@@ -70,6 +70,9 @@ export async function test(plugin, mapview) {
         locale,
       })}`,
     );
+
+    // The xhr utility resolves with an error for a failed request.
+    if (result instanceof Error) throw result;
   } catch (err) {
     console.error(
       err.message === 'HTTP 403'
