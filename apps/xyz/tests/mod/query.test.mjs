@@ -407,6 +407,63 @@ describe('Query: fields param', () => {
       data: 'Fields [foo, bar] not accessible on restricted_fields layer. Fields [category] restricted by user roles on restricted_fields layer.',
     });
   });
+
+  // The name entry of the restricted_overrides layer is overridden by the analyst and manager role templates.
+  it.each([
+    ['analyst', 'category'],
+    ['manager', 'id'],
+  ])(
+    'returns 403 for a field from the %s role template override without roles',
+    async (_, field) => {
+      const res = await request({
+        ...params,
+        layer: 'restricted_overrides',
+        fields: field,
+      });
+
+      expect(res).toEqual({
+        status: 403,
+        data: `Fields [${field}] restricted by user roles on restricted_overrides layer.`,
+      });
+    },
+  );
+
+  it('permits a field from a role template override for a user with the role', async () => {
+    const res = await request({
+      ...params,
+      layer: 'restricted_overrides',
+      fields: 'category',
+      user: { roles: ['analyst'] },
+    });
+
+    expect(res).toEqual({
+      status: 200,
+      data: [[3, 'POINT(13.405 52.52)', 'city']],
+    });
+  });
+
+  it('does not register a query template from a role restricted entry', async () => {
+    // The secret entry of the restricted_query_template layer is gated by the analyst role and defines the secret_query template.
+    const res = await request({
+      ...params,
+      layer: 'restricted_query_template',
+      fields: 'secret',
+    });
+
+    expect(res).toEqual({
+      status: 403,
+      data: 'Fields [secret] restricted by user roles on restricted_query_template layer.',
+    });
+
+    const workspace = await checkWorkspaceCache();
+
+    expect(Object.hasOwn(workspace.templates, 'secret_query')).toBe(false);
+
+    expect(await request({ template: 'secret_query' })).toEqual({
+      status: 400,
+      data: 'Template: secret_query not found.',
+    });
+  });
 });
 
 describe('Query: parameter substitution', () => {

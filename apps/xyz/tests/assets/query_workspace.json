@@ -159,6 +159,39 @@
           { "field": "category", "roles": { "analyst": true } }
         ]
       },
+      "restricted_overrides": {
+        "table": "example.locations",
+        "qID": "id",
+        "geom": "geom",
+        "srid": 4326,
+        "infoj": [
+          {
+            "field": "name",
+            "roles": {
+              "analyst": { "field": "category" },
+              "manager": { "field": "id" }
+            }
+          }
+        ]
+      },
+      "restricted_query_template": {
+        "table": "example.locations",
+        "qID": "id",
+        "geom": "geom",
+        "srid": 4326,
+        "infoj": [
+          { "field": "name" },
+          {
+            "field": "secret",
+            "roles": { "analyst": true },
+            "query": "secret_query",
+            "template": {
+              "key": "secret_query",
+              "template": "SELECT 'secret' AS access"
+            }
+          }
+        ]
+      },
       "features": {
         "table": "example.features",
         "qID": "id",

@@ -10,6 +10,7 @@
 @module /workspace/composeObj
 */
 
+import { AsyncLocalStorage } from 'node:async_hooks';
 import merge from '../utils/merge.js';
 import { withSpan } from '../utils/telemetry.js';
 import { authorizeScope } from './authorization.js';
@@ -17,6 +18,19 @@ import workspaceCache from './cache.js';
 import getTemplate from './getTemplate.js';
 
 let workspace;
+
+/**
+@constant inspection
+@type {AsyncLocalStorage}
+
+@description
+Objects composed in the inspection context do not register query templates in the workspace.templates{} object. Objects can be composed with role checks bypassed in the inspection context without making query templates from role restricted objects available to other requests.
+
+Templates merged with a role are pushed to the alternatives array of the inspection store before the merge can override their properties with the properties of another role template.
+
+@property {Array<Object>} [store.alternatives] The composed role templates.
+*/
+export const inspection = new AsyncLocalStorage();
 
 /**
 @function composeObj
@@ -159,6 +173,11 @@ async function mergeTemplateIntoObj(obj, template, user, templateScope = []) {
   if (rolesCheck instanceof Error) {
     obj.warn ??= [];
     obj.warn.push(rolesCheck.message);
+  }
+
+  // Role templates are recorded before the merge can override their properties with the properties of another role template.
+  if (template.role) {
+    inspection.getStore()?.alternatives?.push(structuredClone(template));
   }
 
   // key and role properties must not overwrite in obj.
@@ -333,6 +352,12 @@ function queryTemplate(key, val, obj, user, templateScope) {
     val.warn.push(
       `Key [${val.key}] template caught in queryTemplate check without reference in object properties.`,
     );
+    return true;
+  }
+
+  // Query templates must not be registered from an object composed in the inspection context.
+  if (inspection.getStore()) {
+    delete obj.template;
     return true;
   }
 

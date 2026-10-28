@@ -17,7 +17,7 @@ import logger from './utils/logger.js';
 import sqlFilter from './utils/sqlFilter.js';
 import { setRequestAttributes } from './utils/telemetry.js';
 import workspaceCache from './workspace/cache.js';
-import composeObj from './workspace/composeObj.js';
+import composeObj, { inspection } from './workspace/composeObj.js';
 import getLayer from './workspace/getLayer.js';
 import getTemplate from './workspace/getTemplate.js';
 
@@ -447,6 +447,8 @@ async function checkFieldsParam(req, res, layerParams) {
 @description
 The method composes the layer with role checks bypassed to check whether fields which are not accessible to the requesting user are referenced in role restricted objects of the layer.
 
+The layer is composed in the inspection context of the composeObj module. Query templates from role restricted objects are not registered in the workspace.templates{} object. The fields of every role template are checked since role templates may override the same property in the composed layer.
+
 The layer can only be composed if the layer and locale request params were retained by the layerQuery method. An empty array is returned if the layer can not be composed.
 
 @param {Array<string>} fields Fields which are not referenced in the layer object composed for the requesting user.
@@ -458,12 +460,21 @@ The layer can only be composed if the layer and locale request params were retai
 async function roleRestrictedFields(fields, layerParams) {
   if (!layerParams) return [];
 
-  // Admin endpoints set the user.roles property to true to bypass role checks.
-  const layer = await getLayer({ ...layerParams, user: { roles: true } });
+  const store = { alternatives: [] };
+
+  // Admin endpoints set the user.roles property to true to bypass role checks. The inspection context prevents query templates from role restricted objects being registered in the workspace.templates{} object.
+  const layer = await inspection.run(store, () =>
+    getLayer({ ...layerParams, user: { roles: true } }),
+  );
 
   if (layer instanceof Error) return [];
 
   const layerFields = layerFieldsSet(layer);
+
+  // Role templates may override the same property. The fields of every role template must be checked.
+  for (const alternative of store.alternatives) {
+    fieldsValueSet(alternative, layerFields);
+  }
 
   return fields.filter((field) => layerFields.has(field));
 }
