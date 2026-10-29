@@ -174,6 +174,20 @@
           }
         ]
       },
+      "restricted_cluster_labels": {
+        "table": "example.locations",
+        "qID": "id",
+        "geom": "geom",
+        "srid": 4326,
+        "cluster": {
+          "label": "name",
+          "roles": {
+            "analyst": { "label": "category" },
+            "manager": { "label": "id" }
+          }
+        },
+        "infoj": [{ "field": "name" }]
+      },
       "restricted_query_template": {
         "table": "example.locations",
         "qID": "id",
@@ -213,6 +227,28 @@
             { "field": "name" },
             { "field": "category", "roles": { "analyst": true } }
           ]
+        }
+      }
+    },
+    "restricted_override": {
+      "roles": {
+        "analyst": {
+          "layers": {
+            "unrelated": {
+              "table": "example.locations",
+              "qID": "id",
+              "infoj": [{ "field": "unrelated_secret" }]
+            }
+          }
+        }
+      },
+      "layers": {
+        "restricted_locale_override": {
+          "table": "example.locations",
+          "qID": "id",
+          "geom": "geom",
+          "srid": 4326,
+          "infoj": [{ "field": "name" }]
         }
       }
     }

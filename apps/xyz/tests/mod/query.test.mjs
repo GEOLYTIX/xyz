@@ -442,6 +442,52 @@ describe('Query: fields param', () => {
     });
   });
 
+  it('returns 403 for a default field overridden by a role template for a user with the role', async () => {
+    // The analyst role template overrides the name field of the restricted_overrides layer. The name field is accessible without roles.
+    const res = await request({
+      ...params,
+      layer: 'restricted_overrides',
+      fields: 'name',
+      user: { roles: ['analyst'] },
+    });
+
+    expect(res).toEqual({
+      status: 403,
+      data: 'Fields [name] restricted by user roles on restricted_overrides layer.',
+    });
+  });
+
+  it('returns 403 for a cluster label from another role template override', async () => {
+    // The analyst and manager role templates override the cluster label of the restricted_cluster_labels layer.
+    const res = await request({
+      ...params,
+      layer: 'restricted_cluster_labels',
+      fields: 'category',
+      user: { roles: ['manager'] },
+    });
+
+    expect(res).toEqual({
+      status: 403,
+      data: 'Fields [category] restricted by user roles on restricted_cluster_labels layer.',
+    });
+  });
+
+  it('returns 400 for a field from another layer in a locale role template', async () => {
+    // The analyst role template of the restricted_override locale references the unrelated_secret field on the unrelated layer only.
+    const res = await request({
+      ...params,
+      layer: 'restricted_locale_override',
+      locale: 'restricted_override',
+      fields: 'unrelated_secret',
+      user: { roles: ['analyst'] },
+    });
+
+    expect(res).toEqual({
+      status: 400,
+      data: 'Fields [unrelated_secret] not accessible on restricted_locale_override layer.',
+    });
+  });
+
   it('does not register a query template from a role restricted entry', async () => {
     // The secret entry of the restricted_query_template layer is gated by the analyst role and defines the secret_query template.
     const res = await request({
