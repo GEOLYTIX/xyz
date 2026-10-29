@@ -14,9 +14,12 @@ The MAPP library is served from the apps/mapp source modules so that no build is
 
 The database is discarded when the process stops.
 
+The --query-delay argument or TESTVIEW_QUERY_DELAY environment variable delays the response of /api/query requests by the given milliseconds. Delayed layer data with cached tiles tests that the mapview.renderComplete promise doesn't resolve before the layer data has loaded.
+
 @example
 pnpm testview
 pnpm testview --port=3002
+pnpm testview --query-delay=1000
 */
 
 import process from 'node:process';
@@ -30,6 +33,12 @@ const port =
   process.argv.find((arg) => arg.startsWith('--port='))?.split('=')[1] ??
   process.env.TESTVIEW_PORT ??
   '3001';
+
+const queryDelay = Number(
+  process.argv.find((arg) => arg.startsWith('--query-delay='))?.split('=')[1] ??
+    process.env.TESTVIEW_QUERY_DELAY ??
+    0,
+);
 
 const devdb = await startDevDb({ port: 0 });
 
@@ -79,6 +88,10 @@ app.use(
 );
 
 app.get('/', (req, res) => res.redirect('/testview/'));
+
+if (queryDelay > 0) {
+  app.use('/api/query', (req, res, next) => setTimeout(next, queryDelay));
+}
 
 app.use(createRouter([validateRequestParams, validateRequestAuth]));
 

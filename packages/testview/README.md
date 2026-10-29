@@ -18,7 +18,10 @@ The package is listed in `.vercelignore` like devdb and is never deployed.
 ```bash
 pnpm testview              # http://localhost:3001/testview/
 pnpm testview --port=3002
+pnpm testview --query-delay=1000
 ```
+
+The `--query-delay` argument, or the `TESTVIEW_QUERY_DELAY` environment variable, delays the `/api/query` responses by the given milliseconds. With cached tiles and delayed layer data the testview must not be ready until the layer data has loaded.
 
 No MAPP build is required. The server provides the source modules:
 
