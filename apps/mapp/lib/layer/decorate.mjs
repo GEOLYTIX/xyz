@@ -245,9 +245,22 @@ function promoteDisplay(layer) {
 
 @description
 Hides the layer from the map.
+
+A hide from the layer.changeEnd() zoom range check will set the zoomDisplay flag. The layer remains in the layers hook and will be shown again once the zoom is in range.
+
+Any other hide will delete the zoomDisplay flag and filter the layer from the layers hook.
+
+@param {Object} [params]
+@property {boolean} [params.zoomDisplay] The layer is hidden because it is out of zoom range.
 */
-function hide() {
+function hide(params = {}) {
   this.display = false;
+
+  if (params.zoomDisplay === true) {
+    this.zoomDisplay = true;
+  } else {
+    delete this.zoomDisplay;
+  }
 
   // Remove OL layer from mapview.
   this.mapview.Map.removeLayer(this.L);
@@ -379,9 +392,8 @@ function changeEnd() {
     // Layer is out of zoom range.
     if (!this.tableCurrent()) {
       if (this.display) {
-        // Layer should be shown if possible.
-        this.zoomDisplay = true;
-        this.hide();
+        // Layer should be shown again once the zoom is in range.
+        this.hide({ zoomDisplay: true });
       }
     } else if (this.zoomDisplay) {
       // Prevents layer.show() being fired on zoom change within range.
