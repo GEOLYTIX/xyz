@@ -237,7 +237,7 @@ The xhr request is debounced by 100ms to prevent requests in quick succession on
 
 The layer source is loading until the features of the latest request have been set. The Openlayers Map doesn't dispatch the rendercomplete event while the source of a visible layer is loading.
 
-The response of a superseded request is discarded and will not set the layer source.
+The layer.request is assigned when the reload method is called, before the debounce timeout. The response of a superseded request is discarded and will neither set the layer source nor end the loading of the layer, also if the response arrives during the debounce timeout of the latest reload.
 
 The reload method is bound to the layer object and doesn't require any arguments.
 
@@ -281,6 +281,10 @@ function reload() {
   // The layer must be loading before the debounce timeout to prevent a rendercomplete event prior to the request.
   startLoading(this);
 
+  // The request is assigned before the debounce timeout. A response of an earlier request arriving during the timeout is superseded and must neither set the layer source nor end the loading.
+  const request = {};
+  this.request = request;
+
   clearTimeout(this.timeout);
 
   this.timeout = setTimeout(() => {
@@ -294,10 +298,6 @@ function reload() {
       template: this.params.template || this.format,
       ...this.params,
     });
-
-    // The response of a superseded request must not set the layer source.
-    const request = {};
-    this.request = request;
 
     this.xhr = mapp.utils
       .xhr(`${this.mapview.host}/api/query?${paramString}`)
