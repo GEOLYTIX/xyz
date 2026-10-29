@@ -293,7 +293,8 @@ function reload() {
         // An error will be returned if the xhr fails with a bad request 400.
         if (features instanceof Error) return;
 
-        this.setSource(features);
+        // The xhr promise resolves once the layer.Features have been set.
+        return this.setSource(features);
       });
   }, 100);
 }
