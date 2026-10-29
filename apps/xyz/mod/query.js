@@ -380,7 +380,6 @@ Note: The 403 response exposes to the requesting user that the restricted fields
 @property {object} req.params The request object params.
 @property {string} [params.fields] The request layer object [from template].
 @property {object} params.layer The request layer object [from template].
-@returns {Error} An error will be returned if the check fails.
 */
 async function checkFieldsParam(req, res, layerParams) {
   if (!req.params.fields) return;
