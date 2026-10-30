@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import composeObj from '../../../mod/workspace/composeObj.js';
+import composeObj, { inspection } from '../../../mod/workspace/composeObj.js';
 
 globalThis.xyzEnv = {
   WORKSPACE: 'file:./tests/assets/_workspace.json',
@@ -432,5 +432,31 @@ describe('composeObj', async () => {
     const response = await composeObj(obj);
 
     expect(response.infoj.length).toEqual(3);
+  });
+});
+
+describe('composeObj: inspection context', () => {
+  it('records the template scopes of the composed object', async () => {
+    const obj = {
+      infoj: [
+        {
+          field: 'name',
+          roles: {
+            analyst: { field: 'category' },
+            manager: { field: 'id' },
+          },
+        },
+        {
+          field: 'secret',
+          roles: { viewer: true },
+        },
+      ],
+    };
+
+    const store = { scopes: new Set() };
+
+    await inspection.run(store, () => composeObj(obj, { roles: true }));
+
+    expect(store.scopes).toEqual(new Set(['', 'analyst', 'manager', 'viewer']));
   });
 });

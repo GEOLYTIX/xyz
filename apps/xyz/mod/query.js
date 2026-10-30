@@ -17,7 +17,7 @@ import logger from './utils/logger.js';
 import sqlFilter from './utils/sqlFilter.js';
 import { setRequestAttributes } from './utils/telemetry.js';
 import workspaceCache from './workspace/cache.js';
-import composeObj from './workspace/composeObj.js';
+import composeObj, { inspection } from './workspace/composeObj.js';
 import getLayer from './workspace/getLayer.js';
 import getTemplate from './workspace/getTemplate.js';
 
@@ -197,12 +197,22 @@ async function layerQuery(req, res) {
     req.params.layer = req.params.layer_template;
   }
 
+  let layerParams;
+
   if (!req.params.layer) {
     // Reserved params will be deleted to prevent DDL injection.
     delete req.params.filter;
     delete req.params.viewport;
     return;
   } else if (typeof req.params.layer === 'string') {
+    // The getLocale method mutates the locale param. The layer request params are retained to compose the layer for other role scopes in the checkFieldsParam method.
+    layerParams = {
+      layer: req.params.layer,
+      locale: Array.isArray(req.params.locale)
+        ? [...req.params.locale]
+        : req.params.locale,
+    };
+
     req.params.layer = await getLayer(req.params);
   }
 
@@ -278,7 +288,7 @@ async function layerQuery(req, res) {
         ${req.params.geom})`;
   }
 
-  checkFieldsParam(req, res);
+  await checkFieldsParam(req, res, layerParams);
 
   // The checkFieldsParam method will have sent an error response.
   if (res.finished) return;
@@ -358,39 +368,65 @@ The method will call the recursive fieldsValueSet method to parse the layer obje
 
 Field values may not be referenced in the layer object from role restricted templates.
 
-The method will return an Error if the fields request param contains a string value which is not referenced in a field prooperty in the layer object.
+Fields which are not referenced in the layer object are passed to the roleRestrictedFields method to check whether the fields are referenced in the layer object composed for other role scopes. The check is not performed for an anonymous request without user.
+
+The error response lists the fields which are not referenced in the layer object for any role scope, as well as the fields which are only referenced in the layer object for other role scopes. The response status is 400 if any field is not referenced in the layer object for any role scope, otherwise 403. The response to an anonymous request lists all fields which are not referenced in the layer object with status 400.
+
+Note: The 403 response exposes to the requesting user that the restricted fields are referenced in the layer object for other role scopes.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
+@param {Object} [layerParams] The layer and locale request params to compose the layer for other role scopes.
 @property {object} req.params The request object params.
 @property {string} [params.fields] The request layer object [from template].
 @property {object} params.layer The request layer object [from template].
-@returns {Error} An error will be returned if the check fails.
 */
-async function checkFieldsParam(req, res) {
+async function checkFieldsParam(req, res, layerParams) {
   if (!req.params.fields) return;
 
-  const layerFields = new Set();
+  const layerFields = layerFieldsSet(req.params.layer);
 
-  fieldsValueSet(req.params.layer, layerFields);
+  const fields = req.params.fields.split(',');
 
-  // Technical debt: The cluster label should be added as a field in the layer template to prevent direct reference here.
-  if (req.params.layer.cluster?.label) {
-    layerFields.add(req.params.layer.cluster.label);
+  const inaccessibleFields = fields.filter((field) => !layerFields.has(field));
+
+  if (inaccessibleFields.length) {
+    // Fields restricted by roles are not reported to an anonymous request.
+    const restrictedFields = req.params.user
+      ? await roleRestrictedFields(inaccessibleFields, layerParams)
+      : [];
+
+    const missingFields = inaccessibleFields.filter(
+      (field) => !restrictedFields.includes(field),
+    );
+
+    const messages = [];
+
+    if (missingFields.length) {
+      messages.push(
+        `Fields [${missingFields.join(', ')}] not accessible on ${req.params.layer.key} layer.`,
+      );
+    }
+
+    if (restrictedFields.length) {
+      messages.push(
+        `Fields [${restrictedFields.join(', ')}] restricted by user roles on ${req.params.layer.key} layer.`,
+      );
+    }
+
+    const err = new Error(messages.join(' '));
+
+    console.error(err);
+    res
+      .status(missingFields.length ? 400 : 403)
+      .setHeader('Content-Type', 'text/plain')
+      .send(err.message);
+    return;
   }
 
   req.params.fieldsMap = new Map();
 
-  for (const field of req.params.fields.split(',')) {
-    if (!layerFields.has(field)) {
-      const err = new Error(
-        `${field} field not accessible on ${req.params.layer.key} layer`,
-      );
-      console.error(err);
-      res.status(400).setHeader('Content-Type', 'text/plain').send(err.message);
-      return;
-    }
-
+  for (const field of fields) {
     let value = field;
 
     if (Object.hasOwn(req.params.workspace.templates, field)) {
@@ -401,6 +437,88 @@ async function checkFieldsParam(req, res) {
 
     req.params.fieldsMap.set(field, value);
   }
+}
+
+/**
+@function roleRestrictedFields
+@async
+
+@description
+The method checks whether fields which are not accessible to the requesting user are referenced in the layer object composed for other role scopes.
+
+The layer is composed with role checks bypassed to collect the template scopes of the locale and layer. The layer is then composed without roles and for each template scope. Role templates may override the same property, eg. the field of an infoj entry. Each composition retains the properties for its role scope.
+
+The layer is composed in the inspection context of the composeObj module. Query templates from role restricted objects are not registered in the workspace.templates{} object.
+
+The layer can only be composed if the layer and locale request params were retained by the layerQuery method. An empty array is returned if the layer can not be composed.
+
+@param {Array<string>} fields Fields which are not referenced in the layer object composed for the requesting user.
+@param {Object} [layerParams] The layer and locale request params.
+@property {string} layerParams.layer Layer key.
+@property {string|Array} [layerParams.locale] Locale key or array of nested locale keys.
+@returns {Promise<Array<string>>} Fields which are referenced in the layer object composed for any role scope.
+*/
+async function roleRestrictedFields(fields, layerParams) {
+  if (!layerParams) return [];
+
+  // The getLocale method mutates the locale param. Each composition requires a copy.
+  const composeLayer = (user) =>
+    getLayer({
+      layer: layerParams.layer,
+      locale: Array.isArray(layerParams.locale)
+        ? [...layerParams.locale]
+        : layerParams.locale,
+      user,
+    });
+
+  const store = { scopes: new Set() };
+
+  return inspection.run(store, async () => {
+    // Admin endpoints set the user.roles property to true to bypass role checks. The composition collects the template scopes in the inspection store.
+    const layer = await composeLayer({ roles: true });
+
+    if (layer instanceof Error) return [];
+
+    // The empty scope is composed without roles.
+    const scopeLayers = await Promise.all(
+      [...new Set(['', ...store.scopes])].map((scope) =>
+        composeLayer(scope ? { roles: [scope] } : undefined),
+      ),
+    );
+
+    const layerFields = new Set();
+
+    for (const scopeLayer of scopeLayers) {
+      // Access to the layer is denied for the scope.
+      if (scopeLayer instanceof Error) continue;
+
+      layerFieldsSet(scopeLayer).forEach((field) => layerFields.add(field));
+    }
+
+    return fields.filter((field) => layerFields.has(field));
+  });
+}
+
+/**
+@function layerFieldsSet
+
+@description
+The method calls the recursive fieldsValueSet method to parse the layer object for any values referenced as properties with the 'field' key.
+
+@param {Object} layer The layer object.
+@returns {Set<string>} Set of fields referenced in the layer object.
+*/
+function layerFieldsSet(layer) {
+  const layerFields = new Set();
+
+  fieldsValueSet(layer, layerFields);
+
+  // Technical debt: The cluster label should be added as a field in the layer template to prevent direct reference here.
+  if (layer.cluster?.label) {
+    layerFields.add(layer.cluster.label);
+  }
+
+  return layerFields;
 }
 
 /**

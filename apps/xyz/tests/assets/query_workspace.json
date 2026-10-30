@@ -149,6 +149,49 @@
         "table": "example.locations",
         "qID": "id"
       },
+      "restricted_fields": {
+        "table": "example.locations",
+        "qID": "id",
+        "geom": "geom",
+        "srid": 4326,
+        "infoj": [
+          { "field": "name" },
+          { "field": "category", "roles": { "analyst": true } }
+        ]
+      },
+      "restricted_overrides": {
+        "table": "example.locations",
+        "qID": "id",
+        "geom": "geom",
+        "srid": 4326,
+        "infoj": [
+          {
+            "field": "name",
+            "roles": {
+              "analyst": { "field": "category" },
+              "manager": { "field": "id" }
+            }
+          }
+        ]
+      },
+      "restricted_query_template": {
+        "table": "example.locations",
+        "qID": "id",
+        "geom": "geom",
+        "srid": 4326,
+        "infoj": [
+          { "field": "name" },
+          {
+            "field": "secret",
+            "roles": { "analyst": true },
+            "query": "secret_query",
+            "template": {
+              "key": "secret_query",
+              "template": "SELECT 'secret' AS access"
+            }
+          }
+        ]
+      },
       "features": {
         "table": "example.features",
         "qID": "id",
@@ -158,5 +201,42 @@
       }
     }
   },
-  "locales": {}
+  "locales": {
+    "restricted": {
+      "layers": {
+        "restricted_locale_fields": {
+          "table": "example.locations",
+          "qID": "id",
+          "geom": "geom",
+          "srid": 4326,
+          "infoj": [
+            { "field": "name" },
+            { "field": "category", "roles": { "analyst": true } }
+          ]
+        }
+      }
+    },
+    "restricted_override": {
+      "roles": {
+        "analyst": {
+          "layers": {
+            "unrelated": {
+              "table": "example.locations",
+              "qID": "id",
+              "infoj": [{ "field": "unrelated_secret" }]
+            }
+          }
+        }
+      },
+      "layers": {
+        "restricted_locale_override": {
+          "table": "example.locations",
+          "qID": "id",
+          "geom": "geom",
+          "srid": 4326,
+          "infoj": [{ "field": "name" }]
+        }
+      }
+    }
+  }
 }

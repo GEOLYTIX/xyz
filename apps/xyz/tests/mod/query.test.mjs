@@ -332,6 +332,199 @@ describe('Query: layer queries', () => {
   });
 });
 
+describe('Query: fields param', () => {
+  // The category infoj entry of the restricted_fields layer is gated by the analyst role.
+  const params = {
+    template: 'wkt',
+    layer: 'restricted_fields',
+    table: 'example.locations',
+    viewport: '10,50,15,55,4326',
+  };
+
+  // A user without the analyst or manager role.
+  const viewer = { roles: ['viewer'] };
+
+  it('permits fields which are accessible without roles', async () => {
+    const res = await request({ ...params, fields: 'name' });
+
+    expect(res).toEqual({
+      status: 200,
+      data: [[3, 'POINT(13.405 52.52)', 'Berlin']],
+    });
+  });
+
+  it('permits a role restricted field for a user with the role', async () => {
+    const res = await request({
+      ...params,
+      fields: 'name,category',
+      user: { roles: ['analyst'] },
+    });
+
+    expect(res).toEqual({
+      status: 200,
+      data: [[3, 'POINT(13.405 52.52)', 'Berlin', 'city']],
+    });
+  });
+
+  it.each([
+    ['without roles', { roles: [] }],
+    ['without the required role', viewer],
+  ])('returns 403 for a role restricted field %s', async (_, user) => {
+    const res = await request({ ...params, fields: 'name,category', user });
+
+    expect(res).toEqual({
+      status: 403,
+      data: 'Fields [category] restricted by user roles on restricted_fields layer.',
+    });
+  });
+
+  it('returns 400 for a role restricted field to an anonymous request', async () => {
+    const res = await request({ ...params, fields: 'name,category' });
+
+    expect(res).toEqual({
+      status: 400,
+      data: 'Fields [category] not accessible on restricted_fields layer.',
+    });
+  });
+
+  it('returns 403 for a role restricted field in a locales layer', async () => {
+    // The getLocale method mutates the locale param before the fields check. The restricted_locale_fields layer is not in the default locale.
+    const res = await request({
+      ...params,
+      layer: 'restricted_locale_fields',
+      locale: 'restricted',
+      fields: 'category',
+      user: viewer,
+    });
+
+    expect(res).toEqual({
+      status: 403,
+      data: 'Fields [category] restricted by user roles on restricted_locale_fields layer.',
+    });
+  });
+
+  it('returns 400 listing every field which is not in the layer', async () => {
+    const res = await request({ ...params, fields: 'foo,name,bar' });
+
+    expect(res).toEqual({
+      status: 400,
+      data: 'Fields [foo, bar] not accessible on restricted_fields layer.',
+    });
+  });
+
+  it('returns 400 listing missing and role restricted fields', async () => {
+    const res = await request({
+      ...params,
+      fields: 'foo,category,bar',
+      user: viewer,
+    });
+
+    expect(res).toEqual({
+      status: 400,
+      data: 'Fields [foo, bar] not accessible on restricted_fields layer. Fields [category] restricted by user roles on restricted_fields layer.',
+    });
+  });
+
+  it('returns 400 listing missing and role restricted fields as not accessible to an anonymous request', async () => {
+    const res = await request({ ...params, fields: 'foo,category,bar' });
+
+    expect(res).toEqual({
+      status: 400,
+      data: 'Fields [foo, category, bar] not accessible on restricted_fields layer.',
+    });
+  });
+
+  // The name entry of the restricted_overrides layer is overridden by the analyst and manager role templates.
+  it.each([
+    ['analyst', 'category'],
+    ['manager', 'id'],
+  ])(
+    'returns 403 for a field from the %s role template override without the role',
+    async (_, field) => {
+      const res = await request({
+        ...params,
+        layer: 'restricted_overrides',
+        fields: field,
+        user: viewer,
+      });
+
+      expect(res).toEqual({
+        status: 403,
+        data: `Fields [${field}] restricted by user roles on restricted_overrides layer.`,
+      });
+    },
+  );
+
+  it('permits a field from a role template override for a user with the role', async () => {
+    const res = await request({
+      ...params,
+      layer: 'restricted_overrides',
+      fields: 'category',
+      user: { roles: ['analyst'] },
+    });
+
+    expect(res).toEqual({
+      status: 200,
+      data: [[3, 'POINT(13.405 52.52)', 'city']],
+    });
+  });
+
+  it('returns 403 for a default field overridden by a role template for a user with the role', async () => {
+    // The analyst role template overrides the name field of the restricted_overrides layer. The name field is accessible without roles.
+    const res = await request({
+      ...params,
+      layer: 'restricted_overrides',
+      fields: 'name',
+      user: { roles: ['analyst'] },
+    });
+
+    expect(res).toEqual({
+      status: 403,
+      data: 'Fields [name] restricted by user roles on restricted_overrides layer.',
+    });
+  });
+
+  it('returns 400 for a field from another layer in a locale role template', async () => {
+    // The analyst role template of the restricted_override locale references the unrelated_secret field on the unrelated layer only.
+    const res = await request({
+      ...params,
+      layer: 'restricted_locale_override',
+      locale: 'restricted_override',
+      fields: 'unrelated_secret',
+      user: { roles: ['analyst'] },
+    });
+
+    expect(res).toEqual({
+      status: 400,
+      data: 'Fields [unrelated_secret] not accessible on restricted_locale_override layer.',
+    });
+  });
+
+  it('does not register a query template from a role restricted entry', async () => {
+    // The secret entry of the restricted_query_template layer is gated by the analyst role and defines the secret_query template. The layer is composed for the analyst scope in the fields check.
+    const res = await request({
+      ...params,
+      layer: 'restricted_query_template',
+      fields: 'secret',
+      user: viewer,
+    });
+
+    expect(res).toEqual({
+      status: 403,
+      data: 'Fields [secret] restricted by user roles on restricted_query_template layer.',
+    });
+
+    const workspace = await checkWorkspaceCache();
+
+    expect(Object.hasOwn(workspace.templates, 'secret_query')).toBe(false);
+
+    expect(await request({ template: 'secret_query' })).toEqual({
+      status: 400,
+      data: 'Template: secret_query not found.',
+    });
+  });
+});
+
 describe('Query: parameter substitution', () => {
   it('replaces ${} params and substitutes %{} params', async () => {
     const res = await request({

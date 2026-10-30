@@ -10,6 +10,7 @@
 @module /workspace/composeObj
 */
 
+import { AsyncLocalStorage } from 'node:async_hooks';
 import merge from '../utils/merge.js';
 import { withSpan } from '../utils/telemetry.js';
 import { authorizeScope } from './authorization.js';
@@ -17,6 +18,19 @@ import workspaceCache from './cache.js';
 import getTemplate from './getTemplate.js';
 
 let workspace;
+
+/**
+@constant inspection
+@type {AsyncLocalStorage}
+
+@description
+Objects composed in the inspection context do not register query templates in the workspace.templates{} object. Objects can be composed with role checks bypassed, or for roles other than the requesting user's, in the inspection context without making query templates from role restricted objects available to other requests.
+
+The template scopes of the composed objects are added to the scopes set of the inspection store.
+
+@property {Set<string>} [store.scopes] The template scopes of the composed objects.
+*/
+export const inspection = new AsyncLocalStorage();
 
 /**
 @function composeObj
@@ -88,7 +102,7 @@ async function composeObject(obj, user, defaults) {
 
   const templateScope = [...obj.parentRoles, obj.role].filter(Boolean);
 
-  workspace.scopes.add(templateScope.join('.'));
+  addScope(templateScope.join('.'));
 
   const allowed = await authorizeScope({
     obj,
@@ -111,6 +125,19 @@ async function composeObject(obj, user, defaults) {
   }
 
   return obj;
+}
+
+/**
+@function addScope
+
+@description
+Adds the template scope to the workspace.scopes set and to the scopes set of the inspection store.
+
+@param {string} scope The template scope joined with dots.
+*/
+function addScope(scope) {
+  workspace.scopes.add(scope);
+  inspection.getStore()?.scopes?.add(scope);
 }
 
 /**
@@ -141,7 +168,7 @@ async function mergeTemplateIntoObj(obj, template, user, templateScope = []) {
   // The templateScope array must be spread into a new array to prevent the original templateScope from being modified by nested templates.
   templateScope = [...templateScope, template.role].filter(Boolean);
 
-  workspace.scopes.add(templateScope.join('.'));
+  addScope(templateScope.join('.'));
 
   const allowed = await authorizeScope({
     obj: template,
@@ -336,6 +363,12 @@ function queryTemplate(key, val, obj, user, templateScope) {
     return true;
   }
 
+  // Query templates must not be registered from an object composed in the inspection context.
+  if (inspection.getStore()) {
+    delete obj.template;
+    return true;
+  }
+
   // A template object provided in a template will be a query template to be merged into the workspace.templates object. The template will be assigned a _type property to identify it as a template object. Query templates are not merged into the object they are defined in but are assigned to the workspace.templates object for later use.
   val._type = 'template';
   workspace.templates[val.key] = Object.assign(
@@ -443,7 +476,7 @@ async function rolesTemplates(key, val, obj, user, templateScope, root) {
 
   if (roles === true) {
     accessRoles.forEach((role) => {
-      workspace.scopes.add([...templateScope, role].filter(Boolean).join('.'));
+      addScope([...templateScope, role].filter(Boolean).join('.'));
     });
     // Role check is not required for admin endpoints. The user.roles property is set to true to bypass role checks.
     return true;
