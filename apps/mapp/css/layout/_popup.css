@@ -1,8 +1,8 @@
 .popup {
   position: absolute;
-  background-color: var(--color-base-tertiary);
-  color: var(--color-font);
-  border: solid 1px var(--color-border);
+  background-color: var(--color-base-tertiary, #fafafa);
+  color: var(--color-font, #3f3f3f);
+  border: solid 1px var(--color-border, #dddddd);
   bottom: 12px;
   transform: translate(-50%, 0);
 
@@ -15,7 +15,7 @@
   }
 
   &::after {
-    border-top-color: var(--color-border);
+    border-top-color: var(--color-border, #dddddd);
     border-width: 10px;
     left: 50%;
     margin-left: -10px;
@@ -29,7 +29,7 @@
   }
 
   & li:hover {
-    background-color: var(--color-base-secondary);
+    background-color: var(--color-base-secondary, #f7f7f7);
     cursor: pointer;
   }
 
