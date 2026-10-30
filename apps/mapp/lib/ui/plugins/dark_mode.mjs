@@ -1,12 +1,14 @@
 /**
-# /plugins/dark_mode
+## /ui/plugins/dark_mode
 
 The module defines a darkTheme object to be applied with the cssColour.setTheme utility.
 
-@requires /ui/utils/cssColour
+@requires /ui/utils/cssColourTheme
 
-@module /plugins/dark_mode
+@module /ui/plugins/dark_mode
 */
+
+import * as cssColour from '../utils/cssColourTheme.mjs';
 
 /**
 @function dark_mode
@@ -23,8 +25,7 @@ export function dark_mode(plugin, mapview) {
   let darkMode = mapp.user?.dark_mode;
 
   // toggle dark_mode if true.
-  darkMode &&
-    mapp.ui.utils.cssColour.setTheme(mapp.ui.utils.cssColour.themes.dark);
+  darkMode && cssColour.setTheme(cssColour.themes.dark);
 
   const button = mapp.utils.html.node`<button
     title=${mapp.dictionary.dark_mode}
@@ -40,10 +41,10 @@ export function dark_mode(plugin, mapview) {
       }
 
       // Update the dark mode theme depending on the user setting
-      const ThemeChosen = darkMode ? mapp.ui.utils.cssColour.themes.dark : {};
+      const ThemeChosen = darkMode ? cssColour.themes.dark : {};
 
       // Set the dark mode theme
-      mapp.ui.utils.cssColour.setTheme(ThemeChosen);
+      cssColour.setTheme(ThemeChosen);
 
       // change mode icon
       const modeIcon = button.querySelector('span');
@@ -93,5 +94,5 @@ The custom_theme object from the locale will be applied through the cssColourThe
     }
 */
 export function custom_theme(theme) {
-  mapp.ui.utils.cssColour.setTheme(theme);
+  cssColour.setTheme(theme);
 }

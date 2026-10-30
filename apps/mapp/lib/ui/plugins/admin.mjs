@@ -1,12 +1,12 @@
 /**
-### Admin Plugin
+## /ui/plugins/admin
 
 Dictionary entries:
 - toolbar_admin
 
 @requires /dictionary
 
-@module /plugins/admin
+@module /ui/plugins/admin
 */
 
 /**

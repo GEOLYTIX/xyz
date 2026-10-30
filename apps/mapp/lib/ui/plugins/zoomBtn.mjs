@@ -1,5 +1,5 @@
 /**
-### Zoom Btn Plugin
+## /ui/plugins/zoomBtn
 
 Dictionary entries:
 - toolbar_zoom_in
@@ -7,7 +7,7 @@ Dictionary entries:
 
 @requires /dictionary
 
-@module /plugins/zoomBtn
+@module /ui/plugins/zoomBtn
 */
 
 /**

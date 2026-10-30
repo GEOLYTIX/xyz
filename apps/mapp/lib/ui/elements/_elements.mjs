@@ -10,7 +10,6 @@ The module exports a collection of ui element modules.
 @requires module:/ui/elements/card
 @requires module:/ui/elements/chkbox
 @requires module:/ui/elements/confirm
-@requires module:/ui/elements/contextMenu
 @requires module:/ui/elements/control
 @requires module:/ui/elements/dialog
 @requires module:/ui/elements/drawer
@@ -38,7 +37,6 @@ import btnPanel from './btnPanel.mjs';
 import card from './card.mjs';
 import chkbox from './chkbox.mjs';
 import confirm from './confirm.mjs';
-import contextMenu from './contextMenu.mjs';
 import control from './control.mjs';
 import dialog from './dialog.mjs';
 import { drawer, drawerDialog } from './drawer.mjs';
@@ -68,7 +66,6 @@ export default {
   card,
   chkbox,
   confirm,
-  contextMenu,
   control,
   dialog,
   drawer,

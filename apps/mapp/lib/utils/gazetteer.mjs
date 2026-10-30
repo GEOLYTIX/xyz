@@ -206,7 +206,7 @@ export function getLocation(location, gazetteer) {
   );
 
   if (!ol.extent.containsCoordinate(gazetteer.mapview.extent, coord)) {
-    mapp.ui.elements.alert({ text: mapp.dictionary.invalid_lat_lon });
+    mapp.utils.alert({ text: mapp.dictionary.invalid_lat_lon });
     return;
   }
 

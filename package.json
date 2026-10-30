@@ -13,6 +13,7 @@
     "dev:auth": "turbo run dev --filter=@geolytix/xyz-auth-app",
     "dev:saml": "turbo run dev --filter=@geolytix/xyz-saml-app",
     "devdb": "pnpm --filter=@geolytix/xyz-devdb start",
+    "testview": "pnpm --filter=@geolytix/xyz-testview start",
     "test:devdb": "turbo run test --filter=@geolytix/xyz-devdb",
     "deploy:vercel": "node utils/deploy-vercel.js",
     "traces": "node utils/traces.js",
