@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import composeObj, {
-  inspection,
-} from '../../../mod/workspace/composeObj.js';
+import composeObj, { inspection } from '../../../mod/workspace/composeObj.js';
 
 globalThis.xyzEnv = {
   WORKSPACE: 'file:./tests/assets/_workspace.json',
@@ -438,7 +436,7 @@ describe('composeObj', async () => {
 });
 
 describe('composeObj: inspection context', () => {
-  it('records the field overridden by role templates', async () => {
+  it('records the template scopes of the composed object', async () => {
     const obj = {
       infoj: [
         {
@@ -448,19 +446,17 @@ describe('composeObj: inspection context', () => {
             manager: { field: 'id' },
           },
         },
+        {
+          field: 'secret',
+          roles: { viewer: true },
+        },
       ],
     };
 
-    const store = { alternatives: [] };
+    const store = { scopes: new Set() };
 
-    const layer = await inspection.run(store, () =>
-      composeObj(obj, { roles: true }),
-    );
+    await inspection.run(store, () => composeObj(obj, { roles: true }));
 
-    // The manager role template is merged last.
-    expect(layer.infoj[0].field).toEqual('id');
-
-    // The name field is accessible without roles and must be recorded before the role templates override it.
-    expect(JSON.stringify(store.alternatives)).toContain('"field":"name"');
+    expect(store.scopes).toEqual(new Set(['', 'analyst', 'manager', 'viewer']));
   });
 });

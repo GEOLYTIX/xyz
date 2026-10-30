@@ -24,11 +24,11 @@ let workspace;
 @type {AsyncLocalStorage}
 
 @description
-Objects composed in the inspection context do not register query templates in the workspace.templates{} object. Objects can be composed with role checks bypassed in the inspection context without making query templates from role restricted objects available to other requests.
+Objects composed in the inspection context do not register query templates in the workspace.templates{} object. Objects can be composed with role checks bypassed, or for roles other than the requesting user's, in the inspection context without making query templates from role restricted objects available to other requests.
 
-Templates merged with a role are pushed to the alternatives array of the inspection store before the merge can override their properties with the properties of another role template.
+The template scopes of the composed objects are added to the scopes set of the inspection store.
 
-@property {Array<Object>} [store.alternatives] The composed role templates.
+@property {Set<string>} [store.scopes] The template scopes of the composed objects.
 */
 export const inspection = new AsyncLocalStorage();
 
@@ -102,7 +102,7 @@ async function composeObject(obj, user, defaults) {
 
   const templateScope = [...obj.parentRoles, obj.role].filter(Boolean);
 
-  workspace.scopes.add(templateScope.join('.'));
+  addScope(templateScope.join('.'));
 
   const allowed = await authorizeScope({
     obj,
@@ -125,6 +125,19 @@ async function composeObject(obj, user, defaults) {
   }
 
   return obj;
+}
+
+/**
+@function addScope
+
+@description
+Adds the template scope to the workspace.scopes set and to the scopes set of the inspection store.
+
+@param {string} scope The template scope joined with dots.
+*/
+function addScope(scope) {
+  workspace.scopes.add(scope);
+  inspection.getStore()?.scopes?.add(scope);
 }
 
 /**
@@ -155,7 +168,7 @@ async function mergeTemplateIntoObj(obj, template, user, templateScope = []) {
   // The templateScope array must be spread into a new array to prevent the original templateScope from being modified by nested templates.
   templateScope = [...templateScope, template.role].filter(Boolean);
 
-  workspace.scopes.add(templateScope.join('.'));
+  addScope(templateScope.join('.'));
 
   const allowed = await authorizeScope({
     obj: template,
@@ -173,11 +186,6 @@ async function mergeTemplateIntoObj(obj, template, user, templateScope = []) {
   if (rolesCheck instanceof Error) {
     obj.warn ??= [];
     obj.warn.push(rolesCheck.message);
-  }
-
-  // Role templates are recorded before the merge can override their properties with the properties of another role template.
-  if (template.role) {
-    inspection.getStore()?.alternatives?.push(structuredClone(template));
   }
 
   // key and role properties must not overwrite in obj.
@@ -468,7 +476,7 @@ async function rolesTemplates(key, val, obj, user, templateScope, root) {
 
   if (roles === true) {
     accessRoles.forEach((role) => {
-      workspace.scopes.add([...templateScope, role].filter(Boolean).join('.'));
+      addScope([...templateScope, role].filter(Boolean).join('.'));
     });
     // Role check is not required for admin endpoints. The user.roles property is set to true to bypass role checks.
     return true;

@@ -341,6 +341,9 @@ describe('Query: fields param', () => {
     viewport: '10,50,15,55,4326',
   };
 
+  // A user without the analyst or manager role.
+  const viewer = { roles: ['viewer'] };
+
   it('permits fields which are accessible without roles', async () => {
     const res = await request({ ...params, fields: 'name' });
 
@@ -364,14 +367,23 @@ describe('Query: fields param', () => {
   });
 
   it.each([
-    ['without roles', undefined],
-    ['without the required role', { roles: ['viewer'] }],
+    ['without roles', { roles: [] }],
+    ['without the required role', viewer],
   ])('returns 403 for a role restricted field %s', async (_, user) => {
     const res = await request({ ...params, fields: 'name,category', user });
 
     expect(res).toEqual({
       status: 403,
       data: 'Fields [category] restricted by user roles on restricted_fields layer.',
+    });
+  });
+
+  it('returns 400 for a role restricted field to an anonymous request', async () => {
+    const res = await request({ ...params, fields: 'name,category' });
+
+    expect(res).toEqual({
+      status: 400,
+      data: 'Fields [category] not accessible on restricted_fields layer.',
     });
   });
 
@@ -382,6 +394,7 @@ describe('Query: fields param', () => {
       layer: 'restricted_locale_fields',
       locale: 'restricted',
       fields: 'category',
+      user: viewer,
     });
 
     expect(res).toEqual({
@@ -400,11 +413,24 @@ describe('Query: fields param', () => {
   });
 
   it('returns 400 listing missing and role restricted fields', async () => {
-    const res = await request({ ...params, fields: 'foo,category,bar' });
+    const res = await request({
+      ...params,
+      fields: 'foo,category,bar',
+      user: viewer,
+    });
 
     expect(res).toEqual({
       status: 400,
       data: 'Fields [foo, bar] not accessible on restricted_fields layer. Fields [category] restricted by user roles on restricted_fields layer.',
+    });
+  });
+
+  it('returns 400 listing missing and role restricted fields as not accessible to an anonymous request', async () => {
+    const res = await request({ ...params, fields: 'foo,category,bar' });
+
+    expect(res).toEqual({
+      status: 400,
+      data: 'Fields [foo, category, bar] not accessible on restricted_fields layer.',
     });
   });
 
@@ -413,12 +439,13 @@ describe('Query: fields param', () => {
     ['analyst', 'category'],
     ['manager', 'id'],
   ])(
-    'returns 403 for a field from the %s role template override without roles',
+    'returns 403 for a field from the %s role template override without the role',
     async (_, field) => {
       const res = await request({
         ...params,
         layer: 'restricted_overrides',
         fields: field,
+        user: viewer,
       });
 
       expect(res).toEqual({
@@ -457,21 +484,6 @@ describe('Query: fields param', () => {
     });
   });
 
-  it('returns 403 for a cluster label from another role template override', async () => {
-    // The analyst and manager role templates override the cluster label of the restricted_cluster_labels layer.
-    const res = await request({
-      ...params,
-      layer: 'restricted_cluster_labels',
-      fields: 'category',
-      user: { roles: ['manager'] },
-    });
-
-    expect(res).toEqual({
-      status: 403,
-      data: 'Fields [category] restricted by user roles on restricted_cluster_labels layer.',
-    });
-  });
-
   it('returns 400 for a field from another layer in a locale role template', async () => {
     // The analyst role template of the restricted_override locale references the unrelated_secret field on the unrelated layer only.
     const res = await request({
@@ -489,11 +501,12 @@ describe('Query: fields param', () => {
   });
 
   it('does not register a query template from a role restricted entry', async () => {
-    // The secret entry of the restricted_query_template layer is gated by the analyst role and defines the secret_query template.
+    // The secret entry of the restricted_query_template layer is gated by the analyst role and defines the secret_query template. The layer is composed for the analyst scope in the fields check.
     const res = await request({
       ...params,
       layer: 'restricted_query_template',
       fields: 'secret',
+      user: viewer,
     });
 
     expect(res).toEqual({

@@ -205,7 +205,7 @@ async function layerQuery(req, res) {
     delete req.params.viewport;
     return;
   } else if (typeof req.params.layer === 'string') {
-    // The getLocale method mutates the locale param. The layer request params are retained to compose the layer without role restrictions in the checkFieldsParam method.
+    // The getLocale method mutates the locale param. The layer request params are retained to compose the layer for other role scopes in the checkFieldsParam method.
     layerParams = {
       layer: req.params.layer,
       locale: Array.isArray(req.params.locale)
@@ -368,15 +368,15 @@ The method will call the recursive fieldsValueSet method to parse the layer obje
 
 Field values may not be referenced in the layer object from role restricted templates.
 
-Fields which are not referenced in the layer object are passed to the roleRestrictedFields method to check whether the fields are referenced in the layer object composed without role restrictions.
+Fields which are not referenced in the layer object are passed to the roleRestrictedFields method to check whether the fields are referenced in the layer object composed for other role scopes. The check is not performed for an anonymous request without user.
 
-The error response lists the fields which are not referenced in the layer object regardless of the user roles, as well as the fields which are only referenced in the layer object for other user roles. The response status is 400 if any field is not referenced in the layer object regardless of the user roles, otherwise 403.
+The error response lists the fields which are not referenced in the layer object for any role scope, as well as the fields which are only referenced in the layer object for other role scopes. The response status is 400 if any field is not referenced in the layer object for any role scope, otherwise 403. The response to an anonymous request lists all fields which are not referenced in the layer object with status 400.
 
-Note: The 403 response exposes to the requesting user that the restricted fields are referenced in the layer object for other user roles.
+Note: The 403 response exposes to the requesting user that the restricted fields are referenced in the layer object for other role scopes.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
-@param {Object} [layerParams] The layer and locale request params to compose the layer without role restrictions.
+@param {Object} [layerParams] The layer and locale request params to compose the layer for other role scopes.
 @property {object} req.params The request object params.
 @property {string} [params.fields] The request layer object [from template].
 @property {object} params.layer The request layer object [from template].
@@ -391,10 +391,10 @@ async function checkFieldsParam(req, res, layerParams) {
   const inaccessibleFields = fields.filter((field) => !layerFields.has(field));
 
   if (inaccessibleFields.length) {
-    const restrictedFields = await roleRestrictedFields(
-      inaccessibleFields,
-      layerParams,
-    );
+    // Fields restricted by roles are not reported to an anonymous request.
+    const restrictedFields = req.params.user
+      ? await roleRestrictedFields(inaccessibleFields, layerParams)
+      : [];
 
     const missingFields = inaccessibleFields.filter(
       (field) => !restrictedFields.includes(field),
@@ -444,9 +444,11 @@ async function checkFieldsParam(req, res, layerParams) {
 @async
 
 @description
-The method composes the layer with role checks bypassed to check whether fields which are not accessible to the requesting user are referenced in role restricted objects of the layer.
+The method checks whether fields which are not accessible to the requesting user are referenced in the layer object composed for other role scopes.
 
-The layer is composed in the inspection context of the composeObj module. Query templates from role restricted objects are not registered in the workspace.templates{} object. The fields of every role template are checked since role templates may override the same property in the composed layer.
+The layer is composed with role checks bypassed to collect the template scopes of the locale and layer. The layer is then composed without roles and for each template scope. Role templates may override the same property, eg. the field of an infoj entry. Each composition retains the properties for its role scope.
+
+The layer is composed in the inspection context of the composeObj module. Query templates from role restricted objects are not registered in the workspace.templates{} object.
 
 The layer can only be composed if the layer and locale request params were retained by the layerQuery method. An empty array is returned if the layer can not be composed.
 
@@ -454,28 +456,45 @@ The layer can only be composed if the layer and locale request params were retai
 @param {Object} [layerParams] The layer and locale request params.
 @property {string} layerParams.layer Layer key.
 @property {string|Array} [layerParams.locale] Locale key or array of nested locale keys.
-@returns {Promise<Array<string>>} Fields which are referenced in the layer object composed without role restrictions.
+@returns {Promise<Array<string>>} Fields which are referenced in the layer object composed for any role scope.
 */
 async function roleRestrictedFields(fields, layerParams) {
   if (!layerParams) return [];
 
-  const store = { alternatives: [] };
+  // The getLocale method mutates the locale param. Each composition requires a copy.
+  const composeLayer = (user) =>
+    getLayer({
+      layer: layerParams.layer,
+      locale: Array.isArray(layerParams.locale)
+        ? [...layerParams.locale]
+        : layerParams.locale,
+      user,
+    });
 
-  // Admin endpoints set the user.roles property to true to bypass role checks. The inspection context prevents query templates from role restricted objects being registered in the workspace.templates{} object.
-  const layer = await inspection.run(store, () =>
-    getLayer({ ...layerParams, user: { roles: true } }),
-  );
+  const store = { scopes: new Set() };
 
-  if (layer instanceof Error) return [];
+  return inspection.run(store, async () => {
+    // Admin endpoints set the user.roles property to true to bypass role checks. The composition collects the template scopes in the inspection store.
+    const layer = await composeLayer({ roles: true });
 
-  const layerFields = layerFieldsSet(layer);
+    if (layer instanceof Error) return [];
 
-  // Role templates may override the same property. The fields of every role template must be checked.
-  for (const alternative of store.alternatives) {
-    fieldsValueSet(alternative, layerFields);
-  }
+    const layerFields = new Set();
 
-  return fields.filter((field) => layerFields.has(field));
+    // The empty scope is composed without roles.
+    for (const scope of new Set(['', ...store.scopes])) {
+      const scopeLayer = await composeLayer(
+        scope ? { roles: [scope] } : undefined,
+      );
+
+      // Access to the layer is denied for the scope.
+      if (scopeLayer instanceof Error) continue;
+
+      layerFieldsSet(scopeLayer).forEach((field) => layerFields.add(field));
+    }
+
+    return fields.filter((field) => layerFields.has(field));
+  });
 }
 
 /**
