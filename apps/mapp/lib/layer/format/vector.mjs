@@ -307,7 +307,6 @@ function reload() {
         // An error will be returned if the xhr fails with a bad request 400.
         if (features instanceof Error) return;
 
-        // The xhr promise resolves once the layer.Features have been set.
         await this.setSource(features);
       })
       .finally(() => {
