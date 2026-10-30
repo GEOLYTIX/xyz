@@ -1,10 +1,10 @@
 /** 
-### /plugins/userIDB
+## /ui/plugins/userIDB
 
 The plugin provides a JSON editor interface for the userIndexedDB 'user' store.
 
 @requires /utils/userIndexedDB
-@module /plugins/userIDB
+@module /ui/plugins/userIDB
 */
 
 /**

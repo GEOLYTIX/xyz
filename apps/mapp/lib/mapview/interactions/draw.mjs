@@ -3,8 +3,11 @@
 
 The module exports the draw interaction method which is bound to a mapview in the [decorator]{@link module:/mapview~decorate} method.
 
+@requires /mapview/contextMenu
 @module /mapview/interactions/draw
 */
+
+import contextMenu from '../contextMenu.mjs';
 
 /**
 @function draw
@@ -55,7 +58,7 @@ export default function draw(params, mapview = this) {
       }
     },
 
-    drawend: mapp.ui?.elements.contextMenu.draw.bind(this),
+    drawend: contextMenu.draw.bind(this),
 
     finish,
 

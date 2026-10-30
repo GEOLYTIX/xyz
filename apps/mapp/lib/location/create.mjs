@@ -65,7 +65,7 @@ export default async function createLocation(feature, interaction, layer) {
     });
   } catch (err) {
     console.error('Error saving location:', err);
-    mapp.ui.elements.alert({ text: mapp.dictionary.location_new_failed });
+    mapp.utils.alert({ text: mapp.dictionary.location_new_failed });
     return;
   }
 

@@ -4,7 +4,7 @@
 The module exports method to display and store configurable user consent.
 
 @requires /utils/userIndexedDB
-@requires /ui/elements/confirm
+@requires /utils/dialogs
 
 @module /plugins/consent
 */
@@ -48,7 +48,7 @@ export async function consent(plugin, mapview) {
 
   plugin.title ??= 'mapp.user.consent';
 
-  mapp.user.consent = await mapp.ui.elements.confirm(plugin);
+  mapp.user.consent = await mapp.utils.confirm(plugin);
 
   if (mapp.user.consent) {
     await mapp.utils.userIndexedDB.put({
