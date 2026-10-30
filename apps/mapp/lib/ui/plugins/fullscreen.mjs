@@ -1,12 +1,12 @@
 /**
-### Fullscreen Plugin
+## /ui/plugins/fullscreen
 
 Dictionary entries:
 - toolbar_fullscreen
 
 @requires /dictionary
 
-@module /plugins/fullscreen
+@module /ui/plugins/fullscreen
  */
 
 /**

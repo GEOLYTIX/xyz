@@ -29,10 +29,10 @@
       display: inline-block;
       white-space: nowrap;
       line-height: 1;
-      background-color: var(--color-base-secondary);
+      background-color: var(--color-base-secondary, #f7f7f7);
       padding: 0 1px;
       border-radius: 2px;
-      border-bottom: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border, #dddddd);
     }
   }
 }
