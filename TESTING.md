@@ -1,38 +1,9 @@
 # Testing
 
-XYZ/MAPP testing is split into 3 sections:
+XYZ/MAPP testing is split into 2 sections:
 
-- CLI [Command Line Interface] tests for endpoints of the XYZ API.
-- Browser based testing of modules bundled into the Mapp library.
-- Integrity tests for workspaces and XYZ process environments.
-
-## Migrating from Codi to Vitest
-
-The server-side (CLI) test suite has been migrated from the [codi-test-framework](https://www.npmjs.com/package/codi-test-framework) to [Vitest](https://vitest.dev/).
-
-Codi was originally used for both browser and server-side tests. It provided `describe`, `it`, `assertTrue`, `assertEqual`, and similar functions, loaded at runtime via ESM from `https://esm.sh/codi-test-framework`. This worked well in the browser where the full `mapp` global and DOM are available, but was a poor fit for server-side unit testing:
-
-- Tests that called `mapp.utils.xhr(...)` could not run without a live Express server and browser environment.
-- There was no mocking system, making it impossible to isolate modules from their dependencies (database connections, file system, external APIs).
-- Test discovery was manual — each file had to be explicitly wired up.
-- There was no coverage reporting, watch mode, or CI integration out of the box.
-
-Vitest solves all of these problems. It is a Vite-native test framework with built-in mocking (`vi.mock`, `vi.fn`), snapshot testing, code coverage (v8 provider), watch mode, parallel execution, and first-class ESM support — which is important since the XYZ codebase is `"type": "module"` throughout.
-
-> [!NOTE] Browser tests (`tests/lib/` and `tests/browser/`) still use Codi because they run inside the application in a real browser with access to the DOM, OpenLayers map, and the `mapp` global. These are loaded by the [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs) and are not part of the Vitest pipeline.
-
-### What changed
-
-Previously, `tests/mod/query.test.mjs` contained a `describe.skip()` block with 5 tests that depended on `mapp.utils.xhr()` — a browser-only function. These tests could never run in Node.js and were effectively dead code in the CI pipeline.
-
-The file has been rewritten as 19 proper server-side unit tests that exercise `mod/query.js` directly by:
-
-- Mocking `mod/utils/dbs.js` with a Proxy so no real PostgreSQL connection is needed.
-- Mocking `mod/user/login.js` to return a 401 with the message key, avoiding view template rendering.
-- Using a dedicated `tests/assets/query_workspace.json` fixture loaded via `checkWorkspaceCache(true)`.
-- Using `createMocks` from `node-mocks-http` to simulate HTTP request/response objects.
-
-The tests now cover template resolution errors, auth checks (login, admin, roles), query execution (single/multiple rows, empty results, database errors), response formatting (reduce, value_only), parameter substitution and SQL injection rejection, invalid database connections, and nonblocking queries.
+- CLI [Command Line Interface] tests for endpoints of the XYZ API, run with [Vitest](https://vitest.dev/).
+- Integrity tests for the workspace and layers of an XYZ instance, run from the workspace API.
 
 ## CLI [Command Line Interface] tests
 
@@ -80,20 +51,23 @@ This runs `varlock run -- vitest run --coverage` and prints a table showing stat
 
 ### Configuration
 
-Vitest is configured via `vitest.config.mjs` at the project root:
+Vitest is configured for the XYZ API via `apps/xyz/vitest.config.mjs`:
 
 ```javascript
-import { defineConfig } from 'vitest/config';
-
 export default defineConfig({
+  root: rootDir,
   test: {
-    include: ['tests/mod/**/*.test.mjs', 'tests/plugins/**/*.test.mjs'],
-    exclude: ['tests/lib/**', 'tests/browser/**', 'tests/_mapp.test.mjs'],
-    setupFiles: ['tests/setup.mjs'],
+    include: [
+      './tests/mod/**/*.test.mjs',
+      './tests/plugins/**/*.test.mjs',
+      './tests/utils/**/*.test.mjs',
+    ],
+    setupFiles: ['./tests/setup.mjs'],
     testTimeout: 10000,
     fileParallelism: true,
     coverage: {
       provider: 'v8',
+      reporter: ['text', 'lcov'],
     },
   },
 });
@@ -101,7 +75,7 @@ export default defineConfig({
 
 Key points:
 
-- Only `tests/mod/**` and `tests/plugins/**` are included. Browser tests (`tests/lib/**`, `tests/browser/**`) are excluded — they use Codi and run in the browser.
+- Only `tests/mod/**`, `tests/plugins/**`, and `tests/utils/**` are included.
 - `tests/setup.mjs` ensures `globalThis.xyzEnv` exists before any test module loads.
 - `tests/scaffold.mjs` provides shared setup helpers which test modules import explicitly, eg. `mockConsole`.
 - Tests run in parallel across files with a 10-second timeout per test.
@@ -413,146 +387,90 @@ The 28 query template files under `mod/workspace/templates/` are almost entirely
 
 Templates at 0%: `cluster`, `cluster_hex`, `geojson`, `mvt`, `mvt_geom`, `wkt`, `location_get`, `location_new`, `location_update`, `location_delete`, `locations_delete`, `location_field_value`, `location_count`, `histogram`, `infotip`, `get_nnearest`, `get_random_location`, `distinct_values`, `distinct_values_json`, `field_max`, `field_min`, `field_minmax`, `field_stats`, `gaz_query`, `st_distance_ab`, `st_distance_ab_multiple`, `st_intersects_ab`, `st_intersects_count`.
 
-## Browser tests for Mapp library modules
+## Integrity tests
 
-Browser tests are designed for the browser environment with full access to:
+Integrity tests check whether the workspace and layers of an XYZ instance are correctly configured against their databases. They are run on a deployed instance or on localhost with the instance's own process environment, and are not part of the Vitest pipeline.
 
-- DOM
-- Mapp library
-- Mapview for loaded application
-- No mocking required for module imports
+### Running integrity tests
 
-Browser tests still use [Codi](https://www.npmjs.com/package/codi-test-framework), which is loaded at runtime via ESM in the [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs). Codi provides `describe`, `it`, `assertTrue`, `assertEqual`, and related assertion functions designed for in-browser execution.
+The integrity test is an admin-only method of the workspace API.
 
-### Running Browser Tests
+`/api/workspace/test` returns the workspace source errors, template warnings, and negated roles.
 
-A [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs) is provided to run tests in the browser.
+`/api/workspace/test?layers=true` additionally checks the queries for every layer in the workspace.
 
-Build the MAPP browser bundles before launching the local test environment:
+| Param | Description |
+|---|---|
+| `layers=true` | Check the queries for every layer in the workspace. |
+| `locale` | Only check the layers in this locale. The key of a nested locale is the comma separated locale keys, eg. `locale=UK,London`. |
+| `layer` | Only check this layer. |
 
-```bash
-NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
+The `locale` and `layer` params are the locale and layer keys, not their names.
+
+### What is checked
+
+For every layer in every locale (layers inherited by nested locales are checked once):
+
+- The layer query template [`mvt`, `wkt`, `geojson`, `cluster`, `cluster_hex`, or `params.template`] for every table in the `table` or `tables` object, with the fields of every theme. A theme `field` and `fields` array are both requested, as in the [featureFields.fieldsArray](apps/mapp/lib/layer/featureFields.mjs) method of the Mapp library.
+- The `location_get` query with the infoj fields, fieldfx, and field templates of a layer with an infoj and a table.
+- The layer dbs connection.
+- Layers which fail to compose, eg. from a missing template or source, and locales which fail to compose.
+
+Queries are rendered by the `buildQuery` method of the query module with the same validation as a query request, and are sent to the database as `EXPLAIN` statements. `EXPLAIN` plans but does not execute a query. No data is read or written by the integrity test.
+
+Errors which depend on the values of a location, eg. a fieldfx cast which fails for some rows, are not detected by an `EXPLAIN` statement.
+
+### Integrity test response
+
+```json
+{
+  "srcErr": [],
+  "templateWarn": [],
+  "negatedRoles": [],
+  "layers": {
+    "start": "2026-10-27T08:00:00.000Z",
+    "end": "2026-10-27T08:00:02.500Z",
+    "duration_ms": 2500,
+    "checked": 214,
+    "failed": 1,
+    "failed_layers": [
+      {
+        "locale": "UK",
+        "layer": "footfall",
+        "start": "2026-10-27T08:00:00.120Z",
+        "end": "2026-10-27T08:00:00.532Z",
+        "duration_ms": 412
+      }
+    ],
+    "errors": [
+      {
+        "locale": "UK",
+        "layer": "footfall",
+        "template": "mvt",
+        "table": "footfall_z10",
+        "themes": ["Mobile Activity By Hour"],
+        "duration_ms": 7,
+        "error": "column \"glx_ff_234\" does not exist"
+      }
+    ]
+  }
+}
 ```
 
-The current tests require an active user to execute.
+Layers which pass are counted as `checked` but are not listed. An error is returned if the `locale` or `layer` param does not match a locale or layer in the workspace.
 
-In order for the tests to run you will need to configure the test object on a locale.
+### Running integrity tests in the browser
+
+The [test plugin](apps/mapp/lib/plugins/test.mjs) requests the integrity test for the current locale when the `test=integrity` url param is provided, eg. `/?test=integrity`. The plugin requires a `test` object on the locale and a user with admin credentials.
 
 ```json
 "test": {
-  "options": {
-    "quiet": true,
-    "showSummary": true
-  }
-},
+  "quiet": true,
+  "showSummary": true
+}
 ```
 
-To run the different tests you can provide the `test` param as part of the url params.
+- `quiet` - template warnings are not logged. Defaults to false.
+- `showSummary` - the report of the test is logged. Defaults to true.
 
-eg.
-
-`/?test=core` - run the core front end tests
-`/?test=integrity` - run the integrity tests
-
-- `core` - `mapp` object tests
-- `integrity` - workspaces and XYZ process environments tests
-
-### Writing Browser Tests
-
-#### Test Structure
-
-Browser tests use the describe-it pattern for organization:
-
-```javascript
-import { describe, it, assertTrue } from 'codi';
-
-describe({ name: 'Feature Description', id: 'feature_description' }, () => {
-  it(
-    {
-      name: 'should behave in a specific way',
-      parentId: 'feature_description',
-    },
-    () => {
-      // Test code
-    },
-  );
-});
-```
-
-Example with multiple assertions:
-
-```javascript
-codi.describe(
-  {
-    name: 'All languages should have the same base language entries',
-    id: 'dictionaries',
-  },
-  () => {
-    Object.keys(mapp.dictionaries).forEach((language) => {
-      codi.it(
-        {
-          name: `The ${language} dictionary should have all the base keys`,
-          parentId: 'dictionaries',
-        },
-        () => {
-          Object.keys(base_dictionary).forEach((key) => {
-            codi.assertTrue(
-              !!mapp.dictionaries[language][key],
-              `${language} should have ${key}`,
-            );
-          });
-        },
-      );
-    });
-  },
-);
-```
-
-### Browser Tests Development Environment Setup
-
-#### Build Configuration
-
-Tests require an unminified build to enable debugging and stepping through code. This is handled by the build system (`apps/mapp/vite.config.mjs`).
-
-Setting process environment `NODE_ENV=DEVELOPMENT` disables minification in build processes.
-
-```bash
-NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
-```
-
-### Running Tests in Development Mode
-
-1. Set the environment variable:
-
-   ```bash
-   NODE_ENV=DEVELOPMENT
-   ```
-
-   > This can be defined in your .env or in your nodemon.json config.
-
-2. Build the project:
-
-   ```bash
-   pnpm build --filter=@geolytix/mapp
-   ```
-
-3. Verify that:
-   - Source maps are generated
-   - Code is not minified
-
-4. Launch the application and navigate to `localhost:3000/test?template=test_view`
-
-5. Open Chrome DevTools to:
-   - View test results in the console
-   - Debug and step through unminified code
-   - Use source maps for accurate file locations
-
-### Debugging Benefits
-
-The unminified development build provides several advantages:
-
-- Clear, readable code in Chrome DevTools
-- Accurate source mapping to original files
-- Ability to set breakpoints in original source files
-- Step-through debugging from Chrome to VSCode
-- Easier identification of test failures
+The result is logged to the browser console as a single group with one table of the source errors, locale and layer errors, and template warnings, followed by a report of the layers checked, errors, and the timing of the test.

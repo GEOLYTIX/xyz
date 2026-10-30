@@ -6,6 +6,7 @@ The Workspace API module exports the getKeyMethod() which returns a method from 
 @requires /workspace/getLocale
 @requires /workspace/getLayer
 @requires /workspace/getTemplate
+@requires /workspace/integrity
 @requires /utils/telemetry
 @requires crypto
 
@@ -33,6 +34,7 @@ import { setRequestAttributes } from '../utils/telemetry.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
 import getLocale from './getLocale.js';
+import integrity from './integrity.js';
 import { getScopes, scopesArray, scopesTree } from './scopes.js';
 
 const keyMethods = {
@@ -347,12 +349,17 @@ async function nestedLocales(cachedWorkspace, locale, user) {
 @description
 The test method is an admin-only endpoint that checks the workspace sources for errors and warnings.
 
+The layers param will check the queries for every layer in the workspace with the integrity module. The check can be restricted with the locale and layer params.
+
 @param {req} req HTTP request.
 @param {req} res HTTP response.
 
 @property {Object} req.params HTTP request params.
 @property {Object} params.user User requesting the test method.
 @property {boolean} params.user.admin Whether user has admin privileges (required).
+@property {boolean} [params.layers] Check the queries for every layer in the workspace.
+@property {string} [params.locale] Restrict the layers check to a locale.
+@property {string} [params.layer] Restrict the layers check to a layer.
 */
 async function test(req, res) {
   if (!req.params.user?.admin) {
@@ -387,6 +394,10 @@ async function test(req, res) {
     templateWarn,
     negatedRoles: Array.from(negatedRoles).sort((a, b) => a.localeCompare(b)),
   };
+
+  if (req.params.layers) {
+    testResult.layers = await integrity(cachedWorkspace, req.params);
+  }
 
   res.setHeader('content-type', 'application/json');
 

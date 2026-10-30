@@ -1,0 +1,190 @@
+{
+  "dbs": "DEVDB",
+  "templates": {
+    "multi_statement": {
+      "template": "SELECT id FROM example.locations; DELETE FROM example.log",
+      "layer": true
+    }
+  },
+  "locales": {
+    "europe": {
+      "locales": ["berlin"],
+      "layers": {
+        "features_mvt": {
+          "format": "mvt",
+          "table": "example.features",
+          "geom": "geom",
+          "srid": "3857",
+          "qID": "id",
+          "style": {
+            "label": {
+              "field": "name"
+            },
+            "themes": {
+              "category": {
+                "type": "categorized",
+                "field": "category"
+              },
+              "name": {
+                "type": "categorized",
+                "field": "name"
+              },
+              "name_too": {
+                "type": "categorized",
+                "field": "name"
+              }
+            }
+          },
+          "infoj": [
+            {
+              "field": "name"
+            },
+            {
+              "field": "category"
+            }
+          ]
+        },
+        "missing_column": {
+          "format": "wkt",
+          "table": "example.locations",
+          "geom": "geom",
+          "srid": "4326",
+          "qID": "id",
+          "style": {
+            "themes": {
+              "category": {
+                "type": "categorized",
+                "field": "category"
+              },
+              "turnover": {
+                "type": "graduated",
+                "field": "turnover"
+              },
+              "field_and_fields": {
+                "type": "categorized",
+                "field": "category",
+                "fields": ["name", "footfall"]
+              }
+            }
+          }
+        },
+        "missing_table": {
+          "format": "mvt",
+          "tables": {
+            "5": null,
+            "8": "example.features",
+            "12": "example.missing_table",
+            "14": "example.missing_table"
+          },
+          "geom": "geom",
+          "srid": "3857",
+          "qID": "id"
+        },
+        "bad_fieldfx": {
+          "format": "wkt",
+          "table": "example.locations",
+          "geom": "geom",
+          "srid": "4326",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "name"
+            },
+            {
+              "field": "name_number",
+              "fieldfx": "name + 1"
+            }
+          ]
+        },
+        "data_fieldfx": {
+          "format": "wkt",
+          "table": "example.locations",
+          "geom": "geom",
+          "srid": "4326",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "name"
+            },
+            {
+              "field": "name_number",
+              "fieldfx": "name::numeric"
+            }
+          ]
+        },
+        "unknown_dbs": {
+          "format": "wkt",
+          "dbs": "BOGUS",
+          "table": "example.locations",
+          "geom": "geom",
+          "srid": "4326",
+          "qID": "id"
+        },
+        "missing_geom": {
+          "format": "wkt",
+          "table": "example.locations",
+          "geom": "geom",
+          "geoms": {
+            "0": "geom",
+            "10": "missing_geom"
+          },
+          "srid": "4326",
+          "qID": "id"
+        },
+        "multi_statement": {
+          "format": "wkt",
+          "table": "example.locations",
+          "geom": "geom",
+          "srid": "4326",
+          "qID": "id",
+          "params": {
+            "template": "multi_statement"
+          }
+        },
+        "uuid_qid": {
+          "format": "wkt",
+          "table": "example.uuid_locations",
+          "geom": "geom",
+          "srid": "4326",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "name"
+            }
+          ]
+        },
+        "no_table": {
+          "format": "wkt",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "name"
+            }
+          ]
+        },
+        "bad.key": {
+          "format": "wkt",
+          "table": "example.locations",
+          "geom": "geom",
+          "srid": "4326",
+          "qID": "id"
+        },
+        "basemap": {
+          "format": "tiles",
+          "URI": "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        }
+      }
+    },
+    "berlin": {
+      "layers": {
+        "locations_geojson": {
+          "format": "geojson",
+          "table": "example.locations",
+          "geom": "geom",
+          "srid": "4326",
+          "qID": "id"
+        }
+      }
+    }
+  }
+}

@@ -52,91 +52,17 @@ The rows returned from the dbs_connection are then passed to the sendRows() meth
 export default async function query(req, res) {
   Object.assign(req.params, req._params);
 
-  // Get workspace from cache.
-  req.params.workspace = await workspaceCache();
+  const built = await buildQuery(req);
 
-  // Assign reserved request params.
-  Object.assign(req.params, {
-    infojMap: new Map(),
-    missing: [],
-    optional: new Set(['viewport', 'filter']),
-    SQL: [],
-  });
-
-  await layerQuery(req, res);
-
-  // The layerQuery method will have sent an error response.
-  if (res.finished) return;
-
-  // Must be run after the layerQuery method since the query template could be defined within the layer [template].
-  const template = await composeObj(
-    { template: req.params.template },
-    req.params.user,
-  );
-
-  if (template instanceof Error) {
-    console.log(template.message);
+  if (built instanceof Error) {
     res
-      .status(400)
+      .status(built.status ?? 400)
       .setHeader('Content-Type', 'text/plain')
-      .send(template.message);
+      .send(built.message);
     return;
   }
 
-  // A layer template must have a layer param.
-  if (template.layer && !req.params.layer) {
-    res
-      .status(400)
-      .setHeader('Content-Type', 'text/plain')
-      .send(
-        `${req.params.template} query requires a valid layer request parameter.`,
-      );
-    return;
-  }
-
-  // The template requires the admin role for the user.
-  if (template.admin && !req.params.user?.admin) {
-    res
-      .status(401)
-      .setHeader('Content-Type', 'text/plain')
-      .send(`${req.params.template} query requires admin credentials.`);
-    return;
-  }
-
-  // Use layer dbs if defined, or workspace dbs, or provided dbs in the query.
-  template.dbs ??= req.params.layer?.dbs || req.params.workspace.dbs;
-
-  // Validate that the dbs string exists as a stored connection method in dbs_connections.
-  if (!Object.hasOwn(dbs_connections, template.dbs)) {
-    res
-      .status(400)
-      .setHeader('Content-Type', 'text/plain')
-      .send('Failed to validate database connection method.');
-    return;
-  }
-
-  template.value_only ??= req.params.value_only;
-
-  template.reduce ??= req.params.reduce;
-
-  template.nonblocking ??= req.params.nonblocking;
-
-  setRequestAttributes({
-    'xyz.query.template': template.key ?? req.params.template,
-    'xyz.layer': req.params.layer?.key,
-    'xyz.dbs': template.dbs,
-  });
-
-  logger(req.params, 'query_params');
-
-  const query = getQueryFromTemplate(req, template);
-
-  if (query instanceof Error) {
-    res.status(400).setHeader('Content-Type', 'text/plain').send(query.message);
-    return;
-  }
-
-  logger(query, 'query');
+  const { template, query } = built;
 
   // The dbs module ignores params.locals, which a connection replaced by the host may read.
   const params = {
@@ -169,6 +95,123 @@ export default async function query(req, res) {
 }
 
 /**
+@function buildQuery
+@async
+
+@description
+The buildQuery method validates the request params and renders the [SQL] query string for a query template without executing it.
+
+The method is used by the query method and by the workspace integrity test to render queries for layers in the workspace.
+
+The layerQuery() method must be awaited to check whether params are referenced in a role restricted JSON layer.
+
+The query template is composed and checked for layer, admin, and dbs requirements.
+
+The query string is returned from the getQueryFromTemplate() method. Variables to be substituted in the database are assigned to the req.params.SQL[] array.
+
+An error with a HTTP status property is returned if the validation fails.
+
+@param {req} req HTTP request or an object with params [and body].
+@property {Object} req.params Request params.
+@property {Object} [params.user] Requesting user.
+@property {boolean} [params.value_only] Return a single value from one row.
+@property {boolean} [params.reduce] Reduce query response to a values array.
+@property {boolean} [params.nonblocking] Execute a nonblocking query.
+@returns {Promise<Object|Error>} The composed template and query string, or an error with a status property.
+*/
+export async function buildQuery(req) {
+  // Get workspace from cache.
+  req.params.workspace = await workspaceCache();
+
+  // Assign reserved request params.
+  Object.assign(req.params, {
+    infojMap: new Map(),
+    missing: [],
+    optional: new Set(['viewport', 'filter']),
+    SQL: [],
+  });
+
+  const layerErr = await layerQuery(req);
+
+  if (layerErr instanceof Error) return layerErr;
+
+  // Must be run after the layerQuery method since the query template could be defined within the layer [template].
+  const template = await composeObj(
+    { template: req.params.template },
+    req.params.user,
+  );
+
+  if (template instanceof Error) {
+    console.log(template.message);
+    return statusError(400, template.message);
+  }
+
+  // A layer template must have a layer param.
+  if (template.layer && !req.params.layer) {
+    return statusError(
+      400,
+      `${req.params.template} query requires a valid layer request parameter.`,
+    );
+  }
+
+  // The template requires the admin role for the user.
+  if (template.admin && !req.params.user?.admin) {
+    return statusError(
+      401,
+      `${req.params.template} query requires admin credentials.`,
+    );
+  }
+
+  // Use layer dbs if defined, or workspace dbs, or provided dbs in the query.
+  template.dbs ??= req.params.layer?.dbs || req.params.workspace.dbs;
+
+  // Validate that the dbs string exists as a stored connection method in dbs_connections.
+  if (!Object.hasOwn(dbs_connections, template.dbs)) {
+    return statusError(400, 'Failed to validate database connection method.');
+  }
+
+  template.value_only ??= req.params.value_only;
+
+  template.reduce ??= req.params.reduce;
+
+  template.nonblocking ??= req.params.nonblocking;
+
+  setRequestAttributes({
+    'xyz.query.template': template.key ?? req.params.template,
+    'xyz.layer': req.params.layer?.key,
+    'xyz.dbs': template.dbs,
+  });
+
+  logger(req.params, 'query_params');
+
+  const query = getQueryFromTemplate(req, template);
+
+  if (query instanceof Error) {
+    return statusError(400, query.message);
+  }
+
+  logger(query, 'query');
+
+  return { template, query };
+}
+
+/**
+@function statusError
+
+@description
+Returns an error with a HTTP status property for the response.
+
+@param {number} status HTTP status code.
+@param {string} message Error message.
+@returns {Error} Error with status property.
+*/
+function statusError(status, message) {
+  const err = new Error(message);
+  err.status = status;
+  return err;
+}
+
+/**
 @function layerQuery
 @async
 
@@ -183,16 +226,18 @@ Any query which references a layer and locale will be passed through the layer q
 
 The fields request param property may be provided as an array. The string should be replaced with the template property of a matching workspace template.
 
+An error with a HTTP status property is returned if the layer validation fails.
+
 @param {req} req HTTP request.
-@param {res} res HTTP response.
 @property {object} req.params Request params.
 @property {object} [params.filter] JSON filter which must be turned into a SQL filter string for substitution.
 @property {array} params.SQL Substitute parameter for SQL query.
 @property {string} [params.viewport] Viewport string to be split into an array to create a SQL viewport.
 @property {object} [params.user] Requesting user.
 @property {string} [params.layer_template] A layer can be loaded directly from a template not referenced in a locale.
+@returns {Promise<Error|undefined>} An error if the layer validation fails.
 */
-async function layerQuery(req, res) {
+async function layerQuery(req) {
   if (req.params.layer_template) {
     req.params.layer = req.params.layer_template;
   }
@@ -208,11 +253,7 @@ async function layerQuery(req, res) {
 
   // getLayer will return error on role restrictions.
   if (req.params.layer instanceof Error) {
-    res
-      .status(400)
-      .setHeader('Content-Type', 'text/plain')
-      .send(req.params.layer.message);
-    return;
+    return statusError(400, req.params.layer.message);
   }
 
   // Layer queries must have a qID param.
@@ -229,11 +270,10 @@ async function layerQuery(req, res) {
     const tables = new Set(templateTables(req.params.layer));
 
     if (!tables.has(req.params.table)) {
-      res
-        .status(403)
-        .setHeader('Content-Type', 'text/plain')
-        .send(`Access to ${req.params.table} table param forbidden.`);
-      return;
+      return statusError(
+        403,
+        `Access to ${req.params.table} table param forbidden.`,
+      );
     }
   }
 
@@ -254,13 +294,10 @@ async function layerQuery(req, res) {
   if (req.params.viewport) {
     // The viewport condition requires a geom and srid to be substituted in the query string.
     if (!req.params.geom || !req.params.srid) {
-      res
-        .status(400)
-        .setHeader('Content-Type', 'text/plain')
-        .send(
-          `Viewport param requires geom and srid params on ${req.params.layer.key} layer.`,
-        );
-      return;
+      return statusError(
+        400,
+        `Viewport param requires geom and srid params on ${req.params.layer.key} layer.`,
+      );
     }
 
     const viewport = req.params.viewport.split(',');
@@ -278,12 +315,11 @@ async function layerQuery(req, res) {
         ${req.params.geom})`;
   }
 
-  checkFieldsParam(req, res);
+  const fieldsErr = await checkFieldsParam(req);
 
-  // The checkFieldsParam method will have sent an error response.
-  if (res.finished) return;
+  if (fieldsErr instanceof Error) return fieldsErr;
 
-  await infojMap(req, res);
+  await infojMap(req);
 }
 
 /**
@@ -361,13 +397,12 @@ Field values may not be referenced in the layer object from role restricted temp
 The method will return an Error if the fields request param contains a string value which is not referenced in a field prooperty in the layer object.
 
 @param {req} req HTTP request.
-@param {res} res HTTP response.
 @property {object} req.params The request object params.
 @property {string} [params.fields] The request layer object [from template].
 @property {object} params.layer The request layer object [from template].
-@returns {Error} An error will be returned if the check fails.
+@returns {Promise<Error|undefined>} An error with a status property will be returned if the check fails.
 */
-async function checkFieldsParam(req, res) {
+async function checkFieldsParam(req) {
   if (!req.params.fields) return;
 
   const layerFields = new Set();
@@ -387,8 +422,8 @@ async function checkFieldsParam(req, res) {
         `${field} field not accessible on ${req.params.layer.key} layer`,
       );
       console.error(err);
-      res.status(400).setHeader('Content-Type', 'text/plain').send(err.message);
-      return;
+      err.status = 400;
+      return err;
     }
 
     let value = field;
@@ -459,11 +494,10 @@ The method iterates over the layer.infoj entries and only assigns entry fields v
 A lookup of template [SQL] strings is attempted only if the template is defined in the entry object.
 
 @param {req} req HTTP request.
-@param {res} res HTTP response.
 @property {object} req.params The request params.
 @property {object} params.layer The layer object assigned by the layerQuery
 */
-async function infojMap(req, res) {
+async function infojMap(req) {
   if (!req.params.layer.infoj) return;
 
   for (const entry of req.params.layer.infoj) {
