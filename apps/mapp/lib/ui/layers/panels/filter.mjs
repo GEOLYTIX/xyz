@@ -317,7 +317,7 @@ Within the debounce the location count will be executed. The min max will be gen
 
 The queries are skipped if the filter are not restricted to the viewport and the serialised current filter has not changed since the last location count. The last location count will be displayed instead.
 
-A location count is discarded if the current filter has changed while the count was pending. The count for the current filter will be shown by the following updatePanel call.
+Each updatePanel call increments the filter.countGeneration. A location count is discarded if updatePanel was called again while the count was pending, eg. for a filter or viewport change. The count will be shown by the following updatePanel call.
 
 @param {Object} layer
 @property {Object} layer.filter The layer filter configuration.
@@ -326,15 +326,22 @@ A location count is discarded if the current filter has changed while the count 
 @property {HTMLElement} filter.count The location count element in the filter panel.
 @property {String} [filter.countedFilter] The serialised current filter of the last location count.
 @property {String} [filter.countValue] The formatted value of the last location count.
+@property {Number} [filter.countGeneration] Incremented on each updatePanel call to discard outdated location counts.
 */
 function updatePanel(layer) {
   if (!layer.display) return;
 
   clearTimeout(layer.filter.debounce);
 
+  // A location count from an earlier updatePanel call is outdated.
+  layer.filter.countGeneration = (layer.filter.countGeneration ?? 0) + 1;
+
+  const generation = layer.filter.countGeneration;
+
   // The location count is pending until updated within the debounce.
   if (!countUnchanged(layer, JSON.stringify(layer.filter.current))) {
     layer.filter.count.innerText = '?';
+    layer.filter.feature_count.style.setProperty('display', 'block');
   }
 
   // Debounce updatePanel queries by a second.
@@ -374,8 +381,8 @@ function updatePanel(layer) {
       // A failed location count must not be cached.
       if (feature_count === undefined) return;
 
-      // The count is outdated if the filter changed while the count was pending.
-      if (current !== JSON.stringify(layer.filter.current)) return;
+      // The count is outdated if the filter or viewport changed while the count was pending.
+      if (generation !== layer.filter.countGeneration) return;
 
       layer.filter.countedFilter = current;
 

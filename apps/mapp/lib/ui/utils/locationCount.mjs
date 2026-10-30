@@ -13,7 +13,7 @@ Returns the length of the layer.Features[] array or the response from a layer_co
 
 The layer.Features[] array length is returned if the filter is not restricted to the viewport, or if the layer features have been loaded for the viewport. Cluster layer features are not counted as locations.
 
-The layer.xhr data request must resolve before the layer.Features[] array can be counted. The previous layer.Features[] would otherwise be counted while the request for the current filter is still pending.
+The layer.xhr data request must resolve before the layer.Features[] array can be counted. The previous layer.Features[] would otherwise be counted while the request for the current filter is still pending. The location_count query does not wait for the layer.xhr data request.
 @param {layer} layer
 @property {Promise} [layer.xhr] The current layer data request.
 @property {String} layer.key The layers' identifier.
@@ -26,17 +26,17 @@ The layer.xhr data request must resolve before the layer.Features[] array can be
 @returns {Integer} The number of locations that pass the filter.
 */
 export default async function locationCount(layer) {
-  // Wait for the current layer data request to set the layer.Features.
-  await layer.xhr;
-
   // The Features array can be counted if the features are not required to be restricted to the viewport, or if the features have been loaded for the viewport.
   // Cluster features must not be counted as locations.
-  if (
-    Array.isArray(layer.Features) &&
+  const countFeatures =
     layer.format !== 'cluster' &&
-    (!layer.filter?.viewport || layer.params?.viewport)
-  ) {
-    return layer.Features.length;
+    (!layer.filter?.viewport || layer.params?.viewport);
+
+  if (countFeatures) {
+    // Wait for the current layer data request to set the layer.Features.
+    await layer.xhr;
+
+    if (Array.isArray(layer.Features)) return layer.Features.length;
   }
 
   //Whether or not to use the viewport in the query
