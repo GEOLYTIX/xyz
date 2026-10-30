@@ -479,14 +479,16 @@ async function roleRestrictedFields(fields, layerParams) {
 
     if (layer instanceof Error) return [];
 
+    // The empty scope is composed without roles.
+    const scopeLayers = await Promise.all(
+      [...new Set(['', ...store.scopes])].map((scope) =>
+        composeLayer(scope ? { roles: [scope] } : undefined),
+      ),
+    );
+
     const layerFields = new Set();
 
-    // The empty scope is composed without roles.
-    for (const scope of new Set(['', ...store.scopes])) {
-      const scopeLayer = await composeLayer(
-        scope ? { roles: [scope] } : undefined,
-      );
-
+    for (const scopeLayer of scopeLayers) {
       // Access to the layer is denied for the scope.
       if (scopeLayer instanceof Error) continue;
 
