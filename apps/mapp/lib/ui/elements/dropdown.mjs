@@ -165,7 +165,10 @@ function selectOnChange(e, params) {
         placeholderTitles || params.placeholder;
     }
 
-    params.callback?.(e, [...params.selectedOptions], entry);
+    // The pills element will fire the callback.
+    if (!params.pills) {
+      params.callback?.(e, [...params.selectedOptions], entry);
+    }
 
     // return if params.multi
     return;
@@ -235,31 +238,34 @@ Assign a pills element to the params.pills property. Removing a pill unselects t
 @property {Array} params.options The option elements including the placeholder option at index 0.
 @property {Set} params.selectedTitles A set of titles from currently selected dropdown items.
 @property {Set} params.selectedOptions A set of options from currently selected dropdown items.
-@property {function} [params.callback] Called with the array of pills when a pill is added or removed.
+@property {function} [params.callback] Called with the array of selected options when a pill is added or removed.
 */
 function pillsElement(params) {
   if (!params.pills) return;
 
   params.pills = mapp.ui.elements.pills({
-    addCallback: (val, pills) => {
-      params.callback?.(null, [...pills]);
+    addCallback: () => {
+      params.callback?.(null, [...params.selectedOptions]);
     },
     pills: [...params.selectedTitles],
-    removeCallback: (val, pills) => {
-      const entry = params.entries.findIndex((entry) => entry.option === val);
+    removeCallback: (val) => {
+      // Pills are created from entry titles.
+      const index = params.entries.findIndex((entry) => entry.title === val);
 
-      // Add one to the index to account for the placeholder option.
-      const index =
-        params.entries.findIndex((entry) => entry.option === val) + 1;
+      const entry = params.entries[index];
 
-      // Remove the selected class from the option element and entry
-      params.entries.find((entry) => entry.option === val).selected = false;
-      params.options[index].classList.remove('selected');
+      if (entry) {
+        // Remove the selected class from the option element and entry
+        entry.selected = false;
 
-      params.selectedTitles.delete(entry.title);
-      params.selectedOptions.delete(entry.option);
+        // Add one to the index to account for the placeholder option.
+        params.options[index + 1].classList.remove('selected');
 
-      params.callback?.(null, [...pills]);
+        params.selectedTitles.delete(entry.title);
+        params.selectedOptions.delete(entry.option);
+      }
+
+      params.callback?.(null, [...params.selectedOptions]);
     },
   });
 }
