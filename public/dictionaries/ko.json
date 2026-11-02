@@ -3,6 +3,7 @@
   "circle_config": "원의 구성",
   "confirm": "확인하다",
   "confirm_delete": "이 기능을 삭제하시겠습니까? 이것은 되돌릴 수 없습니다.",
+  "consent_title": "동의",
   "create": "만들다",
   "csv_upload_failed": "데이터 가져오기에 실패했습니다. 다시 시도해 주세요.",
   "csv_upload_import": "CSV에서 가져오기",
