@@ -3,6 +3,7 @@
   "circle_config": "Zirkel Einstellung",
   "confirm": "Bestätigen",
   "confirm_delete": "Bestätigung des Löschvorgang",
+  "consent_title": "Einwilligung",
   "create": "Erstellen",
   "delete_geometry": "Geometrie entfernen",
   "delete_vertex": "Entferne Scheitelpunkt",

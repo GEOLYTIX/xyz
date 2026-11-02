@@ -3,6 +3,7 @@
   "circle_config": "圆形配置",
   "confirm": "确认",
   "confirm_delete": "您确定要删除此特性吗？此操作无法撤回。",
+  "consent_title": "同意",
   "create": "创建",
   "delete_geometry": "删除几何",
   "delete_vertex": "移除顶点",
