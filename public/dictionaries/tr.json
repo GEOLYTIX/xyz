@@ -3,6 +3,7 @@
   "circle_config": "Daire yapılandırması",
   "confirm": "Onayla",
   "confirm_delete": "Bu özelliği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+  "consent_title": "Rıza",
   "create": "Oluştur",
   "csv_upload_failed": "Veri aktarımı başarısız oldu, lütfen tekrar deneyin.",
   "csv_upload_import": "CSV'den İçe Aktar",

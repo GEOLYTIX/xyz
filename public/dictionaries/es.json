@@ -3,6 +3,7 @@
   "circle_config": "Configuración del círculo",
   "confirm": "Confirmar",
   "confirm_delete": "¿Estas seguro que quieres borrarlo? No se puede deshacer.",
+  "consent_title": "Consentimiento",
   "create": "Crear",
   "delete_geometry": "Eliminar geometría",
   "delete_vertex": "Eliminar vértice",
