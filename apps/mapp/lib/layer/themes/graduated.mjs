@@ -21,15 +21,16 @@ A value outside the category range is assigned the nearest category by value: th
 @property {Array} [properties.features] An array of sub-features.
 */
 // Matched by value, not order, since jenks assigns values in ascending order after the sort.
+// Categories without a value are NaN after Number(cat.value) in the styleParser and never match.
 const graduated_breaks = {
   // The category with the highest value less than or equal to the field value.
   greater_than: (val) => (match, cat) => {
-    if (!(val >= cat.value)) return match;
+    if (Number.isNaN(cat.value) || val < cat.value) return match;
     return match?.value > cat.value ? match : cat;
   },
   // The category with the lowest value greater than or equal to the field value.
   less_than: (val) => (match, cat) => {
-    if (!(val <= cat.value)) return match;
+    if (Number.isNaN(cat.value) || val > cat.value) return match;
     return match?.value < cat.value ? match : cat;
   },
 };
