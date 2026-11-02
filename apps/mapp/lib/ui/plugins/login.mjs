@@ -1,7 +1,7 @@
 /**
-### /plugins/login
+## /ui/plugins/login
 
-@module /plugins/login
+@module /ui/plugins/login
 */
 
 /**

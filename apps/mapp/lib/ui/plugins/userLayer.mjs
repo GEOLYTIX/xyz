@@ -1,11 +1,11 @@
 /**
-## /plugins/userLayer
+## /ui/plugins/userLayer
 
 The plugin module provides developers a jsoneditor interface to add new layers in the default view.
 
 @requires /ui/utils/layerJSE
 
-@module /plugins/userLayer
+@module /ui/plugins/userLayer
 */
 
 /**
@@ -21,9 +21,6 @@ The jsoneditor dialog allows to validate a layer json configuration to add as us
 @param {mapview} mapview The mapview to which a user layer should be added.
 */
 export async function userLayer(plugin, mapview) {
-  // The mapp.ui lib must be loaded.
-  if (!mapp.ui?.utils.layerJSE) return;
-
   plugin.layersNode = document.getElementById('layers');
 
   if (!plugin.layersNode) return;

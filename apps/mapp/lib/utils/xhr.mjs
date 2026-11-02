@@ -85,6 +85,9 @@ export function xhr(params) {
       resolve(result);
     };
 
+    // A network error would otherwise leave the request promise pending.
+    xhr.onerror = () => reject(new Error('Network error'));
+
     if (debounce(xhr, params, reject)) return;
 
     // Send request if not debounced.

@@ -12,7 +12,10 @@ Exports the default locationCount utility method as mapp.ui.utils.locationCount(
 Returns the length of the layer.Features[] array or the response from a layer_count query.
 
 The layer.Features[] array length is returned if the filter is not restricted to the viewport, or if the layer features have been loaded for the viewport. Cluster layer features are not counted as locations.
+
+The layer.loading promise must resolve before the layer.Features[] array can be counted. The previous layer.Features[] would otherwise be counted while the request for the current filter is still pending. The layer.loading promise is assigned by the vector layer reload method before the request is debounced, and resolves once the features of the latest request have been set. The location_count query does not wait for the layer data to load.
 @param {layer} layer
+@property {Promise} [layer.loading] Resolves once the features of the latest layer data request have been set.
 @property {String} layer.key The layers' identifier.
 @property {String} layer.format The layer format.
 @property {Object} layer.filter The filter currently active on the layer.
@@ -25,12 +28,15 @@ The layer.Features[] array length is returned if the filter is not restricted to
 export default async function locationCount(layer) {
   // The Features array can be counted if the features are not required to be restricted to the viewport, or if the features have been loaded for the viewport.
   // Cluster features must not be counted as locations.
-  if (
-    Array.isArray(layer.Features) &&
+  const countFeatures =
     layer.format !== 'cluster' &&
-    (!layer.filter?.viewport || layer.params?.viewport)
-  ) {
-    return layer.Features.length;
+    (!layer.filter?.viewport || layer.params?.viewport);
+
+  if (countFeatures) {
+    // Wait for the latest layer data request to set the layer.Features.
+    await layer.loading;
+
+    if (Array.isArray(layer.Features)) return layer.Features.length;
   }
 
   //Whether or not to use the viewport in the query

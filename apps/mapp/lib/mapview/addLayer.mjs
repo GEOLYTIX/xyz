@@ -21,7 +21,7 @@ A layer with a valid format property will be decorated and added to the mapview.
 
 Layer with a display flag will shown in the mapview.
 
-A renderComplete event will be assigned to the Openlayers mapview.Map{}. This promise will resolve once after all layer to be shown in the addLayer method have completed their render.
+A mapview.renderComplete promise is assigned which resolves on the next rendercomplete event of the Openlayers mapview.Map{}. The Openlayers Map dispatches the rendercomplete event once the tiles have loaded and no visible layer source is loading. Vector layer sources are loading until the features of their latest request have been set. The promise will therefore resolve once all layers shown in the addLayer method have loaded their data and completed their render.
 
 @param {object} layers A single JSON layer or an array of JSON layer to be added to the mapview.
 
@@ -68,7 +68,7 @@ export default async function addLayer(layers = []) {
     layer.display && layer.show();
   }
 
-  // Will resolve once the map has completed render.
+  // Will resolve once the shown layers have loaded and the map has completed render.
   this.renderComplete = new Promise((resolve) => {
     this.Map.once('rendercomplete', resolve);
   });

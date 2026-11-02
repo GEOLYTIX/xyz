@@ -4,6 +4,7 @@ export default {
   confirm: 'Confirm',
   confirm_delete:
     'Are you sure you want to delete this feature? \nThis cannot be undone.',
+  consent_title: 'Consent',
   create: 'Create',
   csv_upload_failed: 'Data import failed, please try again.',
   csv_upload_import: 'Import From CSV',

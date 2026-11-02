@@ -1,5 +1,5 @@
 /**
-## /plugins/feature_info
+## /ui/plugins/feature_info
 
 The feature_info plugin module exports the feature_info plugin method.
 
@@ -10,7 +10,7 @@ Dictionary entries:
 @requires /mapview/interactions/highlight
 @requires /mapview/popup
 
-@module /plugins/feature_info
+@module /ui/plugins/feature_info
 */
 
 /**

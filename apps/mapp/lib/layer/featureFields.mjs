@@ -78,8 +78,8 @@ export async function process(layer) {
 
     layer.L.changed();
 
-    // The legend method renders into the layer.style.legend
-    mapp.ui.layers.drawLegend(layer);
+    // The ui library replaces the mapp.layer.drawLegend method to render into the layer.style.legend
+    mapp.layer.drawLegend(layer);
   }
 }
 
@@ -89,7 +89,7 @@ export async function process(layer) {
 @description
 The distributionReady method checks whether the legend for the current layer theme can be drawn.
 
-A theme without a data distribution can always be drawn. A theme with a data distribution can only be drawn once its distribution has been processed from the current layer data. The legend of such a theme is drawn by the process method once the data has been received.
+A theme without a data distribution can always be drawn. A theme with a data distribution can only be drawn once its distribution has been processed from the current layer data. The process method calls mapp.layer.drawLegend() once the data has been received.
 
 @param {layer} layer A decorated mapp layer object.
 @property {Object} [style.theme] The current theme.

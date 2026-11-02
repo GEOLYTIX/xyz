@@ -4,6 +4,7 @@ packages:
   - apps/saml
   - apps/xyz
   - packages/devdb
+  - packages/testview
 allowBuilds:
   bcrypt: true
   esbuild: true

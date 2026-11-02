@@ -1,9 +1,9 @@
 /**
-### /plugins/userLocale
+## /ui/plugins/userLocale
 
 The userLocale plugin allows to open a dialog for the userLocale element.
 
-@module /plugins/userLocale
+@module /ui/plugins/userLocale
 */
 
 /**

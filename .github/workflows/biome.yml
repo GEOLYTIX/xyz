@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Setup Biome
-        uses: biomejs/setup-biome@a05c02a1304287da45f13648675a70d5841acdbc
+        uses: biomejs/setup-biome@4c91541eaada48f67d7dbd7833600ce162b68f51
         with:
           version: 2.2.6
       - name: Run Biome

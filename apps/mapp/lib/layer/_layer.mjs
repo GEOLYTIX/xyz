@@ -4,6 +4,7 @@
 The layer module imports the Mapp layer decorator method and utility methods to render Mapp layer in an Openlayers mapview.Map object.
 
 @requires /layer/decorate
+@requires /layer/drawLegend
 @requires /layer/fade
 @requires /layer/featureFields
 @requires /layer/featureFormats
@@ -31,6 +32,7 @@ A mapp-layer object is a decorated JSON layer object which has been added to a m
 */
 
 import decorate from './decorate.mjs';
+import drawLegend from './drawLegend.mjs';
 import fade from './fade.mjs';
 import * as featureFields from './featureFields.mjs';
 import * as featureFormats from './featureFormats.mjs';
@@ -45,6 +47,7 @@ import graduated from './themes/graduated.mjs';
 
 export default {
   decorate,
+  drawLegend,
   fade,
   featureFields,
   featureFormats,

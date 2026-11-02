@@ -1,0 +1,15 @@
+{
+  "name": "@geolytix/xyz-testview",
+  "description": "A test view for the MAPP library without MAPP.UI, with layers from the devdb PGlite database. Never deployed.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@geolytix/xyz-app": "workspace:*",
+    "@geolytix/xyz-devdb": "workspace:*",
+    "express": "catalog:"
+  }
+}

@@ -165,7 +165,10 @@ function selectOnChange(e, params) {
         placeholderTitles || params.placeholder;
     }
 
-    params.callback?.(e, [...params.selectedOptions], entry);
+    // The pills element will fire the callback.
+    if (!params.pills) {
+      params.callback?.(e, [...params.selectedOptions], entry);
+    }
 
     // return if params.multi
     return;
@@ -235,31 +238,34 @@ Assign a pills element to the params.pills property. Removing a pill unselects t
 @property {Array} params.options The option elements including the placeholder option at index 0.
 @property {Set} params.selectedTitles A set of titles from currently selected dropdown items.
 @property {Set} params.selectedOptions A set of options from currently selected dropdown items.
-@property {function} [params.callback] Called with the array of pills when a pill is added or removed.
+@property {function} [params.callback] Called with the array of selected options when a pill is added or removed.
 */
 function pillsElement(params) {
   if (!params.pills) return;
 
   params.pills = mapp.ui.elements.pills({
-    addCallback: (val, pills) => {
-      params.callback?.(null, [...pills]);
+    addCallback: () => {
+      params.callback?.(null, [...params.selectedOptions]);
     },
     pills: [...params.selectedTitles],
-    removeCallback: (val, pills) => {
-      const entry = params.entries.findIndex((entry) => entry.option === val);
+    removeCallback: (val) => {
+      // Pills are created from entry titles.
+      const index = params.entries.findIndex((entry) => entry.title === val);
 
-      // Add one to the index to account for the placeholder option.
-      const index =
-        params.entries.findIndex((entry) => entry.option === val) + 1;
+      const entry = params.entries[index];
 
-      // Remove the selected class from the option element and entry
-      params.entries.find((entry) => entry.option === val).selected = false;
-      params.options[index].classList.remove('selected');
+      if (entry) {
+        // Remove the selected class from the option element and entry
+        entry.selected = false;
 
-      params.selectedTitles.delete(entry.title);
-      params.selectedOptions.delete(entry.option);
+        // Add one to the index to account for the placeholder option.
+        params.options[index + 1].classList.remove('selected');
 
-      params.callback?.(null, [...pills]);
+        params.selectedTitles.delete(entry.title);
+        params.selectedOptions.delete(entry.option);
+      }
+
+      params.callback?.(null, [...params.selectedOptions]);
     },
   });
 }
@@ -289,13 +295,17 @@ function searchInput(params) {
     placeholder=${placeholder}
     type="search" list=${listId}
     onInput=${(e) => onSearchInput(e, params)}
+    onchange=${(e) => onSearchInput(e, params)}
     onfocus="this.placeholder=''"
     onblur=${(e) => (e.target.placeholder = placeholder)}>`;
 
+  // The zero width space suffix ensures that selecting an option always changes the input value.
   params.searchOptions = [];
   for (const entry of params.entries) {
+    const value = entry.option + '\u200B';
+    const label = entry.title !== entry.option ? entry.title : '';
     const option = mapp.utils.html.node`
-      <option value=${entry.option} data-title=${entry.title}>${entry.title}`;
+      <option value=${value} data-title=${entry.title}>${label}`;
     params.searchOptions.push(option);
   }
   const datalist = mapp.utils.html
@@ -310,13 +320,15 @@ function searchInput(params) {
 @function onSearchInput
 
 @description
-The input event handler for the search input element.
+The input and change event handler for the search input element.
 
 Typed keystrokes are ignored to prevent an exact match being selected while typing, e.g. selecting `1` before `10` can be entered. Only the selection of a datalist option [inputType undefined or 'insertReplacementText'] is processed.
 
+The datalist option values have a zero width space suffix. Selecting an option which matches the typed value would otherwise not change the input value and not fire an input event. The suffix is removed from the input value before matching. The change event [Enter or blur] commits a typed value which matches an entry title.
+
 The entry with a title matching the input value is toggled, added to or removed from the selected sets and pills. The input value is cleared. The callback is called with the array of selected options if no pills element is assigned; otherwise the pills element calls the callback.
 
-@param {Event} e The input event from the search element.
+@param {Event} e The input or change event from the search element.
 @param {Object} params The dropdown element object.
 @property {Array} params.entries The entries available to the dropdown.
 @property {Set} params.selectedTitles A set of titles from currently selected dropdown items.
@@ -329,27 +341,30 @@ function onSearchInput(e, params) {
     return;
   }
 
-  params.entries.forEach((entry) => {
-    if (entry.title === e.target.value) {
-      entry.selected = !entry.selected;
+  const value = e.target.value.replace(/\u200B$/, '');
 
-      if (entry.selected) {
-        params.selectedTitles.add(entry.title);
-        params.selectedOptions.add(entry.option);
-        params.pills?.add(entry.title);
-      } else {
-        params.selectedTitles.delete(entry.title);
-        params.selectedOptions.delete(entry.option);
-        params.pills?.remove(entry.title);
-      }
+  // Only toggle the first entry matching the input value.
+  const entry = params.entries.find((entry) => entry.title === value);
 
-      e.target.value = '';
-      e.target.dispatchEvent(new Event('blur'));
+  if (!entry) return;
 
-      // The pills method will fire a callback method for the option.
-      if (!params.pills) {
-        params.callback?.(e, [...params.selectedOptions]);
-      }
-    }
-  });
+  entry.selected = !entry.selected;
+
+  if (entry.selected) {
+    params.selectedTitles.add(entry.title);
+    params.selectedOptions.add(entry.option);
+    params.pills?.add(entry.title);
+  } else {
+    params.selectedTitles.delete(entry.title);
+    params.selectedOptions.delete(entry.option);
+    params.pills?.remove(entry.title);
+  }
+
+  e.target.value = '';
+  e.target.dispatchEvent(new Event('blur'));
+
+  // The pills method will fire a callback method for the option.
+  if (!params.pills) {
+    params.callback?.(e, [...params.selectedOptions]);
+  }
 }

@@ -41,6 +41,7 @@ import copyToClipboard from './copyToClipboard.mjs';
 import csvDownload from './csvDownload.mjs';
 import csvUpload from './csvUpload.mjs';
 import { dataURLtoBlob } from './dataURLtoBlob.mjs';
+import { alert, confirm } from './dialogs.mjs';
 import * as gazetteer from './gazetteer.mjs';
 import getCurrentPosition from './getCurrentPosition.mjs';
 import { default as hexa } from './hexa.mjs';
@@ -73,7 +74,9 @@ import { default as verticeGeoms } from './verticeGeoms.mjs';
 import { xhr } from './xhr.mjs';
 
 export default {
+  alert,
   compose,
+  confirm,
   convert,
   copyToClipboard,
   csvDownload,

@@ -1,12 +1,12 @@
 /**
-### Locator Plugin
+## /ui/plugins/locator
 
 Dictionary entries:
 - toolbar_current_location
 
 @requires /dictionary
 
-@module /plugins/locator
+@module /ui/plugins/locator
  */
 
 /**

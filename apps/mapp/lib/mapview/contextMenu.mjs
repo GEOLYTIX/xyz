@@ -1,7 +1,12 @@
 /**
-### /ui/elements/contextMenu
+## /mapview/contextMenu
 
-@module /ui/elements/contextMenu
+The module exports the draw and modify context menu methods for the mapview interactions. The context menu is shown in the mapview popup.
+
+@requires /dictionary
+@requires /mapview/popup
+
+@module /mapview/contextMenu
 */
 
 export default {

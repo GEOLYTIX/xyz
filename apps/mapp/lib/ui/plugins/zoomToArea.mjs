@@ -1,12 +1,12 @@
 /**
-### Zoom To Area Plugin
+## /ui/plugins/zoomToArea
 
 Dictionary entries:
 - toolbar_zoom_to_area
 
 @requires /dictionary
 
-@module /plugins/zoomtoArea
+@module /ui/plugins/zoomToArea
 */
 
 /**
