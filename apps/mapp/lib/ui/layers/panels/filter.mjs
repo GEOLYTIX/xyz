@@ -311,11 +311,13 @@ function excludeEntry(layer, entry) {
 @description
 The updatePanel method is triggered either from a layer.showCallbacks[] method or from the mapview.Map changeend event listener. The execution of the queries is therefore debounced to 1 second to prevent multiple expensive queries running at the same time. The method will shortcircuit if the layer is not displayed nor has current filter.
 
-The method will hide the location count prior to the debounce.
+The location count is shown as `?` prior to the debounce if the count has to be updated.
 
 Within the debounce the location count will be executed. The min max will be generated for current integer or numeric filter.
 
 The queries are skipped if the filter are not restricted to the viewport and the serialised current filter has not changed since the last location count. The last location count will be displayed instead.
+
+Each updatePanel call increments the filter.countGeneration. A location count is discarded if updatePanel was called again while the count was pending, eg. for a filter or viewport change. The count will be shown by the following updatePanel call.
 
 @param {Object} layer
 @property {Object} layer.filter The layer filter configuration.
@@ -323,17 +325,33 @@ The queries are skipped if the filter are not restricted to the viewport and the
 @property {Boolean} filter.viewport The filter are restricted to the mapview viewport.
 @property {HTMLElement} filter.count The location count element in the filter panel.
 @property {String} [filter.countedFilter] The serialised current filter of the last location count.
+@property {String} [filter.countValue] The formatted value of the last location count.
+@property {Number} [filter.countGeneration] Incremented on each updatePanel call to discard outdated location counts.
 */
 function updatePanel(layer) {
   if (!layer.display) return;
 
   clearTimeout(layer.filter.debounce);
 
+  // A location count from an earlier updatePanel call is outdated.
+  layer.filter.countGeneration = (layer.filter.countGeneration ?? 0) + 1;
+
+  const generation = layer.filter.countGeneration;
+
+  // The location count is pending until updated within the debounce.
+  if (!countUnchanged(layer, JSON.stringify(layer.filter.current))) {
+    layer.filter.count.innerText = '?';
+    layer.filter.feature_count.style.setProperty('display', 'block');
+  }
+
   // Debounce updatePanel queries by a second.
   layer.filter.debounce = setTimeout(async () => {
     const current = JSON.stringify(layer.filter.current);
 
     if (countUnchanged(layer, current)) {
+      // Restore the last location count which may have been shown as pending.
+      layer.filter.count.innerText = layer.filter.countValue;
+
       // Show the location count in case the layer was hidden in between.
       layer.filter.feature_count.style.setProperty('display', 'block');
       return;
@@ -363,13 +381,16 @@ function updatePanel(layer) {
       // A failed location count must not be cached.
       if (feature_count === undefined) return;
 
+      // The count is outdated if the filter or viewport changed while the count was pending.
+      if (generation !== layer.filter.countGeneration) return;
+
       layer.filter.countedFilter = current;
 
-      const value = mapp.utils.formatNumericValue({
+      layer.filter.countValue = mapp.utils.formatNumericValue({
         value: feature_count,
       });
 
-      layer.filter.count.innerText = value;
+      layer.filter.count.innerText = layer.filter.countValue;
       layer.filter.feature_count.style.setProperty('display', 'block');
     });
   }, 1000);
