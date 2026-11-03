@@ -62,4 +62,31 @@ describe('logger Module', () => {
       time: expect.any(String),
     });
   });
+
+  it('inserts postgresql logs as nonblocking queries without retry', async () => {
+    const dbsQuery = vi.fn(() => Promise.resolve(true));
+    vi.doMock('../../../mod/utils/dbs.js', () => ({
+      default: { LOGS: dbsQuery },
+    }));
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    const log = await importLogger({
+      DBS_LOGS: 'postgres://logs',
+      LOGGER: 'postgresql:dbs=LOGS&table=public.logs',
+      LOGS: 'dbs_retry',
+    });
+
+    log({ reason: 'too many connections' }, 'dbs_retry');
+
+    await vi.waitFor(() => expect(dbsQuery).toHaveBeenCalled());
+
+    const { nonblocking, query, timeout, variables } =
+      dbsQuery.mock.calls[0][0];
+    expect(query).toContain('INSERT INTO public.logs');
+    expect(variables[2]).toBe('dbs_retry');
+    expect(timeout).toBe(3000);
+    expect(nonblocking).toBe(true);
+
+    vi.doUnmock('../../../mod/utils/dbs.js');
+  });
 });

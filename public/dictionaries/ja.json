@@ -3,6 +3,7 @@
   "circle_config": "円の設定",
   "confirm": "確認",
   "confirm_delete": "この機能を削除してもよろしいですか？この操作は元に戻せません。",
+  "consent_title": "同意",
   "create": "作成",
   "delete_geometry": "ジオメトリを削除",
   "delete_vertex": "頂点を削除",

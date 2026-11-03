@@ -14,7 +14,7 @@ import { html, render, svg } from './uhtml.mjs';
 @description
 The method import the [simple-statistics]{@link https://www.npmjs.com/package/simple-statistics} module through the esmImport utility.
 
-@returns {Promise<Module>} The promise resolves to the simple-statistics module.
+@returns {Promise<Module|Error>} The promise resolves to the simple-statistics module or an error if the import failed.
 */
 async function simpleStatistics() {
   return await esmImport('simple-statistics@7.8.8');
@@ -41,6 +41,7 @@ import copyToClipboard from './copyToClipboard.mjs';
 import csvDownload from './csvDownload.mjs';
 import csvUpload from './csvUpload.mjs';
 import { dataURLtoBlob } from './dataURLtoBlob.mjs';
+import { alert, confirm } from './dialogs.mjs';
 import * as gazetteer from './gazetteer.mjs';
 import getCurrentPosition from './getCurrentPosition.mjs';
 import { default as hexa } from './hexa.mjs';
@@ -73,7 +74,9 @@ import { default as verticeGeoms } from './verticeGeoms.mjs';
 import { xhr } from './xhr.mjs';
 
 export default {
+  alert,
   compose,
+  confirm,
   convert,
   copyToClipboard,
   csvDownload,

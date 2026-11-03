@@ -4,11 +4,13 @@ The module exports the getTemplate method which is required by the query, langua
 
 @requires /workspace/cache
 @requires /provider/getSrc
+@requires /utils/telemetry
 
 @module /workspace/getTemplate
 */
 
 import { getSrc } from '../provider/getSrc.js';
+import { withSpan } from '../utils/telemetry.js';
 import workspaceCache from './cache.js';
 
 /**
@@ -18,6 +20,7 @@ import workspaceCache from './cache.js';
 @property {String} src The source is a location from which a template object is loaded when required.
 @property {String} template The string representation of a template, eg. html, sql.
 @property {Function} render A method which resolves in a template string.
+@property {Integer} [statement_timeout] Timeout in milliseconds for the SQL query statement after connection to the DBS. Overrides the xyzEnv.STATEMENT_TIMEOUT. The statement_timeout can not be set as a request param.
 @property {Boolean} module The template is a module.
 */
 
@@ -135,23 +138,32 @@ The script string is converted to a JavaScript data URL which can be used in a d
 
 The default export or the imported module itself will be assigned as the render method in the module template.
 
-Module templates are not cached.
+Module templates are not cached. The import is traced in a template.module span for every request of a module template.
 @param {object} template
 @param {string} response Module script as string.
 
 @returns {Promise<Object|Error>} JSON Template
 */
-async function moduleTemplate(template, response) {
-  try {
-    const dataUrl = `data:text/javascript;charset=utf-8,${encodeURIComponent(response)}`;
+function moduleTemplate(template, response) {
+  return withSpan(
+    'template.module',
+    {
+      'xyz.template': template.key,
+      'xyz.src.length': response?.length,
+    },
+    async () => {
+      try {
+        const dataUrl = `data:text/javascript;charset=utf-8,${encodeURIComponent(response)}`;
 
-    // Use dynamic import to load the module
-    const importedModule = await import(dataUrl);
+        // Use dynamic import to load the module
+        const importedModule = await import(dataUrl);
 
-    // Set the render function to the default export or the entire module
-    template.render = importedModule.default || importedModule;
-  } catch (err) {
-    return err;
-  }
-  return template;
+        // Set the render function to the default export or the entire module
+        template.render = importedModule.default || importedModule;
+      } catch (err) {
+        return err;
+      }
+      return template;
+    },
+  );
 }

@@ -4,6 +4,7 @@ The query module exports the [SQL] query method to pass queries to dbs connectio
 @requires /utils/dbs
 @requires /utils/logger
 @requires /utils/sqlFilter
+@requires /utils/telemetry
 @requires /workspace/cache
 @requires /workspace/getLayer
 @requires /workspace/getTemplate
@@ -14,6 +15,7 @@ The query module exports the [SQL] query method to pass queries to dbs connectio
 import dbs_connections from './utils/dbs.js';
 import logger from './utils/logger.js';
 import sqlFilter from './utils/sqlFilter.js';
+import { setRequestAttributes } from './utils/telemetry.js';
 import workspaceCache from './workspace/cache.js';
 import composeObj from './workspace/composeObj.js';
 import getLayer from './workspace/getLayer.js';
@@ -34,6 +36,8 @@ A query string must returned from the getQueryFromTemplate() method.
 
 The query and SQL params to be substituted in the database process are send to the dbs_connection.
 
+The dbs_connection is called with a params object holding the query, variables, statement timeout, and nonblocking flag. The res.locals object is assigned as params.locals, so that a composing host can hand values set by its middleware to a dbs_connection it replaced. Clients cannot write to res.locals.
+
 The rows returned from the dbs_connection are then passed to the sendRows() method.
 
 @param {req} req HTTP request.
@@ -44,7 +48,6 @@ The rows returned from the dbs_connection are then passed to the sendRows() meth
 @property {boolean} [params.value_only] Return a single value from one row.
 @property {boolean} [params.reduce] Reduce query response to a values array.
 @property {boolean} [params.nonblocking] Execute a nonblocking query.
-@property {integer} [params.statement_timeout] Timeout for database connection.
 */
 export default async function query(req, res) {
   Object.assign(req.params, req._params);
@@ -118,7 +121,11 @@ export default async function query(req, res) {
 
   template.nonblocking ??= req.params.nonblocking;
 
-  template.statement_timeout ??= req.params.statement_timeout;
+  setRequestAttributes({
+    'xyz.query.template': template.key ?? req.params.template,
+    'xyz.layer': req.params.layer?.key,
+    'xyz.dbs': template.dbs,
+  });
 
   logger(req.params, 'query_params');
 
@@ -131,21 +138,32 @@ export default async function query(req, res) {
 
   logger(query, 'query');
 
-  const queryPromise = dbs_connections[template.dbs](
+  // The dbs module ignores params.locals, which a connection replaced by the host may read.
+  const params = {
+    locals: res.locals,
+    nonblocking: template.nonblocking,
     query,
-    req.params.SQL,
-    template.statement_timeout,
-  );
+    timeout: template.statement_timeout,
+    variables: req.params.SQL,
+  };
 
-  // Nonblocking queries will not wait for results but return immediately.
+  // Nonblocking queries will not wait for results but return once the query is sent.
   if (template.nonblocking) {
+    const connected = await dbs_connections[template.dbs](params);
+
+    if (connected instanceof Error) {
+      return res
+        .status(503)
+        .setHeader('Content-Type', 'text/plain')
+        .send('Failed to connect to database.');
+    }
+
     return res
       .status(202)
       .send(`Non blocking request sent at ${new Date().toISOString()}.`);
   }
 
-  // Run the query
-  const rows = await queryPromise;
+  const rows = await dbs_connections[template.dbs](params);
 
   sendRows(res, template, rows);
 }

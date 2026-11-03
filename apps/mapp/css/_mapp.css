@@ -1,14 +1,8 @@
-@import url('./base/_colours.css');
-
-@import url('./base/_fonts.css');
-
-@import url('./base/_body.css');
+/* The mapp styles use system fonts and fall back to the default colour palette if the ui.css colours are not loaded. */
 
 @import url('./layout/_ol.css');
 
 @import url('./layout/_map_attribution.css');
-
-@import url('./layout/_legend.css');
 
 @import url('./layout/_infotip.css');
 

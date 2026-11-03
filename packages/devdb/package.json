@@ -1,0 +1,24 @@
+{
+  "name": "@geolytix/xyz-devdb",
+  "description": "PGlite with PostGIS for local testing and coding examples. Never deployed.",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./globalSetup": "./globalSetup.js"
+  },
+  "scripts": {
+    "start": "node start.js",
+    "test": "vitest run"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@electric-sql/pglite": "catalog:",
+    "@electric-sql/pglite-postgis": "catalog:",
+    "@electric-sql/pglite-socket": "catalog:"
+  },
+  "devDependencies": {
+    "pg": "catalog:",
+    "vitest": "catalog:"
+  }
+}

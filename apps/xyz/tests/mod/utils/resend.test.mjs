@@ -21,15 +21,12 @@ vi.mock('resend', () => ({
 
 vi.mock('../../../mod/provider/getSrc.js', () => ({
   getSrc: (params) => {
-    // The test param checks whether a provider exists for the src.
-    if (typeof params === 'object' && params?.test) {
-      return params.src.split(':')[0] === 'file';
-    }
-
     const src = typeof params === 'string' ? params : params?.src;
 
     return fileGet(src);
   },
+  // Only the file provider is available in the resend tests.
+  hasProvider: (src) => typeof src === 'string' && src.split(':')[0] === 'file',
 }));
 
 vi.mock('../../../mod/utils/languageTemplates.js', () => ({
@@ -86,6 +83,121 @@ describe('resend Module', () => {
       'welcome\nFrom: sender@example.com\nTo: user@example.com',
       'mailer',
     );
+  });
+
+  it('sends plain text template bodies which are not src references', async () => {
+    emailSend.mockResolvedValue({});
+    languageTemplates.mockResolvedValue({
+      subject: 'A failed login attempt was made on ${host}',
+      text: 'An incorrect password was entered from ${remote_address}',
+    });
+
+    const mailer = await importMailer({
+      TRANSPORT_EMAIL: 'sender@example.com',
+      TRANSPORT_PASSWORD: 'secret',
+    });
+
+    await mailer.send({
+      host: 'https://geolytix.com',
+      remote_address: '127.0.0.1',
+      template: 'login_incorrect',
+      to: 'user@example.com',
+    });
+
+    expect(fileGet).not.toHaveBeenCalled();
+    expect(emailSend).toHaveBeenCalledWith({
+      from: 'sender@example.com',
+      html: undefined,
+      sender: 'sender@example.com',
+      subject: 'A failed login attempt was made on https://geolytix.com',
+      text: 'An incorrect password was entered from 127.0.0.1',
+      to: 'user@example.com',
+    });
+  });
+
+  it('does not send an email when the template src fails to load', async () => {
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    const error = new Error('Unable to load src: file:text-template');
+
+    fileGet.mockResolvedValue(error);
+    languageTemplates.mockResolvedValue({
+      subject: 'Welcome',
+      text: 'file:text-template',
+    });
+
+    const mailer = await importMailer({
+      TRANSPORT_EMAIL: 'sender@example.com',
+      TRANSPORT_PASSWORD: 'secret',
+    });
+
+    await mailer.send({ template: 'welcome', to: 'user@example.com' });
+
+    expect(consoleError).toHaveBeenCalledWith(error);
+    expect(emailSend).not.toHaveBeenCalled();
+    expect(logger).not.toHaveBeenCalled();
+  });
+
+  it('skips batch emails with a template src which fails to load', async () => {
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    const error = new Error('Unable to load src: file:html-template');
+
+    batchSend.mockResolvedValue({});
+    fileGet.mockResolvedValue(error);
+    languageTemplates
+      .mockResolvedValueOnce({
+        html: 'file:html-template',
+        subject: 'Welcome ${name}',
+      })
+      .mockResolvedValueOnce({
+        subject: 'Hello ${name}',
+        text: 'Second ${name}',
+      });
+
+    const mailer = await importMailer({
+      TRANSPORT_EMAIL: 'sender@example.com',
+      TRANSPORT_PASSWORD: 'secret',
+    });
+
+    await mailer.batch([
+      { name: 'Rob', template: 'welcome', to: 'rob@example.com' },
+      { name: 'Ada', template: 'hello', to: 'ada@example.com' },
+    ]);
+
+    expect(consoleError).toHaveBeenCalledWith(error);
+    expect(batchSend).toHaveBeenCalledWith([
+      {
+        from: 'sender@example.com',
+        html: undefined,
+        sender: 'sender@example.com',
+        subject: 'Hello Ada',
+        text: 'Second Ada',
+        to: 'ada@example.com',
+      },
+    ]);
+  });
+
+  it('does not send a batch when every template src fails to load', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    fileGet.mockResolvedValue(new Error('Unable to load src'));
+    languageTemplates.mockResolvedValue({
+      subject: 'Welcome',
+      text: 'file:text-template',
+    });
+
+    const mailer = await importMailer({
+      TRANSPORT_EMAIL: 'sender@example.com',
+      TRANSPORT_PASSWORD: 'secret',
+    });
+
+    await mailer.batch([{ template: 'welcome', to: 'rob@example.com' }]);
+
+    expect(batchSend).not.toHaveBeenCalled();
+    expect(logger).not.toHaveBeenCalled();
   });
 
   it('does not log a single email when resend returns an error', async () => {

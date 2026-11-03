@@ -105,7 +105,10 @@ function addTab(entry) {
 
     // Hide tab when layer is hidden.
     entry.layer.hideCallbacks.push(() => {
+      // removeTab() clears the display flag; retain it so it is correctly restored when the tab is shown again.
+      entry._display = entry.display;
       entry.remove();
+      entry.display = entry._display;
     });
   }
 

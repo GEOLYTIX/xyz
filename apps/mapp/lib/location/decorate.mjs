@@ -10,7 +10,7 @@ Dictionary entries:
 @requires /dictionary
 @requires /utils/xhr
 @requires /utils/paramString
-@requires /ui/elements/confirm
+@requires /utils/dialogs
 
 @module /location/decorate
 */
@@ -141,7 +141,7 @@ async function confirmUpdate(callback) {
   );
 
   if (unsavedChanges) {
-    const confirmUpdate = await mapp.ui.elements.confirm({
+    const confirmUpdate = await mapp.utils.confirm({
       text: mapp.dictionary.location_save_changes,
     });
 
@@ -180,7 +180,7 @@ A callback function can be provided to override the execution of methods in the 
 */
 async function update(callback) {
   if (this.infoj.some((entry) => entry.invalid)) {
-    mapp.ui.elements.alert({ text: mapp.dictionary.invalid_entry_value });
+    mapp.utils.alert({ text: mapp.dictionary.invalid_entry_value });
     return new Error('Unable to update.');
   }
 
@@ -241,7 +241,7 @@ async function update(callback) {
   });
 
   if (location_update instanceof Error) {
-    mapp.ui.elements.alert({ text: mapp.dictionary.location_update_failed });
+    mapp.utils.alert({ text: mapp.dictionary.location_update_failed });
     this.view?.classList.remove('disabled');
     return;
   }
@@ -383,7 +383,7 @@ function removeLayer(entry) {
 }
 
 async function trash() {
-  const confirm = await mapp.ui.elements.confirm({
+  const confirm = await mapp.utils.confirm({
     text: mapp.dictionary.confirm_delete,
   });
 

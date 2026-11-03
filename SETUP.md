@@ -36,6 +36,14 @@ Use `git clone https://github.com/GEOLYTIX/xyz.git` to clone the repository into
 
 Change into the directory and use `pnpm install` to install any monorepo dependencies defined or referenced in the package.json
 
+The MAPP bundles in `public/js/lib` and the generated `public/css/mapp.css` and `public/css/ui.css` are not committed to the development branches. Build them before starting the server:
+
+```bash
+pnpm build
+```
+
+A checkout of `main` or a release tag, eg. `git clone --branch v5.0.7 https://github.com/GEOLYTIX/xyz.git`, already contains the bundles.
+
 ## launch.json [VSCode]
 
 After the dependencies are installed on local the process can be launched in debug through the VSCode interface. A new node launch.json can be created through the debug interface panel.
@@ -87,7 +95,7 @@ WORKSPACE=file:./public/workspace.json
 - `PUBLIC`: enable optional authentication using an ACL connection
 - `DBS_*`: database connection strings used by query/provider modules
 - `CUSTOM_TEMPLATES`: merge additional templates into the workspace cache
-- `SECRET_KEY`: path to a key file if you want the app to load the signing secret from disk instead of `.env`
+- `SECRET_KEY`: a PEM private key for RS256 token signing, given either inline (a value starting with `-----BEGIN`, eg from a secret manager) or as the path of a key file in the root directory
 - `TRANSPORT_EMAIL`, `TRANSPORT_PASSWORD`, `TRANSPORT_PORT`, `TRANSPORT_TLS`: email transport configuration
 - `SAML_*`: SAML identity provider and certificate settings for the optional SAML flow
 - `TRUSTED_RETURN_HOSTS`: comma-separated origins allowed as an absolute `return_to` on `/api/user/login`
@@ -118,7 +126,7 @@ http://localhost:3000/xyz
 
 ## What should work on first run
 
-With the minimal `.env` above, the server should boot and serve the built frontend assets from `public/`.
+With the minimal `.env` above and the MAPP bundles built, the server should boot and serve the built frontend assets from `public/`.
 
 Useful routes to test locally:
 
@@ -171,6 +179,8 @@ Use the exact connection and ACL values required by your workspace and auth setu
 
 ## SAML authentication
 Please refer to [apps/saml/README.md](./apps/saml/README.md) in regards to authenticating users with SAML.
+
+`SAML_LOGIN` was removed in v5.0.0. A `PRIVATE` SAML instance must set `AUTH_PATH=/saml` to redirect users to the SAML login.
 
 ## Troubleshooting
 

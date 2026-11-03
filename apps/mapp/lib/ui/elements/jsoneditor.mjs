@@ -19,10 +19,12 @@ The method dynamically imports the jsoneditor module from esm.sh and asssigns th
 @property {Object} params.props Custom property for the createJSONEditor method.
 @property {Object} params.data JSON data for the jsoneditor content.
 
-@returns {object} Exports a jsoneditor instance.
+@returns {Promise<Object|Error>} Exports a jsoneditor instance or an error if the jsoneditor module could not be imported.
 */
 export default async function createJSONEditor(params) {
   const mod = await mapp.utils.esmImport('vanilla-jsoneditor@3.3.1');
+
+  if (mod instanceof Error) return mod;
 
   params.content ??= { json: {} };
 

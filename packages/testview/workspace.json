@@ -1,0 +1,240 @@
+{
+  "dbs": "DEVDB",
+  "locale": {
+    "layers": {
+      "OSM": {
+        "display": true,
+        "format": "tiles",
+        "URI": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "attribution": {
+          "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+        }
+      }
+    }
+  },
+  "locales": {
+    "testview": {
+      "name": "Testview",
+      "layers": {
+        "locations_categorized": {
+          "display": true,
+          "format": "wkt",
+          "table": "example.locations",
+          "qID": "id",
+          "geom": "geom",
+          "srid": 4326,
+          "style": {
+            "default": {
+              "icon": { "type": "dot", "fillColor": "#999", "scale": 1.5 }
+            },
+            "theme": {
+              "title": "Category",
+              "type": "categorized",
+              "field": "category",
+              "categories": [
+                {
+                  "value": "office",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#e6194b",
+                      "scale": 1.5
+                    }
+                  }
+                },
+                {
+                  "value": "city",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#4363d8",
+                      "scale": 1.5
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "locations_graduated": {
+          "display": true,
+          "format": "wkt",
+          "table": "example.locations",
+          "qID": "id",
+          "geom": "geom",
+          "srid": 4326,
+          "style": {
+            "default": {
+              "icon": { "type": "dot", "fillColor": "#999", "scale": 1.5 }
+            },
+            "theme": {
+              "title": "ID",
+              "type": "graduated",
+              "field": "id",
+              "graduated_breaks": "less_than",
+              "categories": [
+                {
+                  "value": 1,
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#fee5d9",
+                      "scale": 1.5
+                    }
+                  }
+                },
+                {
+                  "value": 2,
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#fcae91",
+                      "scale": 1.5
+                    }
+                  }
+                },
+                {
+                  "value": 3,
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#fb6a4a",
+                      "scale": 1.5
+                    }
+                  }
+                },
+                {
+                  "value": 4,
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#cb181d",
+                      "scale": 1.5
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "features_categorized": {
+          "display": true,
+          "format": "wkt",
+          "table": "example.features",
+          "qID": "id",
+          "geom": "geom",
+          "srid": 3857,
+          "style": {
+            "default": {
+              "strokeColor": "#333",
+              "strokeWidth": 2,
+              "fillColor": "#9996",
+              "icon": { "type": "dot", "fillColor": "#999", "scale": 1.5 }
+            },
+            "theme": {
+              "title": "Category with count distribution",
+              "type": "categorized",
+              "field": "category",
+              "distribution": "count",
+              "categories": [
+                {
+                  "value": "path",
+                  "style": {
+                    "strokeColor": "#3cb44b",
+                    "strokeWidth": 4,
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#3cb44b",
+                      "scale": 1.5
+                    }
+                  }
+                },
+                {
+                  "value": "park",
+                  "style": {
+                    "strokeColor": "#3cb44b",
+                    "fillColor": "#3cb44b66",
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#3cb44b",
+                      "scale": 1.5
+                    }
+                  }
+                },
+                {
+                  "value": "landmark",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#f58231",
+                      "scale": 1.5
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "features_distributed": {
+          "display": true,
+          "format": "wkt",
+          "table": "example.features",
+          "qID": "id",
+          "geom": "geom",
+          "srid": 3857,
+          "style": {
+            "default": {
+              "strokeColor": "#333",
+              "strokeWidth": 2,
+              "fillColor": "#9996",
+              "icon": { "type": "dot", "fillColor": "#999", "scale": 1.5 }
+            },
+            "theme": {
+              "title": "Distributed",
+              "type": "distributed",
+              "field": "id",
+              "categories": [
+                {
+                  "style": {
+                    "strokeColor": "#911eb4",
+                    "strokeWidth": 4,
+                    "fillColor": "#911eb466",
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#911eb4",
+                      "scale": 1.5
+                    }
+                  }
+                },
+                {
+                  "style": {
+                    "strokeColor": "#42d4f4",
+                    "strokeWidth": 4,
+                    "fillColor": "#42d4f466",
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#42d4f4",
+                      "scale": 1.5
+                    }
+                  }
+                },
+                {
+                  "style": {
+                    "strokeColor": "#f032e6",
+                    "strokeWidth": 4,
+                    "fillColor": "#f032e666",
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#f032e6",
+                      "scale": 1.5
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

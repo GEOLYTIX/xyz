@@ -2,6 +2,8 @@
 ## /ui/layers/panels/jsonEditor
 The layer panels module exports a default method to open a dialog with a layerJSE element to update the mapp layer.
 
+@requires /layer/decorate
+@requires /ui/layers/view
 @requires /ui/utils/layerJSE
 
 @module /ui/layers/panels/jsonEditor
@@ -71,16 +73,42 @@ export default function jsonEditor(layer) {
 
 /**
 @function updateLayer
+@async
+
 @description
-The method extracts the content from the provided jsoneditor argument and attempt to update the mapp with the json content.
+The method extracts the content from the provided jsoneditor argument and attempts to decorate a new layer from the json content.
+
+The view of the new layer is inserted before the view of the current layer, which may be in a listview group. The current layer is removed and the new layer is assigned with the key of the current layer to the mapview.layers.
 
 @param {jse} jse A jsoneditor instance.
 @param {layer} layer A decorated mapp layer.
+@returns {Promise<layer>} The new decorated mapp layer.
 */
 async function updateLayer(jse, layer) {
+  // The jsoneditor content is json or text depending on the last edit mode.
   const content = jse.get();
 
-  const layerJSON = JSON.parse(content.text);
+  const jsonLayer = structuredClone(content.json) ?? JSON.parse(content.text);
 
-  await layer.update(layerJSON);
+  jsonLayer.mapview = layer.mapview;
+
+  const newLayer = await mapp.layer.decorate(jsonLayer);
+
+  if (!newLayer.L) {
+    console.warn('Updated layer could not be decorated');
+    return;
+  }
+
+  mapp.ui.layers.view(newLayer);
+
+  // The layer.view may be in a listview group.
+  newLayer.view && layer.view?.before(newLayer.view);
+
+  layer.remove();
+
+  newLayer.mapview.layers[layer.key] = newLayer;
+
+  newLayer.display && newLayer.show();
+
+  return newLayer;
 }
