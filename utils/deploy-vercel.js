@@ -25,9 +25,9 @@ if (!['production', 'preview'].includes(environment)) {
   process.exit(1);
 }
 
-// The MAPP bundles are gitignored and must be built before public/** is
-// uploaded with the deployment.
-runPnpm(['build', '--filter=@geolytix/mapp']);
+// The MAPP and MAPP.UI bundles are gitignored and must be built before
+// public/** is uploaded with the deployment.
+runPnpm(['build', '--filter=@geolytix/mapp', '--filter=@geolytix/mapp-ui']);
 
 const key = generateVarlockKey();
 

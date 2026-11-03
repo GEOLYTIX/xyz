@@ -17,3 +17,10 @@ jobs:
           version: 2.2.6
       - name: Run Biome
         run: biome ci .
+      # The mapp library must work without the MAPP.UI library in apps/ui.
+      - name: Check that the mapp library doesn't reference the ui library
+        run: |
+          if grep -rnE "mapp\??\.ui\b|['\"][^'\"]*apps/ui|['\"](\.\.?/)+ui[/.]" apps/mapp/lib; then
+            echo "The mapp library in apps/mapp must not reference the MAPP.UI library."
+            exit 1
+          fi

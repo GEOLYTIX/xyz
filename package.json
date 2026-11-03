@@ -31,6 +31,7 @@
   "license": "MIT",
   "dependencies": {
     "@geolytix/mapp": "workspace:*",
+    "@geolytix/mapp-ui": "workspace:*",
     "@geolytix/xyz-auth-app": "workspace:*",
     "@geolytix/xyz-app": "workspace:*",
     "@geolytix/xyz-saml-app": "workspace:*",

@@ -1,6 +1,8 @@
 # MAPP App
 
-The MAPP app contains the frontend MAPP and MAPP.UI source modules.
+The MAPP app contains the MAPP library source modules. The MAPP library creates interactive Openlayers mapviews with layers and locations from the XYZ API, and works without the MAPP.UI library.
+
+The MAPP.UI library is in the [MAPP.UI app](../ui/README.md). The MAPP library must not import or reference the MAPP.UI library. The code quality workflow fails if a module in `apps/mapp/lib` references `mapp.ui` or imports from the ui app.
 
 ## Build
 
@@ -10,20 +12,23 @@ From the repository root, build the app with Turborepo:
 pnpm build --filter=@geolytix/mapp
 ```
 
+Build the MAPP and MAPP.UI bundles together with:
+
+```bash
+pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
+```
+
 From `apps/mapp`, run the package build directly:
 
 ```bash
 pnpm build
 ```
 
-The build uses `apps/mapp/vite.config.mjs` and writes bundled assets to `public/js/lib` in the repository root. When a root `.env.schema` exists, Varlock loads env files from the repository root via this package's `varlock.loadPath` setting.
+The build uses `apps/mapp/vite.config.mjs` and writes `apps/mapp/lib/mapp.mjs` as `public/js/lib/mapp.js` in the repository root.
 
-The Vite build has two library entry points:
+The mapp and ui apps both write into `public/js/lib`. The build doesn't empty the directory, so building one app keeps the bundle of the other.
 
-- `apps/mapp/lib/mapp.mjs` becomes `public/js/lib/mapp.js`
-- `apps/mapp/lib/ui.mjs` becomes `public/js/lib/ui.js`
-
-Shared code may be emitted as additional chunk files in `public/js/lib`. The generated files and their sourcemaps are gitignored and must not be committed to a development branch. The release workflow commits them to `main` and the release tag, see [RELEASING.md](../../RELEASING.md).
+The generated files and their sourcemaps are gitignored and must not be committed to a development branch. The release workflow commits them to `main` and the release tag, see [RELEASING.md](../../RELEASING.md).
 
 To build against an environment-specific Varlock file, set the environment before running the build:
 
@@ -41,20 +46,22 @@ NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
 
 `NODE_ENV` is read directly by the Vite config for the minification toggle. Do not declare it in `.env.schema`, because platform-provided values should not be injected from a frozen environment.
 
-## CSS Bundles
+## CSS Bundle
 
-The MAPP build also bundles `apps/mapp/css/_mapp.css` and `apps/mapp/css/_ui.css` through `apps/mapp/vite.css.config.mjs`. The generated CSS and font assets are written to the root `public/css` directory. The generated `mapp.css` and `ui.css` are gitignored like the JavaScript bundles; the font files are committed.
+The MAPP build also bundles `apps/mapp/css/_mapp.css` through `apps/mapp/vite.css.config.mjs` into `public/css/mapp.css`. The generated `mapp.css` is gitignored like the JavaScript bundles.
 
-`mapp.css` only styles mapview elements like the popup, infotip, attribution and Openlayers controls. It doesn't load fonts or define the colour palette. The colour variables in `mapp.css` fall back to the default palette values. `ui.css` loads the fonts, the colour palette and the body styles, and a colour theme set with the ui overrides the mapp colours. The layer legends are ui elements and are styled by `ui.css`.
+`mapp.css` only styles mapview elements like the popup, infotip, attribution and Openlayers controls. It doesn't load fonts or define the colour palette. The colour variables in `mapp.css` fall back to the default palette values. `ui.css` from the MAPP.UI app loads the fonts, the colour palette and the body styles, and a colour theme set with the ui overrides the mapp colours.
 
-The root package also exposes CSS-only commands used by the host app:
+## Testview
+
+The [testview](../../packages/testview/README.md) serves the `apps/mapp/lib` source modules with a local XYZ process and the devdb, and creates mapviews without the MAPP.UI library:
 
 ```bash
-pnpm mapp_css
-pnpm ui_css
+pnpm testview
 ```
 
 ## Related Docs
 
+- MAPP.UI app: [../ui/README.md](../ui/README.md)
 - Root setup: [../../SETUP.md](../../SETUP.md)
 - Contributor workflow: [../../DEVELOPING.md](../../DEVELOPING.md)

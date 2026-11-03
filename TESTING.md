@@ -428,10 +428,10 @@ Browser tests still use [Codi](https://www.npmjs.com/package/codi-test-framework
 
 A [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs) is provided to run tests in the browser.
 
-Build the MAPP browser bundles before launching the local test environment:
+Build the MAPP and MAPP.UI browser bundles before launching the local test environment:
 
 ```bash
-NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
+NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
 ```
 
 The current tests require an active user to execute.
@@ -512,12 +512,12 @@ codi.describe(
 
 #### Build Configuration
 
-Tests require an unminified build to enable debugging and stepping through code. This is handled by the build system (`apps/mapp/vite.config.mjs`).
+Tests require an unminified build to enable debugging and stepping through code. This is handled by the build system (`apps/mapp/vite.config.mjs` and `apps/ui/vite.config.mjs`).
 
 Setting process environment `NODE_ENV=DEVELOPMENT` disables minification in build processes.
 
 ```bash
-NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
+NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
 ```
 
 ### Running Tests in Development Mode
@@ -533,7 +533,7 @@ NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
 2. Build the project:
 
    ```bash
-   pnpm build --filter=@geolytix/mapp
+   pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
    ```
 
 3. Verify that:
