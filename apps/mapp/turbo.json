@@ -1,0 +1,13 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "outputs": [
+        "$TURBO_ROOT$/public/js/lib/**",
+        "$TURBO_ROOT$/public/css/mapp.css",
+        "$TURBO_ROOT$/public/css/ui.css"
+      ]
+    }
+  }
+}

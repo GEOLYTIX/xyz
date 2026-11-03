@@ -193,6 +193,9 @@ async function show() {
   // An ol layer L can only be created with a value.
   if (!this.value) return;
 
+  // The entry may have been shown from a location view render while awaiting the api() method.
+  this.location.removeLayer(this);
+
   // Create new geometry layer from entry value
   this.L = this.location.layer.mapview.geometry(this);
 

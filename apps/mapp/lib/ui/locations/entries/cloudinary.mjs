@@ -99,7 +99,7 @@ function images(entry) {
   // Push upload input into images array.
   if (entry.edit) {
     const drap_and_drop_zone = mapp.utils.html.node`<div
-      class="drag_and_drop_zone mobile-display-none"
+      class="drag_and_drop_zone"
       ondrop=${(e) => {
         // the input element onchange trigger must be prevented.
         e.preventDefault();
@@ -150,7 +150,7 @@ function documents(entry) {
 
   if (entry.edit) {
     const drag_and_drop_zone = mapp.utils.html.node`<div
-      class="drag_and_drop_zone mobile-display-none"
+      class="drag_and_drop_zone"
       ondrop=${(e) => {
         // the input element onchange trigger must be prevented.
         e.preventDefault();

@@ -11,6 +11,8 @@ Common interface methods such as layer.show, and hide are assigned to the layer 
 
 A blank layer.filter object will be set if the filter has not been defined in the JSON layer.
 
+The layer.filter.viewport flag will be set if the layer.params or layer.queryparams are restricted to the viewport.
+
 Any plugins matching layer keys will be executed with the layer being passed as argument to the plugin method.
 
 The layer object is returned from the decorator.
@@ -61,7 +63,6 @@ export default async function decorate(layer) {
     show,
     showCallbacks: [],
     tableCurrent,
-    update,
     zoomToExtent,
   });
 
@@ -82,6 +83,11 @@ export default async function decorate(layer) {
     current: {},
     ...layer.filter,
   };
+
+  // The filter must be restricted to the viewport if the layer features or the layer queryparams are restricted to the viewport.
+  if (layer.params?.viewport || layer.queryparams?.viewport) {
+    layer.filter.viewport = true;
+  }
 
   if (Array.isArray(layer.featureSet)) {
     layer.featureSet = new Set(layer.featureSet);
@@ -239,9 +245,22 @@ function promoteDisplay(layer) {
 
 @description
 Hides the layer from the map.
+
+A hide from the layer.changeEnd() zoom range check will set the zoomDisplay flag. The layer remains in the layers hook and will be shown again once the zoom is in range.
+
+Any other hide will delete the zoomDisplay flag and filter the layer from the layers hook.
+
+@param {Object} [params]
+@property {boolean} [params.zoomDisplay] The layer is hidden because it is out of zoom range.
 */
-function hide() {
+function hide(params = {}) {
   this.display = false;
+
+  if (params.zoomDisplay === true) {
+    this.zoomDisplay = true;
+  } else {
+    delete this.zoomDisplay;
+  }
 
   // Remove OL layer from mapview.
   this.mapview.Map.removeLayer(this.L);
@@ -373,9 +392,8 @@ function changeEnd() {
     // Layer is out of zoom range.
     if (!this.tableCurrent()) {
       if (this.display) {
-        // Layer should be shown if possible.
-        this.zoomDisplay = true;
-        this.hide();
+        // Layer should be shown again once the zoom is in range.
+        this.hide({ zoomDisplay: true });
       }
     } else if (this.zoomDisplay) {
       // Prevents layer.show() being fired on zoom change within range.
@@ -393,47 +411,6 @@ function changeEnd() {
   for (const fn of this.changeEndCallbacks) {
     if (typeof fn === 'function') fn(this);
   }
-}
-
-/**
-@function update
-@async
-
-@description
-The layer.update() method receives a json layer and attempts to decorate a new layer.
-
-The layer itself will be removed once the newly decorated layer view as been inserted before the existing layer view.
-
-The new layer will be returned from the method.
-
-@param {json} jsonLayer A json layer object.
-@returns {layer} A decorated mapp layer.
-*/
-async function update(jsonLayer) {
-  jsonLayer.mapview = this.mapview;
-
-  const newLayer = await mapp.this.decorate(jsonLayer);
-
-  if (!newLayer.L) {
-    console.warn('Updated layer could not be decorated');
-    return;
-  }
-
-  const layersnode = document.getElementById('layers');
-
-  if (layersnode) {
-    mapp.ui.layers.view(newLayer);
-
-    layersnode?.insertBefore(newLayer.view, this.view);
-  }
-
-  this.remove();
-
-  newLayer.mapview.layers[this.key] = newLayer;
-
-  newLayer.display && newLayer.show();
-
-  return newLayer;
 }
 
 /**

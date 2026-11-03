@@ -89,6 +89,7 @@
     .contents > * {
       margin-left: 0.5em;
       margin-right: 0.5em;
+      max-width: calc(100% - 1em);
     }
   }
 

@@ -3,6 +3,7 @@
   "circle_config": "圓形調整",
   "confirm": "确认",
   "confirm_delete": "您確定要刪除嗎？ 這將無法撤銷。",
+  "consent_title": "同意",
   "create": "創建",
   "delete_geometry": "刪除圖形",
   "delete_vertex": "刪除頂點",

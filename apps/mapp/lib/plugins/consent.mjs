@@ -3,8 +3,12 @@
 
 The module exports method to display and store configurable user consent.
 
+Dictionary entries:
+- consent_title
+
+@requires /dictionary
 @requires /utils/userIndexedDB
-@requires /ui/elements/confirm
+@requires /utils/dialogs
 
 @module /plugins/consent
 */
@@ -31,7 +35,7 @@ The confirm dialog will not be displayed if consent has been provided previously
 @param {Object} plugin The consent configuration.
 @param {mapview} mapview
 @property {string} plugin.text The text shown in the consent dialog.
-@property {string} [plugin.title="mapp.user.consent"] The title for the consent confirmation dialog.
+@property {string} [plugin.title=mapp.dictionary.consent_title] The title for the consent confirmation dialog.
 */
 export async function consent(plugin, mapview) {
   if (!mapp.user) return;
@@ -46,9 +50,9 @@ export async function consent(plugin, mapview) {
     return;
   }
 
-  plugin.title ??= 'mapp.user.consent';
+  plugin.title ??= mapp.dictionary.consent_title;
 
-  mapp.user.consent = await mapp.ui.elements.confirm(plugin);
+  mapp.user.consent = await mapp.utils.confirm(plugin);
 
   if (mapp.user.consent) {
     await mapp.utils.userIndexedDB.put({

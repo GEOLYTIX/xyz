@@ -60,6 +60,8 @@ export default function categorized(theme, feature) {
 @description
 For categorical themes on multiple fields, the themeFieldsLookup function will loop through the theme.fields and apply an array of icon styles to the feature.style.icon property for each matching category.
 
+The feature.style will be null if the matching category for any of the theme.fields has a null style [eg. the category is toggled off in the legend]. The feature is filtered out and must not be rendered with the icons from the remaining fields.
+
 The icon styles array will not be reassigned if it already exists on the feature.style to prevent parsing the theme.categories on every feature in the render.
 
 @param {Object} theme The theme configuration object.
@@ -86,6 +88,12 @@ function themeFieldsLookup(theme, feature) {
       );
 
     if (!cat) continue;
+
+    // The feature is filtered out by a category on any of the theme fields.
+    if (cat.style === null) {
+      feature.style = null;
+      return true;
+    }
 
     if (!cat.style) continue;
 

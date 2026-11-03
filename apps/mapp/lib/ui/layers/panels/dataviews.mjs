@@ -83,6 +83,9 @@ export default function dataviews(layer) {
       if (dataview.display) {
         dataview.chkbox.querySelector('input').checked = false;
         dataview.hide();
+
+        // hide() clears the display flag; retain it so the dataview is shown again with the layer.
+        dataview.display = true;
       }
     });
 

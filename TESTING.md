@@ -106,6 +106,10 @@ Key points:
 - `tests/scaffold.mjs` provides shared setup helpers which test modules import explicitly, eg. `mockConsole`.
 - Tests run in parallel across files with a 10-second timeout per test.
 
+### Local PostgreSQL with PostGIS
+
+Tests which need a real database belong in the `packages/devdb` workspace package. It runs [PGlite](https://pglite.dev) with the PostGIS extension and starts an in-memory database for each Vitest run. `pnpm devdb` starts a persistent database for coding examples. The package is excluded from Vercel deployments. See [packages/devdb/README.md](packages/devdb/README.md).
+
 ### CI Pipeline
 
 Tests run automatically on every push and pull request to `main`, `major`, `minor`, and `patch` branches via the GitHub Actions workflow in `.github/workflows/unit_tests.yml`:

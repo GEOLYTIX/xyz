@@ -20,7 +20,7 @@ vi.mock('../../../mod/provider/cloudfront.js', () => ({
   default: (...args) => mockCloudFrontFn(...args),
 }));
 
-const { getSrc, clearSrcMap, cacheSources } = await import(
+const { getSrc, clearSrcMap, cacheSources, hasProvider } = await import(
   '../../../mod/provider/getSrc.js'
 );
 
@@ -109,6 +109,24 @@ describe('getSrc: providers', () => {
     );
     expect(await getSrc({ src: 'foo:bar.json' })).toBeInstanceOf(Error);
     expect(await getSrc({ src: 'plain text value' })).toBeInstanceOf(Error);
+  });
+});
+
+describe('getSrc: hasProvider', () => {
+  it('checks whether a provider exists for the src prefix', () => {
+    expect(hasProvider('file:./template.html')).toBe(true);
+    expect(hasProvider('https://geolytix.com/template.html')).toBe(true);
+    expect(hasProvider('cloudfront:aws.example/template.html')).toBe(true);
+    expect(hasProvider('foo:bar.json')).toBe(false);
+    expect(hasProvider('Hello: ${name}')).toBe(false);
+    expect(hasProvider('plain text value')).toBe(false);
+    expect(hasProvider(undefined)).toBe(false);
+  });
+
+  it('resolves an environment variable provider prefix', () => {
+    globalThis.xyzEnv = { SRC_TEMPLATES: 'file:./templates' };
+
+    expect(hasProvider('${TEMPLATES}/mail.html')).toBe(true);
   });
 });
 

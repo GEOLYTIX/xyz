@@ -6,6 +6,7 @@ The Workspace API module exports the getKeyMethod() which returns a method from 
 @requires /workspace/getLocale
 @requires /workspace/getLayer
 @requires /workspace/getTemplate
+@requires /utils/telemetry
 @requires crypto
 
 @module /workspace
@@ -28,7 +29,7 @@ if (!process.env.VITEST) Object.freeze(Object.prototype);
 
 import { createHash } from 'node:crypto';
 import { cacheSources } from '../provider/getSrc.js';
-import logger from '../utils/logger.js';
+import { setRequestAttributes } from '../utils/telemetry.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
 import getLocale from './getLocale.js';
@@ -42,6 +43,7 @@ const keyMethods = {
   roles, // deprecated, use scopes instead
   test,
   compose,
+  templates,
 };
 
 let workspace;
@@ -62,6 +64,12 @@ The method checks whether the req.params.key matches a keyMethods property and r
 */
 export default async function getKeyMethod(req, res) {
   Object.assign(req.params, req._params);
+
+  setRequestAttributes({
+    'xyz.workspace.key': req.params.key,
+    'xyz.locale': req.params.locale,
+    'xyz.layer': req.params.layer,
+  });
 
   workspace = await workspaceCache();
 
@@ -448,6 +456,39 @@ async function compose(req, res) {
   res.setHeader('content-type', 'application/json');
 
   res.send(composedWorkspace);
+}
+
+/**
+@function templates
+@async
+
+@description
+The templates method is an admin-only endpoint which returns the workspace.templates{} object.
+
+The workspace is composed first to ensure that any templates referenced in composed locale and layer objects are added to the workspace.templates{} object.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+
+@property {Object} req.params HTTP request params.
+@property {Object} params.user User requesting the templates method.
+@property {boolean} params.user.admin Whether user has admin privileges (required).
+*/
+async function templates(req, res) {
+  if (!req.params.user?.admin) {
+    res
+      .status(403)
+      .send(
+        `Admin credentials are required to access the workspace templates.`,
+      );
+    return;
+  }
+
+  const composedWorkspace = await composeWorkspace();
+
+  res.setHeader('content-type', 'application/json');
+
+  res.send(composedWorkspace.templates ?? {});
 }
 
 /**

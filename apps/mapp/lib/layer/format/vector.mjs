@@ -110,9 +110,7 @@ async function setSource(features) {
     [features].flat(),
   );
 
-  this.source = new ol.source.Vector({
-    features: this.Features,
-  });
+  this.source = createSource(this, this.Features);
 
   if (this.fade) mapp.layer.fade(this);
 
@@ -122,6 +120,7 @@ async function setSource(features) {
 
     this.cluster.source = new ol.source.Cluster({
       distance: this.cluster.distance,
+      geometryFunction: (F) => clusterGeometry(F, this),
       source: this.source,
     });
 
@@ -134,6 +133,47 @@ async function setSource(features) {
 
   // Set source if not cluster
   this.L.setSource(this.source);
+}
+
+/**
+@function clusterGeometry
+
+@description
+The clusterGeometry method is the geometryFunction for the OL cluster source. Features which are not displayed by the featureStyle method return a null geometry and will not be considered for clustering. These are features excluded by the layer featureSet or featureLookup, and features without a style from a categorized or graduated layer theme [eg. a category toggled off in a filterOnly theme].
+
+A cluster without displayed features will not be created and a cluster with a single displayed feature will be rendered as a single location.
+
+@param {Object} F The OL feature in the cluster source.
+@param {layer} layer The Mapp layer object.
+@property {layer-style} layer.style The layer style config.
+@property {Object} [style.theme] The layer theme.
+@returns {Object} The feature geometry or null if the feature is not displayed.
+*/
+function clusterGeometry(F, layer) {
+  // Assign properties as the featureStyle method. The OL feature properties must not be mutated.
+  const properties = mapp.layer.featureProperties(layer, {
+    ...F.getProperties(),
+  });
+
+  // The feature is not displayed by the featureStyle method.
+  if (properties === null) return null;
+
+  const theme = layer.style?.theme;
+
+  // Only categorized and graduated themes can remove the style of a feature without side effects.
+  if (['categorized', 'graduated'].includes(theme?.type)) {
+    const feature = {
+      properties,
+      style: {},
+    };
+
+    mapp.layer.themes[theme.type](theme, feature);
+
+    // The theme removed the feature style.
+    if (feature.style === null) return null;
+  }
+
+  return F.getGeometry();
 }
 
 /**
@@ -195,10 +235,16 @@ The layer.reload() method determines the table and geometry for the current zoom
 
 The xhr request is debounced by 100ms to prevent requests in quick succession on panning, scroll, and touch zooming.
 
+The layer source is loading until the features of the latest request have been set. The Openlayers Map doesn't dispatch the rendercomplete event while the source of a visible layer is loading.
+
+The layer.request is assigned when the reload method is called, before the debounce timeout. The response of a superseded request is discarded and will neither set the layer source nor end the loading of the layer, also if the response arrives during the debounce timeout of the latest reload.
+
 The reload method is bound to the layer object and doesn't require any arguments.
 
 @property {Object} layer.params Parameter for data request.
 @property {Object} layer.timeout Timeout for the xhr request.
+@property {Object} layer.request The latest request for the layer data.
+@property {Promise} [layer.loading] Resolves once the features of the latest request have been set.
 */
 function reload() {
   // Do not reload the layer if features have been assigned.
@@ -232,6 +278,13 @@ function reload() {
   // Assign current viewport if queryparam is truthy.
   this.params.z &&= this.mapview.Map.getView().getZoom();
 
+  // The layer must be loading before the debounce timeout to prevent a rendercomplete event prior to the request.
+  startLoading(this);
+
+  // The request is assigned before the debounce timeout. A response of an earlier request arriving during the timeout is superseded and must neither set the layer source nor end the loading.
+  const request = {};
+  this.request = request;
+
   clearTimeout(this.timeout);
 
   this.timeout = setTimeout(() => {
@@ -245,15 +298,116 @@ function reload() {
       template: this.params.template || this.format,
       ...this.params,
     });
+
     this.xhr = mapp.utils
       .xhr(`${this.mapview.host}/api/query?${paramString}`)
-      .then((features) => {
+      .then(async (features) => {
+        if (this.request !== request) return;
+
         // An error will be returned if the xhr fails with a bad request 400.
         if (features instanceof Error) return;
 
-        this.setSource(features);
+        await this.setSource(features);
+      })
+      .finally(() => {
+        // The loading of a superseded request is ended by the latest request.
+        if (this.request === request) endLoading(this);
       });
   }, 100);
+}
+
+/**
+The loaded extent of a vector source with the default 'all' loading strategy.
+*/
+const ALL_EXTENT = [-Infinity, -Infinity, Infinity, Infinity];
+
+/**
+@function createSource
+
+@description
+The createSource method creates the Openlayers vector source for a vector layer.
+
+The vector layer data is requested by the layer.reload() method. The source loader doesn't load any features but completes once the layer has finished loading. The Openlayers vector source is loading while the loader is pending, and the Openlayers Map will not dispatch the rendercomplete event while the source of a visible layer is loading.
+
+@param {layer} layer The vector layer.
+@param {Array} [features] The Openlayers features for the source.
+@returns {Object} Openlayers vector source.
+*/
+function createSource(layer, features) {
+  return new ol.source.Vector({
+    features,
+    // The loader must declare the success argument for the source to be loading while the loader is pending.
+    loader: (extent, resolution, projection, success) => {
+      if (layer.loading) {
+        layer.loading.then(() => success([]));
+      } else {
+        success([]);
+      }
+    },
+    strategy: ol.loadingstrategy.all,
+  });
+}
+
+/**
+@function startLoading
+
+@description
+The startLoading method assigns the layer.loading promise which is resolved by the endLoading method once the features of the latest request have been set.
+
+A layer without a source is assigned an empty source to be loading until the features are set.
+
+The loaded extent of the layer source is removed for the source loader to be called on the next render.
+
+The Openlayers cluster source doesn't call a loader. The loading flag is set on a cluster source directly.
+
+@param {layer} layer The vector layer.
+*/
+function startLoading(layer) {
+  if (!layer.loading) {
+    let resolve;
+    layer.loading = new Promise((r) => {
+      resolve = r;
+    });
+    layer.loading.resolve = resolve;
+  }
+
+  if (!layer.L.getSource()) {
+    layer.L.setSource(createSource(layer));
+  }
+
+  const source = layer.L.getSource();
+
+  if (source instanceof ol.source.Cluster) {
+    source.loading = true;
+  } else {
+    source.removeLoadedExtent(ALL_EXTENT);
+  }
+
+  layer.L.changed();
+}
+
+/**
+@function endLoading
+
+@description
+The endLoading method resolves the layer.loading promise for pending source loaders to complete.
+
+The layer is changed to trigger the render which dispatches the rendercomplete event.
+
+@param {layer} layer The vector layer.
+*/
+function endLoading(layer) {
+  layer.loading?.resolve();
+
+  delete layer.loading;
+
+  const source = layer.L.getSource();
+
+  if (source instanceof ol.source.Cluster) {
+    source.loading = false;
+  }
+
+  layer.L.changed();
 }
 
 /**

@@ -10,7 +10,8 @@ The handler serves the complete SAML flow:
 - metadata generation
 - login redirect
 - ACS response validation
-- optional ACL enrichment
+- ACL enrichment
+- same-site document redirect after ACS
 - logout redirect and logout callback handling
 
 Certificate files are still resolved relative to the `apps/xyz` package root so
@@ -193,8 +194,53 @@ async function acs(req, res, strategy, redirectUser) {
       spNameQualifier: samlResponse.profile.spNameQualifier,
     };
 
+    documentRedirect(res);
+
     return await redirectUser(req, res, user);
   } catch (error) {
     console.error(error);
   }
+}
+
+/**
+@function documentRedirect
+
+@description
+The ACS endpoint is requested with a cross-site POST from the IdP. A 302 response from the ACS keeps the following navigation in that cross-site chain and the browser will not send a `SameSite=Strict` user cookie with the redirected request. The user is then redirected to the login again, which loops for as long as the IdP holds a session.
+
+The method wraps `res.status()` so that a 302 response from the redirect helper is sent as a 200 HTML document with a meta refresh to the location instead. The navigation from that document is same-site and the user cookie is sent with the default COOKIE_PROPS.
+
+Any other status, eg. an ACL error, is sent unchanged.
+
+@param {res} res HTTP response.
+*/
+function documentRedirect(res) {
+  const status = res.status.bind(res);
+
+  res.status = (code) => {
+    if (code !== 302) return status(code);
+
+    const location = escapeHTML(res.getHeader('location'));
+
+    res.removeHeader('location');
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'no-store');
+
+    return {
+      send: () =>
+        status(200).send(
+          `<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=${location}"></head><body><a href="${location}">Continue</a></body></html>`,
+        ),
+    };
+  };
+}
+
+function escapeHTML(value) {
+  return String(value).replace(
+    /[&<>"']/g,
+    (char) =>
+      ({ '"': '&quot;', '&': '&amp;', "'": '&#39;', '<': '&lt;', '>': '&gt;' })[
+        char
+      ],
+  );
 }

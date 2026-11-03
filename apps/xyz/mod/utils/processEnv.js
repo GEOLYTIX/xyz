@@ -80,12 +80,12 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [PUBLIC] General requests to XYZ API do require authentication. The PUBLIC value represents an ACL connection for optional authentication.
 @property {String} [SECRET] A secret string is required to sign and [validate JWT]{@link module:/user/auth}.
 @property {String} [SECRET_ALGORITHM] The algorithm used to sign and validate token. Defaults to HS256.
-@property {String} [SECRET_KEY] A key in the root directory to be read as a string secret for token signatures and validation.
+@property {String} [SECRET_KEY] A PEM private key for token signatures and validation, given inline or as the path of a key file in the root directory.
 @property {String} [USER_SESSION] The [auth module]{@link module:/user/auth} will store and check a session key if the USER_SESSION xyzEnv is not undefined.
 @property {String} [AUTH_EXPIRY] The [user/fromACL module]{@link module:/user/fromACL} can expiry user authorization if the AUTH_EXPIRY xyzEnv is configured.
 @property {String} [FAILED_ATTEMPTS='3'] The [user/fromACL module]{@link module:/user/fromACL} will expire user validation if failed login attempts exceed the FAILED_ATTEMPTS value.
 @property {String} [PASSWORD_REGEXP='(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$'] The [user/register module]{@link module:/user/register} will apply PASSWORD_REGEXP value to check the complexity of provided user passwords.
-@property {String} [STATEMENT_TIMEOUT] The [utils/dbs module]{@link module:/utils/dbs} will apply the STATEMENT_TIMEOUT to the query.client.
+@property {String} [STATEMENT_TIMEOUT='10000'] The [utils/dbs module]{@link module:/utils/dbs} will apply the STATEMENT_TIMEOUT in milliseconds to queries whose template does not define a statement_timeout.
 @property {String} [RETRY_LIMIT='3'] The [utils/dbs module]{@link module:/utils/dbs} will apply the RETRY_LIMIT to the query.client.
 @property {String} [WORKSPACE_AGE] The [workspace/cache module]{@link module:/mod/workspace/cache} flashes the workspace cache after the WORKSPACE_AGE is reached.
 @property {String} [CUSTOM_TEMPLATES] The [workspace/cache module]{@link module:/mod/workspace/cache} caches templates defined as a src in the CUSTOM_TEMPLATES xyzEnv.
@@ -113,6 +113,17 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [JWT_TYPE='session'] The typ (type) claim in a JSON Web Token (JWT) is an optional header parameter that declares the media type or category of the token. Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}
 @property {String} [JWT_ISSUER='xyz'] The iss (issuer) claim in a JSON Web Token (JWT) is a case-sensitive string or URI that identifies the principal or authorization server that created and signed the token. Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}
 @property {String} [JWT_AUDIENCE='xyz'] The aud (audience) claim in a JSON Web Token (JWT) identifies the specific recipient or resource server that the token is intended for. The string property will be split into an array of audiences.Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}
+@property {String} [OTEL_EXPORTER_OTLP_ENDPOINT] Enables tracing in the [telemetry module]{@link module:/utils/telemetry} with spans exported to the OTLP/HTTP collector endpoint, eg. http://localhost:4318. See the [OTLP exporter configuration]{@link https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/}.
+@property {String} [OTEL_EXPORTER_OTLP_TRACES_ENDPOINT] Enables tracing in the [telemetry module]{@link module:/utils/telemetry} with a traces specific OTLP/HTTP endpoint which takes precedence over the OTEL_EXPORTER_OTLP_ENDPOINT.
+@property {String} [OTEL_EXPORTER_OTLP_HEADERS] Comma separated key=value headers sent with OTLP export requests, eg. an authorization header for a hosted collector.
+@property {String} [OTEL_TRACES_EXPORTER] The exporter for the [telemetry module]{@link module:/utils/telemetry}. Supported values are otlp, console, html, and none. The html exporter only writes the OTEL_CONSOLE_HTML report, which defaults to .traces/local.html, without logging to the console. Defaults to otlp if an OTLP endpoint is configured.
+@property {String} [OTEL_CONSOLE_MIN_DURATION] Requests shorter than the duration in milliseconds are not logged with the console exporter of the [telemetry module]{@link module:/utils/telemetry}. Specific to XYZ, not an OpenTelemetry SDK variable.
+@property {String} [OTEL_CONSOLE_HTML] Path relative to the workspace root, eg. .traces/local.html, of an HTML report with the most recent traces logged by the console exporter of the [telemetry module]{@link module:/utils/telemetry}. Ignored in a Vercel deployment. Specific to XYZ, not an OpenTelemetry SDK variable.
+@property {String} [OTEL_SERVICE_NAME='xyz'] The service.name resource attribute assigned to spans from the [telemetry module]{@link module:/utils/telemetry}.
+@property {String} [OTEL_RESOURCE_ATTRIBUTES] Comma separated key=value resource attributes which take precedence over the process metadata assigned by the [telemetry module]{@link module:/utils/telemetry}.
+@property {String} [OTEL_TRACES_SAMPLER] The trace sampler, eg. parentbased_traceidratio. All traces are sampled by default.
+@property {String} [OTEL_TRACES_SAMPLER_ARG] The sampler argument, eg. 0.1 to sample 10% of traces with a traceidratio sampler.
+@property {String} [OTEL_SDK_DISABLED] Disables tracing in the [telemetry module]{@link module:/utils/telemetry} if true, regardless of the configured exporter. See the [SDK configuration]{@link https://opentelemetry.io/docs/languages/sdk-configuration/} for all OTEL_* variables.
 */
 
 const defaults = {
@@ -124,6 +135,7 @@ const defaults = {
   RATE_LIMIT_WINDOW: 60 * 1000,
   RETRY_LIMIT: 3,
   SECRET_ALGORITHM: 'HS256',
+  STATEMENT_TIMEOUT: 10000,
   TITLE: 'GEOLYTIX | XYZ',
   TRANSPORT_PORT: 587,
   TRANSPORT_TLS: false,
@@ -136,7 +148,13 @@ const workspaceRoot = fileURLToPath(new URL('../../../../', import.meta.url));
 const rootDir = process.env.XYZ_CWD || workspaceRoot;
 
 if (process.env.SECRET_KEY) {
-  const SECRET = String(readFileSync(resolve(rootDir, process.env.SECRET_KEY)));
+  // A secret manager holds the PEM itself; a local setup points at a key file.
+  // Leading whitespace from a pasted secret must not send the PEM down the file path branch.
+  const SECRET_KEY = process.env.SECRET_KEY.trimStart();
+
+  const SECRET = SECRET_KEY.startsWith('-----BEGIN')
+    ? SECRET_KEY
+    : String(readFileSync(resolve(rootDir, SECRET_KEY)));
 
   process.env.SECRET = SECRET;
   process.env.SECRET_ALGORITHM ||= 'RS256';
@@ -172,6 +190,7 @@ process.env.RATE_LIMIT_WINDOW ||= defaults.RATE_LIMIT_WINDOW;
 process.env.RATE_LIMIT ||= defaults.RATE_LIMIT;
 process.env.RETRY_LIMIT ||= defaults.RETRY_LIMIT;
 process.env.SECRET_ALGORITHM ||= defaults.SECRET_ALGORITHM;
+process.env.STATEMENT_TIMEOUT ||= defaults.STATEMENT_TIMEOUT;
 process.env.TITLE ||= defaults.TITLE;
 process.env.TRANSPORT_PORT ||= defaults.TRANSPORT_PORT;
 process.env.TRANSPORT_TLS ||= defaults.TRANSPORT_TLS;
@@ -186,6 +205,7 @@ const xyzEnv = {
   RATE_LIMIT: process.env.RATE_LIMIT,
   RATE_LIMIT_WINDOW: process.env.RATE_LIMIT_WINDOW,
   RETRY_LIMIT: process.env.RETRY_LIMIT,
+  STATEMENT_TIMEOUT: process.env.STATEMENT_TIMEOUT,
   TITLE: process.env.TITLE,
   TRANSPORT_PORT: Number.parseInt(process.env.TRANSPORT_PORT),
   TRANSPORT_TLS: process.env.TRANSPORT_TLS,

@@ -3,6 +3,7 @@
   "circle_config": "Configurazione cerchio",
   "confirm": "Conferma",
   "confirm_delete": "Sei sicuro di voler eliminare questa caratteristica? Questa operazione non può essere annullata.",
+  "consent_title": "Consenso",
   "create": "Crea",
   "delete_geometry": "Elimina geometria",
   "delete_vertex": "Rimuovi vertice",
