@@ -31,6 +31,14 @@ A new database creates the `postgis` extension and then runs the `*.sql` files i
 | `example.features` | `002_features.sql` | A line, a polygon and points in EPSG:3857, plus a row with a null category and a row with a null geometry |
 | `example.log` | `002_features.sql` | An empty table for insert queries |
 
+### Adding vector datasets
+
+Larger vector datasets, eg. from [Natural Earth](https://www.naturalearthdata.com/) (public domain), go into their own schema and numbered seed files, eg. `100_naturalearth_countries.sql` for `naturalearth.countries`.
+
+- Every test run seeds a new in-memory database, so the seed size adds to the start of every run. Prefer the 1:110m or 1:50m scale and only the columns the tests need.
+- Write the seed with `INSERT` statements. The seed files are executed with `db.exec()`, which doesn't read `COPY ... FROM stdin` data. With GDAL, eg. `ogr2ogr -f PGDump -lco SCHEMA=naturalearth -lco CREATE_SCHEMA=OFF --config PG_USE_COPY NO 100_naturalearth_countries.sql ne_110m_admin_0_countries.shp`, and create the schema in the first seed file of the dataset.
+- Add the table to the seed table above with its geometry type and SRID.
+
 ## Use in Vitest
 
 `globalSetup.js` starts an in-memory database on a free port for the run and discards it afterwards:

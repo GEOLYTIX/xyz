@@ -3,7 +3,7 @@
 XYZ/MAPP testing is split into 3 sections:
 
 - CLI [Command Line Interface] tests for endpoints of the XYZ API.
-- Browser based testing of modules bundled into the Mapp library.
+- Browser tests of the MAPP library modules against a local XYZ host.
 - Integrity tests for workspaces and XYZ process environments.
 
 ## Migrating from Codi to Vitest
@@ -19,7 +19,7 @@ Codi was originally used for both browser and server-side tests. It provided `de
 
 Vitest solves all of these problems. It is a Vite-native test framework with built-in mocking (`vi.mock`, `vi.fn`), snapshot testing, code coverage (v8 provider), watch mode, parallel execution, and first-class ESM support — which is important since the XYZ codebase is `"type": "module"` throughout.
 
-> [!NOTE] Browser tests (`tests/lib/` and `tests/browser/`) still use Codi because they run inside the application in a real browser with access to the DOM, OpenLayers map, and the `mapp` global. These are loaded by the [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs) and are not part of the Vitest pipeline.
+> [!NOTE] The MAPP library browser tests use Vitest browser mode. See [Browser tests for the MAPP library](#browser-tests-for-the-mapp-library).
 
 ### What changed
 
@@ -413,146 +413,75 @@ The 28 query template files under `mod/workspace/templates/` are almost entirely
 
 Templates at 0%: `cluster`, `cluster_hex`, `geojson`, `mvt`, `mvt_geom`, `wkt`, `location_get`, `location_new`, `location_update`, `location_delete`, `locations_delete`, `location_field_value`, `location_count`, `histogram`, `infotip`, `get_nnearest`, `get_random_location`, `distinct_values`, `distinct_values_json`, `field_max`, `field_min`, `field_minmax`, `field_stats`, `gaz_query`, `st_distance_ab`, `st_distance_ab_multiple`, `st_intersects_ab`, `st_intersects_count`.
 
-## Browser tests for Mapp library modules
+## Browser tests for the MAPP library
 
-Browser tests are designed for the browser environment with full access to:
+The MAPP library tests in [apps/mapp/tests](apps/mapp/tests/) run in headless Chromium with [Vitest browser mode](https://vitest.dev/guide/browser/) and the Playwright provider. The tests have the DOM, Openlayers, the `mapp` global and a local XYZ API.
 
-- DOM
-- Mapp library
-- Mapview for loaded application
-- No mocking required for module imports
+### Running browser tests
 
-Browser tests still use [Codi](https://www.npmjs.com/package/codi-test-framework), which is loaded at runtime via ESM in the [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs). Codi provides `describe`, `it`, `assertTrue`, `assertEqual`, and related assertion functions designed for in-browser execution.
-
-### Running Browser Tests
-
-A [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs) is provided to run tests in the browser.
-
-Build the MAPP and MAPP.UI browser bundles before launching the local test environment:
+Install Chromium once:
 
 ```bash
-NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
+pnpm --filter=@geolytix/mapp exec playwright install chromium
 ```
 
-The current tests require an active user to execute.
+Run the tests:
 
-In order for the tests to run you will need to configure the test object on a locale.
-
-```json
-"test": {
-  "options": {
-    "quiet": true,
-    "showSummary": true
-  }
-},
+```bash
+pnpm test:mapp
+pnpm test:mapp:coverage
+pnpm --filter=@geolytix/mapp test:watch
 ```
 
-To run the different tests you can provide the `test` param as part of the url params.
+Run a single file from `apps/mapp`:
 
-eg.
+```bash
+pnpm exec vitest run tests/smoke.test.mjs
+```
 
-`/?test=core` - run the core front end tests
-`/?test=integrity` - run the integrity tests
+No MAPP build is required. Vite serves the `apps/mapp/lib` source modules to the browser, which also provides the v8 coverage for `lib/**`. Coverage is written to `coverage/mapp/lcov.info`.
 
-- `core` - `mapp` object tests
-- `integrity` - workspaces and XYZ process environments tests
+### Testhost
 
-### Writing Browser Tests
+The Vitest global setup from [packages/testhost](packages/testhost/README.md) starts one in-memory [devdb](packages/devdb/README.md) database and one XYZ host on free ports for the run. The [setup](apps/mapp/tests/setup.mjs) assigns the host url as `mapp.host` before the library is imported, so `mapp.utils.xhr` requests the XYZ API of the testhost.
 
-#### Test Structure
+Openlayers is loaded from the `ol` package, not from a CDN. Tests must not depend on the network. Don't add tile layers like OSM to test workspaces, and stub external requests with `vi`.
 
-Browser tests use the describe-it pattern for organization:
+### Workspaces and test data
 
-```javascript
-import { describe, it, assertTrue } from 'codi';
+The host workspace is [apps/mapp/tests/workspaces/_workspace.json](apps/mapp/tests/workspaces/_workspace.json). Each test suite which requests the API adds a locale file to `tests/workspaces/locales` and a template entry for the file to the `_workspace.json`. Tests request the locale by its template key with the `getLocale(key)` helper.
 
-describe({ name: 'Feature Description', id: 'feature_description' }, () => {
-  it(
-    {
-      name: 'should behave in a specific way',
-      parentId: 'feature_description',
-    },
-    () => {
-      // Test code
-    },
-  );
+The layers query the devdb seed tables. Add seed files for new test data rather than changing the existing rows, which tests depend on. The seed rows are documented in [tests/helpers.mjs](apps/mapp/tests/helpers.mjs).
+
+The testhost can serve the test workspace for manual checks in a browser:
+
+```bash
+pnpm testview --workspace=apps/mapp/tests/workspaces/_workspace.json
+```
+
+### Writing browser tests
+
+- One test file per module, mirroring the `lib` path, eg. `tests/layer/themes/categorized.test.mjs` for `lib/layer/themes/categorized.mjs`.
+- Most MAPP modules use the `mapp` global. The setup loads the library for every test file, so tests can call `mapp.*` or import a module from `lib` directly.
+- Assert specific values, eg. a style colour, a feature count or a request param. Avoid snapshots of whole objects.
+- `createMapview(locale, view)` from the helpers creates a mapview which is disposed when the test finishes. `addLayers(mapview)` adds the locale layers and awaits `mapview.renderComplete`.
+- A test for a known bug is written for the correct behaviour with `it.fails()` and a link to the issue. The test fails once the bug is fixed and the `.fails` must be removed with the fix.
+
+```js
+import { describe, expect, it } from 'vitest';
+import { addLayers, createMapview, getLocale, sourceFeatures } from './helpers.mjs';
+
+describe('Smoke', () => {
+  it('renders wkt layers with the devdb rows', async () => {
+    const locale = await getLocale('smoke');
+
+    const mapview = await createMapview(locale, { lat: 48, lng: 5, z: 4 });
+
+    await addLayers(mapview);
+
+    const ids = sourceFeatures(mapview.layers.locations).map((f) => f.get('id'));
+
+    expect(ids).toEqual([1, 2, 3, 4]);
+  });
 });
 ```
-
-Example with multiple assertions:
-
-```javascript
-codi.describe(
-  {
-    name: 'All languages should have the same base language entries',
-    id: 'dictionaries',
-  },
-  () => {
-    Object.keys(mapp.dictionaries).forEach((language) => {
-      codi.it(
-        {
-          name: `The ${language} dictionary should have all the base keys`,
-          parentId: 'dictionaries',
-        },
-        () => {
-          Object.keys(base_dictionary).forEach((key) => {
-            codi.assertTrue(
-              !!mapp.dictionaries[language][key],
-              `${language} should have ${key}`,
-            );
-          });
-        },
-      );
-    });
-  },
-);
-```
-
-### Browser Tests Development Environment Setup
-
-#### Build Configuration
-
-Tests require an unminified build to enable debugging and stepping through code. This is handled by the build system (`apps/mapp/vite.config.mjs` and `apps/ui/vite.config.mjs`).
-
-Setting process environment `NODE_ENV=DEVELOPMENT` disables minification in build processes.
-
-```bash
-NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
-```
-
-### Running Tests in Development Mode
-
-1. Set the environment variable:
-
-   ```bash
-   NODE_ENV=DEVELOPMENT
-   ```
-
-   > This can be defined in your .env or in your nodemon.json config.
-
-2. Build the project:
-
-   ```bash
-   pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
-   ```
-
-3. Verify that:
-   - Source maps are generated
-   - Code is not minified
-
-4. Launch the application and navigate to `localhost:3000/test?template=test_view`
-
-5. Open Chrome DevTools to:
-   - View test results in the console
-   - Debug and step through unminified code
-   - Use source maps for accurate file locations
-
-### Debugging Benefits
-
-The unminified development build provides several advantages:
-
-- Clear, readable code in Chrome DevTools
-- Accurate source mapping to original files
-- Ability to set breakpoints in original source files
-- Step-through debugging from Chrome to VSCode
-- Easier identification of test failures
