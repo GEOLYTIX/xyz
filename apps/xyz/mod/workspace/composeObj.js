@@ -28,7 +28,10 @@ Objects composed in the inspection context do not register query templates in th
 
 The template scopes of the composed objects are added to the scopes set of the inspection store.
 
+The roles which gate access to the root object of a composition (eg. a locale or layer) are pushed to the gates array of the inspection store. A user requires one of the roles of every gate to access the root object.
+
 @property {Set<string>} [store.scopes] The template scopes of the composed objects.
+@property {Array<Array<string>>} [store.gates] The roles which gate access to the root objects of the compositions.
 */
 export const inspection = new AsyncLocalStorage();
 
@@ -104,6 +107,9 @@ async function composeObject(obj, user, defaults) {
 
   addScope(templateScope.join('.'));
 
+  // The root object is gated by its template scope.
+  if (templateScope.length) addGate([templateScope.join('.')]);
+
   const allowed = await authorizeScope({
     obj,
     scope: [...templateScope],
@@ -138,6 +144,18 @@ Adds the template scope to the workspace.scopes set and to the scopes set of the
 function addScope(scope) {
   workspace.scopes.add(scope);
   inspection.getStore()?.scopes?.add(scope);
+}
+
+/**
+@function addGate
+
+@description
+Pushes the roles which gate access to the root object of a composition to the gates array of the inspection store.
+
+@param {Array<string>} roles One of the roles is required to access the root object.
+*/
+function addGate(roles) {
+  inspection.getStore()?.gates?.push(roles);
 }
 
 /**
@@ -478,6 +496,12 @@ async function rolesTemplates(key, val, obj, user, templateScope, root) {
     accessRoles.forEach((role) => {
       addScope([...templateScope, role].filter(Boolean).join('.'));
     });
+
+    // The root obj is gated by every accessRole unless the wildcard role grants access.
+    if (root && accessRoles.length && !accessRoles.includes('*')) {
+      addGate(accessRoles);
+    }
+
     // Role check is not required for admin endpoints. The user.roles property is set to true to bypass role checks.
     return true;
   }

@@ -459,4 +459,28 @@ describe('composeObj: inspection context', () => {
 
     expect(store.scopes).toEqual(new Set(['', 'analyst', 'manager', 'viewer']));
   });
+
+  it('records the gates of the root object', async () => {
+    const obj = {
+      roles: { viewer: true, editor: { field: 'id' } },
+      infoj: [{ field: 'secret', roles: { analyst: true } }],
+    };
+
+    const store = { gates: [] };
+
+    await inspection.run(store, () => composeObj(obj, { roles: true }));
+
+    // The root obj is gated by every role key. Nested roles do not gate the root obj.
+    expect(store.gates).toEqual([['viewer', 'editor']]);
+  });
+
+  it('does not record a gate for the wildcard role', async () => {
+    const store = { gates: [] };
+
+    await inspection.run(store, () =>
+      composeObj({ roles: { '*': true, viewer: true } }, { roles: true }),
+    );
+
+    expect(store.gates).toEqual([]);
+  });
 });

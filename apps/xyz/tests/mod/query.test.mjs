@@ -500,6 +500,41 @@ describe('Query: fields param', () => {
     });
   });
 
+  // The layers are gated by the viewer role. The category entry is gated by the analyst role.
+  it.each(['gated_fields', 'gated_nested_fields'])(
+    'returns 403 for a field which requires the layer gate role and another role on the %s layer',
+    async (layer) => {
+      const res = await request({
+        ...params,
+        layer,
+        fields: 'name,category',
+        user: viewer,
+      });
+
+      expect(res).toEqual({
+        status: 403,
+        data: `Fields [category] restricted by user roles on ${layer} layer.`,
+      });
+    },
+  );
+
+  it.each(['gated_fields', 'gated_nested_fields'])(
+    'permits a field which requires the layer gate role and another role on the %s layer for a user with both roles',
+    async (layer) => {
+      const res = await request({
+        ...params,
+        layer,
+        fields: 'name,category',
+        user: { roles: ['viewer', 'analyst'] },
+      });
+
+      expect(res).toEqual({
+        status: 200,
+        data: [[3, 'POINT(13.405 52.52)', 'Berlin', 'city']],
+      });
+    },
+  );
+
   it('does not register a query template from a role restricted entry', async () => {
     // The secret entry of the restricted_query_template layer is gated by the analyst role and defines the secret_query template. The layer is composed for the analyst scope in the fields check.
     const res = await request({

@@ -393,7 +393,11 @@ async function checkFieldsParam(req, res, layerParams) {
   if (inaccessibleFields.length) {
     // Fields restricted by roles are not reported to an anonymous request.
     const restrictedFields = req.params.user
-      ? await roleRestrictedFields(inaccessibleFields, layerParams)
+      ? await roleRestrictedFields(
+          inaccessibleFields,
+          layerParams,
+          req.params.user,
+        )
       : [];
 
     const missingFields = inaccessibleFields.filter(
@@ -446,7 +450,7 @@ async function checkFieldsParam(req, res, layerParams) {
 @description
 The method checks whether fields which are not accessible to the requesting user are referenced in the layer object composed for other role scopes.
 
-The layer is composed with role checks bypassed to collect the template scopes of the locale and layer. The layer is then composed without roles and for each template scope. Role templates may override the same property, eg. the field of an infoj entry. Each composition retains the properties for its role scope.
+The layer is composed with role checks bypassed to collect the template scopes and the access gates of the locale and layer. The layer is then composed with the gate roles only, and with the gate roles for each template scope. Role templates may override the same property, eg. the field of an infoj entry. Each composition retains the properties for its role scope.
 
 The layer is composed in the inspection context of the composeObj module. Query templates from role restricted objects are not registered in the workspace.templates{} object.
 
@@ -456,9 +460,10 @@ The layer can only be composed if the layer and locale request params were retai
 @param {Object} [layerParams] The layer and locale request params.
 @property {string} layerParams.layer Layer key.
 @property {string|Array} [layerParams.locale] Locale key or array of nested locale keys.
+@param {Object} user The requesting user.
 @returns {Promise<Array<string>>} Fields which are referenced in the layer object composed for any role scope.
 */
-async function roleRestrictedFields(fields, layerParams) {
+async function roleRestrictedFields(fields, layerParams, user) {
   if (!layerParams) return [];
 
   // The getLocale method mutates the locale param. Each composition requires a copy.
@@ -471,18 +476,28 @@ async function roleRestrictedFields(fields, layerParams) {
       user,
     });
 
-  const store = { scopes: new Set() };
+  const store = { gates: [], scopes: new Set() };
 
   return inspection.run(store, async () => {
-    // Admin endpoints set the user.roles property to true to bypass role checks. The composition collects the template scopes in the inspection store.
+    // Admin endpoints set the user.roles property to true to bypass role checks. The composition collects the template scopes and the gates of the locale and layer in the inspection store.
     const layer = await composeLayer({ roles: true });
 
     if (layer instanceof Error) return [];
 
-    // The empty scope is composed without roles.
+    const gateRoles = accessGateRoles(store.gates, user);
+
+    // The empty scope is composed with the gate roles only.
     const scopeLayers = await Promise.all(
       [...new Set(['', ...store.scopes])].map((scope) =>
-        composeLayer(scope ? { roles: [scope] } : undefined),
+        composeLayer({
+          roles: [
+            ...new Set([
+              ...gateRoles,
+              // Role gates check the role keys of a nested scope, template scopes check the joined scope.
+              ...(scope ? [...scope.split('.'), scope] : []),
+            ]),
+          ],
+        }),
       ),
     );
 
@@ -497,6 +512,32 @@ async function roleRestrictedFields(fields, layerParams) {
 
     return fields.filter((field) => layerFields.has(field));
   });
+}
+
+/**
+@function accessGateRoles
+
+@description
+The method returns one role for each gate of the locale and layer. A role of the requesting user is preferred since the user has passed the gates to receive the layer. The first role of the gate is used if the user has none of the gate roles.
+
+A field may require a role to access the locale or layer and another role to access the field. The gate roles are composed with every template scope to satisfy the access gates.
+
+@param {Array<Array<string>>} gates The gates collected in the inspection store.
+@param {Object} user The requesting user.
+@property {Array<string>} [user.roles] The user roles.
+@returns {Array<string>} One role for each gate.
+*/
+function accessGateRoles(gates, user) {
+  const userRoles = Array.isArray(user.roles) ? user.roles : [];
+
+  return gates.map(
+    (gate) =>
+      gate.find((role) =>
+        userRoles.some(
+          (userRole) => userRole === role || userRole.startsWith(`${role}.`),
+        ),
+      ) ?? gate[0],
+  );
 }
 
 /**
