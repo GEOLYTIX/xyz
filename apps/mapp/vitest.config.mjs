@@ -38,10 +38,9 @@ export default defineConfig({
         lines: 46,
       },
       // Sonar resolves the lcov source paths from the repository root.
-      reporter: ['text-summary', ['lcov', { projectRoot: repoRoot }]],
-      reportsDirectory: fileURLToPath(
-        new URL('../../coverage/mapp', import.meta.url),
-      ),
+      reporter: ['text', 'text-summary', ['lcov', { projectRoot: repoRoot }]],
+      // The xyz coverage cleans the root coverage directory.
+      reportsDirectory: fileURLToPath(new URL('./coverage', import.meta.url)),
     },
   },
 });

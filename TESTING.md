@@ -439,7 +439,7 @@ Run a single file from `apps/mapp`:
 pnpm exec vitest run tests/smoke.test.mjs
 ```
 
-No MAPP build is required. Vite serves the `apps/mapp/lib` source modules to the browser, which also provides the v8 coverage for `lib/**`. Coverage is written to `coverage/mapp/lcov.info`.
+No MAPP build is required. Vite serves the `apps/mapp/lib` source modules to the browser, which also provides the v8 coverage for `lib/**`. Coverage is written to `apps/mapp/coverage/lcov.info`.
 
 ### Testhost
 
