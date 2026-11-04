@@ -30,6 +30,13 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['lib/**/*.mjs'],
+      // The coverage floor. Raise the thresholds with new tests.
+      thresholds: {
+        statements: 47,
+        branches: 47,
+        functions: 45,
+        lines: 46,
+      },
       // Sonar resolves the lcov source paths from the repository root.
       reporter: ['text-summary', ['lcov', { projectRoot: repoRoot }]],
       reportsDirectory: fileURLToPath(
