@@ -12,6 +12,7 @@
     "freeze-env": "node utils/freeze-env.js",
     "dev:auth": "turbo run dev --filter=@geolytix/xyz-auth-app",
     "dev:saml": "turbo run dev --filter=@geolytix/xyz-saml-app",
+    "testview": "pnpm --filter=@geolytix/xyz-testhost start",
     "deploy:vercel": "node utils/deploy-vercel.js",
     "bump:patch": "node utils/bump-version.js patch",
     "bump:minor": "node utils/bump-version.js minor",

@@ -5,7 +5,7 @@ packages:
   - apps/ui
   - apps/xyz
   - packages/devdb
-  - packages/testview
+  - packages/testhost
 allowBuilds:
   bcrypt: true
   esbuild: true

@@ -1,0 +1,19 @@
+{
+  "name": "@geolytix/xyz-testhost",
+  "description": "A local XYZ host with the devdb PGlite database for browser tests and test views of the MAPP libraries. Never deployed.",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./globalSetup": "./globalSetup.js"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@geolytix/xyz-app": "workspace:*",
+    "@geolytix/xyz-devdb": "workspace:*",
+    "express": "catalog:"
+  }
+}
