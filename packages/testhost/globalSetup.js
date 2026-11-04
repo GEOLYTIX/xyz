@@ -23,18 +23,24 @@ export default defineConfig({
 import { resolve } from 'node:path';
 import { startHost } from './index.js';
 
+// Vitest runs the global setup for each project, eg. the root project and a browser instance. The projects share one host.
+let hostPromise;
+let projects = 0;
+
 /**
 @function setup
 @async
 
 @description
-The setup method starts the testhost and provides the host url and devdb connection string to the Vitest project.
+The setup method starts the testhost for the first project and provides the host url and devdb connection string to each Vitest project.
+
+The host is stopped by the teardown of the last project.
 
 @param {TestProject} project The Vitest test project.
-@returns {Promise<Function>} The teardown method which stops the host and database.
+@returns {Promise<Function>} The teardown method which stops the host and database after the last project.
 */
 export default async function setup(project) {
-  const host = await startHost({
+  hostPromise ??= startHost({
     port: 0,
     // The Vitest browser page is served from a different origin.
     cors: true,
@@ -43,11 +49,17 @@ export default async function setup(project) {
       : undefined,
   });
 
+  projects++;
+
+  const host = await hostPromise;
+
   process.env.XYZ_HOST = host.url;
   process.env.DEVDB = host.devdb.connectionString;
 
   project.provide('XYZ_HOST', host.url);
   project.provide('DEVDB', host.devdb.connectionString);
 
-  return host.stop;
+  return async () => {
+    if (--projects === 0) await host.stop();
+  };
 }

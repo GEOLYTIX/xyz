@@ -21,6 +21,8 @@
     "test:saml": "turbo run test --filter=@geolytix/xyz-saml-app",
     "test:xyz": "turbo run test --filter=@geolytix/xyz-app",
     "test:xyz:coverage": "turbo run test:coverage --filter=@geolytix/xyz-app",
+    "test:mapp": "turbo run test --filter=@geolytix/mapp",
+    "test:mapp:coverage": "turbo run test:coverage --filter=@geolytix/mapp",
     "build": "turbo run build",
     "generate-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose && jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
     "login-public-key": "varlock run -- node ./utils/printLoginPublicKey.js",

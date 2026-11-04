@@ -1,0 +1,33 @@
+{
+  "name": "Smoke",
+  "layers": {
+    "locations": {
+      "display": true,
+      "format": "wkt",
+      "table": "example.locations",
+      "qID": "id",
+      "geom": "geom",
+      "srid": 4326,
+      "style": {
+        "default": {
+          "icon": { "type": "dot", "fillColor": "#999" }
+        }
+      }
+    },
+    "features": {
+      "display": true,
+      "format": "wkt",
+      "table": "example.features",
+      "qID": "id",
+      "geom": "geom",
+      "srid": 3857,
+      "style": {
+        "default": {
+          "strokeColor": "#333",
+          "fillColor": "#9996",
+          "icon": { "type": "dot", "fillColor": "#999" }
+        }
+      }
+    }
+  }
+}
