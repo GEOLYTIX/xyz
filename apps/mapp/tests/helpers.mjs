@@ -26,6 +26,8 @@ example.features with EPSG:3857 geometries in London and Berlin:
 
 geodata.uk_glx_open_retail_points has 19,229 UK grocery stores with EPSG:4326 points in the geom_p_4326 column. The grocery locale has the retail_points cluster layer of the GEOLYTIX MAPP product workspace. The locale view at z13 in south London has 39 stores.
 
+naturalearth.countries has 177 Natural Earth 1:110m countries. The countries locale has the countries mvt layer with the geom_3857 MultiPolygons. The testhost encodes the vector tiles, see packages/testhost/README.md.
+
 example.scratch_location is an empty table for location create, update and delete tests. The scratch locale has the scratch_location layer with editable infoj entries. Each test inserts its own record with newLocation(), because all test files of a run share the devdb.
 
 ## Workspaces

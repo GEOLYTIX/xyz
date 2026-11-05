@@ -68,6 +68,12 @@ Workspaces use the `DEVDB` connection and the devdb seed tables. Add new seed fi
 
 The test suites of the libraries keep their workspaces next to the tests, eg. [apps/mapp/tests/workspaces](../../apps/mapp/tests/workspaces/).
 
+## Vector tiles
+
+The devdb PostGIS is compiled without protobuf-c, so `ST_AsMVT` and `ST_AsMVTGeom` raise an error. The testhost replaces the core `mvt` query template through the `CUSTOM_TEMPLATES` with the [testhost mvt template](templates/mvt.js). The template has the layer, fields and filter of the core template and returns the features with their GeoJSON geometry in tile pixel coordinates. The [mvtEncode](mvtEncode.js) middleware encodes the rows with [vt-pbf](https://github.com/mapbox/vt-pbf) as vector tile.
+
+MVT layers of any workspace served by the testhost request their tiles through the XYZ API as usual. The tests cover the MAPP mvt format, not the SQL of the core mvt template.
+
 ## Test views
 
 Each folder in [views/](views/) is a test view, served at `/views/{folder}/`. A view imports modules from `/mapp/lib` and fetches from `/api`. More complex views with scripts for specific MAPP API processes can be added as new folders.

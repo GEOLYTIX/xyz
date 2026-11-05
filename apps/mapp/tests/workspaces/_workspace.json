@@ -17,6 +17,9 @@
     "grocery": {
       "src": "file:apps/mapp/tests/workspaces/locales/grocery.json"
     },
+    "countries": {
+      "src": "file:apps/mapp/tests/workspaces/locales/countries.json"
+    },
     "scratch": {
       "src": "file:apps/mapp/tests/workspaces/locales/scratch.json"
     }

@@ -32,6 +32,7 @@ A new database creates the `postgis` extension and then runs the `*.sql` files i
 | `example.log` | `002_features.sql` | An empty table for insert queries |
 | `example.scratch_location` | `003_scratch_location.sql` | An empty table for location create, update and delete tests, with text, integer, jsonb, json and EPSG:4326 point columns. Tests insert their own rows. |
 | `geodata.uk_glx_open_retail_points` | `100_retailpoints.sql` | 19,229 grocery stores in EPSG:4326 from the [GEOLYTIX UK Retail Points](https://geolytix.com/blog/supermarket-retail-points/) v49 (2026-09), Open Data CC0. The `geom_p_4326` points are rounded to 6 decimals. |
+| `naturalearth.countries` | `101_naturalearth_countries.sql` | 177 countries from the [Natural Earth](https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/) 1:110m Admin 0 countries, public domain. MultiPolygons in `geom_4326` and in `geom_3857`, clipped to the EPSG:3857 latitude bounds. |
 
 ### Adding vector datasets
 
@@ -64,4 +65,5 @@ The MAPP library tests use the database through the [testhost](../testhost/READM
 
 - PGlite is a single-connection database. The socket server accepts up to 20 client connections and runs their queries one at a time.
 - `@electric-sql/pglite-postgis` is marked experimental by its authors.
+- The PGlite PostGIS extension is compiled without protobuf-c. `ST_AsMVT` and `ST_AsMVTGeom` raise an error, so the XYZ `mvt` query template doesn't work with the devdb.
 - PGlite is not a full PostgreSQL server. Roles, passwords and some extensions differ from production, so treat it as a fixture database, not a production replica.

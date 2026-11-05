@@ -28,6 +28,7 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { startDevDb } from '@geolytix/xyz-devdb';
 import express from 'express';
+import mvtEncode from './mvtEncode.js';
 
 const workspaceRoot = fileURLToPath(new URL('../..', import.meta.url));
 
@@ -47,6 +48,8 @@ let started = false;
 The startHost method starts an in-memory devdb database and an express server with the XYZ API for the workspace file.
 
 The workspace is read with the file provider relative to the repository root. Changes to the workspace file apply without a restart.
+
+The devdb PostGIS is compiled without protobuf-c and cannot create vector tiles. The CUSTOM_TEMPLATES replace the core mvt query template with the [testhost mvt template](templates/mvt.js), and the [mvtEncode](mvtEncode.js) middleware encodes its rows as vector tile.
 
 The queryDelay delays the response of /api/query requests by the given milliseconds. Delayed layer data with cached tiles tests that the mapview.renderComplete promise doesn't resolve before the layer data has loaded.
 
@@ -84,6 +87,8 @@ export async function startHost({
     WORKSPACE: `file:${workspaceSrc}`,
     WORKSPACE_AGE: '0',
     XYZ_CWD: workspaceRoot,
+    // The devdb PostGIS cannot create vector tiles. The testhost mvt template returns the features for the mvtEncode middleware.
+    CUSTOM_TEMPLATES: 'file:packages/testhost/templates/_templates.json',
   });
 
   await import('@geolytix/xyz-app/mod/utils/processEnv.js');
@@ -142,6 +147,8 @@ export async function startHost({
   if (queryDelay > 0) {
     app.use('/api/query', (req, res, next) => setTimeout(next, queryDelay));
   }
+
+  app.use('/api/query', mvtEncode);
 
   app.use(createRouter([validateRequestParams, validateRequestAuth]));
 

@@ -1,0 +1,7 @@
+{
+  "mvt": {
+    "src": "file:packages/testhost/templates/mvt.js",
+    "module": true,
+    "layer": true
+  }
+}

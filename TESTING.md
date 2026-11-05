@@ -17,7 +17,7 @@ All suites use [Vitest](https://vitest.dev/).
 
 **MAPP library tests** run with [Vitest browser mode](https://vitest.dev/guide/browser/) in Chromium with the Playwright provider. The tests have the DOM, Openlayers and the `mapp` global. Vite serves the `apps/mapp/lib` source modules, so no build is required.
 
-The global setup from [packages/testhost](packages/testhost/README.md) starts one devdb database and one XYZ host for the test run. The `mapp.host` is the testhost url, so `mapp.utils.xhr` requests the XYZ API with the test workspace.
+The global setup from [packages/testhost](packages/testhost/README.md) starts one devdb database and one XYZ host for the test run. The devdb can't create vector tiles, so the testhost [encodes the tiles](packages/testhost/README.md#vector-tiles) of mvt layers. The `mapp.host` is the testhost url, so `mapp.utils.xhr` requests the XYZ API with the test workspace.
 
 **Test data** is the devdb seed data. The devdb is a [PGlite](https://pglite.dev) PostgreSQL database with PostGIS, which runs in memory in the Node process. Every run seeds a new database from the [seed files](packages/devdb/seed/).
 

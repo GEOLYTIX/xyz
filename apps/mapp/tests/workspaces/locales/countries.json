@@ -1,0 +1,38 @@
+{
+  "name": "Countries",
+  "view": { "lat": 50, "lng": 10, "z": 3 },
+  "layers": {
+    "countries": {
+      "display": true,
+      "format": "mvt",
+      "table": "naturalearth.countries",
+      "geom": "geom_3857",
+      "srid": "3857",
+      "qID": "id",
+      "infoj": [
+        { "type": "key" },
+        { "title": "Name", "field": "name" },
+        { "title": "ISO A3", "field": "iso_a3" },
+        { "title": "Continent", "field": "continent" },
+        { "title": "Population", "field": "pop_est", "type": "integer" }
+      ],
+      "style": {
+        "default": {
+          "strokeColor": "#333",
+          "fillColor": "#9996"
+        },
+        "hover": { "field": "name" },
+        "theme": {
+          "title": "Continent",
+          "type": "categorized",
+          "field": "continent",
+          "cat": {
+            "Europe": { "fillColor": "#4363d8" },
+            "Africa": { "fillColor": "#f58231" },
+            "Asia": { "fillColor": "#3cb44b" }
+          }
+        }
+      }
+    }
+  }
+}
