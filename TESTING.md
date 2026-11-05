@@ -29,7 +29,9 @@ The global setup from [packages/testhost](packages/testhost/README.md) starts on
 | [apps/mapp/tests/workspaces](apps/mapp/tests/workspaces/) | MAPP library tests |
 | [packages/testhost/workspaces](packages/testhost/workspaces/) | Test views and checks for bugs and features of a pull request |
 
-Tests don't use the network. Openlayers is loaded from the `ol` package, test workspaces have no tile layers, and requests to external services are stubbed.
+Tests don't use the network. Openlayers is loaded from the `ol` package, the tile layers in test workspaces are not displayed, and requests to external services are stubbed.
+
+The [osm template](packages/testhost/workspaces/templates/osm.json) is the base map of all test workspaces. Each workspace adds the template as the `osm` layer of its default locale, so every locale has the `osm` layer. The layer has `display: false`, and the testview workspace overrides it with `display: true`. The [tiles format tests](apps/mapp/tests/layer/format/tiles.test.mjs) use the layer, including its `style.contextFilter`.
 
 ## Running tests
 
@@ -94,7 +96,7 @@ The testhost can serve a test workspace for a manual check in a browser:
 pnpm testview --workspace=apps/mapp/tests/workspaces/_workspace.json
 ```
 
-Open a locale of the workspace in the locale view, eg. http://127.0.0.1:3001/views/locale/?locale=smoke. The view has the layers of the locale with their feature count, and an OSM base map.
+Open a locale of the workspace in the locale view, eg. http://127.0.0.1:3001/views/locale/?locale=smoke. The view has the layers of the locale with their feature count and a checkbox to show them, eg. the hidden OSM Basemap.
 
 ### VS Code
 

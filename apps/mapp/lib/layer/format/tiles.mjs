@@ -15,8 +15,10 @@ The function takes a layer object as input and performs the following steps:
 2. It creates a parameter string (`layer.paramString`) using the `mapp.utils.paramString` function, passing `layer.params` as an argument.
 3. It creates a new `ol.layer.Tile` object and assigns it to `layer.L`. The tile layer is configured with the following properties:
    - `source`: A new instance of the tile source based on layer.source. The source is created using `ol.source[layer.source]` and is configured with the projection, url, and transition properties.
-   - `layer`: The layer object itself, allowing access to layer properties within the tile layer.
+   - `className`: The `mapp-layer-{layer.key}` class name of the layer canvas element.
+   - `key`: The layer key.
    - `zIndex`: The z-index of the layer.
+4. It adds prerender and postrender listeners to the tile layer to apply the `layer.style.contextFilter`, if defined.
    
 @param {layer} layer The layer object.
 @property {string} [layer.source='OSM'] The source of the tile layer (e.g., 'OSM', 'XYZ').
@@ -25,10 +27,11 @@ The function takes a layer object as input and performs the following steps:
 @property {Object} [layer.params] Additional parameters for the tile layer.
 @property {string} layer.URI The base URI for the tile layer.
 @property {Object} [layer.style] The style configuration for the layer.
+@property {string} [style.contextFilter] A CSS filter, eg. `grayscale(100%)`, assigned to the canvas context on prerender of the tile layer. The filter is reset to `none` on postrender, so it doesn't apply to layers rendered after the tile layer.
 @property {number} [layer.zIndex=0] The z-index of the layer.
 @property {ol.layer.Tile} layer.L The OpenLayers tile layer object.
 */
-export default (layer) => {
+export default function tiles(layer) {
   layer.source ??= 'OSM';
 
   layer.projection ??= 'EPSG:3857';
@@ -60,4 +63,4 @@ export default (layer) => {
       }
     });
   }
-};
+}

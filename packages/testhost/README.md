@@ -76,7 +76,7 @@ Each folder in [views/](views/) is a test view, served at `/views/{folder}/`. A 
 
 The [locale view](views/locale/) creates a mapview for any locale of the workspace served by the host, eg. `/views/locale/?locale=smoke`. The root url redirects to the locale view if the host serves a workspace other than the testview workspace.
 
-The mapview fits the extent of the vector features if the locale has no view. The panel lists the layers with their feature count and a checkbox to show or hide them. The view adds an OSM base map once the mapview is ready, so test workspaces don't need a tile layer.
+The mapview fits the extent of the vector features if the locale has no view. The scroll wheel zooms the map to check the layer behaviour on pan and zoom. The panel lists the layers with their feature count and a checkbox to show or hide them. The base map is the `osm` layer from the [osm template](workspaces/templates/osm.json) in the default locale of the workspace. It has `display: false`, so the tests don't request tiles, and is shown with its checkbox in the panel.
 
 The mapview is assigned to `window.mapview`. `document.body.dataset.ready` is set once the mapview has rendered.
 
@@ -84,7 +84,7 @@ The mapview is assigned to `window.mapview`. `document.body.dataset.ready` is se
 
 The testview requires the locale and layers of the default workspace. It doesn't work with other workspaces.
 
-The [testview](views/testview/) loads Openlayers and the MAPP library and creates 4 mapviews with the [workspaces/testview.json](workspaces/testview.json) locale. Each mapview has an OSM base layer and one themed layer from the devdb seed tables.
+The [testview](views/testview/) loads Openlayers and the MAPP library and creates 4 mapviews with the [workspaces/testview.json](workspaces/testview.json) locale. Each mapview has the `osm` base layer from the [osm template](workspaces/templates/osm.json) and one themed layer from the devdb seed tables.
 
 | Mapview | Table | Theme |
 |---|---|---|

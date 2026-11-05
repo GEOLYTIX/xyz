@@ -2,13 +2,9 @@
   "dbs": "DEVDB",
   "locale": {
     "layers": {
-      "OSM": {
-        "display": true,
-        "format": "tiles",
-        "URI": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-        "attribution": {
-          "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-        }
+      "osm": {
+        "template": "osm",
+        "display": true
       }
     }
   },
@@ -235,6 +231,11 @@
           }
         }
       }
+    }
+  },
+  "templates": {
+    "osm": {
+      "src": "file:packages/testhost/workspaces/templates/osm.json"
     }
   }
 }

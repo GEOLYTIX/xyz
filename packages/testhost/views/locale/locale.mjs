@@ -3,9 +3,9 @@ The locale view creates a mapview for a locale of the testhost workspace, eg. `/
 
 The view can check any workspace served by the testhost, eg. the MAPP test workspace or a workspace for a bug or feature.
 
-The mapview is created with the locale view. The view fits the extent of the vector layer features if the locale has no view.
+The mapview is created with the locale view. The scroll wheel zooms the map to check the layer behaviour on pan and zoom, eg. the clustering of a vector layer. The view fits the extent of the vector layer features if the locale has no view.
 
-The panel lists the locale layers with their feature count and a checkbox to show or hide the layer. An OSM base map is added once the mapview is ready.
+The panel lists the locale layers with their feature count and a checkbox to show or hide the layer. The base map is the hidden `osm` layer from the testhost osm template in the default locale of the workspace.
 
 The decorated mapview is assigned to `window.mapview`. `document.body.dataset.ready` is set once the mapview has rendered.
 */
@@ -40,6 +40,8 @@ const mapview = await mapp.Mapview({
   host: mapp.host,
   target: document.getElementById('map'),
   locale,
+  // Scroll wheel zoom for checks of the layer behaviour on pan and zoom.
+  scrollWheelZoom: true,
 });
 
 window.mapview = mapview;
@@ -78,24 +80,10 @@ for (const layer of Object.values(mapview.layers)) {
     <label>
       <input
         type="checkbox"
-        checked=${layer.display}
+        .checked=${!!layer.display}
         onchange=${(e) => (e.target.checked ? layer.show() : layer.hide())}>
       ${layer.name || layer.key}${count}
     </label>`);
 }
 
 document.body.dataset.ready = true;
-
-// The OSM base map is added by the view, not the workspace, so that test workspaces don't depend on the network.
-const baseMap = new ol.layer.Tile({ source: new ol.source.OSM(), zIndex: -1 });
-
-mapview.Map.addLayer(baseMap);
-
-panel.append(mapp.utils.html.node`
-  <label>
-    <input
-      type="checkbox"
-      checked
-      onchange=${(e) => baseMap.setVisible(e.target.checked)}>
-    OSM base map
-  </label>`);

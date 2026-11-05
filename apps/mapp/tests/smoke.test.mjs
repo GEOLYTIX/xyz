@@ -18,7 +18,9 @@ describe('Smoke', () => {
     const locale = await getLocale('smoke');
 
     expect(locale.key).toBe('smoke');
+    // The osm layer is from the default locale of the test workspace.
     expect(locale.layers.map((layer) => layer.key)).toEqual([
+      'osm',
       'locations',
       'features',
     ]);

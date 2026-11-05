@@ -24,7 +24,11 @@ example.features with EPSG:3857 geometries in London and Berlin:
 | 4  | Lost Park        | park     | NULL       |
 | 5  | Brandenburg Gate | landmark | Point      |
 
+geodata.uk_glx_open_retail_points has 19,229 UK grocery stores with EPSG:4326 points in the geom_p_4326 column. The grocery locale has the retail_points cluster layer of the GEOLYTIX MAPP product workspace. The locale view at z13 in south London has 39 stores.
+
 ## Workspaces
+
+The default locale of the _workspace.json has the hidden `osm` tiles layer from the testhost osm template, so every locale has the `osm` layer.
 
 Each test suite which requests the XYZ API has a locale file in [workspaces/locales](workspaces/locales/). The locale file is added as a template to the _workspace.json and requested by its template key, eg. `getLocale('smoke')`.
 */

@@ -30,6 +30,7 @@ A new database creates the `postgis` extension and then runs the `*.sql` files i
 | `example.locations` | `001_example.sql` | 4 points in EPSG:4326 (London, Paris, Berlin, Madrid) |
 | `example.features` | `002_features.sql` | A line, a polygon and points in EPSG:3857, plus a row with a null category and a row with a null geometry |
 | `example.log` | `002_features.sql` | An empty table for insert queries |
+| `geodata.uk_glx_open_retail_points` | `100_retailpoints.sql` | 19,229 grocery stores in EPSG:4326 from the [GEOLYTIX UK Retail Points](https://geolytix.com/blog/supermarket-retail-points/) v49 (2026-09), Open Data CC0. The `geom_p_4326` points are rounded to 6 decimals. |
 
 ### Adding vector datasets
 

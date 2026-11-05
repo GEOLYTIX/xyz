@@ -1,0 +1,12 @@
+{
+  "name": "OSM Basemap",
+  "display": false,
+  "format": "tiles",
+  "URI": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+  "attribution": {
+    "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+  },
+  "style": {
+    "contextFilter": "grayscale(100%)"
+  }
+}

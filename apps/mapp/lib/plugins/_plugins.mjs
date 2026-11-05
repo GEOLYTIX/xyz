@@ -15,7 +15,6 @@ Plugins which add buttons to the mapview.mapButton element are ui plugins.
 import { svgTemplates } from '../utils/svgTemplates.mjs';
 import { consent } from './consent.mjs';
 import { layer_order } from './layer_order.mjs';
-import { test } from './test.mjs';
 
 /**
 @typedef {Object} plugins
@@ -28,7 +27,6 @@ const plugins = {
   consent,
   layer_order,
   svg_templates: svgTemplates,
-  test,
 };
 
 export default plugins;

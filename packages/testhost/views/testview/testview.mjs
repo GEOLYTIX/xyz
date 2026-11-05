@@ -1,7 +1,7 @@
 /**
 The testview module imports the MAPP library without MAPP.UI and creates a mapview for each testview configuration.
 
-Each mapview is created with a clone of the testview locale and adds the OSM base layer and the themed layer from the locale layers.
+Each mapview is created with a clone of the testview locale and adds the osm base layer and the themed layer from the locale layers.
 
 The decorated mapviews are assigned to `window.testviews` and `document.body.dataset.ready` is set once all mapviews have completed their render. Browser tests can await the ready flag before making assertions on the mapviews.
 */
@@ -58,7 +58,7 @@ for (const testview of testviews) {
   });
 
   await mapview.addLayer(
-    locale.layers.filter((layer) => ['OSM', testview.key].includes(layer.key)),
+    locale.layers.filter((layer) => ['osm', testview.key].includes(layer.key)),
   );
 
   window.testviews[testview.key] = mapview;
