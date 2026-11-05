@@ -235,7 +235,7 @@ The MAPP library tests depend on the XYZ service running locally with a devdb da
 | Helper | Description |
 |---|---|
 | `getLocale(key)` | Requests a locale with its layers from the test workspace. |
-| `createMapview(locale, view)` | Creates a mapview, which is disposed when the test finishes. |
+| `createMapview(locale, view, params)` | Creates a mapview with additional mapview params, eg. an `attribution`. The mapview is disposed when the test finishes. |
 | `addLayers(mapview)` | Adds the locale layers and awaits `mapview.renderComplete`. |
 | `changeEnd(mapview)` | Resolves after the debounced `mapview.changeEnd` has called the layer `changeEnd` methods. Create the promise before the map view changes. |
 | `sourceFeatures(layer)` | Returns the features of a vector layer sorted by id. |

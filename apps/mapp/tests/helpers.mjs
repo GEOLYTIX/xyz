@@ -66,9 +66,10 @@ The layers are not added to the mapview. Use `await addLayers(mapview)` to add t
 
 @param {Object} locale The locale for the mapview.
 @param {Object} [view] The initial view, eg. `{ lat: 51.5, lng: -0.1, z: 10 }`.
+@param {Object} [params] Additional mapview params, eg. `{ attribution: {} }`.
 @returns {Promise<mapview>} The decorated mapview.
 */
-export async function createMapview(locale, view) {
+export async function createMapview(locale, view, params = {}) {
   const target = document.createElement('div');
 
   target.style.cssText = 'position:relative;width:800px;height:600px;';
@@ -80,6 +81,7 @@ export async function createMapview(locale, view) {
     target,
     locale: structuredClone(locale),
     view: view && { ...view },
+    ...params,
   });
 
   onTestFinished(() => {
