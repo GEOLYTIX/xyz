@@ -224,6 +224,8 @@ it('warns about a potential SQL injection', () => {
 
 ### MAPP library tests
 
+The MAPP library tests depend on the XYZ service running locally with a devdb database. The global setup from [packages/testhost](packages/testhost/README.md) starts the testhost with a new devdb database on a free port before the tests and stops it after the run, so no host needs to be started for the tests. The layer data, locales and query responses in the tests come from this host, not from mocks.
+
 [tests/setup.mjs](apps/mapp/tests/setup.mjs) runs in the browser before each test file. It loads Openlayers and the MAPP library with the testhost as `mapp.host`. Most MAPP modules use the `mapp` global, so tests can call `mapp.*` or import a module from `lib` directly.
 
 [tests/helpers.mjs](apps/mapp/tests/helpers.mjs) documents the seed rows and provides:
