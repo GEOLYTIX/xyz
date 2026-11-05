@@ -132,7 +132,12 @@ export async function startHost({
     ),
   );
 
-  app.get('/', (req, res) => res.redirect('/views/testview/'));
+  // The testview requires the locale and layers of the default workspace.
+  app.get('/', (req, res) =>
+    res.redirect(
+      workspace === DEFAULT_WORKSPACE ? '/views/testview/' : '/views/locale/',
+    ),
+  );
 
   if (queryDelay > 0) {
     app.use('/api/query', (req, res, next) => setTimeout(next, queryDelay));

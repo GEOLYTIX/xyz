@@ -19,7 +19,7 @@ The package is listed in `.vercelignore` like devdb and is never deployed.
 pnpm testview                     # http://127.0.0.1:3001/views/testview/
 pnpm testview --port=3002
 pnpm testview --query-delay=1000
-pnpm testview --workspace=apps/mapp/tests/workspaces/_workspace.json
+pnpm testview --workspace=apps/mapp/tests/workspaces/_workspace.json   # http://127.0.0.1:3001/views/locale/?locale=smoke
 ```
 
 | Argument | Environment variable | Default |
@@ -62,6 +62,8 @@ The [workspaces/](workspaces/) directory holds workspaces for the testhost views
 pnpm testview --workspace=packages/testhost/workspaces/bug_2988.json
 ```
 
+Open a locale of the workspace in the [locale view](#locale), eg. `/views/locale/?locale=bug_2988`.
+
 Workspaces use the `DEVDB` connection and the devdb seed tables. Add new seed files to devdb for data a workspace needs.
 
 The test suites of the libraries keep their workspaces next to the tests, eg. [apps/mapp/tests/workspaces](../../apps/mapp/tests/workspaces/).
@@ -70,7 +72,17 @@ The test suites of the libraries keep their workspaces next to the tests, eg. [a
 
 Each folder in [views/](views/) is a test view, served at `/views/{folder}/`. A view imports modules from `/mapp/lib` and fetches from `/api`. More complex views with scripts for specific MAPP API processes can be added as new folders.
 
+### locale
+
+The [locale view](views/locale/) creates a mapview for any locale of the workspace served by the host, eg. `/views/locale/?locale=smoke`. The root url redirects to the locale view if the host serves a workspace other than the testview workspace.
+
+The mapview fits the extent of the vector features if the locale has no view. The panel lists the layers with their feature count and a checkbox to show or hide them. The view adds an OSM base map once the mapview is ready, so test workspaces don't need a tile layer.
+
+The mapview is assigned to `window.mapview`. `document.body.dataset.ready` is set once the mapview has rendered.
+
 ### testview
+
+The testview requires the locale and layers of the default workspace. It doesn't work with other workspaces.
 
 The [testview](views/testview/) loads Openlayers and the MAPP library and creates 4 mapviews with the [workspaces/testview.json](workspaces/testview.json) locale. Each mapview has an OSM base layer and one themed layer from the devdb seed tables.
 

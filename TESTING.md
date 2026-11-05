@@ -104,6 +104,8 @@ The testhost can serve a test workspace for a manual check in a browser:
 pnpm testview --workspace=apps/mapp/tests/workspaces/_workspace.json
 ```
 
+Open a locale of the workspace in the locale view, eg. http://127.0.0.1:3001/views/locale/?locale=smoke. The view has the layers of the locale with their feature count, and an OSM base map.
+
 **XYZ API tests** can be debugged in VS Code with a launch configuration for the node runtime:
 
 ```json

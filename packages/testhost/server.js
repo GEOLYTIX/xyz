@@ -45,9 +45,15 @@ try {
   process.exit(1);
 }
 
+// The testview requires the locale and layers of the default workspace.
+const view =
+  workspace === DEFAULT_WORKSPACE
+    ? `Testview: ${host.url}/views/testview/`
+    : `Locale view: ${host.url}/views/locale/?locale={key}`;
+
 console.log(`The testhost is running on ${host.url}
 
-Testview: ${host.url}/views/testview/
+${view}
 Workspace: ${workspace}
 Devdb: ${host.devdb.connectionString}
 
