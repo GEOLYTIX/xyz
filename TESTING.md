@@ -13,7 +13,7 @@ Tests for the MAPP.UI library will follow in `apps/ui/tests`.
 
 All suites use [Vitest](https://vitest.dev/).
 
-**XYZ API tests** import the API modules in Node. Dependencies like database connections, login views or remote sources are replaced with Vitest mocks. Requests and responses are created with `node-mocks-http`. Tests which need real SQL run against the [devdb](packages/devdb/README.md), eg. the query module tests.
+**XYZ API tests** import the API modules in Node. Tests which need a database run against the [devdb](packages/devdb/README.md), eg. the query module tests. Dependencies the devdb can't provide, like login views or remote sources, are replaced with Vitest mocks. Requests and responses are created with `node-mocks-http`.
 
 **MAPP library tests** run with [Vitest browser mode](https://vitest.dev/guide/browser/) in Chromium with the Playwright provider. The tests have the DOM, Openlayers and the `mapp` global. Vite serves the `apps/mapp/lib` source modules, so no build is required.
 
@@ -134,6 +134,26 @@ See the [Vitest API](https://vitest.dev/api/) for the available test methods and
 
 [tests/setup.mjs](apps/xyz/tests/setup.mjs) runs before each test file and creates the `globalThis.xyzEnv`. A test which needs `xyzEnv` properties assigns them before it imports the module under test, because modules read the `xyzEnv` when they are imported.
 
+**A devdb database** is started by a test file which needs a database. Tests should use the devdb rather than mocks where possible. A test against the devdb runs the real SQL and the real database responses, while a mocked database only returns what the test expects. See [query.test.mjs](apps/xyz/tests/mod/query.test.mjs):
+
+```js
+import { afterAll } from 'vitest';
+import { startDevDb } from '../../../../packages/devdb/index.js';
+
+const devdb = await startDevDb({ port: 0 });
+
+afterAll(() => devdb.stop());
+
+globalThis.xyzEnv = {
+  WORKSPACE: 'file:./tests/assets/query_workspace.json',
+  DBS_DEVDB: devdb.connectionString,
+};
+```
+
+Add seed files to the [devdb](packages/devdb/README.md) for the data a test needs.
+
+Mock the dependencies which the devdb can't provide, eg. login views, remote sources or a database error.
+
 **Module mocks** replace the import of a module. `vi.mock()` calls are hoisted to the top of the file. Use a `vi.fn()` proxy to change the mock implementation in a test:
 
 ```js
@@ -200,22 +220,6 @@ it('warns about a potential SQL injection', () => {
     'Potential SQL Injection in sql_table_insert request body.',
   );
 });
-```
-
-**A devdb database** is started by a test file which needs real SQL. See [query.test.mjs](apps/xyz/tests/mod/query.test.mjs):
-
-```js
-import { afterAll } from 'vitest';
-import { startDevDb } from '../../../../packages/devdb/index.js';
-
-const devdb = await startDevDb({ port: 0 });
-
-afterAll(() => devdb.stop());
-
-globalThis.xyzEnv = {
-  WORKSPACE: 'file:./tests/assets/query_workspace.json',
-  DBS_DEVDB: devdb.connectionString,
-};
 ```
 
 ### MAPP library tests
