@@ -37,8 +37,13 @@ export default defineConfig({
         functions: 45,
         lines: 46,
       },
-      // Sonar resolves the lcov source paths from the repository root.
-      reporter: ['text', 'text-summary', ['lcov', { projectRoot: repoRoot }]],
+      // The lcov.info is for SonarQube, which resolves the source paths from the repository root.
+      // The VS Code extension shows the coverage in the editor.
+      reporter: [
+        'text',
+        'text-summary',
+        ['lcovonly', { projectRoot: repoRoot }],
+      ],
       // The xyz coverage cleans the root coverage directory.
       reportsDirectory: fileURLToPath(new URL('./coverage', import.meta.url)),
     },

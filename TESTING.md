@@ -78,12 +78,9 @@ pnpm test:xyz:coverage
 pnpm test:mapp:coverage
 ```
 
-The terminal shows the coverage per file, with the uncovered lines, and the totals. The HTML reports show the uncovered lines and branches in the source of each file:
+The terminal shows the coverage per file, with the uncovered line numbers, and the totals. Run with Coverage in the [VS Code extension](#vs-code) highlights the covered and uncovered lines in the source.
 
-| Suite | HTML report | lcov |
-|---|---|---|
-| XYZ API | `coverage/lcov-report/index.html` | `coverage/lcov.info` |
-| MAPP library | `apps/mapp/coverage/lcov-report/index.html` | `apps/mapp/coverage/lcov.info` |
+The coverage runs also write an `lcov.info` for the SonarQube analysis in [CI](#ci): `coverage/lcov.info` for the XYZ API and `apps/mapp/coverage/lcov.info` for the MAPP library.
 
 The MAPP coverage has thresholds in [apps/mapp/vitest.config.mjs](apps/mapp/vitest.config.mjs). A coverage run fails if the coverage drops below the thresholds. Raise the thresholds when new tests increase the coverage.
 
