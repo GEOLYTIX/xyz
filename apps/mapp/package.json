@@ -10,7 +10,6 @@
     "build": "vite build && pnpm css",
     "css": "vite build --config vite.css.config.mjs",
     "test": "vitest run",
-    "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
   },
   "license": "MIT",

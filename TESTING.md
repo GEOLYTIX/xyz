@@ -53,13 +53,6 @@ Run a suite:
 | `pnpm test:xyz` | XYZ API |
 | `pnpm test:mapp` | MAPP library |
 
-Each package has a `test:watch` script, which re-runs the affected tests on file changes. In watch mode, `f` re-runs the failed tests, `p` filters by file name and `t` filters by test name.
-
-```bash
-pnpm --filter=@geolytix/xyz-app test:watch
-pnpm --filter=@geolytix/mapp test:watch
-```
-
 Run a single file or the tests matching a name from the package directory:
 
 ```bash
@@ -114,8 +107,6 @@ The extension finds the `vitest.config.mjs` of each app and lists the tests by c
 | Run Test | Runs a test, a file or a suite. Failed assertions are shown inline in the editor. |
 | Debug Test | Runs a test with the VS Code debugger. Breakpoints in the test and in the source modules pause the test. |
 | Run with Coverage | Runs the tests with the coverage settings of the config. The editor highlights covered and uncovered lines, and the Test Coverage view lists the coverage per file. |
-| Continuous Run | Re-runs the tests on file changes. |
-
 The extension runs the MAPP library tests in Chromium. Debug Test attaches the debugger to the browser, so breakpoints in `apps/mapp/lib` modules pause in VS Code. Debug a single test file at a time.
 
 The MAPP coverage thresholds apply to coverage runs in the extension. A run with coverage for a single file reports a threshold error, which can be ignored.
