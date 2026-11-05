@@ -238,6 +238,7 @@ globalThis.xyzEnv = {
 | `getLocale(key)` | Requests a locale with its layers from the test workspace. |
 | `createMapview(locale, view)` | Creates a mapview, which is disposed when the test finishes. |
 | `addLayers(mapview)` | Adds the locale layers and awaits `mapview.renderComplete`. |
+| `changeEnd(mapview)` | Resolves after the debounced `mapview.changeEnd` has called the layer `changeEnd` methods. Create the promise before the map view changes. |
 | `sourceFeatures(layer)` | Returns the features of a vector layer sorted by id. |
 
 A test suite which requests the XYZ API has its own locale file in [tests/workspaces/locales](apps/mapp/tests/workspaces/locales/). Add the locale file as a template to the [_workspace.json](apps/mapp/tests/workspaces/_workspace.json) and request the locale by its template key:
@@ -284,4 +285,5 @@ Modules which don't request the API are tested without a locale, with layer, fea
 - **A mock is not applied** — `vi.mock()` is hoisted above the variables in the file. Reference `vi.fn()` variables through a proxy function in the factory.
 - **A mocked class can't be constructed** — arrow functions can't be called with `new`. Use class syntax in the `vi.mock()` factory, eg. for AWS SDK commands.
 - **Async setup in a `describe()` body** — the tests may start before the setup has finished. Use `beforeAll()` instead.
+- **The MAPP coverage changes between runs** — a test leaves a timer or a request running, and its code is covered only if it finishes before the test. Await the work in the test, eg. with `changeEnd(mapview)`, and set the thresholds from a stable run.
 - **`browserType.launch: Executable doesn't exist`** — Chromium is not installed for the Playwright version. Run `pnpm --filter=@geolytix/mapp exec playwright install chromium`, also after a Playwright update.

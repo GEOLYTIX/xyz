@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   addLayers,
+  changeEnd,
   createMapview,
   getLocale,
   sourceFeatures,
@@ -45,5 +46,28 @@ describe('Smoke', () => {
       'Point',
       'Point',
     ]);
+  });
+
+  it('calls the layer changeEnd after the map view changes', async () => {
+    const locale = await getLocale('smoke');
+
+    const mapview = await createMapview(locale, { lat: 48, lng: 5, z: 4 });
+
+    await addLayers(mapview);
+
+    const calls = [];
+
+    mapview.layers.locations.changeEndCallbacks.push((layer) =>
+      calls.push(layer.key),
+    );
+
+    const changed = changeEnd(mapview);
+
+    mapview.Map.getView().setZoom(5);
+
+    await changed;
+
+    expect(calls).toEqual(['locations']);
+    expect(mapview.layers.locations.display).toBe(true);
   });
 });

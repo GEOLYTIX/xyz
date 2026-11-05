@@ -79,10 +79,42 @@ export async function createMapview(locale, view) {
   });
 
   onTestFinished(() => {
+    // A debounced changeEnd must not run after the test, or the coverage depends on the test timing.
+    clearTimeout(mapview.changeEndTimer);
     mapview.Map.setTarget(null);
     mapview.Map.dispose();
     target.remove();
   });
+
+  return mapview;
+}
+
+/**
+@function changeEnd
+@async
+
+@description
+Resolves once the debounced mapview.changeEnd has called the changeEndCallbacks and the layer.changeEnd methods.
+
+The promise must be created before the map view changes.
+
+@param {mapview} mapview The mapview.
+@returns {Promise<mapview>} The mapview after the changeEnd.
+*/
+export async function changeEnd(mapview) {
+  let callback;
+
+  // The promise resolves after the timer has called the layer.changeEnd methods.
+  await new Promise((resolve) => {
+    callback = resolve;
+    mapview.changeEndCallbacks.push(callback);
+  });
+
+  // The callback is removed after the changeEndCallbacks iteration.
+  mapview.changeEndCallbacks.splice(
+    mapview.changeEndCallbacks.indexOf(callback),
+    1,
+  );
 
   return mapview;
 }
