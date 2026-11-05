@@ -275,12 +275,3 @@ describe('Smoke', () => {
 ```
 
 Modules which don't request the API are tested without a locale, with layer, feature and style objects created in the test. Stub external libraries which `mapp.utils` loads from a CDN, eg. with `vi.spyOn(mapp.utils, 'esmImport')`.
-
-### Common issues
-
-- **`xyzEnv is not defined`** — the module under test was imported before the `xyzEnv` was assigned. Assign the `xyzEnv` first and import the module with `await import()`.
-- **A mock is not applied** — `vi.mock()` is hoisted above the variables in the file. Reference `vi.fn()` variables through a proxy function in the factory.
-- **A mocked class can't be constructed** — arrow functions can't be called with `new`. Use class syntax in the `vi.mock()` factory, eg. for AWS SDK commands.
-- **Async setup in a `describe()` body** — the tests may start before the setup has finished. Use `beforeAll()` instead.
-- **The MAPP coverage changes between runs** — a test leaves a timer or a request running, and its code is covered only if it finishes before the test. Await the work in the test, eg. with `changeEnd(mapview)`, and set the thresholds from a stable run.
-- **`browserType.launch: Executable doesn't exist`** — Chromium is not installed for the Playwright version. Run `pnpm --filter=@geolytix/mapp exec playwright install chromium`, also after a Playwright update.
