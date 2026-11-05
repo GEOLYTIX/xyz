@@ -69,7 +69,7 @@ pnpm test -t "graduated"
 pnpm exec vitest run --reporter=verbose    # list every test with its result
 ```
 
-The XYZ API tests run with the environment in [varlock/vanilla.env](varlock/vanilla.env). The package `test` scripts load it, so run the XYZ API tests through `pnpm test`, not `vitest` directly.
+The XYZ API `test` scripts run Vitest with the environment in [varlock/vanilla.env](varlock/vanilla.env). The tests assign the `xyzEnv` properties they need, so they also pass when Vitest runs without varlock, eg. in VS Code.
 
 ### Coverage
 
@@ -106,24 +106,22 @@ pnpm testview --workspace=apps/mapp/tests/workspaces/_workspace.json
 
 Open a locale of the workspace in the locale view, eg. http://127.0.0.1:3001/views/locale/?locale=smoke. The view has the layers of the locale with their feature count, and an OSM base map.
 
-**XYZ API tests** can be debugged in VS Code with a launch configuration for the node runtime:
+### VS Code
 
-```json
-{
-  "type": "node",
-  "request": "launch",
-  "name": "Debug XYZ API tests",
-  "autoAttachChildProcesses": true,
-  "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
-  "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
-  "args": ["run", "--no-file-parallelism"],
-  "console": "integratedTerminal",
-  "internalConsoleOptions": "neverOpen",
-  "cwd": "${workspaceFolder}/apps/xyz"
-}
-```
+The [Vitest extension](https://marketplace.visualstudio.com/items?itemName=vitest.explorer) (`vitest.explorer`) is the preferred way to run, debug and check the coverage of tests.
 
-Add a test file to the `args` to debug a single file, eg. `"args": ["run", "--no-file-parallelism", "tests/mod/utils/merge.test.mjs"]`.
+The extension finds the `vitest.config.mjs` of each app and lists the tests by config in the Testing view. Each test has gutter icons in the editor to run or debug it.
+
+| Action | Description |
+|---|---|
+| Run Test | Runs a test, a file or a suite. Failed assertions are shown inline in the editor. |
+| Debug Test | Runs a test with the VS Code debugger. Breakpoints in the test and in the source modules pause the test. |
+| Run with Coverage | Runs the tests with the coverage settings of the config. The editor highlights covered and uncovered lines, and the Test Coverage view lists the coverage per file. |
+| Continuous Run | Re-runs the tests on file changes. |
+
+The extension runs the MAPP library tests in Chromium. Debug Test attaches the debugger to the browser, so breakpoints in `apps/mapp/lib` modules pause in VS Code. Debug a single test file at a time.
+
+The MAPP coverage thresholds apply to coverage runs in the extension. A run with coverage for a single file reports a threshold error, which can be ignored.
 
 ### CI
 
