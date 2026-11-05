@@ -3,11 +3,21 @@
 Fits the view to a given extent
 
 @module /mapview/fitView
-@param {Array} extent - geo extent, array of 4 numbers, must be [minX, minY, maxX, maxY]
-@param {Object} options - Defaults to empty object 
 */
 
-export default function (extent, options = {}) {
+/**
+@function fitView
+@this mapview
+
+@description
+Fits the mapview.Map view to the extent. The extent must be an array of finite values, otherwise a warning is logged and the view doesn't change.
+
+The view fit has a duration of 1000ms and a padding of 50px, which can be overwritten by the options.
+
+@param {Array} extent The extent [minX, minY, maxX, maxY] in the mapview projection.
+@param {Object} [options={}] The Openlayers view fit options.
+*/
+export default function fitView(extent, options = {}) {
   // Extent must be an array of finite values.
   if (
     !Array.isArray(extent) ||
