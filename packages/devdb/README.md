@@ -39,35 +39,24 @@ Larger vector datasets, eg. from [Natural Earth](https://www.naturalearthdata.co
 - Write the seed with `INSERT` statements. The seed files are executed with `db.exec()`, which doesn't read `COPY ... FROM stdin` data. With GDAL, eg. `ogr2ogr -f PGDump -lco SCHEMA=naturalearth -lco CREATE_SCHEMA=OFF --config PG_USE_COPY NO 100_naturalearth_countries.sql ne_110m_admin_0_countries.shp`, and create the schema in the first seed file of the dataset.
 - Add the table to the seed table above with its geometry type and SRID.
 
-## Use in Vitest
+## Use in tests
 
-`globalSetup.js` starts an in-memory database on a free port for the run and discards it afterwards:
-
-```js
-// vitest.config.mjs
-export default defineConfig({
-  test: {
-    include: ['./tests/**/*.test.mjs'],
-    globalSetup: ['./globalSetup.js'],
-    hookTimeout: 60000,
-  },
-});
-```
+A test file starts an in-memory database on a free port with `startDevDb({ port: 0 })` and stops it after the tests, eg. [query.test.mjs](../../apps/xyz/tests/mod/query.test.mjs):
 
 ```js
-import pg from 'pg';
-import { inject } from 'vitest';
+import { afterAll } from 'vitest';
+import { startDevDb } from '../../../../packages/devdb/index.js';
 
-const client = new pg.Client({ connectionString: inject('DEVDB') });
+const devdb = await startDevDb({ port: 0 });
+
+afterAll(() => devdb.stop());
 ```
 
-The connection string is also set as `process.env.DEVDB`. [tests/dbs.test.mjs](tests/dbs.test.mjs) shows XYZ's `mod/utils/dbs.js` querying the database through a `DBS_` connection.
+The XYZ `dbs` module connects to the database with the connection string as a `DBS_*` environment variable, eg. `DBS_DEVDB: devdb.connectionString`.
 
-```bash
-pnpm test:devdb
-```
+The MAPP library tests use the database through the [testhost](../testhost/README.md), which starts the devdb with the XYZ API.
 
-Tests in `apps/xyz/tests` can also start a database by importing `index.js` by relative path, eg. the `wkt` template tests in [query.test.mjs](../../apps/xyz/tests/mod/query.test.mjs). `apps/xyz/tests` is excluded from Vercel too. Don't declare `@geolytix/xyz-devdb` as a dependency of an app, though. That would break installs on Vercel, where the package is absent.
+`apps/xyz/tests` imports `index.js` by relative path. Don't declare `@geolytix/xyz-devdb` as a dependency of `apps/xyz`. Vercel installs the xyz app without the devdb package, which is excluded in the `.vercelignore`.
 
 ## Limitations
 

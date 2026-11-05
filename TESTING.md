@@ -6,7 +6,6 @@
 |---|---|---|---|
 | XYZ API | [apps/xyz/tests](apps/xyz/tests/) | Node | API modules, query templates, providers, user and workspace modules |
 | MAPP library | [apps/mapp/tests](apps/mapp/tests/) | Headless Chromium | MAPP library modules against a local XYZ host |
-| devdb | [packages/devdb/tests](packages/devdb/tests/) | Node | The PGlite database and its seed data |
 
 Tests for the MAPP.UI library will follow in `apps/ui/tests`.
 
@@ -53,7 +52,6 @@ Run a suite:
 |---|---|
 | `pnpm test:xyz` | XYZ API |
 | `pnpm test:mapp` | MAPP library |
-| `pnpm --filter=@geolytix/xyz-devdb test` | devdb |
 
 Each package has a `test:watch` script, which re-runs the affected tests on file changes. In watch mode, `f` re-runs the failed tests, `p` filters by file name and `t` filters by test name.
 
