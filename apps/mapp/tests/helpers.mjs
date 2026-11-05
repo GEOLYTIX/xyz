@@ -26,6 +26,8 @@ example.features with EPSG:3857 geometries in London and Berlin:
 
 geodata.uk_glx_open_retail_points has 19,229 UK grocery stores with EPSG:4326 points in the geom_p_4326 column. The grocery locale has the retail_points cluster layer of the GEOLYTIX MAPP product workspace. The locale view at z13 in south London has 39 stores.
 
+example.scratch_location is an empty table for location create, update and delete tests. The scratch locale has the scratch_location layer with editable infoj entries. Each test inserts its own record with newLocation(), because all test files of a run share the devdb.
+
 ## Workspaces
 
 The default locale of the _workspace.json has the hidden `osm` tiles layer from the testhost osm template, so every locale has the `osm` layer.
@@ -156,4 +158,57 @@ export function sourceFeatures(layer) {
   return layer.L.getSource()
     .getFeatures()
     .sort((a, b) => a.get('id') - b.get('id'));
+}
+
+/**
+@function newLocation
+@async
+
+@description
+Inserts a record into the layer table with the location_new query template and returns the id of the new record.
+
+Tests which create, update or delete locations use the scratch_location layer of the scratch locale. Each test inserts its own record, because all test files of a run share the devdb.
+
+@param {layer} layer A decorated layer.
+@param {Object} [values] The field values of the record, eg. `{ name: 'one' }`.
+@returns {Promise<string>} The id of the new record. The xhr rejects if the insert fails.
+*/
+export async function newLocation(layer, values = {}) {
+  const id = await mapp.utils.xhr({
+    method: 'POST',
+    url: `${mapp.host}/api/query?${mapp.utils.paramString({
+      layer: layer.key,
+      locale: layer.mapview.locale.key,
+      table: layer.table,
+      template: 'location_new',
+    })}`,
+    body: JSON.stringify(values),
+  });
+
+  return id;
+}
+
+/**
+@function getRecord
+@async
+
+@description
+Requests a record of the layer table with the location_get query template. The record has the fields and fieldfx of the layer infoj.
+
+@param {layer} layer A decorated layer.
+@param {string} id The record id.
+@returns {Promise<Object|null>} The record or null if the table has no record with the id.
+*/
+export async function getRecord(layer, id) {
+  const record = await mapp.utils.xhr(
+    `${mapp.host}/api/query?${mapp.utils.paramString({
+      id,
+      layer: layer.key,
+      locale: layer.mapview.locale.key,
+      table: layer.table,
+      template: 'location_get',
+    })}`,
+  );
+
+  return record ?? null;
 }

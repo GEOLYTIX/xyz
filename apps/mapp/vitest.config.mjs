@@ -32,10 +32,10 @@ export default defineConfig({
       include: ['lib/**/*.mjs'],
       // The coverage floor. Raise the thresholds with new tests.
       thresholds: {
-        statements: 59,
-        branches: 59,
-        functions: 59,
-        lines: 58,
+        statements: 62,
+        branches: 60,
+        functions: 62,
+        lines: 61,
       },
       // The lcov.info is for SonarQube, which resolves the source paths from the repository root.
       // The VS Code extension shows the coverage in the editor.

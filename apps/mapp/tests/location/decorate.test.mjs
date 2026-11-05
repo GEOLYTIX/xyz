@@ -1,5 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
-import { addLayers, createMapview, getLocale } from '../helpers.mjs';
+import {
+  addLayers,
+  createMapview,
+  getLocale,
+  getRecord,
+  newLocation,
+} from '../helpers.mjs';
 
 // Lidl Walworth Road in the grocery locale view.
 const LIDL = 1010025395;
@@ -147,5 +153,257 @@ describe('location decorate', () => {
     expect(mapview.interaction.type).toBe('highlight');
     expect(reload).toHaveBeenCalled();
     expect(removed).toHaveBeenCalledWith(location);
+  });
+});
+
+/**
+Gets a location for a new record in the scratch_location table. Each test has its own record, because all test files of a run share the devdb.
+*/
+async function scratch(values = { name: 'Scratch', category: 'a', size: 1 }) {
+  const locale = await getLocale('scratch');
+
+  const mapview = await createMapview(locale, locale.view);
+
+  await addLayers(mapview);
+
+  const layer = mapview.layers.scratch_location;
+
+  const id = await newLocation(layer, values);
+
+  return mapp.location.get({ layer, id });
+}
+
+describe('location update', () => {
+  it('updates the record with the new values', async () => {
+    const location = await scratch();
+
+    entry(location, 'category').newValue = 'b';
+    entry(location, 'size').newValue = 42;
+
+    await location.update();
+
+    expect(entry(location, 'category').value).toBe('b');
+    expect(entry(location, 'category').newValue).toBeUndefined();
+    expect(entry(location, 'size').value).toBe(42);
+
+    const record = await getRecord(location.layer, location.id);
+
+    expect(record.category).toBe('b');
+    expect(record.size).toBe(42);
+    expect(record.name).toBe('Scratch');
+  });
+
+  it('updates a value to null', async () => {
+    const location = await scratch();
+
+    entry(location, 'category').newValue = null;
+
+    await location.update();
+
+    expect((await getRecord(location.layer, location.id)).category).toBeNull();
+  });
+
+  // Known bug https://github.com/GEOLYTIX/xyz/issues/3029: the location_update template escapes quotes and passes the escaped string as a query parameter. The record value has double quotes.
+  it.fails('stores string values with quotes', async () => {
+    const location = await scratch();
+
+    entry(location, 'name').newValue = "O'Brien's";
+
+    await location.update();
+
+    expect((await getRecord(location.layer, location.id)).name).toBe(
+      "O'Brien's",
+    );
+  });
+
+  it('syncs the dependent fields of updated entries', async () => {
+    const location = await scratch();
+
+    expect(entry(location, 'name_upper').value).toBe('SCRATCH');
+
+    entry(location, 'name').newValue = 'Renamed';
+
+    await location.update();
+
+    expect(entry(location, 'name_upper').value).toBe('RENAMED');
+  });
+
+  it('reloads the dependent layers of updated entries', async () => {
+    const location = await scratch();
+
+    const reload = vi.spyOn(location.layer, 'reload');
+
+    entry(location, 'size').newValue = 2;
+
+    await location.update();
+
+    // The location layer is reloaded after every update.
+    expect(reload).toHaveBeenCalledTimes(1);
+
+    entry(location, 'category').newValue = 'c';
+
+    await location.update();
+
+    // The category entry has the location layer as dependents_layers.
+    expect(reload).toHaveBeenCalledTimes(3);
+  });
+
+  it('updates a key of a jsonb field', async () => {
+    const location = await scratch({ name: 'jsonb', props: { other: 1 } });
+
+    entry(location, 'tag').newValue = 'red';
+
+    await location.update();
+
+    expect(entry(location, 'tag').value).toEqual({
+      jsonb: { props: { tag: 'red' } },
+    });
+
+    const record = await getRecord(location.layer, location.id);
+
+    // The other keys of the jsonb field are kept.
+    expect(record.tag).toBe('red');
+  });
+
+  it('updates a json field with the json_key entries', async () => {
+    const location = await scratch({ name: 'json', meta: { size: 'S' } });
+
+    entry(location, 'colour').newValue = 'blue';
+
+    await location.update();
+
+    // The json_key entry value is assigned to the json_field entry.
+    expect(entry(location, 'meta').value).toEqual({
+      size: 'S',
+      colour: 'blue',
+    });
+    expect(entry(location, 'colour').newValue).toBeUndefined();
+
+    const record = await getRecord(location.layer, location.id);
+
+    expect(record.meta).toEqual({ size: 'S', colour: 'blue' });
+    expect(record.colour).toBe('blue');
+  });
+
+  it('updates the geometry', async () => {
+    const location = await scratch({
+      name: 'geom',
+      geom: { type: 'Point', coordinates: [0, 51] },
+    });
+
+    entry(location, 'geom').newValue = {
+      type: 'Point',
+      coordinates: [-0.1, 51.5],
+    };
+
+    await location.update();
+
+    expect((await getRecord(location.layer, location.id)).coords).toEqual([
+      -0.1, 51.5,
+    ]);
+  });
+
+  it('calls the updateCallbacks or the callback argument', async () => {
+    const location = await scratch();
+
+    const updateCallback = vi.fn();
+    location.updateCallbacks.push(updateCallback);
+
+    entry(location, 'size').newValue = 3;
+
+    await location.update();
+
+    expect(updateCallback).toHaveBeenCalledWith(location);
+
+    const callback = vi.fn();
+
+    entry(location, 'size').newValue = 4;
+
+    await location.update(callback);
+
+    expect(callback).toHaveBeenCalledWith(location);
+    expect(updateCallback).toHaveBeenCalledTimes(1);
+  });
+
+  it('updates unsaved changes if the confirm is confirmed', async () => {
+    const location = await scratch();
+
+    const confirm = vi
+      .spyOn(mapp.utils, 'confirm')
+      .mockImplementation(async () => true);
+
+    entry(location, 'name').newValue = 'Confirmed';
+
+    expect(await location.confirmUpdate()).toBe(true);
+    expect(confirm).toHaveBeenCalledWith({
+      text: mapp.dictionary.location_save_changes,
+    });
+
+    expect((await getRecord(location.layer, location.id)).name).toBe(
+      'Confirmed',
+    );
+
+    confirm.mockRestore();
+  });
+
+  it('alerts if the update query fails', async () => {
+    const location = await scratch();
+
+    const alert = vi.spyOn(mapp.utils, 'alert').mockImplementation(() => {});
+
+    location.view = document.createElement('div');
+    location.view.classList.add('disabled');
+
+    // The name_upper fieldfx is not a column of the table.
+    entry(location, 'name_upper').newValue = 'invalid';
+
+    expect(await location.update()).toBeUndefined();
+
+    expect(alert).toHaveBeenCalledWith({
+      text: mapp.dictionary.location_update_failed,
+    });
+    expect(location.view.classList).not.toContain('disabled');
+
+    // The new value is kept for another update.
+    expect(entry(location, 'name_upper').newValue).toBe('invalid');
+
+    alert.mockRestore();
+  });
+});
+
+describe('location trash', () => {
+  it('deletes the record and removes the location', async () => {
+    const location = await scratch();
+
+    const confirm = vi
+      .spyOn(mapp.utils, 'confirm')
+      .mockImplementation(async () => true);
+
+    const { layer, id, hook } = location;
+
+    await location.trash();
+
+    expect(confirm).toHaveBeenCalledWith({
+      text: mapp.dictionary.confirm_delete,
+    });
+    expect(layer.mapview.locations[hook]).toBeUndefined();
+    expect(await getRecord(layer, id)).toBeNull();
+
+    confirm.mockRestore();
+  });
+
+  it('keeps the record if the confirm is cancelled', async () => {
+    const location = await scratch();
+
+    const confirm = vi
+      .spyOn(mapp.utils, 'confirm')
+      .mockImplementation(async () => false);
+
+    await location.trash();
+
+    expect(location.layer.mapview.locations[location.hook]).toBe(location);
+    expect(await getRecord(location.layer, location.id)).not.toBeNull();
+
+    confirm.mockRestore();
   });
 });

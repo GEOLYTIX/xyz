@@ -127,6 +127,7 @@ These conventions apply to all suites:
 - A `describe()` block per module or feature, with an `it()` test per behaviour. Use `it.each()` for the same behaviour with different input.
 - Assert specific values, eg. a style colour, a feature count, a status code or a request param. Avoid snapshots of whole objects.
 - Add seed files for new test data rather than changing existing seed rows, which tests depend on.
+- Tests which write to the database use the empty `example.scratch_location` table. Each test inserts its own record, because all test files of a run share the devdb, and asserts only on its own records.
 - A test for a known bug is written for the correct behaviour and marked with `it.fails()`, with a link to the issue. The test fails once the bug is fixed, and the `.fails` must be removed with the fix.
 - Suppress expected console output and assert on it where the message is the behaviour.
 
@@ -239,6 +240,8 @@ The MAPP library tests depend on the XYZ service running locally with a devdb da
 | `addLayers(mapview)` | Adds the locale layers and awaits `mapview.renderComplete`. |
 | `changeEnd(mapview)` | Resolves after the debounced `mapview.changeEnd` has called the layer `changeEnd` methods. Create the promise before the map view changes. |
 | `sourceFeatures(layer)` | Returns the features of a vector layer sorted by id. |
+| `newLocation(layer, values)` | Inserts a record with the location_new template and returns its id. |
+| `getRecord(layer, id)` | Requests a record with the location_get template, or null without a record. |
 
 A test suite which requests the XYZ API has its own locale file in [tests/workspaces/locales](apps/mapp/tests/workspaces/locales/). Add the locale file as a template to the [_workspace.json](apps/mapp/tests/workspaces/_workspace.json) and request the locale by its template key:
 

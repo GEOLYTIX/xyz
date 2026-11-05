@@ -1,0 +1,68 @@
+{
+  "name": "Scratch",
+  "view": { "lat": 51.5, "lng": -0.1, "z": 10 },
+  "layers": {
+    "scratch_location": {
+      "display": true,
+      "format": "wkt",
+      "table": "example.scratch_location",
+      "qID": "id",
+      "geom": "geom",
+      "srid": "4326",
+      "style": {
+        "default": {
+          "icon": { "type": "dot", "fillColor": "#999" }
+        }
+      },
+      "infoj": [
+        { "type": "key" },
+        {
+          "title": "Name",
+          "field": "name",
+          "edit": true,
+          "dependents": ["name_upper"]
+        },
+        {
+          "title": "Name upper case",
+          "field": "name_upper",
+          "fieldfx": "upper(name)"
+        },
+        {
+          "title": "Category",
+          "field": "category",
+          "edit": true,
+          "dependents_layers": ["scratch_location"]
+        },
+        { "title": "Size", "field": "size", "type": "integer", "edit": true },
+        {
+          "title": "Tag",
+          "field": "tag",
+          "fieldfx": "props->>'tag'",
+          "jsonb_field": "props",
+          "jsonb_key": "tag",
+          "edit": true
+        },
+        { "title": "Meta", "field": "meta", "type": "json" },
+        {
+          "title": "Colour",
+          "field": "colour",
+          "fieldfx": "meta->>'colour'",
+          "json_field": "meta",
+          "json_key": "colour",
+          "edit": true
+        },
+        {
+          "title": "Geometry",
+          "field": "geom",
+          "fieldfx": "ST_AsGeoJSON(geom)::json",
+          "edit": true
+        },
+        {
+          "title": "Coordinates",
+          "field": "coords",
+          "fieldfx": "ARRAY[ST_X(geom),ST_Y(geom)]"
+        }
+      ]
+    }
+  }
+}
