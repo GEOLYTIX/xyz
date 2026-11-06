@@ -17,7 +17,8 @@ export default defineConfig({
     fileParallelism: true,
     coverage: {
       provider: 'v8',
-      reporter: ['text', 'lcov'],
+      // The lcov.info is for SonarQube. The VS Code extension shows the coverage in the editor.
+      reporter: ['text', 'lcovonly'],
       // Write to the repository root so the CI coverage check and the
       // sonar.javascript.lcov.reportPaths in sonar-project.properties resolve.
       reportsDirectory: fileURLToPath(

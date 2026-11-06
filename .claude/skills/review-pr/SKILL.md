@@ -65,10 +65,11 @@ Be careful to distinguish scope creep from a fix that genuinely needs breadth. A
 
 ## Check Tests And Coverage
 
-XYZ has two test systems and the distinction decides what to ask for. Read `vitest.config.mjs` and the relevant `package.json` rather than relying on TESTING.md for paths — the documented config has drifted from the real one before.
+Each app has its own Vitest config, and which suite covers a touched file decides what to ask for. Read the app's `vitest.config.mjs` and `package.json` rather than relying on TESTING.md for paths — the documented config has drifted from the real one before.
 
 - **XYZ API** — `apps/xyz/mod/**`, plus its `utils` and `plugins`. Covered by Vitest under `apps/xyz/tests/**`. Run `pnpm test:xyz:coverage` and read the per-file table for the touched files.
-- **MAPP and MAPP.UI libraries** — `apps/mapp/lib/**` and `apps/ui/lib/**`. Outside the Vitest run entirely, so they never appear in that coverage table and their absence there means nothing. The browser suite TESTING.md describes runs from a built bundle at `public/js/tests/`, and its source is not in this repository, so there is no per-file coverage figure to quote for a MAPP module. Say that plainly rather than reporting a coverage gap that is an artefact of which suite exists.
+- **MAPP library** — `apps/mapp/lib/**`. Covered by Vitest browser mode under `apps/mapp/tests/**`, which mirrors the `lib` paths and runs in Chromium against the testhost. Run `pnpm test:mapp:coverage` and read the per-file table for the touched files. The run fails if the coverage drops below the thresholds in `apps/mapp/vitest.config.mjs`. A test marked `it.fails` records a known bug; a fix for that bug must remove the `.fails`.
+- **MAPP.UI library** — `apps/ui/lib/**`. Has no test suite yet, so there is no coverage figure to quote. Say that plainly rather than reporting a coverage gap.
 
 Then judge the change:
 
@@ -76,7 +77,7 @@ Then judge the change:
 - A touched module whose coverage is unchanged and low is worth raising, with the current percentage quoted so the reader can weigh it. Treat this as a discussion to open rather than a gate: several XYZ modules start near zero, and demanding full coverage on a one-line fix in one of them is how a reasonable pull request gets stuck.
 - A bug fix with no test that fails before the fix is the finding most worth making. Say which case the test should cover.
 - Run the suite. A suite that runs and fails is a blocking finding regardless of anything else in the report. A suite you could not run — dependencies not installed, environment not configured — is not a failure and must not be reported as one; record it as a check that could not be completed, and say why. The distinction matters because a reader who sees "tests failed" will look for a bug that may not exist.
-- Make sure the suite actually ran. These scripts go through turbo, which replays a cached result when nothing it tracks has changed: the run returns in milliseconds and prints `>>> FULL TURBO` with no test counts. Reporting a pass from a cached artefact is the worst outcome available to this check, because it reads exactly like a real pass. If you see that marker, re-run with `--force` and report the counts from the run that actually executed.
+- Make sure the suite actually ran. `pnpm test` and `pnpm test:xyz:coverage` go through turbo, which replays a cached result when nothing it tracks has changed: the run returns in milliseconds and prints `>>> FULL TURBO` with no test counts. Reporting a pass from a cached artefact is the worst outcome available to this check, because it reads exactly like a real pass. If you see that marker, re-run with `--force` and report the counts from the run that actually executed.
 - A touched file missing from the coverage table altogether is a different finding from one with low coverage, and more interesting. It usually means the tests mock the module out rather than exercise it, so the suite passes while the changed code never executes. Say which it is.
 
 ## Check Documentation

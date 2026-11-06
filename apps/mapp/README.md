@@ -54,7 +54,7 @@ The MAPP build also bundles `apps/mapp/css/_mapp.css` through `apps/mapp/vite.cs
 
 ## Testview
 
-The [testview](../../packages/testview/README.md) serves the `apps/mapp/lib` source modules with a local XYZ process and the devdb, and creates mapviews without the MAPP.UI library:
+The [testview](../../packages/testhost/README.md) serves the `apps/mapp/lib` source modules with a local XYZ process and the devdb, and creates mapviews without the MAPP.UI library:
 
 ```bash
 pnpm testview
