@@ -202,7 +202,13 @@ export async function startHost({
     port: assignedPort,
     devdb,
     stop: async () => {
-      await new Promise((resolve) => server.close(resolve));
+      await new Promise((resolve) => {
+        server.close(resolve);
+
+        // The close callback waits for all connections to end. Headless Chrome keeps a preconnect socket open without a request, which the close doesn't end. Vitest closes the browser after the global setup teardown, so the run would never exit.
+        server.closeAllConnections();
+      });
+
       await devdb.stop();
     },
   };
