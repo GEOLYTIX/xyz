@@ -6,8 +6,8 @@
 |---|---|---|---|
 | XYZ API | [apps/xyz/tests](apps/xyz/tests/) | Node | API modules, query templates, providers, user and workspace modules |
 | MAPP library | [apps/mapp/tests](apps/mapp/tests/) | Headless Chromium | MAPP library modules against a local XYZ host |
+| MAPP.UI library | [apps/ui/tests](apps/ui/tests/) | Headless Chromium | The XYZ default view with the MAPP.UI library against a local XYZ host |
 
-Tests for the MAPP.UI library will follow in `apps/ui/tests`.
 
 ## How we test
 
@@ -54,6 +54,7 @@ Run a suite:
 |---|---|
 | `pnpm test:xyz` | XYZ API |
 | `pnpm test:mapp` | MAPP library |
+| `pnpm test:ui` | MAPP.UI library |
 
 Run a single file or the tests matching a name from the package directory:
 
@@ -71,13 +72,14 @@ The XYZ API `test` scripts run Vitest with the environment in [varlock/vanilla.e
 ```bash
 pnpm test:xyz:coverage
 pnpm test:mapp:coverage
+pnpm test:ui:coverage
 ```
 
 The terminal shows the coverage per file, with the uncovered line numbers, and the totals. Run with Coverage in the [VS Code extension](#vs-code) highlights the covered and uncovered lines in the source.
 
-The coverage runs also write an `lcov.info` for the SonarQube analysis in [CI](#ci): `coverage/lcov.info` for the XYZ API and `apps/mapp/coverage/lcov.info` for the MAPP library.
+The coverage runs also write an `lcov.info` for the SonarQube analysis in [CI](#ci): `coverage/lcov.info` for the XYZ API, `apps/mapp/coverage/lcov.info` for the MAPP library and `apps/ui/coverage/lcov.info` for the MAPP.UI library. The MAPP.UI coverage is from the module tests only.
 
-The MAPP coverage has thresholds in [apps/mapp/vitest.config.mjs](apps/mapp/vitest.config.mjs). A coverage run fails if the coverage drops below the thresholds. Raise the thresholds when new tests increase the coverage.
+The MAPP and MAPP.UI coverage have thresholds in [apps/mapp/vitest.config.mjs](apps/mapp/vitest.config.mjs) and [apps/ui/vitest.config.mjs](apps/ui/vitest.config.mjs). A coverage run fails if the coverage drops below the thresholds. Raise the thresholds when new tests increase the coverage.
 
 ### Debugging
 
@@ -224,6 +226,68 @@ it('warns about a potential SQL injection', () => {
   );
 });
 ```
+
+### MAPP.UI library tests
+
+The MAPP.UI library has two kinds of tests in `apps/ui/tests`:
+
+| Tests | Files | Runner | Test |
+|---|---|---|---|
+| Module tests | `*.test.mjs`, mirroring `apps/ui/lib` | Vitest browser mode | A ui module, eg. an element, legend or infoj entry, with its params and edge cases |
+| Default view tests | `*.spec.mjs` | Playwright Test | User flows in the XYZ default view across modules |
+
+`pnpm test:ui` runs both. From `apps/ui`, `pnpm test:modules` runs the module tests and `pnpm test:view` the default view tests. `pnpm test:ui:coverage` reports the coverage of `apps/ui/lib` from the module tests.
+
+#### Module tests
+
+The module tests run like the [MAPP library tests](#mapp-library-tests), with the testhost global setup and the [UI test workspace](apps/ui/tests/workspaces/_workspace.json). [tests/setup.mjs](apps/ui/tests/setup.mjs) loads Openlayers, the MAPP library and the MAPP.UI library, which assigns itself as `mapp.ui`. Tests call the modules from `mapp.ui`:
+
+```js
+import { describe, expect, it, vi } from 'vitest';
+
+const { chkbox } = mapp.ui.elements;
+
+describe('ui/elements/chkbox', () => {
+  it('calls onchange with the checked state and the val param', () => {
+    const onchange = vi.fn();
+
+    const node = chkbox({ label: 'Show', val: 'a', onchange });
+
+    // A click on a checkbox which is not in the document doesn't dispatch a change event.
+    document.body.append(node);
+
+    node.querySelector('input').click();
+
+    expect(onchange).toHaveBeenCalledWith(true, 'a');
+
+    node.remove();
+  });
+});
+```
+
+Remove the elements which a test appends to the document, eg. dialogs and toasts, so they don't affect the next test.
+
+#### Default view tests
+
+The default view tests run with [Playwright Test](https://playwright.dev/docs/intro) and open the XYZ default view (`/view?locale={key}`) from the testhost. The tests use the view like a user, with Playwright locators for the panels, buttons and inputs.
+
+The [playwright.config.mjs](apps/ui/playwright.config.mjs) starts the testhost with the [UI test workspace](apps/ui/tests/workspaces/_workspace.json). The testhost redirects the built bundles and stylesheets of the view to the MAPP and MAPP.UI source modules, so the tests don't require a build.
+
+[tests/fixtures.mjs](apps/ui/tests/fixtures.mjs) provides the `test` with a `page` that serves Openlayers from the `ol` package for the CDN script of the view and aborts other external requests, and collects uncaught errors in `page.errors`. `openView(page, locale)` opens the default view and resolves once the view has added the layers and panels.
+
+```js
+import { expect, openView, test } from './fixtures.mjs';
+
+test('lists the locale layers in the layers panel', async ({ page }) => {
+  await openView(page, 'grocery');
+
+  await expect(page.locator('#layers').getByText('OSM Basemap')).toBeVisible();
+});
+```
+
+The tests run in one worker. With parallel pages, closing an HTTP socket in the testhost blocks the Node process for several seconds on Windows and the page loads time out.
+
+Debug a test in a visible browser with `pnpm exec playwright test --headed` or step through it with `--debug` from `apps/ui`. A failed test keeps a trace in `test-results`, which opens with `pnpm exec playwright show-trace`.
 
 ### MAPP library tests
 

@@ -25,6 +25,8 @@ public/css/ui.css
 
 resources
 coverage
+test-results
+playwright-report
 
 docs/*
 

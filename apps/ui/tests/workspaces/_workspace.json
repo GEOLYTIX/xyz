@@ -1,0 +1,18 @@
+{
+  "dbs": "DEVDB",
+  "locale": {
+    "layers": {
+      "osm": {
+        "template": "osm"
+      }
+    }
+  },
+  "templates": {
+    "osm": {
+      "src": "file:packages/testhost/workspaces/templates/osm.json"
+    },
+    "grocery": {
+      "src": "file:apps/mapp/tests/workspaces/locales/grocery.json"
+    }
+  }
+}
