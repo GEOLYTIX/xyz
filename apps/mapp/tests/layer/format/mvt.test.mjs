@@ -229,6 +229,15 @@ async function properties(layer, id) {
   return layer.featuresObject[id];
 }
 
+/**
+Stops the debounced mapview changeEnd of the initial view. The changeEnd loads the properties without the reload flag. A load from the changeEnd after the layer.reload() would supersede the debounced reload request, and the tiles would not be refreshed.
+*/
+function stopChangeEnd(layer) {
+  clearTimeout(layer.mapview.changeEndTimer);
+
+  layer.changeEndCallbacks.length = 0;
+}
+
 describe('mvt wkt_properties', () => {
   it('requests the tile geometries without fields', async () => {
     const layer = await countries(undefined, { wkt_properties: true });
@@ -293,6 +302,8 @@ describe('mvt wkt_properties', () => {
 
     layer.filter.current = { continent: { in: ['Europe'] } };
 
+    stopChangeEnd(layer);
+
     layer.reload();
 
     await expect
@@ -313,6 +324,8 @@ describe('mvt wkt_properties', () => {
     // France has not been rendered before, eg. after a location has been created.
     delete layer.featuresObject[FRANCE];
 
+    stopChangeEnd(layer);
+
     layer.reload();
 
     await expect
@@ -329,6 +342,8 @@ describe('mvt wkt_properties', () => {
 
     const refresh = vi.spyOn(layer.source, 'refresh');
     const changed = vi.spyOn(layer.L, 'changed');
+
+    stopChangeEnd(layer);
 
     layer.reload();
 
@@ -348,6 +363,8 @@ describe('mvt wkt_properties', () => {
     const clear = vi.spyOn(layer.source, 'clear');
 
     layer.display = false;
+
+    stopChangeEnd(layer);
 
     layer.reload();
 
