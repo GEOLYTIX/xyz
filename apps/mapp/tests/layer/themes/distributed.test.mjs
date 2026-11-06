@@ -102,7 +102,7 @@ describe('layer/themes/distributed', () => {
     expect(fills[3]).toBe('#bbb');
   });
 
-  // BUG: distributed.mjs:107 pushes the value to categories[theme.index].values instead of the assigned categories[bbox.themeIdx].values.
+  // Known bug https://github.com/GEOLYTIX/xyz/issues/3039: distributed.mjs:107 pushes the value to categories[theme.index].values instead of the assigned categories[bbox.themeIdx].values.
   it.fails('records the value on the assigned category', () => {
     const t = theme();
 
@@ -120,7 +120,7 @@ describe('layer/themes/distributed', () => {
     expect(fills).toEqual(['#aaa', '#bbb', '#aaa']);
   });
 
-  // BUG: distributed.mjs:32 casts the field value with String() before the falsy check, so a feature without a field value is styled as 'undefined'.
+  // Known bug https://github.com/GEOLYTIX/xyz/issues/3040: distributed.mjs:32 casts the field value with String() before the falsy check, so a feature without a field value is styled as 'undefined'.
   it.fails('does not style a feature without a field value', () => {
     const t = theme();
     t.field = 'group';

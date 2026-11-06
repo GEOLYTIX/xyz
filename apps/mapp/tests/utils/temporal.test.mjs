@@ -90,7 +90,7 @@ describe('utils/temporal', () => {
       expect(params.locale).toBe(navigator.language);
     });
 
-    // BUG: An invalid timestamp logs an error but Intl format(undefined) returns the current date.
+    // Known bug https://github.com/GEOLYTIX/xyz/issues/3045: An invalid timestamp logs an error but Intl format(undefined) returns the current date.
     it.fails('does not format an invalid timestamp as the current date', () => {
       vi.spyOn(console, 'error').mockImplementation(() => {});
 

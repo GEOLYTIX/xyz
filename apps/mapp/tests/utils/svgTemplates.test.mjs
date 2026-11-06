@@ -42,7 +42,7 @@ describe('utils/svgTemplates', () => {
     expect(mapp.utils.svgTemplates).toBe(svgTemplates);
   });
 
-  // BUG: mapp.utils.svgSymbols is the svgSymbols module namespace. Assigning svgSymbols.templates throws a TypeError in the unbundled library.
+  // Known bug https://github.com/GEOLYTIX/xyz/issues/3047: mapp.utils.svgSymbols is the svgSymbols module namespace. Assigning svgSymbols.templates throws a TypeError in the unbundled library.
   it.fails(
     'assigns the templates to the mapp.utils.svgSymbols module',
     async () => {
