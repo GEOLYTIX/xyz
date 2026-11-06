@@ -3,7 +3,7 @@
 
 The dialogs module exports alert and confirm methods which are bound to the window.alert() and window.confirm() browser functions.
 
-The methods accept the same params as the mapp.ui.elements.alert() and mapp.ui.elements.confirm() methods. The ui module assigns the ui elements as mapp.utils.alert and mapp.utils.confirm when loaded.
+The methods accept the same params as the [ui alert]{@link module:/ui/elements/alert} and [ui confirm]{@link module:/ui/elements/confirm} elements. The ui module assigns the ui elements as mapp.utils.alert and mapp.utils.confirm when loaded.
 
 MAPP modules must call mapp.utils.alert() and mapp.utils.confirm() so that they can be used without the MAPP.UI library.
 
@@ -37,7 +37,7 @@ export function alert(params) {
 @description
 The confirm method shows the params text in a window.confirm() browser dialog.
 
-The method resolves to the boolean response like the async mapp.ui.elements.confirm() method.
+The method resolves to the boolean response like the async [ui confirm]{@link module:/ui/elements/confirm} element.
 
 ```js
 const confirmed = await mapp.utils.confirm({

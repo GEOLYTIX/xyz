@@ -1,0 +1,17 @@
+{
+  "name": "@geolytix/mapp-ui",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geolytix/xyz"
+  },
+  "packageManager": "pnpm@10.10.0",
+  "scripts": {
+    "build": "vite build && pnpm css",
+    "css": "vite build --config vite.css.config.mjs"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "catalog:"
+  }
+}

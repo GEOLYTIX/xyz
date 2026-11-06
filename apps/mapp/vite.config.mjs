@@ -8,11 +8,12 @@ const isDevelopmentBuild = process.env.NODE_ENV === 'DEVELOPMENT';
 
 export default defineConfig({
   build: {
-    emptyOutDir: true,
+    // The mapp and ui apps both build into public/js/lib. The directory is
+    // not emptied, so the build of one app keeps the bundle of the other.
+    emptyOutDir: false,
     lib: {
       entry: {
         mapp: fileURLToPath(new URL('./lib/mapp.mjs', import.meta.url)),
-        ui: fileURLToPath(new URL('./lib/ui.mjs', import.meta.url)),
       },
       fileName: (_format, entryName) => `${entryName}.js`,
       formats: ['es'],

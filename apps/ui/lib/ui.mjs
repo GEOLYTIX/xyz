@@ -11,7 +11,9 @@ The alert and confirm ui elements are assigned as `mapp.utils.alert()` and `mapp
 
 The ui drawLegend method is assigned as `mapp.layer.drawLegend()`, replacing the mapp method which doesn't render a legend.
 
-The `ui.mjs` module is used as entry point for the Vite build process to bundle the MAPP/UI API.
+The `ui.mjs` module is used as entry point for the Vite build process of the `apps/ui` app to bundle the MAPP/UI API.
+
+The ui module requires the MAPP library. The `mapp.js` script must be loaded before the `ui.js` script.
 
 @requires /ui/elements
 @requires /ui/locations
@@ -22,14 +24,14 @@ The `ui.mjs` module is used as entry point for the Vite build process to bundle 
 @module /ui
 */
 
-import Dataview from './ui/Dataview.mjs';
-import elements from './ui/elements/_elements.mjs';
-import Gazetteer from './ui/Gazetteer.mjs';
-import layers from './ui/layers/_layers.mjs';
-import locations from './ui/locations/_locations.mjs';
-import plugins from './ui/plugins/_plugins.mjs';
-import Tabview from './ui/Tabview.mjs';
-import utils from './ui/utils/_utils.mjs';
+import Dataview from './Dataview.mjs';
+import elements from './elements/_elements.mjs';
+import Gazetteer from './Gazetteer.mjs';
+import layers from './layers/_layers.mjs';
+import locations from './locations/_locations.mjs';
+import plugins from './plugins/_plugins.mjs';
+import Tabview from './Tabview.mjs';
+import utils from './utils/_utils.mjs';
 
 const ui = {
   Dataview,

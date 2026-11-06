@@ -9,6 +9,7 @@
 *.md
 
 apps/mapp
+apps/ui
 apps/xyz/tests
 
 # PGlite for local testing only. Excluding the workspace package means pnpm on

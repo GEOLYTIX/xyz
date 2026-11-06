@@ -1,6 +1,6 @@
 {
   "source": {
-    "include": ["./apps/mapp/lib"],
+    "include": ["./apps/mapp/lib", "./apps/ui/lib"],
     "includePattern": ".js$"
   },
   "plugins": ["plugins/markdown"],

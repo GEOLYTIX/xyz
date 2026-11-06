@@ -71,9 +71,9 @@ jobs:
         if: steps.version.outputs.build == 'true'
         run: pnpm test
 
-      - name: Build MAPP bundles
+      - name: Build MAPP and MAPP.UI bundles
         if: steps.version.outputs.build == 'true'
-        run: pnpm build --filter=@geolytix/mapp --force
+        run: pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui --force
 
       # The tag is pushed atomically with main, so a tag always points at a
       # commit on main which contains the bundles.

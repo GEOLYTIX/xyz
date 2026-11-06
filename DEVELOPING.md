@@ -28,6 +28,7 @@ App-specific build and development notes live with each app:
 
 - [XYZ app](./apps/xyz/README.md)
 - [MAPP app](./apps/mapp/README.md)
+- [MAPP.UI app](./apps/ui/README.md)
 - [SAML app](./apps/saml/README.md)
 
 ## Test Debugging [VSCode]

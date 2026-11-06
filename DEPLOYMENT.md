@@ -156,7 +156,7 @@ pnpm deploy:vercel --env=preview --varlock-env=staging
 To keep the existing key instead, freeze and deploy separately with `_VARLOCK_ENV_KEY` already set locally and in the project:
 
 ```bash
-pnpm build --filter=@geolytix/mapp
+pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
 pnpm freeze-env --env=production
 vercel --prod
 ```
@@ -178,7 +178,7 @@ Smoke routes: `/`, `/api/workspace/locale`, `/public/js/lib/mapp.js`. Prefix the
 `apps/auth` and `apps/saml` import the XYZ app and mount extra routes. Each has its own `vercel.json` with paths relative to the **repository root**, so deploy from the root with `--local-config`:
 
 ```bash
-pnpm build --filter=@geolytix/mapp
+pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
 vercel --prod --local-config=apps/saml/vercel.json
 ```
 
@@ -186,19 +186,19 @@ Deploy each to its **own Vercel project** — they all claim `/(.*)`. The SAML c
 
 ## Build artefacts
 
-### MAPP bundles
+### MAPP and MAPP.UI bundles
 
-The bundles in `public/js/lib`, `public/css/mapp.css` and `public/css/ui.css` are gitignored and not tracked on the development branches, so changes to `apps/mapp` never cause merge conflicts in build output. Vercel ships whatever is in the local `public` directory, so build before any deployment which does not go through `pnpm deploy:vercel`:
+The bundles in `public/js/lib`, `public/css/mapp.css` and `public/css/ui.css` are gitignored and not tracked on the development branches, so changes to `apps/mapp` and `apps/ui` never cause merge conflicts in build output. Vercel ships whatever is in the local `public` directory, so build before any deployment which does not go through `pnpm deploy:vercel`:
 
 ```bash
-pnpm build --filter=@geolytix/mapp
+pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
 ```
 
-Turbo restores the bundles from its cache when `apps/mapp` is unchanged, so deleting `public/js/lib` and building again is safe. Use `--force` to skip the cache.
+Turbo restores the bundles from its cache when `apps/mapp` and `apps/ui` are unchanged, so deleting `public/js/lib` and building again is safe. Use `--force` to skip the cache.
 
 `main` and the release tags carry the bundles. The release workflow builds them on top of `main`, commits them to `main`, and tags that commit (see [RELEASING.md](./RELEASING.md)). A checkout of `main` or a release tag, or a source archive, is deployable without a build.
 
-`node utils/version.js` stamps the bundle with the current commit SHA and then builds — useful for identifying which framework version a deployment runs. `NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp` produces an unminified bundle for debugging; do not deploy one.
+`node utils/version.js` stamps the mapp bundle with the current commit SHA and then builds — useful for identifying which framework version a deployment runs. `NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui` produces unminified bundles for debugging; do not deploy one.
 
 ### Pre-cached workspace
 
@@ -213,7 +213,7 @@ Point `WORKSPACE` at the generated file and make sure it ships. Module templates
 
 ## What ships
 
-`@vercel/node` traces imports from `apps/xyz/server.js`. Anything read from disk at runtime rather than imported must be in `includeFiles`; anything matched by `.vercelignore` (currently `.env*`, `*.md`, `apps/mapp`, `apps/xyz/tests`) is excluded.
+`@vercel/node` traces imports from `apps/xyz/server.js`. Anything read from disk at runtime rather than imported must be in `includeFiles`; anything matched by `.vercelignore` (currently `.env*`, `*.md`, `apps/mapp`, `apps/ui`, `apps/xyz/tests`) is excluded.
 
 Runtime file reads, all resolved from `XYZ_CWD` or the workspace root:
 
@@ -244,17 +244,17 @@ No workflow deploys the app. The existing ones are:
 
 | Workflow | Trigger | Purpose |
 |---|---|---|
-| `biome.yml` | push, PR | `biome ci .` |
+| `biome.yml` | push, PR | `biome ci .`, and a check that `apps/mapp` doesn't reference the MAPP.UI library |
 | `unit_tests.yml` | push/PR on `main`, `major`, `minor`, `patch` | `pnpm test` |
 | `build.yml` | push/PR on the same branches | coverage + SonarQube (skipped for fork PRs) |
 | `deploy-docs.yml` | push to `main`, manual | JSDoc to GitHub Pages |
 | `release.yml` | push to `main` with an untagged version | builds the bundles, tags a build commit, GitHub release from `release-notes/<tag>.md` |
 
-Vercel Git integration deploys a branch checkout, which has no MAPP bundles because no build command runs on Vercel. Deploy with `pnpm deploy:vercel`, or from a workflow which builds first. A workflow also needs to freeze the blob when using Varlock, with credentials for any `gsm()` references: To deploy with a frozen blob, freeze before deploying and give the job credentials for any `gsm()` references:
+Vercel Git integration deploys a branch checkout, which has no MAPP or MAPP.UI bundles because no build command runs on Vercel. Deploy with `pnpm deploy:vercel`, or from a workflow which builds first. A workflow also needs to freeze the blob when using Varlock, with credentials for any `gsm()` references: To deploy with a frozen blob, freeze before deploying and give the job credentials for any `gsm()` references:
 
 ```yaml
 - run: pnpm install --ignore-scripts
-- run: pnpm build --filter=@geolytix/mapp
+- run: pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
 - run: pnpm freeze-env --env=production
   env:
     _VARLOCK_ENV_KEY: ${{ secrets.VARLOCK_ENV_KEY }}
@@ -319,7 +319,7 @@ The key in Vercel does not match the one used to freeze. Re-run `pnpm deploy:ver
 Run `gcloud auth application-default login`, and check `GCP_PROJECT_ID` and the secret names in `.env`.
 
 **Stale frontend**
-`public/js/lib` was not rebuilt before deploying. Run `pnpm build --filter=@geolytix/mapp --force` and deploy again.
+`public/js/lib` was not rebuilt before deploying. Run `pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui --force` and deploy again.
 
 **404s on every route**
 Check `DIR` — routes mount under it and `COOKIE_PROPS` derives its `Path` from it.

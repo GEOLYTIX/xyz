@@ -2,10 +2,11 @@
 
 ## What this repository contains
 
-This repository is a `pnpm` monorepo workspace with three apps:
+This repository is a `pnpm` monorepo workspace with four apps:
 
 - `apps/xyz`: the core XYZ API and Express server logic
 - `apps/mapp`: the MAPP frontend library bundle
+- `apps/ui`: the MAPP.UI frontend library bundle, which requires the MAPP library
 - `apps/saml`: optional SAML routes mounted by the SAML dev server
 
 The repository root wires those packages together and exposes the commands you will usually run during local development.
@@ -13,6 +14,7 @@ For app-specific usage, see each app README:
 
 - [XYZ app](./apps/xyz/README.md)
 - [MAPP app](./apps/mapp/README.md)
+- [MAPP.UI app](./apps/ui/README.md)
 - [SAML app](./apps/saml/README.md)
 
 ## Prerequisites
@@ -145,12 +147,12 @@ Run all builds:
 pnpm build
 ```
 
-For MAPP-specific build details, see [apps/mapp/README.md](./apps/mapp/README.md).
+For MAPP and MAPP.UI build details, see [apps/mapp/README.md](./apps/mapp/README.md) and [apps/ui/README.md](./apps/ui/README.md).
 
 Build unminified MAPP bundles for browser debugging with:
 
 ```bash
-NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
+NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
 ```
 
 For JSDoc generation, see [DOCUMENTATION.md](./DOCUMENTATION.md).

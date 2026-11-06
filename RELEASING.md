@@ -3,7 +3,7 @@
 Merging a version bump into `main` releases it. The [release workflow](./.github/workflows/release.yml) runs on every push to `main`. For a version which has no tag yet it:
 
 1. runs the tests,
-2. builds the MAPP bundles into `public/js/lib`, `public/css/mapp.css` and `public/css/ui.css`,
+2. builds the MAPP and MAPP.UI bundles into `public/js/lib`, `public/css/mapp.css` and `public/css/ui.css`,
 3. commits the bundles on top of `main` in a `Build <tag>` commit,
 4. tags that commit and pushes `main` and the tag together,
 5. creates a GitHub release using `release-notes/<tag>.md`,
@@ -54,7 +54,7 @@ Create or update `release-notes/v5.0.3.md`. Summarise the changes, link relevant
 ```bash
 pnpm exec biome check .
 pnpm test
-pnpm build --filter=@geolytix/mapp
+pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui
 git status --short
 ```
 
