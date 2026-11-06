@@ -8,10 +8,14 @@
   "packageManager": "pnpm@10.10.0",
   "scripts": {
     "build": "vite build && pnpm css",
-    "css": "vite build --config vite.css.config.mjs"
+    "css": "vite build --config vite.css.config.mjs",
+    "test": "playwright test"
   },
   "license": "MIT",
   "devDependencies": {
+    "@geolytix/xyz-testhost": "workspace:*",
+    "@playwright/test": "catalog:",
+    "ol": "catalog:",
     "vite": "catalog:"
   }
 }

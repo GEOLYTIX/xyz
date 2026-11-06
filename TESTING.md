@@ -6,8 +6,8 @@
 |---|---|---|---|
 | XYZ API | [apps/xyz/tests](apps/xyz/tests/) | Node | API modules, query templates, providers, user and workspace modules |
 | MAPP library | [apps/mapp/tests](apps/mapp/tests/) | Headless Chromium | MAPP library modules against a local XYZ host |
+| MAPP.UI library | [apps/ui/tests](apps/ui/tests/) | Headless Chromium | The XYZ default view with the MAPP.UI library against a local XYZ host |
 
-Tests for the MAPP.UI library will follow in `apps/ui/tests`.
 
 ## How we test
 
@@ -54,6 +54,7 @@ Run a suite:
 |---|---|
 | `pnpm test:xyz` | XYZ API |
 | `pnpm test:mapp` | MAPP library |
+| `pnpm test:ui` | MAPP.UI library |
 
 Run a single file or the tests matching a name from the package directory:
 
@@ -224,6 +225,28 @@ it('warns about a potential SQL injection', () => {
   );
 });
 ```
+
+### MAPP.UI library tests
+
+The MAPP.UI tests run with [Playwright Test](https://playwright.dev/docs/intro) and open the XYZ default view (`/view?locale={key}`) from the testhost. The tests use the view like a user, with Playwright locators for the panels, buttons and inputs.
+
+The [playwright.config.mjs](apps/ui/playwright.config.mjs) starts the testhost with the [UI test workspace](apps/ui/tests/workspaces/_workspace.json). The testhost redirects the built bundles and stylesheets of the view to the MAPP and MAPP.UI source modules, so the tests don't require a build.
+
+[tests/fixtures.mjs](apps/ui/tests/fixtures.mjs) provides the `test` with a `page` that serves Openlayers from the `ol` package for the CDN script of the view and aborts other external requests, and collects uncaught errors in `page.errors`. `openView(page, locale)` opens the default view and resolves once the view has added the layers and panels.
+
+```js
+import { expect, openView, test } from './fixtures.mjs';
+
+test('lists the locale layers in the layers panel', async ({ page }) => {
+  await openView(page, 'grocery');
+
+  await expect(page.locator('#layers').getByText('OSM Basemap')).toBeVisible();
+});
+```
+
+The tests run in one worker. With parallel pages, closing an HTTP socket in the testhost blocks the Node process for several seconds on Windows and the page loads time out.
+
+Debug a test in a visible browser with `pnpm exec playwright test --headed` or step through it with `--debug` from `apps/ui`. A failed test keeps a trace in `test-results`, which opens with `pnpm exec playwright show-trace`.
 
 ### MAPP library tests
 

@@ -23,6 +23,7 @@
     "test:xyz:coverage": "turbo run test:coverage --filter=@geolytix/xyz-app",
     "test:mapp": "pnpm --filter=@geolytix/mapp test",
     "test:mapp:coverage": "pnpm --filter=@geolytix/mapp test:coverage",
+    "test:ui": "pnpm --filter=@geolytix/mapp-ui test",
     "build": "turbo run build",
     "generate-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose && jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
     "login-public-key": "varlock run -- node ./utils/printLoginPublicKey.js",
