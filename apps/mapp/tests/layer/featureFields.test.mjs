@@ -59,7 +59,7 @@ describe('layer/featureFields', () => {
       ]);
     });
 
-    // BUG: featureFields.mjs:220 flattens the default_fields array after the Set is created, so a default field is duplicated by a style field.
+    // Known bug https://github.com/GEOLYTIX/xyz/issues/3042: featureFields.mjs:220 flattens the default_fields array after the Set is created, so a default field is duplicated by a style field.
     it.fails('does not duplicate default_fields', () => {
       const l = {
         params: { default_fields: ['category'] },
