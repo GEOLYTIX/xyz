@@ -48,7 +48,7 @@ export default function loadPlugins(plugins, endsWith = ['.js', '.mjs']) {
 
 function loadPlugin(plugin) {
   return new Promise((resolve, reject) =>
-    import(plugin)
+    import(/* @vite-ignore */ plugin)
       .then((mod) => {
         resolve(mod);
       })
