@@ -4,26 +4,14 @@
 @module /utils/convert
 */
 
-let promise, convertUnits;
-
-async function moduleImport() {
-  if (!promise)
-    promise = new Promise((resolve) => {
-      import('https://cdn.skypack.dev/convert@4').then((mod) => {
-        convertUnits = mod.convert;
-        resolve();
-      });
-    });
-
-  await promise;
-}
-
 /**
 @function convert
 @async
 
 @description
-Formats a numeric value as string. The value is converted from the params.units to the params.convertTo units with the [convert]{@link https://www.npmjs.com/package/convert} module, which is imported on the first call.
+Formats a numeric value as string. The value is converted from the params.units to the params.convertTo units with the [convert]{@link https://www.npmjs.com/package/convert} module. The module is imported from esm.sh with the mapp.utils.esmImport method on the first conversion.
+
+The value is formatted without conversion if the module can't be imported. The esmImport method logs the error.
 
 @param {number|string} value The value to format.
 @param {Object} params The format params.
@@ -36,12 +24,14 @@ Formats a numeric value as string. The value is converted from the params.units 
 @returns {Promise<string>} The formatted value.
 */
 export default async function convert(value, params) {
-  await moduleImport();
-
   value = Number.parseFloat(value);
 
   if (params.units && params.convertTo) {
-    value = convertUnits(value, params.units).to(params.convertTo);
+    const convertModule = await mapp.utils.esmImport('convert@4');
+
+    if (!(convertModule instanceof Error)) {
+      value = convertModule.convert(value, params.units).to(params.convertTo);
+    }
   }
 
   value = value.toFixed(params.decimals || 0);
