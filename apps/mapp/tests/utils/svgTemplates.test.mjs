@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { templates } from '../../lib/utils/svgSymbols.mjs';
 import { svgTemplates } from '../../lib/utils/svgTemplates.mjs';
 
 const validSvg =
@@ -21,19 +22,22 @@ function stubFetch(responses) {
   return fetch;
 }
 
-describe('utils/svgTemplates', () => {
-  const namespace = mapp.utils.svgSymbols;
+/**
+Removes the loaded templates from the templates object of the svgSymbols module, which is shared by the tests.
+*/
+function clearTemplates() {
+  for (const key of Object.keys(templates)) delete templates[key];
+}
 
+describe('utils/svgTemplates', () => {
   let warn;
 
   beforeEach(() => {
-    // The svgSymbols module namespace is not extensible. The tests assign a plain object copy, see the BUG below.
-    mapp.utils.svgSymbols = { ...namespace };
     warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    mapp.utils.svgSymbols = namespace;
+    clearTemplates();
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
   });
@@ -42,19 +46,27 @@ describe('utils/svgTemplates', () => {
     expect(mapp.utils.svgTemplates).toBe(svgTemplates);
   });
 
-  // Known bug https://github.com/GEOLYTIX/xyz/issues/3047: mapp.utils.svgSymbols is the svgSymbols module namespace. Assigning svgSymbols.templates throws a TypeError in the unbundled library.
-  it.fails(
-    'assigns the templates to the mapp.utils.svgSymbols module',
-    async () => {
-      mapp.utils.svgSymbols = namespace;
+  // https://github.com/GEOLYTIX/xyz/issues/3047: mapp.utils.svgSymbols is the svgSymbols module namespace, which can't be extended. The templates are assigned to the templates object exported by the module.
+  it('assigns the templates to the mapp.utils.svgSymbols module', async () => {
+    expect(Object.isExtensible(mapp.utils.svgSymbols)).toBe(false);
+    expect(mapp.utils.svgSymbols.templates).toBe(templates);
 
-      stubFetch({ '/pin.svg': { body: validSvg } });
+    stubFetch({ '/pin.svg': { body: validSvg } });
 
-      await svgTemplates({ pin: '/pin.svg' });
+    await svgTemplates({ pin: '/pin.svg' });
 
-      expect(mapp.utils.svgSymbols.templates).toEqual({ pin: validSvg });
-    },
-  );
+    expect(mapp.utils.svgSymbols.templates).toEqual({ pin: validSvg });
+  });
+
+  it('styles an icon with a loaded template', async () => {
+    stubFetch({ '/pin.svg': { body: validSvg } });
+
+    await svgTemplates({ pin: '/pin.svg' });
+
+    expect(mapp.utils.svgSymbols.template({ template: 'pin' })).toBe(
+      `data:image/svg+xml,${encodeURIComponent(validSvg)}`,
+    );
+  });
 
   it.each([
     ['undefined', undefined],
@@ -65,7 +77,7 @@ describe('utils/svgTemplates', () => {
     await svgTemplates(templates);
 
     expect(fetch).not.toHaveBeenCalled();
-    expect(mapp.utils.svgSymbols.templates).toBeUndefined();
+    expect(mapp.utils.svgSymbols.templates).toEqual({});
   });
 
   it('loads valid svg templates', async () => {
@@ -88,7 +100,7 @@ describe('utils/svgTemplates', () => {
   });
 
   it('does not fetch templates which are already loaded', async () => {
-    mapp.utils.svgSymbols.templates = { pin: 'loaded' };
+    templates.pin = 'loaded';
 
     const fetch = stubFetch({ '/other.svg': { body: validSvg } });
 

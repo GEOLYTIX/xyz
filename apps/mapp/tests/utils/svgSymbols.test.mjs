@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import * as svgSymbols from '../../lib/utils/svgSymbols.mjs';
 
 const prefix = 'data:image/svg+xml,';
@@ -26,19 +26,16 @@ function fills(svg, selector) {
 }
 
 describe('utils/svgSymbols', () => {
-  const namespace = mapp.utils.svgSymbols;
-
-  // The module namespace is not extensible. A plain object copy holds the templates, see the BUG in svgTemplates.test.mjs.
-  beforeEach(() => {
-    mapp.utils.svgSymbols = { ...namespace };
-  });
-
+  // The templates object is shared by the tests.
   afterEach(() => {
-    mapp.utils.svgSymbols = namespace;
+    for (const key of Object.keys(svgSymbols.templates)) {
+      delete svgSymbols.templates[key];
+    }
   });
 
   it('is assigned to mapp.utils', () => {
-    expect(namespace.dot).toBe(svgSymbols.dot);
+    expect(mapp.utils.svgSymbols.dot).toBe(svgSymbols.dot);
+    expect(mapp.utils.svgSymbols.templates).toBe(svgSymbols.templates);
   });
 
   describe('dot', () => {
@@ -154,9 +151,8 @@ describe('utils/svgSymbols', () => {
     });
 
     it('returns the template with substitutes as data url', () => {
-      mapp.utils.svgSymbols.templates = {
-        pin: '<svg xmlns="http://www.w3.org/2000/svg"><circle fill="$FILL" stroke="$FILL"/></svg>',
-      };
+      svgSymbols.templates.pin =
+        '<svg xmlns="http://www.w3.org/2000/svg"><circle fill="$FILL" stroke="$FILL"/></svg>';
 
       const svg = parse(
         svgSymbols.template({ template: 'pin', substitute: { $FILL: '#f00' } }),
@@ -167,7 +163,7 @@ describe('utils/svgSymbols', () => {
     });
 
     it('returns the template without substitutes', () => {
-      mapp.utils.svgSymbols.templates = { plain: '<svg/>' };
+      svgSymbols.templates.plain = '<svg/>';
 
       expect(svgSymbols.template({ template: 'plain' })).toBe(
         `${prefix}${encodeURIComponent('<svg/>')}`,
