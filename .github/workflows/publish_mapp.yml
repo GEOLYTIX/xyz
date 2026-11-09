@@ -1,0 +1,142 @@
+name: Publish MAPP
+
+# Publishes the @geolytix/mapp package to npm. The workflow only runs on a
+# manual dispatch, after a maintainer decided that a release has MAPP changes
+# to publish, see RELEASING.md.
+#
+# - latest: publishes the version of a release tag, eg. v5.1.0.
+# - next: publishes a prerelease of a branch or tag, eg. 5.1.0-rc.2 from minor.
+#
+# npm trusted publishing authenticates the workflow with OIDC, so there is no
+# npm token. The trusted publisher on npm names this workflow file and the npm
+# environment. The npm environment requires the approval of a reviewer.
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'The release tag for latest, eg. v5.1.0, or a branch or tag for next.'
+        required: true
+        type: string
+      dist_tag:
+        description: 'The npm dist-tag.'
+        required: true
+        type: choice
+        options:
+          - next
+          - latest
+        default: next
+      prerelease:
+        description: 'The prerelease identifier for next, eg. rc.2 publishes 5.1.0-rc.2.'
+        required: false
+        type: string
+
+concurrency:
+  group: publish-mapp
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish @geolytix/mapp
+    runs-on: ubuntu-26.04
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      # Node 24 ships an npm version with trusted publishing.
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+
+      - name: Check the npm version
+        run: |
+          npm_version=$(npm --version)
+          echo "npm $npm_version"
+          node -e "
+            const [major, minor, patch] = '$npm_version'.split('.').map(Number);
+            const ok = major > 11 || (major === 11 && (minor > 5 || (minor === 5 && patch >= 1)));
+            if (!ok) { console.error('Trusted publishing requires npm 11.5.1 or later.'); process.exit(1); }
+          "
+
+      - name: Resolve the version
+        id: version
+        env:
+          REF: ${{ inputs.ref }}
+          DIST_TAG: ${{ inputs.dist_tag }}
+          PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          node utils/check-version.js
+          base=$(node -p "require('./apps/mapp/package.json').version")
+
+          if [ "$DIST_TAG" = "latest" ]; then
+            if [ -n "$PRERELEASE" ]; then
+              echo "::error::A prerelease is published with the next dist-tag."
+              exit 1
+            fi
+            if [ "$REF" != "v$base" ] || ! git ls-remote --exit-code --tags origin "refs/tags/$REF" > /dev/null; then
+              echo "::error::latest publishes a release tag. The ref must be the tag v$base."
+              exit 1
+            fi
+            version="$base"
+          else
+            if ! [[ "$PRERELEASE" =~ ^[0-9A-Za-z]+(\.[0-9A-Za-z]+)*$ ]]; then
+              echo "::error::next requires a prerelease identifier, eg. rc.2."
+              exit 1
+            fi
+            version="$base-$PRERELEASE"
+          fi
+
+          if npm view "@geolytix/mapp@$version" version > /dev/null 2>&1; then
+            echo "::error::@geolytix/mapp@$version is already published."
+            exit 1
+          fi
+
+          echo "Publishing @geolytix/mapp@$version with the $DIST_TAG dist-tag."
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Install dependencies
+        run: pnpm install --ignore-scripts
+
+      - name: Install Chromium for the MAPP browser tests
+        run: pnpm --filter=@geolytix/mapp exec playwright install --with-deps chromium
+
+      - name: Test
+        run: pnpm --filter=@geolytix/mapp test
+
+      - name: Build
+        run: pnpm build --filter=@geolytix/mapp --force
+
+      # The prerelease version is only set in the workflow checkout.
+      - name: Set the prerelease version
+        if: inputs.dist_tag == 'next'
+        working-directory: apps/mapp
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: npm pkg set "version=$VERSION"
+
+      - name: Pack and check the tarball
+        run: pnpm --filter=@geolytix/mapp pack:check
+
+      - name: Install the tarball
+        run: pnpm --filter=@geolytix/mapp pack:install
+
+      - name: Package test
+        run: pnpm --filter=@geolytix/mapp test:package
+
+      - name: Publish
+        working-directory: apps/mapp/.pack
+        env:
+          DIST_TAG: ${{ inputs.dist_tag }}
+        run: npm publish geolytix-mapp.tgz --provenance --access public --tag "$DIST_TAG"
