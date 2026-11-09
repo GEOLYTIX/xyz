@@ -76,7 +76,7 @@ MVT layers of any workspace served by the testhost request their tiles through t
 
 ## Test views
 
-Each folder in [views/](views/) is a test view, served at `/views/{folder}/`. A view imports modules from `/mapp/lib` and fetches from `/api`. More complex views with scripts for specific MAPP API processes can be added as new folders.
+Each folder in [views/](views/) is a test view, served at `/views/{folder}/`. A view imports modules from `/mapp/lib`, except the cdn view, and fetches from `/api`. More complex views with scripts for specific MAPP API processes can be added as new folders.
 
 ### locale
 
@@ -102,3 +102,15 @@ The [testview](views/testview/) loads Openlayers and the MAPP library and create
 The decorated mapviews are assigned to `window.testviews` by mapview key. `document.body.dataset.ready` is set once every mapview has rendered, so a browser test can wait for `body[data-ready]` before it makes assertions.
 
 Openlayers is loaded from the jsdelivr CDN, the same version as the default view.
+
+### cdn
+
+The [cdn view](views/cdn/) loads the published `@geolytix/mapp` package from the jsDelivr CDN instead of the `/mapp/lib` source modules. It checks a published version the way a page outside of XYZ uses the MAPP library, eg. after a release with the [Publish MAPP workflow](../../RELEASING.md#publish-the-mapp-library-to-npm).
+
+The version or dist-tag is read from the `version` URL parameter. The default is `latest`.
+
+```bash
+pnpm testview   # http://127.0.0.1:3001/views/cdn/?version=next
+```
+
+The view has no `data-dir`, so the `mapp.host` is set to the testhost origin after the import. The view creates one mapview with the `osm` base layer and the `locations_categorized` layer of the testview workspace, and sets `document.body.dataset.ready` once the mapview has rendered.

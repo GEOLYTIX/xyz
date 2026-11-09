@@ -15,7 +15,7 @@ A squash merge from a development branch removes the bundles from `main`, becaus
 
 The workflow pushes to the protected `main` and `patch` branches with the `PAT_TOKEN` repository secret. The token owner must be allowed to push to `main` and to bypass the pull request rule on both branches.
 
-The workflow **does not deploy the app or publish an npm package**. For deployment, see [DEPLOYMENT.md](./DEPLOYMENT.md).
+The workflow **does not deploy the app or publish an npm package**. For deployment, see [DEPLOYMENT.md](./DEPLOYMENT.md). The MAPP library is published to npm manually, see [Publish the MAPP library to npm](#publish-the-mapp-library-to-npm).
 
 The example below releases **v5.0.3**. Replace that version everywhere with your target version.
 
@@ -43,7 +43,7 @@ Choose **one** command:
 | Minor | Backwards-compatible features | `pnpm bump:minor` |
 | Major | Breaking changes | `pnpm bump:major` |
 
-The script increments the current version in `package.json`, `README.md`, and `apps/mapp/lib/mapp.mjs`. Check all three with `git diff`. **Do not run it again if the target version is already set.** It does not create a commit or tag.
+The script increments the current version in `package.json`, `README.md`, `apps/mapp/lib/mapp.mjs` and `apps/mapp/package.json`. Check all four with `git diff`, and check they match with `node utils/check-version.js`. **Do not run it again if the target version is already set.** It does not create a commit or tag.
 
 Create or update `release-notes/v5.0.3.md`. Summarise the changes, link relevant PRs, and explain any breaking changes or migration steps. Follow an [existing example](./release-notes/v5.0.3.md).
 
@@ -61,7 +61,7 @@ git status --short
 Stop and resolve any failures. The local build only checks that the bundles build. A branch from `main` tracks the bundles, so discard the rebuilt files before committing: `git restore public/js/lib public/css/mapp.css public/css/ui.css`. The workflow commits the release build.
 
 ```bash
-git add package.json README.md apps/mapp/lib/mapp.mjs release-notes/v5.0.3.md
+git add package.json README.md apps/mapp/lib/mapp.mjs apps/mapp/package.json release-notes/v5.0.3.md
 git diff --cached
 git commit -m "Prepare release v5.0.3"
 git push -u origin release/v5.0.3
@@ -96,3 +96,73 @@ git push origin patch
 `git status --short` must not list any other conflicts or bundle files before the commit.
 
 If the workflow fails before the tag is pushed, fix the cause in a new commit to `main`, or re-run the failed job for a transient failure. The next push to `main` retries the release while the version is still untagged. If the tag was pushed but the GitHub release is missing, re-run the job; it skips the build when `main` already contains the bundles and only creates the release. Never move or overwrite a published release tag.
+
+## Publish the MAPP library to npm
+
+The MAPP library is published to npm as [`@geolytix/mapp`](https://www.npmjs.com/package/@geolytix/mapp). Publishing is manual for now. The release workflow doesn't publish to npm.
+
+The package version is the XYZ release version. The MAPP library doesn't change in every release, so after a release a maintainer decides whether to publish it. Check for MAPP changes since the last published version:
+
+```bash
+npm view @geolytix/mapp dist-tags
+git diff --stat v5.1.0 v5.1.3 -- apps/mapp/lib apps/mapp/css
+```
+
+A published version can't be changed or reused, and npm limits unpublishing. Releases without MAPP changes are not published, so the npm versions can have gaps, eg. `5.1.0` and then `5.1.3`.
+
+### Publish with the workflow
+
+The [Publish MAPP workflow](./.github/workflows/publish_mapp.yml) only runs on a manual dispatch from [Actions → Publish MAPP](https://github.com/GEOLYTIX/xyz/actions/workflows/publish_mapp.yml), or with the GitHub CLI:
+
+```bash
+# A release, after the release workflow pushed the tag.
+gh workflow run publish_mapp.yml -f ref=v5.1.0 -f dist_tag=latest
+
+# A prerelease from a development branch, published as 5.1.0-rc.2.
+gh workflow run publish_mapp.yml -f ref=minor -f dist_tag=next -f prerelease=rc.2
+```
+
+| Input | Description |
+| --- | --- |
+| `ref` | The release tag for `latest`, eg. `v5.1.0`. A branch or tag for `next`. |
+| `dist_tag` | `latest` for a release, `next` for a prerelease. |
+| `prerelease` | The prerelease identifier for `next`, eg. `rc.2`. The version is the `apps/mapp/package.json` version with the identifier, eg. `5.1.0-rc.2`. |
+
+The workflow checks that the versions match and that the version isn't published yet. It runs the MAPP library tests, builds and packs the package, runs the package test with the tarball, and publishes the tarball with provenance. The prerelease version is only set in the workflow checkout and isn't committed.
+
+The publish job runs in the `npm` environment, which requires the approval of a reviewer. npm authenticates the workflow with trusted publishing (OIDC), so there is no npm token.
+
+GitHub only lists a manually dispatched workflow once the workflow file is on `main`. Until then, publish locally.
+
+### Check the published version
+
+- The [npm page](https://www.npmjs.com/package/@geolytix/mapp) shows the version, the dist-tag and the provenance.
+- The jsDelivr CDN serves the version, eg. `https://cdn.jsdelivr.net/npm/@geolytix/mapp@5.1.0/dist/mapp.js`.
+- The [cdn view](./packages/testhost/README.md#cdn) of the testhost loads the version from jsDelivr: `pnpm testview` and open `/views/cdn/?version=5.1.0`.
+
+### Publish locally
+
+The first version must be published locally by an owner of the `geolytix` npm organisation, because npm trusted publishing can only be set up for a package which exists. A local publish has no provenance and requires npm two-factor authentication.
+
+```bash
+pnpm install --frozen-lockfile
+pnpm test:mapp
+pnpm build --filter=@geolytix/mapp --force
+cd apps/mapp
+npm pkg set version=5.1.0-rc.1   # a prerelease only, don't commit the change
+pnpm pack:check
+pnpm pack:install
+pnpm test:package
+cd .pack
+npm login
+npm publish geolytix-mapp.tgz --access public --tag next
+cd .. && git restore package.json
+```
+
+### Set up trusted publishing
+
+After the first publish, an owner of the `geolytix` npm organisation sets up the package once:
+
+1. Create the `npm` environment in the GitHub repository settings with required reviewers, and restrict it to the `main` branch and the `v*` tags. Add `minor` and `patch` to publish prereleases from them.
+2. On npm, open the `@geolytix/mapp` package settings and add a trusted publisher: GitHub Actions, organisation `GEOLYTIX`, repository `xyz`, workflow `publish_mapp.yml`, environment `npm`.
+3. Set the publishing access of the package to require two-factor authentication and disallow tokens. The trusted publisher isn't affected.
