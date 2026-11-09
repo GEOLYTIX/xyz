@@ -41,6 +41,9 @@ function dateString(params) {
 
   const date = toJSDate(timestamp);
 
+  // toJSDate returns undefined for an invalid timestamp. Intl.format(undefined) would format the current date.
+  if (!date) return;
+
   return new Intl.DateTimeFormat(params.locale, params.options).format(date);
 }
 
