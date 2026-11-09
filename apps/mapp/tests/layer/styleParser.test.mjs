@@ -536,8 +536,8 @@ describe('styleParser: graduated theme', () => {
     expect(theme.categories[0].label).toBe(5);
   });
 
-  // Known bug https://github.com/GEOLYTIX/xyz/issues/3041: graduatedTheme calls theme.categories.forEach without a guard and throws for a graduated theme without categories.
-  it.fails('parses a graduated theme without categories', () => {
+  // https://github.com/GEOLYTIX/xyz/issues/3041: graduatedTheme guards against a graduated theme without categories.
+  it('parses a graduated theme without categories', () => {
     expect(() => graduated({})).not.toThrow();
   });
 });

@@ -433,6 +433,9 @@ The checks the order of theme categories according to their value. The method wi
 function graduatedTheme(theme) {
   if (theme.type !== 'graduated') return;
 
+  // A graduated theme may have no categories yet, eg. categories added by a plugin or dataview.
+  if (!Array.isArray(theme.categories)) return;
+
   if (!['less_than', 'greater_than'].includes(theme.graduated_breaks)) {
     theme.graduated_breaks = 'less_than';
   }

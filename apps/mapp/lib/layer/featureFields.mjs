@@ -203,8 +203,9 @@ An array without duplicates or undefined fields is returned from the Set.
 @returns {array} Array of feature fields.
 */
 export function fieldsArray(layer) {
+  // The default_fields array is spread so its fields are deduplicated against the style fields.
   const fieldsSet = new Set([
-    layer.params.default_fields,
+    ...(layer.params.default_fields ?? []),
     layer.style.theme?.field,
     layer.style.label?.field,
     layer.style.hover?.field,
@@ -216,7 +217,5 @@ export function fieldsArray(layer) {
     layer.style.theme.fields.forEach(fieldsSet.add, fieldsSet);
   }
 
-  return Array.from(fieldsSet)
-    .flat()
-    .filter((field) => !!field);
+  return Array.from(fieldsSet).filter((field) => !!field);
 }
