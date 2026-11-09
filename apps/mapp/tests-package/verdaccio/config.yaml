@@ -1,0 +1,24 @@
+# A local Verdaccio registry for the MAPP package workflow.
+# The workflow publishes the packed @geolytix/mapp tarball to this registry
+# and installs the package from it for the package test. Nothing is published
+# to npmjs.com. The storage and htpasswd paths are relative to this file and
+# gitignored.
+storage: ./storage
+
+auth:
+  htpasswd:
+    file: ./htpasswd
+    max_users: 1
+
+# No uplinks: the @geolytix scope only resolves the package published to this
+# registry. The installPackage script requests other packages, eg. the ol peer
+# dependency, from the npm registry.
+packages:
+  '@geolytix/*':
+    access: $all
+    publish: $authenticated
+
+log:
+  type: stdout
+  format: pretty
+  level: warn

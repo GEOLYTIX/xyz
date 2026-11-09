@@ -23,6 +23,13 @@ public/js/lib/
 public/css/mapp.css
 public/css/ui.css
 
+# The @geolytix/mapp npm package build, the packed tarball, and the installed package and local registry of the package test
+apps/mapp/dist/
+apps/mapp/.pack/
+apps/mapp/tests-package/node_modules/
+apps/mapp/tests-package/verdaccio/storage/
+apps/mapp/tests-package/verdaccio/htpasswd
+
 resources
 coverage
 

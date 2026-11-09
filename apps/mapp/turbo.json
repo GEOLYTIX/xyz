@@ -4,6 +4,7 @@
   "tasks": {
     "build": {
       "outputs": [
+        "dist/**",
         "$TURBO_ROOT$/public/js/lib/mapp.js",
         "$TURBO_ROOT$/public/js/lib/mapp.js.map",
         "$TURBO_ROOT$/public/css/mapp.css"
