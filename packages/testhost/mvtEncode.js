@@ -3,7 +3,7 @@
 
 The mvtEncode middleware encodes the response of the testhost mvt query template as vector tile.
 
-The devdb PostGIS can't create vector tiles with ST_AsMVT. The testhost [mvt template](templates/mvt.js) returns the features with their GeoJSON geometry in tile pixel coordinates. The middleware replaces the res.send method of a template=mvt request and encodes the rows with [vt-pbf]{@link https://github.com/mapbox/vt-pbf} as a tile layer named by the layer key, like the core mvt template.
+The devdb PostGIS can't create vector tiles with ST_AsMVT. The testhost [mvt template](templates/mvt.js) returns the features with their GeoJSON geometry in tile pixel coordinates. The middleware replaces the res.send method of an mvt template request and encodes the rows with [vt-pbf]{@link https://github.com/mapbox/vt-pbf} as a tile layer named by the layer key, like the core mvt template.
 
 A response without rows is sent as an empty tile, as the ST_AsMVT aggregate of no rows. Error responses are sent unchanged.
 
@@ -27,6 +27,26 @@ const TYPES = {
 };
 
 /**
+@function queryTemplate
+
+@description
+Returns the query template of an /api/query request. The XYZ API accepts the template as path param, eg. `/api/query/mvt`, or as query param, eg. `/api/query?template=mvt`.
+
+The template is resolved like the XYZ validateRequestParams middleware: the query params are assigned over the path params, and the `_template` query param is the fallback.
+
+The middleware is mounted at /api/query, so the path of a template path param request is `/{template}`.
+
+@param {req} req The express request.
+@returns {string|undefined} The query template.
+*/
+export function queryTemplate(req) {
+  const pathTemplate = req.path.split('/')[1] || undefined;
+
+  // The path isn't decoded. The template is only compared with 'mvt', and template keys are limited to whitelisted characters.
+  return req.query.template ?? pathTemplate ?? req.query._template;
+}
+
+/**
 @function mvtEncode
 
 @description
@@ -37,7 +57,7 @@ Express middleware for /api/query requests. Requests with another template than 
 @param {function} next Calls the next middleware.
 */
 export default function mvtEncode(req, res, next) {
-  if (req.query.template !== 'mvt') return next();
+  if (queryTemplate(req) !== 'mvt') return next();
 
   const send = res.send.bind(res);
 

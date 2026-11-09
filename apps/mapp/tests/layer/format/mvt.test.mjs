@@ -124,6 +124,35 @@ describe('mvt', () => {
     expect(url.searchParams.has('viewport')).toBe(false);
   });
 
+  // The XYZ API accepts the template as path param and as query param. The testhost must encode the tiles of both URL forms.
+  it('receives a vector tile with the template as path or query param', async () => {
+    const params =
+      'locale=countries&layer=countries&table=naturalearth.countries&geom=geom_3857&z=3&x=4&y=2';
+
+    const tiles = await Promise.all(
+      [
+        `${mapp.host}/api/query?template=mvt&${params}`,
+        `${mapp.host}/api/query/mvt?${params}`,
+      ].map(async (url) => {
+        const response = await fetch(url);
+
+        expect(response.status).toBe(200);
+        expect(response.headers.get('Content-Type')).toBe(
+          'application/x-protobuf',
+        );
+
+        const features = new ol.format.MVT().readFeatures(
+          await response.arrayBuffer(),
+        );
+
+        return features.map((F) => F.get('id')).sort((a, b) => a - b);
+      }),
+    );
+
+    expect(tiles[0].length).toBeGreaterThan(0);
+    expect(tiles[1]).toEqual(tiles[0]);
+  });
+
   it('does not request tiles for a hidden layer', async () => {
     const layer = await countries();
 
