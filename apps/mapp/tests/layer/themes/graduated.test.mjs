@@ -129,7 +129,7 @@ describe('layer/themes/graduated', () => {
   });
 
   // https://github.com/GEOLYTIX/xyz/issues/3062: the renderer reduces theme.categories without guarding an absent array. A graduated theme may have no categories yet, eg. until a plugin or dataview populates them, so a numeric feature throws.
-  it.fails('does not throw for a graduated theme without categories', () => {
+  it('does not throw for a graduated theme without categories', () => {
     const t = {
       type: 'graduated',
       field: 'value',
@@ -140,7 +140,7 @@ describe('layer/themes/graduated', () => {
   });
 
   // https://github.com/GEOLYTIX/xyz/issues/3062: an empty category array reduces to undefined and theme.categories[0] is undefined, so cat.style throws.
-  it.fails('does not throw for a graduated theme with empty categories', () => {
+  it('does not throw for a graduated theme with empty categories', () => {
     const t = {
       type: 'graduated',
       field: 'value',
@@ -152,7 +152,7 @@ describe('layer/themes/graduated', () => {
   });
 
   // https://github.com/GEOLYTIX/xyz/issues/3062: the renderer looks up graduated_breaks[theme.graduated_breaks]. Categories assigned after the styleParser early return leave graduated_breaks undefined, so the lookup is undefined and the reduce throws.
-  it.fails('does not throw without a graduated_breaks mode', () => {
+  it('does not throw without a graduated_breaks mode', () => {
     const t = {
       type: 'graduated',
       field: 'value',
