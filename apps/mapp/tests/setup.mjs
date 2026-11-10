@@ -9,10 +9,18 @@ Openlayers is loaded from the ol package, not from a CDN, so that tests don't de
 */
 
 import olUrl from 'ol/dist/ol.js?url';
-import { inject } from 'vitest';
+import { afterEach, inject, vi } from 'vitest';
 import '../css/_mapp.css';
 
 document.head.dataset.dir = inject('XYZ_HOST');
+
+// Restore all vi.spyOn mocks after every test, regardless of how the test body
+// exits. A test body may not reach a trailing vi.restoreAllMocks(), eg. an
+// it.fails test that throws by design or an assertion that fails, which would
+// otherwise leak spies into the next test in the file.
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 if (!globalThis.ol?.util) {
   await new Promise((resolve, reject) => {
