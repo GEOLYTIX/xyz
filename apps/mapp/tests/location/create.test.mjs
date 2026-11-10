@@ -109,32 +109,29 @@ describe('location create', () => {
     (await created(layer)).remove();
   });
 
-  // Known bug https://github.com/GEOLYTIX/xyz/issues/3028: mapp.utils.xhr resolves with the Error of a failed request and doesn't reject. The try/catch in createLocation can't catch a failed insert, and mapp.location.get is called with the Error as location.id.
-  it.fails(
-    'alerts and does not get a location if the insert fails',
-    async () => {
-      const layer = await scratchLayer();
+  // https://github.com/GEOLYTIX/xyz/issues/3028: mapp.utils.xhr resolves with the Error of a failed request and doesn't reject. createLocation now rethrows a resolved Error so the insert failure is caught and mapp.location.get is not called with the Error as location.id.
+  it('alerts and does not get a location if the insert fails', async () => {
+    const layer = await scratchLayer();
 
-      const alert = vi.spyOn(mapp.utils, 'alert').mockImplementation(() => {});
-      const error = vi.spyOn(console, 'error').mockImplementation(() => {});
-      const get = vi.spyOn(mapp.location, 'get');
+    const alert = vi.spyOn(mapp.utils, 'alert').mockImplementation(() => {});
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const get = vi.spyOn(mapp.location, 'get');
 
-      // The table has no unknown column.
-      await mapp.location.create(
-        FEATURE,
-        { defaults: { unknown: 'value' } },
-        layer,
-      );
+    // The table has no unknown column.
+    await mapp.location.create(
+      FEATURE,
+      { defaults: { unknown: 'value' } },
+      layer,
+    );
 
-      expect(alert).toHaveBeenCalledWith({
-        text: mapp.dictionary.location_new_failed,
-      });
-      expect(error).toHaveBeenCalled();
-      expect(get).not.toHaveBeenCalled();
+    expect(alert).toHaveBeenCalledWith({
+      text: mapp.dictionary.location_new_failed,
+    });
+    expect(error).toHaveBeenCalled();
+    expect(get).not.toHaveBeenCalled();
 
-      vi.restoreAllMocks();
-    },
-  );
+    vi.restoreAllMocks();
+  });
 
   it('does not insert a record without a feature', async () => {
     const layer = await scratchLayer();
