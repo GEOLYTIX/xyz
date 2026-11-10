@@ -128,19 +128,23 @@ describe('layer/themes/graduated', () => {
     expect(f.style.fillColor).toBe('#300');
   });
 
-  // https://github.com/GEOLYTIX/xyz/issues/3062: the renderer reduces theme.categories without guarding an absent array. A graduated theme may have no categories yet, eg. until a plugin or dataview populates them, so a numeric feature throws.
-  it('does not throw for a graduated theme without categories', () => {
+  // https://github.com/GEOLYTIX/xyz/issues/3062: a graduated theme may have no categories yet, eg. until a plugin or dataview populates them. The renderer keeps the default style instead of throwing.
+  it('keeps the default style for a graduated theme without categories', () => {
     const t = {
       type: 'graduated',
       field: 'value',
       graduated_breaks: 'less_than',
     };
 
-    expect(() => graduated(t, feature(15))).not.toThrow();
+    const f = feature(15);
+
+    graduated(t, f);
+
+    expect(f.style).toEqual({ fillColor: '#999', scale: 2 });
   });
 
-  // https://github.com/GEOLYTIX/xyz/issues/3062: an empty category array reduces to undefined and theme.categories[0] is undefined, so cat.style throws.
-  it('does not throw for a graduated theme with empty categories', () => {
+  // https://github.com/GEOLYTIX/xyz/issues/3062: an empty category array has no category to assign. The renderer keeps the default style instead of throwing.
+  it('keeps the default style for a graduated theme with empty categories', () => {
     const t = {
       type: 'graduated',
       field: 'value',
@@ -148,17 +152,25 @@ describe('layer/themes/graduated', () => {
       categories: [],
     };
 
-    expect(() => graduated(t, feature(15))).not.toThrow();
+    const f = feature(15);
+
+    graduated(t, f);
+
+    expect(f.style).toEqual({ fillColor: '#999', scale: 2 });
   });
 
-  // https://github.com/GEOLYTIX/xyz/issues/3062: the renderer looks up graduated_breaks[theme.graduated_breaks]. Categories assigned after the styleParser early return leave graduated_breaks undefined, so the lookup is undefined and the reduce throws.
-  it('does not throw without a graduated_breaks mode', () => {
+  // https://github.com/GEOLYTIX/xyz/issues/3062: categories assigned after the styleParser can leave graduated_breaks unset. The renderer defaults the comparison mode to less_than instead of throwing.
+  it('defaults the comparison mode when graduated_breaks is unset', () => {
     const t = {
       type: 'graduated',
       field: 'value',
       categories: [{ value: 10, style: { fillColor: '#100' } }],
     };
 
-    expect(() => graduated(t, feature(15))).not.toThrow();
+    const f = feature(15);
+
+    graduated(t, f);
+
+    expect(f.style.fillColor).toBe('#100');
   });
 });

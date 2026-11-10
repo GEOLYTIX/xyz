@@ -43,20 +43,25 @@ export default function graduated(theme, feature) {
     return;
   }
 
+  // The theme may have no categories yet, eg. until a plugin or dataview populates them.
+  if (!theme.categories?.length) return;
+
+  // Default the comparison mode. Categories assigned after the styleParser can leave graduated_breaks unset.
+  const mode = graduated_breaks[theme.graduated_breaks]
+    ? theme.graduated_breaks
+    : 'less_than';
+
   const catValue = Array.isArray(feature.properties.features)
     ? feature.properties.features[0].getProperties()[theme.field]
     : Number.parseFloat(feature.properties[theme.field]);
 
   if (!Number.isNaN(Number(catValue)) && catValue !== null) {
     const cat =
-      theme.categories.reduce(
-        graduated_breaks[theme.graduated_breaks](catValue),
-        undefined,
-      ) ??
+      theme.categories.reduce(graduated_breaks[mode](catValue), undefined) ??
       // A value outside the category range takes the nearest category by value.
       // An unbounded value matches the highest category for less_than and the lowest for greater_than.
       theme.categories.reduce(
-        theme.graduated_breaks === 'less_than'
+        mode === 'less_than'
           ? graduated_breaks.greater_than(Infinity)
           : graduated_breaks.less_than(-Infinity),
         undefined,
