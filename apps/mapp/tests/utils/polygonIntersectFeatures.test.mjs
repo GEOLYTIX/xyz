@@ -82,13 +82,10 @@ describe('utils/polygonIntersectFeatures', () => {
     expect(intersecting).not.toContain(features.pointOutside);
   });
 
-  // Known bug https://github.com/GEOLYTIX/xyz/issues/3043: the coordinates [x, y] of a Point are iterated as numbers, so point features never intersect the polygon.
-  it.fails(
-    'passes point features in the polygon to the drawendCallback',
-    () => {
-      expect(drawPolygon()).toContain(features.pointInside);
-    },
-  );
+  // https://github.com/GEOLYTIX/xyz/issues/3043: the coordinates [x, y] of a Point were iterated as numbers, so point features never intersected the polygon.
+  it('passes point features in the polygon to the drawendCallback', () => {
+    expect(drawPolygon()).toContain(features.pointInside);
+  });
 
   it('completes the drawend without a drawendCallback', () => {
     const mapview = mockMapview();
