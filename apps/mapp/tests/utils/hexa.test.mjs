@@ -20,8 +20,8 @@ describe('utils/hexa', () => {
     expect(hexa(hex, transparency)).toBe(expected);
   });
 
-  // Known bug https://github.com/GEOLYTIX/xyz/issues/3044: transparency values below 16/255 return a single hex digit, eg. #ff00005 for 0.02, which is not a valid colour.
-  it.fails('pads the alpha channel to two hex digits', () => {
+  // https://github.com/GEOLYTIX/xyz/issues/3044: transparency values below 16/255 returned a single hex digit, eg. #ff00005 for 0.02, which is not a valid colour.
+  it('pads the alpha channel to two hex digits', () => {
     expect(hexa('#ff0000', 0.02)).toBe('#ff000005');
   });
 });

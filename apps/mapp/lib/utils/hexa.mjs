@@ -20,7 +20,10 @@ export default function hexa(hex, transparency) {
   if (hex.length === 7)
     return (
       hex +
-      ((transparency && Number.parseInt(transparency * 255).toString(16)) ||
+      ((transparency &&
+        Number.parseInt(transparency * 255)
+          .toString(16)
+          .padStart(2, '0')) ||
         '00')
     );
 

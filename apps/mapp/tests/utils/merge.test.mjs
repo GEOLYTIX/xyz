@@ -51,8 +51,8 @@ describe('utils/merge', () => {
     expect(merge({ a: { b: 1 } }, { a: value })).toEqual({ a: value });
   });
 
-  // Known bug https://github.com/GEOLYTIX/xyz/issues/3046: target[key] ??= {} keeps a primitive target value, so the source object is dropped.
-  it.fails('replaces a primitive target value with a merged object', () => {
+  // https://github.com/GEOLYTIX/xyz/issues/3046: target[key] ??= {} kept a primitive target value, so the source object was dropped.
+  it('replaces a primitive target value with a merged object', () => {
     expect(merge({ a: 'str' }, { a: { b: 1 } })).toEqual({ a: { b: 1 } });
   });
 

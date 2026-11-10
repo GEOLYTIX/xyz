@@ -48,8 +48,8 @@ export default function mergeDeep(target, ...sources) {
 
       // source[key] is object with potential nesting.
     } else if (isObject(source[key])) {
-      // Target key must be an object.
-      target[key] ??= {};
+      // Target key must be an object. A primitive, null, or array target value is replaced.
+      if (!isObject(target[key])) target[key] = {};
 
       // Call recursive merge for target key object.
       mergeDeep(target[key], source[key]);
