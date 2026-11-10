@@ -540,10 +540,19 @@ describe('styleParser: graduated theme', () => {
   it.each([
     ['without a categories array', {}],
     ['with an empty categories array', { categories: [] }],
+    [
+      'without a categories array and with a distribution',
+      { distribution: 'jenks' },
+    ],
+    [
+      'with an empty categories array and a distribution',
+      { categories: [], distribution: 'jenks' },
+    ],
   ])('invalidates a graduated theme %s', (_, theme) => {
     const parsed = graduated(theme);
 
     expect(parsed.type).toBeUndefined();
+    expect(parsed.distribution).toBeUndefined();
     expect(warnings()).toContain(
       'Layer: test; Graduated theme without categories ignored.',
     );
