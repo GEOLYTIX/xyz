@@ -32,7 +32,20 @@ describe('utils/verticeGeoms', () => {
         [1, 1],
       ],
     ],
+    ['MultiPoint', () => new ol.geom.MultiPoint(square), 'MultiPoint', square],
+    [
+      'MultiLineString',
+      () => new ol.geom.MultiLineString([square, shifted]),
+      'MultiPoint',
+      [...square, ...shifted],
+    ],
     ['Polygon', () => new ol.geom.Polygon([square]), 'MultiPoint', square],
+    [
+      'Polygon with an interior ring',
+      () => new ol.geom.Polygon([square, shifted]),
+      'MultiPoint',
+      [...square, ...shifted],
+    ],
     [
       'MultiPolygon',
       () => new ol.geom.MultiPolygon([[square], [shifted]]),

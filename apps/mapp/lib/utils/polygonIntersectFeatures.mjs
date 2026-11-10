@@ -30,9 +30,12 @@ export function polygonIntersectFeatures(params) {
       let features = params.mapview.interaction.snap.source.getFeatures();
 
       features = features.filter((feature) => {
-        let coordinates = feature.getGeometry().getCoordinates(); //.flat(2)
+        let coordinates = feature.getGeometry().getCoordinates();
 
-        coordinates = coordinates.flat(getArrayDepth(coordinates) - 2);
+        const depth = getArrayDepth(coordinates);
+
+        // A Point returns a single [x, y] coordinate. Wrap it so it is iterated as one coordinate rather than as the numbers x and y. Every other geometry flattens to an array of coordinates.
+        coordinates = depth < 2 ? [coordinates] : coordinates.flat(depth - 2);
 
         return coordinates.some((coord) =>
           polyGeom.intersectsCoordinate(coord),
