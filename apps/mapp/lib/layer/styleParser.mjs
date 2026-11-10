@@ -390,6 +390,7 @@ function parseTheme(theme, layer) {
     );
 
     delete theme.type;
+    delete theme.distribution;
 
     return;
   }
