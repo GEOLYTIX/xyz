@@ -24,7 +24,7 @@ describe('layer_extent', () => {
 
     const result = sql(layer_extent(_));
 
-    expect(result).toContain('WHERE ${qID}::varchar = ANY(%{body_ids})');
+    expect(result).toContain('WHERE ${qID} = ANY(%{body_ids})');
 
     // The id values are not written into the SQL string.
     expect(result).not.toContain('123');
@@ -40,9 +40,7 @@ describe('layer_extent', () => {
     const result = sql(layer_extent(_));
 
     // The condition has no id value, only the bound param.
-    expect(result).toContain(
-      'WHERE ${qID}::varchar = ANY(%{body_ids}) ${filter}',
-    );
+    expect(result).toContain('WHERE ${qID} = ANY(%{body_ids}) ${filter}');
     expect(result).not.toContain('DELETE');
 
     // The values are passed to node-postgres as param values and compared as data.
@@ -71,7 +69,7 @@ describe('layer_extent', () => {
 
     const result = sql(layer_extent(_));
 
-    expect(result).toContain('WHERE ${qID}::varchar = ANY(%{body_ids})');
+    expect(result).toContain('WHERE ${qID} = ANY(%{body_ids})');
     expect(_.body_ids).toEqual([]);
   });
 });

@@ -47,8 +47,8 @@ describe('location_new', () => {
     );
   });
 
-  it('throws for the id field', () => {
-    expect(() => location_new(params({ id: 1 }))).toThrow(
+  it.each([['id'], ['ID'], ['Id']])('throws for the %s field', (key) => {
+    expect(() => location_new(params({ [key]: 1 }))).toThrow(
       'Layer scratch: You cannot update the id or ID field as it is a reserved parameter.',
     );
   });

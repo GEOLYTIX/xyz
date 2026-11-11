@@ -18,8 +18,8 @@ const FIELD = /^[A-Za-z_][A-Za-z0-9_]*$/;
 export default (_) => {
   const keys = Object.keys(_.body);
 
-  // The location ID must not be altered.
-  if (keys.some((key) => key === _.layer.qID || key === 'id')) {
+  // The location ID must not be altered. Unquoted identifiers are case-insensitive in Postgres.
+  if (keys.some((key) => isReserved(key, _.layer))) {
     throw new Error(
       `Layer ${_.layer.key}: You cannot update the ${_.layer.qID} or ID field as it is a reserved parameter.`,
     );
@@ -87,9 +87,25 @@ Throws an error if the field name is not an SQL identifier. The field name is wr
 @param {Object} layer The layer of the query.
 */
 function checkField(field, layer) {
-  if (!FIELD.test(field)) {
+  // FIELD.test(undefined) would test the string 'undefined'.
+  if (typeof field !== 'string' || !FIELD.test(field)) {
     throw new Error(
       `Layer ${layer.key}: Invalid field name in the location_update request body.`,
     );
   }
+}
+
+/**
+@function isReserved
+
+@description
+Returns true if the field is the layer qID or the id field. Unquoted identifiers are case-insensitive in Postgres, so the comparison is case-insensitive.
+
+@param {string} field The field name from the POST body.
+@param {Object} layer The layer of the query.
+@returns {boolean} The field is reserved.
+*/
+export function isReserved(field, layer) {
+  const name = field.toLowerCase();
+  return name === 'id' || name === String(layer.qID).toLowerCase();
 }

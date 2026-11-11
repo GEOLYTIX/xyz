@@ -85,17 +85,21 @@ describe('location_update', () => {
     ['a field with a quote', { "name'": 'x' }],
     ['a field starting with a number', { '1name': 'x' }],
     ['a jsonb field', { tag: { jsonb: { 'props = null --': { tag: 'x' } } } }],
+    ['an empty jsonb object', { tag: { jsonb: {} } }],
   ])('throws for %s', (_, body) => {
     expect(() => location_update(params(body))).toThrow(
       'Layer scratch: Invalid field name in the location_update request body.',
     );
   });
 
-  it.each([['id'], ['pk']])('throws for the %s field', (key) => {
-    const _ = { ...params({ [key]: 1 }), layer: { ...layer, qID: 'pk' } };
+  it.each([['id'], ['pk'], ['ID'], ['Id'], ['PK']])(
+    'throws for the %s field',
+    (key) => {
+      const _ = { ...params({ [key]: 1 }), layer: { ...layer, qID: 'pk' } };
 
-    expect(() => location_update(_)).toThrow(
-      'Layer scratch: You cannot update the pk or ID field as it is a reserved parameter.',
-    );
-  });
+      expect(() => location_update(_)).toThrow(
+        'Layer scratch: You cannot update the pk or ID field as it is a reserved parameter.',
+      );
+    },
+  );
 });

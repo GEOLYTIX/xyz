@@ -10,6 +10,8 @@ The values of the POST body are substituted as query params. The params are assi
 @module /workspace/templates/location_new
 */
 
+import { isReserved } from './location_update.js';
+
 /**
 Field names [body keys] must be SQL identifiers.
 */
@@ -21,8 +23,8 @@ export default (_) => {
 
   const keys = Object.keys(_.body);
 
-  // The location ID must not be altered.
-  if (keys.some((key) => key === _.layer.qID || key === 'id')) {
+  // The location ID must not be altered. Unquoted identifiers are case-insensitive in Postgres.
+  if (keys.some((key) => isReserved(key, _.layer))) {
     throw new Error(
       `Layer ${_.layer.key}: You cannot update the ${_.layer.qID} or ID field as it is a reserved parameter.`,
     );

@@ -263,7 +263,23 @@ async function layerQuery(req, res) {
       return;
     }
 
-    const viewport = req.params.viewport.split(',');
+    // The viewport is written into the SQL string. The bounds must be finite numbers and the srids must be integers.
+    const viewport = req.params.viewport.split(',').map(Number);
+
+    // The geom param may be provided by the request and is written into the SQL string.
+    if (
+      viewport.length !== 5 ||
+      !viewport.slice(0, 4).every(Number.isFinite) ||
+      !Number.isInteger(viewport[4]) ||
+      !Number.isInteger(Number(req.params.srid)) ||
+      !/^[A-Za-z0-9,"'._-\s]*$/.test(req.params.geom)
+    ) {
+      res
+        .status(400)
+        .setHeader('Content-Type', 'text/plain')
+        .send(`Invalid viewport param on ${req.params.layer.key} layer.`);
+      return;
+    }
 
     req.params.viewport = `AND
       ST_Intersects(
@@ -273,8 +289,8 @@ async function layerQuery(req, res) {
             ${viewport[1]},
             ${viewport[2]},
             ${viewport[3]},
-            ${Number.parseInt(viewport[4])}),
-          ${req.params.srid}),
+            ${viewport[4]}),
+          ${Number(req.params.srid)}),
         ${req.params.geom})`;
   }
 
