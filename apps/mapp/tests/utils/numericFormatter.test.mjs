@@ -75,8 +75,8 @@ describe('utils/numericFormatter', () => {
       expect(formatNumericValue(params)).toBe('1.');
     });
 
-    // Known bug https://github.com/GEOLYTIX/xyz/issues/3038: params.round || … treats round: 0 as unset and formats 2 fraction digits.
-    it.fails('formats a round param of 0 without fraction digits', () => {
+    // https://github.com/GEOLYTIX/xyz/issues/3038: params.round || … treated round: 0 as unset and formatted 2 fraction digits.
+    it('formats a round param of 0 without fraction digits', () => {
       expect(
         formatNumericValue({
           value: 1.6,
