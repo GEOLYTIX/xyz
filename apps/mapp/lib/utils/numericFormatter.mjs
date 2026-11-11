@@ -59,8 +59,9 @@ export function formatNumericValue(params) {
     params.formatterParams.options ??= {};
 
     // "integer" type values must not have fraction digits.
+    // params.round is nullish-coalesced so a round of 0 is respected rather than treated as unset.
     params.formatterParams.options.maximumFractionDigits ??=
-      params.round || (params.type === 'integer' ? 0 : 2);
+      params.round ?? (params.type === 'integer' ? 0 : 2);
 
     // Format a numeric value into a localized string representation
     params.localeString = new Intl.NumberFormat(
