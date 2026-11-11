@@ -536,9 +536,26 @@ describe('styleParser: graduated theme', () => {
     expect(theme.categories[0].label).toBe(5);
   });
 
-  // https://github.com/GEOLYTIX/xyz/issues/3041: graduatedTheme guards against a graduated theme without categories.
-  it('parses a graduated theme without categories', () => {
-    expect(() => graduated({})).not.toThrow();
+  // https://github.com/GEOLYTIX/xyz/issues/3062: a graduated theme without categories cannot map a value to a style. The parser warns and invalidates the theme by removing its type, so the renderer and legend ignore it.
+  it.each([
+    ['without a categories array', {}],
+    ['with an empty categories array', { categories: [] }],
+    [
+      'without a categories array and with a distribution',
+      { distribution: 'jenks' },
+    ],
+    [
+      'with an empty categories array and a distribution',
+      { categories: [], distribution: 'jenks' },
+    ],
+  ])('invalidates a graduated theme %s', (_, theme) => {
+    const parsed = graduated(theme);
+
+    expect(parsed.type).toBeUndefined();
+    expect(parsed.distribution).toBeUndefined();
+    expect(warnings()).toContain(
+      'Layer: test; Graduated theme without categories ignored.',
+    );
   });
 });
 
