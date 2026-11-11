@@ -216,15 +216,19 @@ async function update(callback) {
       delete entry.newValue;
     });
 
-  // Map newValues from infoj entry objects.
-  const newValues = Object.fromEntries(
-    this.infoj
-      .filter((entry) => typeof entry.newValue !== 'undefined')
-      .map((entry) => [entry.field, entry.newValue]),
-  );
+  // Snapshot the entries and the values which are sent with the update request.
+  // A newValue set while the request is pending must not be marked as saved.
+  const updated = this.infoj
+    .filter((entry) => typeof entry.newValue !== 'undefined')
+    .map((entry) => [entry, entry.newValue]);
 
   // Shortcircuit if no update is required.
-  if (!Object.keys(newValues).length) return;
+  if (!updated.length) return;
+
+  // Map newValues from the snapshot of entries sent with the update request.
+  const newValues = Object.fromEntries(
+    updated.map(([entry, newValue]) => [entry.field, newValue]),
+  );
 
   const paramString = mapp.utils.paramString({
     id: this.id,
@@ -246,15 +250,16 @@ async function update(callback) {
     return;
   }
 
-  // Find newValue entries for update.
-  const dependents = this.infoj
-    .filter((entry) => typeof entry.newValue !== 'undefined')
-    .map((entry) => {
-      // Update entry.values with newValues.
-      entry.value = entry.newValue;
+  // Assign the values sent with the request from the snapshot, not the current
+  // infoj newValues which may have changed while the request was pending.
+  const dependents = updated
+    .map(([entry, newValue]) => {
+      // Update entry.value with the value which was sent.
+      entry.value = newValue;
 
-      // Remove newValue
-      delete entry.newValue;
+      // Only clear newValue if it is still the value which was sent. A newValue
+      // changed while the request was pending is kept as an unsaved change.
+      if (entry.newValue === newValue) delete entry.newValue;
 
       // Iterate through the dependents_layers array
       if (Array.isArray(entry.dependents_layers)) {

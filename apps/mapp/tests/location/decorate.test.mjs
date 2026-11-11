@@ -216,6 +216,40 @@ describe('location update', () => {
     );
   });
 
+  // https://github.com/GEOLYTIX/xyz/issues/3068: a newValue set while the update request is pending was not sent but was still marked as saved and cleared, losing the edit.
+  it('keeps a newValue set while the update request is pending', async () => {
+    const location = await scratch();
+
+    const category = entry(location, 'category');
+    const size = entry(location, 'size');
+
+    category.newValue = 'b';
+
+    // Isolate the reconciliation from the layer reload and dependent sync.
+    vi.spyOn(location, 'syncFields').mockImplementation(async () => {});
+    vi.spyOn(location.layer, 'reload').mockImplementation(() => {});
+    vi.spyOn(
+      location.layer.mapview.interactions,
+      'highlight',
+    ).mockImplementation(() => {});
+
+    // A concurrent edit sets another newValue while the update request is pending.
+    vi.spyOn(mapp.utils, 'xhr').mockImplementation(async () => {
+      size.newValue = 99;
+      return 1;
+    });
+
+    await location.update();
+
+    // The value sent with the request is saved and its newValue cleared.
+    expect(category.value).toBe('b');
+    expect(category.newValue).toBeUndefined();
+
+    // The edit made while the request was pending was not sent, so it is kept.
+    expect(size.newValue).toBe(99);
+    expect(size.value).not.toBe(99);
+  });
+
   it('syncs the dependent fields of updated entries', async () => {
     const location = await scratch();
 
