@@ -79,7 +79,13 @@ function lock() {
   const params = { url: `${idle.host}/api/user/cookie?destroy=true` };
 
   // Reload location once cookie has been removed.
-  mapp.utils.xhr(params).then(() => location.reload());
+  mapp.utils.xhr(params).then((response) => {
+    if (response instanceof Error) {
+      idle.locked = false;
+      return;
+    }
+    location.reload();
+  });
 }
 
 /**
