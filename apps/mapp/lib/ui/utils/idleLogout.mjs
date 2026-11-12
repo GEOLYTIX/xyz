@@ -79,9 +79,7 @@ function lock() {
   const params = { url: `${idle.host}/api/user/cookie?destroy=true` };
 
   // Reload location once cookie has been removed.
-  params.onLoad = (e) => location.reload();
-
-  mapp.utils.xhr(params);
+  mapp.utils.xhr(params).then(() => location.reload());
 }
 
 /**
