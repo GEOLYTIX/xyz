@@ -127,8 +127,10 @@ function selfSignedCertificate({ privateKey, publicKey }, commonName) {
     .match(/.{1,64}/g)
     .join('\n')}\n-----END CERTIFICATE-----\n`;
 
-  // Throws for a malformed certificate.
-  new X509Certificate(pem);
+  // Parsing throws for a malformed certificate; verify checks the self-signature.
+  if (!new X509Certificate(pem).verify(createPublicKey(publicKey))) {
+    throw new Error('Self-signed test certificate failed signature verification.');
+  }
 
   return pem;
 }
