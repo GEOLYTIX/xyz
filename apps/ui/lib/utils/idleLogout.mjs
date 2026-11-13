@@ -68,6 +68,8 @@ function resetTimer() {
 
 @description
 Function which logs the user out of the view by deleting the cookie and reloading the location.
+
+Should the cookie deletion request fail the interface is unlocked and the idle timer is re-armed to retry the lock.
 */
 function lock() {
   idle.locked = true;
@@ -79,9 +81,15 @@ function lock() {
   const params = { url: `${idle.host}/api/user/cookie?destroy=true` };
 
   // Reload location once cookie has been removed.
-  params.onLoad = (e) => location.reload();
-
-  mapp.utils.xhr(params);
+  mapp.utils.xhr(params).then((response) => {
+    if (response instanceof Error) {
+      // Unlock and re-arm the timer so the lock is retried without user activity.
+      idle.locked = false;
+      resetTimer();
+      return;
+    }
+    location.reload();
+  });
 }
 
 /**
@@ -104,13 +112,11 @@ Timeout function for renewing the access token used in {@link module:/ui/utils/i
 function cookie() {
   const params = { url: `${idle.host}/api/user/cookie` };
 
-  params.onLoad = (e) => {
+  mapp.utils.xhr(params).then((response) => {
     // Lock interface if cookie renewal fails.
-    if (e.target.status === 401) return lock();
+    if (response instanceof Error) return lock();
 
     // Re-call method to renew token.
     renewToken();
-  };
-
-  mapp.utils.xhr(params);
+  });
 }

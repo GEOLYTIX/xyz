@@ -203,8 +203,8 @@ describe('location update', () => {
     expect((await getRecord(location.layer, location.id)).category).toBeNull();
   });
 
-  // Known bug https://github.com/GEOLYTIX/xyz/issues/3029: the location_update template escapes quotes and passes the escaped string as a query parameter. The record value has double quotes.
-  it.fails('stores string values with quotes', async () => {
+  // https://github.com/GEOLYTIX/xyz/issues/3029: the location_update template escaped quotes and passed the escaped string as a query parameter, so the record value had doubled quotes. Fixed by passing body values as query params.
+  it('stores string values with quotes', async () => {
     const location = await scratch();
 
     entry(location, 'name').newValue = "O'Brien's";
