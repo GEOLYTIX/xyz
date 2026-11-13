@@ -137,7 +137,6 @@ function tableParam(_this, params) {
       (table) => !!table,
     );
     params.table = table;
-    return;
   }
 }
 

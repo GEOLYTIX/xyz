@@ -328,7 +328,7 @@ function queryTemplate(key, val, obj, user, templateScope) {
   }
 
   // A query template object must be referenced by it's key in the obj properties values.
-  if (!Object.values(obj).some((v) => v === val.key)) {
+  if (!Object.values(obj).includes(val.key)) {
     val.warn ??= [];
     val.warn.push(
       `Key [${val.key}] template caught in queryTemplate check without reference in object properties.`,

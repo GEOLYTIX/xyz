@@ -15,7 +15,7 @@ import { isReserved } from './location_update.js';
 /**
 Field names [body keys] must be SQL identifiers.
 */
-const FIELD = /^[A-Za-z_][A-Za-z0-9_]*$/;
+const FIELD = /^[A-Za-z_]\w*$/;
 
 export default (_) => {
   // select array for insert statement
@@ -50,15 +50,13 @@ export default (_) => {
 
       // push geojson string into params.
       _[param] = JSON.stringify(_.body[key]);
+    } else {
+      // push %{param} into selects for substitution in query template.
+      selects.push(`%{${param}}`);
 
-      return key;
+      // push value into params.
+      _[param] = _.body[key];
     }
-
-    // push %{param} into selects for substitution in query template.
-    selects.push(`%{${param}}`);
-
-    // push value into params.
-    _[param] = _.body[key];
 
     return key;
   });

@@ -255,6 +255,4 @@ async function checkSession(req, res, user) {
     // Store user.session in user_sessions object.
     user_sessions[user.email] = user.session;
   }
-
-  return;
 }

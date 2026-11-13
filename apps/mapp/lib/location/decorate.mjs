@@ -137,7 +137,7 @@ null will be returned if the user cancels the confirm dialog.
 async function confirmUpdate(callback) {
   // Check other infoj entries for unsaved changed.
   const unsavedChanges = this.infoj.some(
-    (entry) => typeof entry.newValue !== 'undefined',
+    (entry) => entry.newValue !== undefined,
   );
 
   if (unsavedChanges) {
@@ -188,7 +188,7 @@ async function update(callback) {
   this.infoj
     .filter((entry) => entry.jsonb_key)
     .filter((entry) => entry.jsonb_field)
-    .filter((entry) => typeof entry.newValue !== 'undefined')
+    .filter((entry) => entry.newValue !== undefined)
     .forEach((entry) => {
       entry.newValue = {
         jsonb: {
@@ -203,7 +203,7 @@ async function update(callback) {
   this.infoj
     .filter((entry) => entry.json_field)
     .filter((entry) => entry.json_key)
-    .filter((entry) => typeof entry.newValue !== 'undefined')
+    .filter((entry) => entry.newValue !== undefined)
     .forEach((entry) => {
       const fieldEntry = this.infoj.find(
         (_entry) => _entry.field === entry.json_field,
@@ -219,7 +219,7 @@ async function update(callback) {
   // Map newValues from infoj entry objects.
   const newValues = Object.fromEntries(
     this.infoj
-      .filter((entry) => typeof entry.newValue !== 'undefined')
+      .filter((entry) => entry.newValue !== undefined)
       .map((entry) => [entry.field, entry.newValue]),
   );
 
@@ -248,8 +248,9 @@ async function update(callback) {
 
   // Find newValue entries for update.
   const dependents = this.infoj
-    .filter((entry) => typeof entry.newValue !== 'undefined')
-    .map((entry) => {
+    .filter((entry) => entry.newValue !== undefined)
+    // Flatten dependents arrays.
+    .flatMap((entry) => {
       // Update entry.values with newValues.
       entry.value = entry.newValue;
 
@@ -269,8 +270,7 @@ async function update(callback) {
 
       return entry.dependents;
     })
-    // Flatten dependents array and filter out undefined values.
-    .flat()
+    // Filter out undefined values.
     .filter((dependents) => dependents !== undefined);
 
   // sync dependent fields
@@ -336,7 +336,7 @@ async function syncFields(fields) {
   }
 
   this.infoj
-    .filter((entry) => typeof response[entry.field] !== 'undefined')
+    .filter((entry) => response[entry.field] !== undefined)
     .forEach((entry) => {
       entry.value = response[entry.field];
     });

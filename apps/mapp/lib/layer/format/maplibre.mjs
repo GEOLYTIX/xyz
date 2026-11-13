@@ -136,25 +136,25 @@ export default async function maplibre(layer) {
 // transformMapboxUrl and supporting functions are taken from https://github.com/rowanwins/maplibregl-mapbox-request-transformer
 
 function transformMapboxUrl(url, resourceType, accessToken) {
-  if (url.indexOf('/styles/') > -1 && url.indexOf('/sprite') === -1) {
+  if (url.includes('/styles/') && !url.includes('/sprite')) {
     return {
       url: normalizeStyleURL(url, accessToken),
     };
   }
 
-  if (url.indexOf('/sprites/') > -1) {
+  if (url.includes('/sprites/')) {
     return {
       url: normalizeSpriteURL(url, accessToken),
     };
   }
 
-  if (url.indexOf('/fonts/') > -1) {
+  if (url.includes('/fonts/')) {
     return {
       url: normalizeGlyphsURL(url, accessToken),
     };
   }
 
-  if (url.indexOf('/v4/') > -1) {
+  if (url.includes('/v4/')) {
     return {
       url: normalizeSourceURL(url, accessToken),
     };

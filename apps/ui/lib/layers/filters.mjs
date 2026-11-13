@@ -349,13 +349,11 @@ async function filter_numeric(layer, filter) {
   filter.step ??= filter.type === 'integer' ? 1 : 0.01;
 
   // Assign the range min / max as layer filter if not already defined.
-  layer.filter.current[filter.field] = Object.assign(
-    {
-      gte: Number(filter.min),
-      lte: Number(filter.max),
-    },
-    layer.filter.current[filter.field],
-  );
+  layer.filter.current[filter.field] = {
+    gte: Number(filter.min),
+    lte: Number(filter.max),
+    ...layer.filter.current[filter.field],
+  };
 
   // A range which matches the min and max values of the data does not filter the layer. The layer must only be reloaded for a filter with configured bounds.
   if (filter.Min !== undefined || filter.Max !== undefined) {

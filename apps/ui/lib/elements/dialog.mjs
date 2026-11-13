@@ -178,8 +178,8 @@ export default function dialog(dialog) {
 
     // Calculate the maximum allowed positions for the dialog
     // Prevent negative left and top values
-    const maxLeft = mapWidth - dialogWidth < 0 ? 0 : mapWidth - dialogWidth;
-    const maxTop = mapHeight - dialogHeight < 0 ? 0 : mapHeight - dialogHeight;
+    const maxLeft = Math.max(0, mapWidth - dialogWidth);
+    const maxTop = Math.max(0, mapHeight - dialogHeight);
 
     // Adjust the dialog's position if it exceeds the map boundaries
     dialog.node.style.left = `${Math.min(Math.max(dialog.node.offsetLeft, 0), maxLeft)}px`;

@@ -28,7 +28,7 @@ The values are substituted as query params. The params are assigned with a `body
 /**
 Field names and casts [body key parts] must be SQL identifiers.
 */
-const IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]*$/;
+const IDENTIFIER = /^[A-Za-z_]\w*$/;
 
 export default (_) => {
   const fields = [];

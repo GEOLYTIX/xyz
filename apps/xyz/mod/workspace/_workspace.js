@@ -420,7 +420,6 @@ function parseWarnings(warnings, obj) {
 
     if (typeof val === 'object') {
       parseWarnings(warnings, val);
-      continue;
     }
   }
 }
