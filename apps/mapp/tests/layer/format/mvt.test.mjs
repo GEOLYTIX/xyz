@@ -259,12 +259,37 @@ async function properties(layer, id) {
 }
 
 /**
-Stops the debounced mapview changeEnd of the initial view. The changeEnd loads the properties without the reload flag. A load from the changeEnd after the layer.reload() would supersede the debounced reload request, and the tiles would not be refreshed.
+Stops the debounced mapview changeEnd of the initial view and resolves once the properties requests of the initial view have settled.
+
+The changeEnd loads the properties without the reload flag. A load from the changeEnd after the layer.reload() would supersede the debounced reload request, and the tiles would not be refreshed.
+
+A properties request from the changeEnd may also be debounced or in flight when the test calls the layer.reload(). Its response would assign the properties before the response of the reload request, which then has no new feature and does not refresh the tiles. The final load supersedes a debounced request, and is sent after a request in flight, so no response of the initial view is pending once the load has resolved.
 */
-function stopChangeEnd(layer) {
+async function stopChangeEnd(layer) {
   clearTimeout(layer.mapview.changeEndTimer);
 
+  const [load] = layer.changeEndCallbacks;
+
   layer.changeEndCallbacks.length = 0;
+
+  await load(layer);
+}
+
+/**
+Resolves as soon as the next XMLHttpRequest has been sent, before its response can be received. A debounced mapp.utils.xhr request is sent from a timeout.
+*/
+function requestSent() {
+  return new Promise((resolve) => {
+    const send = vi
+      .spyOn(XMLHttpRequest.prototype, 'send')
+      .mockImplementation(function (body) {
+        send.mockRestore();
+
+        this.send(body);
+
+        resolve();
+      });
+  });
 }
 
 describe('mvt wkt_properties', () => {
@@ -329,9 +354,9 @@ describe('mvt wkt_properties', () => {
 
     await properties(layer, MOROCCO);
 
-    layer.filter.current = { continent: { in: ['Europe'] } };
+    await stopChangeEnd(layer);
 
-    stopChangeEnd(layer);
+    layer.filter.current = { continent: { in: ['Europe'] } };
 
     layer.reload();
 
@@ -348,12 +373,12 @@ describe('mvt wkt_properties', () => {
 
     await properties(layer, FRANCE);
 
+    await stopChangeEnd(layer);
+
     const refresh = vi.spyOn(layer.source, 'refresh');
 
     // France has not been rendered before, eg. after a location has been created.
     delete layer.featuresObject[FRANCE];
-
-    stopChangeEnd(layer);
 
     layer.reload();
 
@@ -364,15 +389,78 @@ describe('mvt wkt_properties', () => {
     expect(layer.featuresObject[FRANCE]).toBeDefined();
   });
 
+  // The layer.reload() is called for a feature which has not been rendered, eg. after a location has been created. The reload flag is an argument of one wktPropertiesLoad call. The two tests below fail, because a load from a mapview changeEnd, which has no reload flag, takes the place of the reload.
+  it('refreshes the tiles if a changeEnd load supersedes the debounced reload request', async () => {
+    const layer = await countries(undefined, { wkt_properties: true });
+
+    await properties(layer, FRANCE);
+
+    const [load] = layer.changeEndCallbacks;
+
+    await stopChangeEnd(layer);
+
+    const refresh = vi.spyOn(layer.source, 'refresh');
+
+    // France has not been rendered before.
+    delete layer.featuresObject[FRANCE];
+
+    // The reload request is debounced by 500ms.
+    layer.reload();
+
+    // The map view changes before the reload request has been sent. The changeEnd load has the same debounce key and supersedes the reload request.
+    await load(layer);
+
+    // The changeEnd response has assigned the properties of the new feature.
+    expect(layer.featuresObject[FRANCE]).toBeDefined();
+
+    // The reload request was never sent. The tiles with the geometry of the new feature are not requested.
+    expect(refresh).toHaveBeenCalledTimes(1);
+  });
+
+  it('refreshes the tiles if a changeEnd response assigns the new feature before the reload response', async () => {
+    const layer = await countries(undefined, { wkt_properties: true });
+
+    await properties(layer, FRANCE);
+
+    const [load] = layer.changeEndCallbacks;
+
+    await stopChangeEnd(layer);
+
+    const refresh = vi.spyOn(layer.source, 'refresh');
+
+    // The map view changes. The changeEnd request is sent after the debounce.
+    const sent = requestSent();
+
+    const changeEndLoad = load(layer);
+
+    await sent;
+
+    // France has not been rendered before. The changeEnd request is in flight when the layer is reloaded.
+    delete layer.featuresObject[FRANCE];
+
+    layer.reload();
+
+    // The changeEnd response assigns the properties of the new feature. The load has no reload flag and does not refresh the tiles.
+    await changeEndLoad;
+
+    expect(layer.featuresObject[FRANCE]).toBeDefined();
+    expect(refresh).not.toHaveBeenCalled();
+
+    // The new feature is already in the featuresObject when the reload response is received. The feature has not been rendered before the reload, and the tiles with the geometry of the new feature must be requested.
+    await expect
+      .poll(() => refresh.mock.calls.length, { timeout: 5000 })
+      .toBe(1);
+  });
+
   it('does not refresh the tiles on reload without a new feature', async () => {
     const layer = await countries(undefined, { wkt_properties: true });
 
     await properties(layer, FRANCE);
 
+    await stopChangeEnd(layer);
+
     const refresh = vi.spyOn(layer.source, 'refresh');
     const changed = vi.spyOn(layer.L, 'changed');
-
-    stopChangeEnd(layer);
 
     layer.reload();
 
@@ -389,11 +477,11 @@ describe('mvt wkt_properties', () => {
 
     await properties(layer, GERMANY);
 
+    await stopChangeEnd(layer);
+
     const clear = vi.spyOn(layer.source, 'clear');
 
     layer.display = false;
-
-    stopChangeEnd(layer);
 
     layer.reload();
 
