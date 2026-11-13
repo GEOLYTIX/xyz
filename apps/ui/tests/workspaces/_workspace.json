@@ -13,6 +13,9 @@
     },
     "grocery": {
       "src": "file:apps/mapp/tests/workspaces/locales/grocery.json"
+    },
+    "scratch": {
+      "src": "file:apps/mapp/tests/workspaces/locales/scratch.json"
     }
   }
 }

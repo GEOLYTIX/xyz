@@ -23,7 +23,8 @@ export default defineConfig({
     globalSetup: ['@geolytix/xyz-testhost/globalSetup'],
     // Loading the PostGIS extension into PGlite takes a few seconds.
     hookTimeout: 60000,
-    testTimeout: 10000,
+    // Closing an HTTP socket in the testhost can block the Node process for several seconds on Windows. A test with requests to the testhost must not time out during the block.
+    testTimeout: 30000,
     // The test files run one at a time. With parallel pages, closing an HTTP socket in the testhost blocks the Node process for several seconds on Windows and the layer tests time out.
     fileParallelism: false,
     browser: {
@@ -39,10 +40,10 @@ export default defineConfig({
       include: ['lib/**/*.mjs'],
       // The coverage floor. Raise the thresholds with new tests.
       thresholds: {
-        statements: 24,
-        branches: 22,
-        functions: 22,
-        lines: 25,
+        statements: 34,
+        branches: 31,
+        functions: 33,
+        lines: 34,
       },
       // The lcov.info is for SonarQube, which resolves the source paths from the repository root.
       reporter: [

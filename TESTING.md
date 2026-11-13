@@ -267,12 +267,16 @@ describe('ui/elements/chkbox', () => {
 
 Remove the elements which a test appends to the document, eg. dialogs and toasts, so they don't affect the next test.
 
-[tests/helpers.mjs](apps/ui/tests/helpers.mjs) exports the [MAPP test helpers](#mapp-library-tests) and provides helpers for tests with layers. The layer tests use the `retail_points` layer of the grocery locale from the MAPP library tests:
+[tests/helpers.mjs](apps/ui/tests/helpers.mjs) exports the [MAPP test helpers](#mapp-library-tests) and provides helpers for tests with layers and locations. The tests use the grocery and scratch locales from the MAPP library tests:
 
 | Helper | Description |
 |---|---|
 | `groceryMapview(configure)` | Creates a mapview for the grocery locale and adds the locale layers. The `configure` method can change the layer configuration before the mapview is created. |
 | `layersListview(configure)` | Creates a layers listview for a grocery mapview, like the default view, and returns the `mapview`, `listview` and the retail_points `layer` with its `layer.view`. |
+| `locationsListview(mapview)` | Creates a locations listview for a mapview, like the default view, with the layers and locations tabs. The listview creates the `location.view` of a location. |
+| `lidlLocation(configure)` | Gets the Lidl Walworth Road location of the retail_points layer with its `location.view`. The record must not be changed. |
+| `scratchLocation(configure, values)` | Inserts a record into the `example.scratch_location` table and gets its location with its `location.view`, for tests which update or delete a location. |
+| `entry(location, field)` | Returns the infoj entry of a location for a field. |
 
 ```js
 import { expect, it } from 'vitest';
@@ -291,7 +295,7 @@ it('orders the panels by the viewConfig.keyOrder', async () => {
 
 Await the `layer.loading` promise after a test reloads a layer, eg. with `layer.show()` or a click on a legend category, before the assertions on the reloaded data.
 
-The test files run one at a time, for the same reason as the default view tests run in one worker.
+The test files run one at a time, for the same reason as the default view tests run in one worker. The test timeout is 30 seconds, so a test doesn't time out while the testhost is blocked.
 
 #### Default view tests
 
