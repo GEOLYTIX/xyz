@@ -2,10 +2,13 @@
 ## Bump version script
 This script bumps the xyz framework version by a patch, minor, or major increment.
 
-The version is stored in three files which must be kept in sync:
+The version is stored in four files which must be kept in sync:
 - package.json (with a 'v' prefix)
 - README.md (first line, with a 'v' prefix)
 - apps/mapp/lib/mapp.mjs (without a 'v' prefix)
+- apps/mapp/package.json, the @geolytix/mapp npm package (without a 'v' prefix)
+
+utils/check-version.js checks that the four versions match.
 
 To run this script execute `node utils/bump-version.js <patch|minor|major>`,
 or use the package scripts `pnpm bump:patch`, `pnpm bump:minor`, `pnpm bump:major`.
@@ -57,6 +60,14 @@ const mapp = readFileSync('./apps/mapp/lib/mapp.mjs', 'utf-8');
 writeFileSync(
   './apps/mapp/lib/mapp.mjs',
   mapp.replace(`version: '${current}',`, `version: '${next}',`),
+);
+
+// The @geolytix/mapp package version is semver without a prefix.
+const mappPkg = JSON.parse(readFileSync('./apps/mapp/package.json', 'utf-8'));
+mappPkg.version = next;
+writeFileSync(
+  './apps/mapp/package.json',
+  `${JSON.stringify(mappPkg, null, 2)}\n`,
 );
 
 console.log(`v${current} -> v${next}`);

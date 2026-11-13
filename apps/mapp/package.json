@@ -1,18 +1,50 @@
 {
   "name": "@geolytix/mapp",
-  "type": "module",
+  "version": "5.1.0",
+  "description": "Interactive Openlayers mapviews with layers and locations from an XYZ API.",
+  "keywords": [
+    "geolytix",
+    "xyz",
+    "mapp",
+    "openlayers",
+    "map",
+    "gis"
+  ],
+  "homepage": "https://github.com/GEOLYTIX/xyz/tree/main/apps/mapp#readme",
+  "bugs": "https://github.com/GEOLYTIX/xyz/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/geolytix/xyz"
-  },
-  "packageManager": "pnpm@10.10.0",
-  "scripts": {
-    "build": "vite build && pnpm css",
-    "css": "vite build --config vite.css.config.mjs",
-    "test": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "url": "git+https://github.com/GEOLYTIX/xyz.git",
+    "directory": "apps/mapp"
   },
   "license": "MIT",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/mapp.js",
+    "./css": "./dist/mapp.css",
+    "./package.json": "./package.json"
+  },
+  "module": "./dist/mapp.js",
+  "browser": "./dist/mapp.js",
+  "sideEffects": true,
+  "peerDependencies": {
+    "ol": "^10.8.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vite build && pnpm css && node scripts/copyPublic.mjs",
+    "css": "vite build --config vite.css.config.mjs",
+    "pack:check": "node scripts/pack.mjs",
+    "pack:install": "node scripts/installPackage.mjs",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:package": "vitest run --config tests-package/vitest.config.mjs"
+  },
   "devDependencies": {
     "@geolytix/xyz-testhost": "workspace:*",
     "@vitest/browser-playwright": "catalog:",

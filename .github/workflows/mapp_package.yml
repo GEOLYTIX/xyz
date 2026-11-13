@@ -1,0 +1,79 @@
+name: MAPP Package
+
+# Builds and packs the @geolytix/mapp npm package, publishes it to a local
+# Verdaccio registry, installs it from there, and runs the package test in the
+# browser against the testhost. Nothing is published to npmjs.com. The
+# Publish MAPP workflow publishes the package, see RELEASING.md.
+
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: ['main', 'major', 'minor', 'patch']
+  # No base branch filter, so the check also runs on pull requests stacked on a feature branch.
+  pull_request:
+    paths:
+      - 'apps/mapp/**'
+      - 'packages/testhost/**'
+      - 'packages/devdb/**'
+      - 'package.json'
+      - 'README.md'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - 'utils/bump-version.js'
+      - 'utils/check-version.js'
+      - '.github/workflows/mapp_package.yml'
+
+jobs:
+  package:
+    name: Pack & test the package
+    runs-on: ubuntu-26.04
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: pnpm install --ignore-scripts
+
+      - name: Install Chromium for the package test
+        run: pnpm --filter=@geolytix/mapp exec playwright install --with-deps chromium
+
+      - name: Check the versions match
+        run: node utils/check-version.js
+
+      - name: Build
+        run: pnpm build --filter=@geolytix/mapp --force
+
+      - name: Pack and check the tarball
+        run: pnpm --filter=@geolytix/mapp pack:check
+
+      - name: Start a local registry
+        working-directory: apps/mapp
+        run: |
+          npx --yes verdaccio@6.11.1 \
+            --config tests-package/verdaccio/config.yaml \
+            --listen 4873 > "$RUNNER_TEMP/verdaccio.log" 2>&1 &
+
+      - name: Publish to the local registry
+        working-directory: apps/mapp
+        run: bash scripts/registryPublish.sh http://localhost:4873
+
+      # The script is run with node, pnpm would read --registry as its own option.
+      - name: Install from the local registry
+        working-directory: apps/mapp
+        run: node scripts/installPackage.mjs --registry=http://localhost:4873
+
+      - name: Package test
+        run: pnpm --filter=@geolytix/mapp test:package
+
+      - name: Registry log
+        if: failure()
+        run: cat "$RUNNER_TEMP/verdaccio.log" || true
