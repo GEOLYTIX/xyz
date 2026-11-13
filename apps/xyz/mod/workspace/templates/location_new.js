@@ -15,7 +15,7 @@ import { isReserved } from './location_update.js';
 /**
 Field names [body keys] must be SQL identifiers.
 */
-const FIELD = /^[A-Za-z_][A-Za-z0-9_]*$/;
+const FIELD = /^[A-Za-z_]\w*$/;
 
 export default (_) => {
   // select array for insert statement
@@ -37,8 +37,8 @@ export default (_) => {
     );
   }
 
-  // keys array for insert statement
-  const fields = keys.map((key) => {
+  // The keys are the fields of the insert statement.
+  for (const key of keys) {
     // The param for the value substitution.
     const param = `body_${key}`;
 
@@ -51,7 +51,7 @@ export default (_) => {
       // push geojson string into params.
       _[param] = JSON.stringify(_.body[key]);
 
-      return key;
+      continue;
     }
 
     // push %{param} into selects for substitution in query template.
@@ -59,12 +59,10 @@ export default (_) => {
 
     // push value into params.
     _[param] = _.body[key];
-
-    return key;
-  });
+  }
 
   return `
-    INSERT INTO ${_.table} (${fields.join(',')})
+    INSERT INTO ${_.table} (${keys.join(',')})
     SELECT ${selects.join(',')}
     RETURNING ${_.layer.qID}::varchar AS id;`;
 };
