@@ -267,6 +267,32 @@ describe('ui/elements/chkbox', () => {
 
 Remove the elements which a test appends to the document, eg. dialogs and toasts, so they don't affect the next test.
 
+[tests/helpers.mjs](apps/ui/tests/helpers.mjs) exports the [MAPP test helpers](#mapp-library-tests) and provides helpers for tests with layers. The layer tests use the `retail_points` layer of the grocery locale from the MAPP library tests:
+
+| Helper | Description |
+|---|---|
+| `groceryMapview(configure)` | Creates a mapview for the grocery locale and adds the locale layers. The `configure` method can change the layer configuration before the mapview is created. |
+| `layersListview(configure)` | Creates a layers listview for a grocery mapview, like the default view, and returns the `mapview`, `listview` and the retail_points `layer` with its `layer.view`. |
+
+```js
+import { expect, it } from 'vitest';
+import { layersListview } from '../helpers.mjs';
+
+it('orders the panels by the viewConfig.keyOrder', async () => {
+  const { layer } = await layersListview((layers) => {
+    layers.retail_points.viewConfig = { keyOrder: ['filter', 'style'] };
+  });
+
+  expect(layer.view.querySelector('.content').firstElementChild.dataset.id).toBe(
+    'filter-drawer',
+  );
+});
+```
+
+Await the `layer.loading` promise after a test reloads a layer, eg. with `layer.show()` or a click on a legend category, before the assertions on the reloaded data.
+
+The test files run one at a time, for the same reason as the default view tests run in one worker.
+
 #### Default view tests
 
 The default view tests run with [Playwright Test](https://playwright.dev/docs/intro) and open the XYZ default view (`/view?locale={key}`) from the testhost. The tests use the view like a user, with Playwright locators for the panels, buttons and inputs.
