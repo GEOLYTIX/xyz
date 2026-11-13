@@ -91,9 +91,14 @@ The method will trigger methods to reset and process featureFields to update dyn
 
 The clusterSourceChange method is triggered for cluster layer.
 
+The method will return without setting a source if the layer has no Openlayers layer. The Openlayers layer of a location layer entry is deleted when the location is removed, which may happen while the features are formatted.
+
 @param {array} [features] The features to be added to the vector layer source.
 */
 async function setSource(features) {
+  // The Openlayers layer has been removed.
+  if (!this.L) return;
+
   // The layer datasource is empty.
   if (features === null) {
     this.Features = [];
@@ -109,6 +114,9 @@ async function setSource(features) {
     this,
     [features].flat(),
   );
+
+  // The Openlayers layer may have been removed while the features were formatted.
+  if (!this.L) return;
 
   this.source = createSource(this, this.Features);
 

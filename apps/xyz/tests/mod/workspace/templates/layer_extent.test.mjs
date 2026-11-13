@@ -1,163 +1,75 @@
 import layer_extent from '@geolytix/xyz-app/mod/workspace/templates/layer_extent.js';
 import { describe, expect, it } from 'vitest';
 
-describe('feature_extent', () => {
-  it('Should generate correct SQL for valid input', () => {
-    const req = {
-      body: {
-        ids: ['123', '456', '789'],
-      },
-      geom: 'geom',
-      srid: 4326,
-      proj: 3857,
-      table: 'public.features',
-    };
+function params(body) {
+  return {
+    body,
+    geom: 'geom',
+    srid: 4326,
+    proj: 3857,
+    table: 'public.features',
+  };
+}
 
-    const result = layer_extent(req);
+/**
+Removes the indentation of the rendered SQL.
+*/
+function sql(string) {
+  return string.replace(/\s+/g, ' ').trim();
+}
 
-    // Build expected SQL with direct property substitution
-    const expected =
-      "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('123','456','789') ${filter}) box";
+describe('layer_extent', () => {
+  it('substitutes the ids as a query param, not into the SQL', () => {
+    const _ = params({ ids: ['123', '456', '789'] });
 
-    expect(result).toEqual(expected);
+    const result = sql(layer_extent(_));
+
+    expect(result).toContain('WHERE ${qID} = ANY(%{body_ids})');
+
+    // The id values are not written into the SQL string.
+    expect(result).not.toContain('123');
+    expect(_.body_ids).toEqual(['123', '456', '789']);
   });
 
-  it('Should filter out SQL injection attempts', () => {
-    const req = {
-      body: {
-        ids: [
-          '123',
-          '456; DROP TABLE users; --',
-          '789',
-          "'; DELETE FROM features; --",
-          'valid_id',
-        ],
-      },
-      geom: 'geom',
-      srid: 4326,
-      proj: 3857,
-      table: 'public.features',
-    };
+  it('passes id values with SQL characters as param values', () => {
+    // These ids previously had to be filtered because they were written into the SQL string. They are now safe as param values, so they are passed through.
+    const ids = ["x','y", "'; DELETE FROM features; --", '1,2'];
 
-    const result = layer_extent(req);
+    const _ = params({ ids });
 
-    // Should filter out malicious SQL and only include valid IDs
-    const expected =
-      "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('123','789','valid_id') ${filter}) box";
+    const result = sql(layer_extent(_));
 
-    expect(result).toEqual(expected);
+    // The condition has no id value, only the bound param.
+    expect(result).toContain('WHERE ${qID} = ANY(%{body_ids}) ${filter}');
+    expect(result).not.toContain('DELETE');
+
+    // The values are passed to node-postgres as param values and compared as data.
+    expect(_.body_ids).toEqual(ids);
   });
 
-  it('Should handle empty ids array', () => {
-    const req = {
-      body: {
-        ids: [],
-      },
-      geom: 'geom',
-      srid: 4326,
-      proj: 3857,
-      table: 'public.features',
-    };
+  it('coerces id values to strings', () => {
+    const _ = params({ ids: [123, 456] });
 
-    const result = layer_extent(req);
+    layer_extent(_);
 
-    const expected =
-      "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('') ${filter}) box";
-
-    expect(result).toEqual(expected);
+    expect(_.body_ids).toEqual(['123', '456']);
   });
 
-  it('Should handle single valid ID', () => {
-    const req = {
-      body: {
-        ids: ['single_id'],
-      },
-      geom: 'geom',
-      srid: 4326,
-      proj: 3857,
-      table: 'public.features',
-    };
+  it('queries all geometries without an ids array', () => {
+    const _ = params(undefined);
 
-    const result = layer_extent(req);
+    const result = sql(layer_extent(_));
 
-    const expected =
-      "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('single_id') ${filter}) box";
-
-    expect(result).toEqual(expected);
+    expect(result).toContain('WHERE true ${filter}');
+    expect(_.body_ids).toBeUndefined();
   });
 
-  it('Should handle IDs with allowed special characters', () => {
-    const req = {
-      body: {
-        ids: [
-          'id_with_underscore',
-          'id-with-dash',
-          'id.with.dot',
-          'id with space',
-          'ID_WITH_UPPERCASE',
-          'id123',
-          'id,with,comma',
-        ],
-      },
-      geom: 'geom',
-      srid: 4326,
-      proj: 3857,
-      table: 'public.features',
-    };
+  it('matches no geometry for an empty ids array', () => {
+    const _ = params({ ids: [] });
 
-    const result = layer_extent(req);
+    const result = sql(layer_extent(_));
 
-    const expected =
-      "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('id_with_underscore','id-with-dash','id.with.dot','id with space','ID_WITH_UPPERCASE','id123','id,with,comma') ${filter}) box";
-
-    expect(result).toEqual(expected);
-  });
-
-  it('Should filter out IDs with dangerous characters', () => {
-    const req = {
-      body: {
-        ids: [
-          'valid_id',
-          'id_with_semicolon;',
-          'id_with_parens()',
-          'id_with_brackets[]',
-          'id_with_braces{}',
-          'id_with_pipe|',
-          'id_with_ampersand&',
-          'dangerous; DROP TABLE test; --',
-        ],
-      },
-      geom: 'geom',
-      srid: 4326,
-      proj: 3857,
-      table: 'public.features',
-    };
-
-    const result = layer_extent(req);
-
-    // Should only include the valid_id
-    const expected =
-      "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('valid_id') ${filter}) box";
-
-    expect(result).toEqual(expected);
-  });
-
-  it('Should handle different SRID and projection values', () => {
-    const req = {
-      body: {
-        ids: ['test_id'],
-      },
-      geom: 'geometry_column',
-      srid: 27700,
-      proj: 4326,
-      table: 'test_table',
-    };
-
-    const result = layer_extent(req);
-
-    const expected =
-      "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('test_id') ${filter}) box";
-
-    expect(result).toEqual(expected);
+    expect(result).toContain('WHERE ${qID} = ANY(%{body_ids})');
+    expect(_.body_ids).toEqual([]);
   });
 });
