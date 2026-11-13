@@ -129,7 +129,9 @@ function selfSignedCertificate({ privateKey, publicKey }, commonName) {
 
   // Parsing throws for a malformed certificate; verify checks the self-signature.
   if (!new X509Certificate(pem).verify(createPublicKey(publicKey))) {
-    throw new Error('Self-signed test certificate failed signature verification.');
+    throw new Error(
+      'Self-signed test certificate failed signature verification.',
+    );
   }
 
   return pem;
