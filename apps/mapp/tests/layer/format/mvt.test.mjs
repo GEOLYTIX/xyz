@@ -259,12 +259,20 @@ async function properties(layer, id) {
 }
 
 /**
-Stops the debounced mapview changeEnd of the initial view. The changeEnd loads the properties without the reload flag. A load from the changeEnd after the layer.reload() would supersede the debounced reload request, and the tiles would not be refreshed.
+Stops the debounced mapview changeEnd of the initial view and resolves once the properties requests of the initial view have settled.
+
+The changeEnd loads the properties without the reload flag. A load from the changeEnd after the layer.reload() would supersede the debounced reload request, and the tiles would not be refreshed.
+
+A properties request from the changeEnd may also be debounced or in flight when the test calls the layer.reload(). Its response would assign the properties before the response of the reload request, which then has no new feature and does not refresh the tiles. The final load supersedes a debounced request, and is sent after a request in flight, so no response of the initial view is pending once the load has resolved.
 */
-function stopChangeEnd(layer) {
+async function stopChangeEnd(layer) {
   clearTimeout(layer.mapview.changeEndTimer);
 
+  const [load] = layer.changeEndCallbacks;
+
   layer.changeEndCallbacks.length = 0;
+
+  await load(layer);
 }
 
 describe('mvt wkt_properties', () => {
@@ -329,9 +337,9 @@ describe('mvt wkt_properties', () => {
 
     await properties(layer, MOROCCO);
 
-    layer.filter.current = { continent: { in: ['Europe'] } };
+    await stopChangeEnd(layer);
 
-    stopChangeEnd(layer);
+    layer.filter.current = { continent: { in: ['Europe'] } };
 
     layer.reload();
 
@@ -348,12 +356,12 @@ describe('mvt wkt_properties', () => {
 
     await properties(layer, FRANCE);
 
+    await stopChangeEnd(layer);
+
     const refresh = vi.spyOn(layer.source, 'refresh');
 
     // France has not been rendered before, eg. after a location has been created.
     delete layer.featuresObject[FRANCE];
-
-    stopChangeEnd(layer);
 
     layer.reload();
 
@@ -369,10 +377,10 @@ describe('mvt wkt_properties', () => {
 
     await properties(layer, FRANCE);
 
+    await stopChangeEnd(layer);
+
     const refresh = vi.spyOn(layer.source, 'refresh');
     const changed = vi.spyOn(layer.L, 'changed');
-
-    stopChangeEnd(layer);
 
     layer.reload();
 
@@ -389,11 +397,11 @@ describe('mvt wkt_properties', () => {
 
     await properties(layer, GERMANY);
 
+    await stopChangeEnd(layer);
+
     const clear = vi.spyOn(layer.source, 'clear');
 
     layer.display = false;
-
-    stopChangeEnd(layer);
 
     layer.reload();
 
