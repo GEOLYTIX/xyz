@@ -37,6 +37,7 @@ A decorated mapp location.
 @property {function} syncFields {@link module:/location/decorate~syncFields}
 @property {function} update {@link module:/location/decorate~update}
 @property {string} [updateTemplate='location_update'] The query template for the location update post query.
+@property {Promise} [updatePending] The pending location update which a subsequent update must wait for.
 @property {HTMLElement} [view] The location view displayed in the location listview in the default Mapp application view.
 */
 
@@ -176,9 +177,35 @@ Dependent layers is an array of layer keys that will be reloaded after the updat
 
 A callback function can be provided to override the execution of methods in the location updateCallbacks array. This allows to provide a function to render the location view without changing the editing state and execute a modify or draw interaction from a geometry entry.
 
+Updates of a location are serialized. An update called while another update is pending waits for the pending update to complete before the newValues are collected. An older update response can therefore not overwrite a value saved by a newer update, and the update requests are executed in the order the updates were called.
+
 @param {function} [callback] The callback function overrides the default location updateCallbacks.
+@returns {Promise<Error|undefined>} Resolves once the update has completed.
 */
-async function update(callback) {
+function update(callback) {
+  // Chain the update to the completion of any pending location update.
+  const pending = (this.updatePending ?? Promise.resolve()).then(() =>
+    updateLocation.call(this, callback),
+  );
+
+  // A failed update must not block subsequent updates.
+  this.updatePending = pending.catch(() => {});
+
+  return pending;
+}
+
+/**
+@function updateLocation
+@async
+@this location
+
+@description
+Executes the location update described in the update method. The updateLocation method must only be called by the update method which serializes updates of the location.
+
+@param {function} [callback] The callback function overrides the default location updateCallbacks.
+@returns {Promise<Error|undefined>}
+*/
+async function updateLocation(callback) {
   if (this.infoj.some((entry) => entry.invalid)) {
     mapp.utils.alert({ text: mapp.dictionary.invalid_entry_value });
     return new Error('Unable to update.');
@@ -218,6 +245,7 @@ async function update(callback) {
 
   // Snapshot the entries and the values which are sent with the update request.
   // A newValue set while the request is pending must not be marked as saved.
+  // It is sent by the next update, which waits for this update to complete.
   const updated = this.infoj
     .filter((entry) => typeof entry.newValue !== 'undefined')
     .map((entry) => [entry, entry.newValue]);
@@ -253,7 +281,7 @@ async function update(callback) {
   // Assign the values sent with the request from the snapshot, not the current
   // infoj newValues which may have changed while the request was pending.
   const dependents = updated
-    .map(([entry, newValue]) => {
+    .flatMap(([entry, newValue]) => {
       // Update entry.value with the value which was sent.
       entry.value = newValue;
 
@@ -274,8 +302,7 @@ async function update(callback) {
 
       return entry.dependents;
     })
-    // Flatten dependents array and filter out undefined values.
-    .flat()
+    // Filter out undefined values from the flattened dependents.
     .filter((dependents) => dependents !== undefined);
 
   // sync dependent fields
