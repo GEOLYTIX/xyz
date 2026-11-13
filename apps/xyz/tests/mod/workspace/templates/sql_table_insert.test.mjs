@@ -5,14 +5,14 @@ import { mockConsole } from '../../../scaffold.mjs';
 //mockWarnings from test so we can assert on them and not pollute the console.
 const mockWarnings = mockConsole('warn');
 
+const expectedWarning =
+  'Potential SQL Injection in sql_table_insert request body.';
+
 describe('sql_table_insert', () => {
   it('base test', () => {
     const expected = `INSERT INTO test.table
     (letters,numbers)
-    SELECT unnest(%{letters}::varchar[]) as letters,unnest(%{numbers}::int[]) as numbers`;
-
-    const expectedWarning =
-      'Potential SQL Injection in sql_table_insert request body.';
+    SELECT unnest(%{body_letters}::varchar[]) as letters,unnest(%{body_numbers}::int[]) as numbers`;
 
     const req = {
       table: 'test.table',
@@ -26,6 +26,37 @@ describe('sql_table_insert', () => {
     const result = sql_table_insert(req);
 
     expect(result).toEqual(expected);
-    expect(mockWarnings[0]).toEqual(expectedWarning);
+    expect(mockWarnings.at(-1)).toEqual(expectedWarning);
+    expect(req.body_letters).toEqual(['a', 'b']);
+    expect(req.body_numbers).toEqual([1, 2]);
+  });
+
+  it('does not overwrite the template params with body keys', () => {
+    const req = {
+      table: 'test.table',
+      body: {
+        'table::varchar': ['pg_catalog.pg_class SELECT 1; --'],
+      },
+    };
+
+    const result = sql_table_insert(req);
+
+    expect(result).toContain('INSERT INTO test.table');
+    expect(req.table).toBe('test.table');
+    expect(req.body_table).toEqual(['pg_catalog.pg_class SELECT 1; --']);
+  });
+
+  it.each([
+    ['a key without a cast', 'letters'],
+    ['a key with two casts', 'letters::int::varchar'],
+    ['a cast with a comment', 'letters::int--'],
+    ['a field starting with a number', '1letters::int'],
+  ])('skips %s', (_, key) => {
+    const req = { table: 'test.table', body: { [key]: [1] } };
+
+    const result = sql_table_insert(req);
+
+    expect(result).not.toContain('letters');
+    expect(mockWarnings.at(-1)).toEqual(expectedWarning);
   });
 });
