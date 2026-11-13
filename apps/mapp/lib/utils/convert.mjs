@@ -11,7 +11,7 @@
 @description
 Formats a numeric value as string. The value is converted from the params.units to the params.convertTo units with the [convert]{@link https://www.npmjs.com/package/convert} module. The module is imported from esm.sh with the mapp.utils.esmImport method on the first conversion.
 
-The value is formatted without conversion if the module can't be imported. The esmImport method logs the error.
+The value is not converted if the module can't be imported. The esmImport method logs the error. The unconverted value is labelled with its source params.units instead of the params.suffix, so the measurement isn't mislabelled with the convertTo units.
 
 @param {number|string} value The value to format.
 @param {Object} params The format params.
@@ -26,10 +26,16 @@ The value is formatted without conversion if the module can't be imported. The e
 export default async function convert(value, params) {
   value = Number.parseFloat(value);
 
+  let suffix = params.suffix;
+
   if (params.units && params.convertTo) {
     const convertModule = await mapp.utils.esmImport('convert@4');
 
-    if (!(convertModule instanceof Error)) {
+    if (convertModule instanceof Error) {
+      // The value can't be converted. Label it with its source units so the
+      // measurement isn't mislabelled with the convertTo units suffix.
+      suffix = ` ${params.units}`;
+    } else {
       value = convertModule.convert(value, params.units).to(params.convertTo);
     }
   }
@@ -38,5 +44,5 @@ export default async function convert(value, params) {
 
   value = value.toLocaleString(params.locale || 'en-GB');
 
-  return `${params.prefix || ''}${value}${params.suffix || ''}`;
+  return `${params.prefix || ''}${value}${suffix || ''}`;
 }

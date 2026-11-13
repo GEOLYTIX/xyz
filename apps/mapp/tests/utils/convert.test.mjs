@@ -57,11 +57,13 @@ describe('utils/convert', () => {
     expect(esmImport).not.toHaveBeenCalled();
   });
 
-  it('formats the value without conversion if the import fails', async () => {
+  it('labels the value with its source units if the import fails', async () => {
     stubEsmImport(new Error('Failed to fetch'));
 
-    await expect(convert(2500, { units: 'm', convertTo: 'km' })).resolves.toBe(
-      '2500',
-    );
+    // The convertTo suffix would mislabel the unconverted value, so the value is
+    // labelled with its source units instead.
+    await expect(
+      convert(2500, { units: 'm', convertTo: 'km', suffix: ' km' }),
+    ).resolves.toBe('2500 m');
   });
 });
