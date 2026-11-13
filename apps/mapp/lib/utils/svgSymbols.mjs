@@ -22,9 +22,7 @@ The templates object is exported by the svgSymbols module and available as `mapp
 export const templates = {};
 
 export function dot(style) {
-  const lookup = Object.values({
-    fillColor: style.fillColor,
-  }).reduce((a, b) => a + b);
+  const lookup = style.fillColor;
 
   if (memoizedIcons.dot.has(lookup)) return memoizedIcons.dot.get(lookup);
 

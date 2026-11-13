@@ -98,8 +98,7 @@ async function registerUserBody(req, res) {
   const date = new Date().toISOString().replace(/\..*/, '');
 
   const expiry_date = Number.parseInt(
-    (new Date().getTime() + xyzEnv.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) /
-      1000,
+    (Date.now() + xyzEnv.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000,
   );
 
   const USER = {
@@ -277,8 +276,7 @@ async function passwordReset(req, res) {
   const date = new Date().toISOString().replace(/\..*/, '');
 
   const expiry_date = Number.parseInt(
-    (new Date().getTime() + xyzEnv.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) /
-      1000,
+    (Date.now() + xyzEnv.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000,
   );
 
   const VALUES = [

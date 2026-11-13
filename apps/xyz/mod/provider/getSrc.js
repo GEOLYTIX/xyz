@@ -197,9 +197,8 @@ async function cacheWorkspaceSources(workspace, span) {
       const response = await responsePromise;
 
       if (response instanceof Error || response === undefined) {
-        workspace.errors.add(
-          `${src}: ${response?.message || `Unable to load src: ${src}`}`,
-        );
+        const message = response?.message || `Unable to load src: ${src}`;
+        workspace.errors.add(`${src}: ${message}`);
         continue;
       }
 

@@ -44,7 +44,7 @@ export default function idleLogout(params) {
   window.onmousedown = resetTimer;
   window.ontouchstart = resetTimer;
   window.onclick = resetTimer;
-  window.onkeypress = resetTimer;
+  window.onkeydown = resetTimer;
   resetTimer();
   renewToken();
 }

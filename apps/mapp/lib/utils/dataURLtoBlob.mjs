@@ -5,7 +5,7 @@
 */
 
 export function dataURLtoBlob(dataURL) {
-  if (dataURL.indexOf(';base64,') == -1) {
+  if (!dataURL.includes(';base64,')) {
     const parts = dataURL.split(','),
       contentType = parts[0].split(':')[1],
       raw = parts[1];
@@ -19,7 +19,7 @@ export function dataURLtoBlob(dataURL) {
     uInt8Array = new Uint8Array(raw.length);
 
   for (let i = 0; i < raw.length; ++i) {
-    uInt8Array[i] = raw.charCodeAt(i);
+    uInt8Array[i] = raw.codePointAt(i);
   }
 
   return new Blob([uInt8Array], { type: contentType });

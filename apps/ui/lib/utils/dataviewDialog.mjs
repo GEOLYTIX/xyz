@@ -102,7 +102,7 @@ export default function dataviewDialog(dataview) {
         dataview.target.querySelector('canvas'),
       );
 
-      dataview.dataview_dialog.node.removeChild(dataview.target);
+      dataview.target.remove();
     }
 
     dataview.dataview_dialog.dialog.show();
