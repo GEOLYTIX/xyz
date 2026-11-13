@@ -3,7 +3,8 @@
   "description": "Optional SAML backend app",
   "type": "module",
   "scripts": {
-    "dev": "varlock run -- node --inspect server.js"
+    "dev": "varlock run -- node --inspect server.js",
+    "test": "vitest run"
   },
   "varlock": {
     "loadPath": "../../"
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "node-mocks-http": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "xml-crypto": "catalog:"
   }
 }
