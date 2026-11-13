@@ -88,6 +88,7 @@ describe('saml:', async () => {
     expect(getLogoutUrlAsync).not.toHaveBeenCalled();
     expect(res.statusCode).toBe(302);
     expect(res.getHeader('location')).toBe('/app');
+    expect(res.getHeader('Set-Cookie')).toMatch(/^TEST_APP=null; Max-Age=0/);
   });
 
   it('passes SAML identity fields from ACS to the shared redirect helper', async () => {
@@ -262,6 +263,43 @@ describe('saml:', async () => {
 
     expect(html).not.toContain('<script>');
     expect(html).toContain('/app/&quot;&gt;&lt;script&gt;');
+  });
+
+  it('rejects an ACS response without an authenticated profile', async () => {
+    validatePostResponseAsync.mockResolvedValueOnce({
+      loggedOut: true,
+      profile: null,
+    });
+
+    const { req, res } = createMocks({
+      body: { SAMLResponse: 'response' },
+      url: '/app/saml/acs',
+    });
+
+    await saml(req, res);
+
+    expect(res.statusCode).toBe(401);
+    expect(redirectFn).not.toHaveBeenCalled();
+  });
+
+  it('sends a 500 when the ACS user redirect throws', async () => {
+    vi.spyOn(console, 'error').mockImplementationOnce(() => {});
+
+    validatePostResponseAsync.mockResolvedValueOnce({
+      profile: { email: 'test@example.com', nameID: 'name-id' },
+    });
+
+    redirectFn.mockRejectedValueOnce(new Error('ACL connection lost'));
+
+    const { req, res } = createMocks({
+      body: { SAMLResponse: 'response' },
+      url: '/app/saml/acs',
+    });
+
+    await saml(req, res);
+
+    expect(res.statusCode).toBe(500);
+    expect(res._isEndCalled()).toBe(true);
   });
 
   it('sends ACL errors from ACS unchanged', async () => {

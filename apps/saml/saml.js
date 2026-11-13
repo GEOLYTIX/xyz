@@ -14,8 +14,7 @@ The handler serves the complete SAML flow:
 - same-site document redirect after ACS
 - logout redirect and logout callback handling
 
-Certificate files are still resolved relative to the `apps/xyz` package root so
-existing deployment layout and environment variables continue to work.
+Certificate files are resolved relative to the `apps/saml` package root.
 
 @module saml-app
 */
@@ -30,6 +29,11 @@ import jwt from 'jsonwebtoken';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+/**
+The clock skew in milliseconds accepted when the NotBefore and NotOnOrAfter conditions of a SAML assertion are checked.
+*/
+const DEFAULT_CLOCK_SKEW_MS = 60000;
+
 function parseBoolean(value, fallback) {
   if (value === undefined) return fallback;
   if (typeof value === 'boolean') return value;
@@ -38,35 +42,69 @@ function parseBoolean(value, fallback) {
   return fallback;
 }
 
-const samlConfig = {
-  acceptedClockSkewMs: xyzEnv.SAML_ACCEPTED_CLOCK_SKEW ?? -1,
-  callbackUrl: xyzEnv.SAML_ACS,
-  entryPoint: xyzEnv.SAML_SSO,
-  identifierFormat: xyzEnv.SAML_IDENTIFIER_FORMAT,
-  idpCert:
-    xyzEnv.SAML_IDP_CRT &&
-    String(readFileSync(join(__dirname, `./${xyzEnv.SAML_IDP_CRT}.crt`))),
-  issuer: xyzEnv.SAML_ENTITY_ID,
-  logoutCallbackUrl: xyzEnv.SLO_CALLBACK,
-  logoutUrl: xyzEnv.SAML_SLO,
-  privateKey:
-    xyzEnv.SAML_SP_CRT &&
-    String(readFileSync(join(__dirname, `./${xyzEnv.SAML_SP_CRT}.pem`))),
-  providerName: xyzEnv.SAML_PROVIDER_NAME,
-  publicCert:
-    xyzEnv.SAML_SP_CRT &&
-    String(readFileSync(join(__dirname, `./${xyzEnv.SAML_SP_CRT}.crt`))),
-  signatureAlgorithm: xyzEnv.SAML_SIGNATURE_ALGORITHM,
-  wantAssertionsSigned: parseBoolean(xyzEnv.SAML_WANT_ASSERTIONS_SIGNED),
-  wantAuthnResponseSigned: parseBoolean(
-    xyzEnv.SAML_AUTHN_RESPONSE_SIGNED,
-    false,
-  ),
-  disableRequestedAuthnContext:
-    xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT === undefined
-      ? true
-      : xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT === 'true',
-};
+/**
+@function parseClockSkew
+
+@description
+Environment values are strings. node-saml adds the skew to the current time, so a string value would be concatenated instead of added and the NotBefore check would never fail.
+
+A negative skew disables the NotBefore and NotOnOrAfter checks in node-saml. Expired assertions would be accepted and a captured SAML response could be replayed indefinitely. Negative and non-numeric values fall back to the default skew.
+
+@param {string} [value] The SAML_ACCEPTED_CLOCK_SKEW environment value.
+@returns {number} The accepted clock skew in milliseconds.
+*/
+export function parseClockSkew(value) {
+  if (value === undefined || value === '') return DEFAULT_CLOCK_SKEW_MS;
+
+  const skew = Number(value);
+
+  if (!Number.isInteger(skew) || skew < 0) {
+    console.warn(
+      `SAML_ACCEPTED_CLOCK_SKEW must be a non-negative integer. ${DEFAULT_CLOCK_SKEW_MS}ms is used instead of ${value}.`,
+    );
+    return DEFAULT_CLOCK_SKEW_MS;
+  }
+
+  return skew;
+}
+
+/**
+@function createSamlConfig
+
+@description
+Creates the node-saml configuration from the environment. The certificate files are read from the certDir.
+
+@param {Object} [env=xyzEnv] The environment.
+@param {string} [certDir] The directory with the IdP certificate and SP key pair.
+@returns {Object} The node-saml configuration.
+*/
+export function createSamlConfig(env = xyzEnv, certDir = __dirname) {
+  const readCert = (file) => String(readFileSync(join(certDir, file)));
+
+  return {
+    acceptedClockSkewMs: parseClockSkew(env.SAML_ACCEPTED_CLOCK_SKEW),
+    callbackUrl: env.SAML_ACS,
+    entryPoint: env.SAML_SSO,
+    identifierFormat: env.SAML_IDENTIFIER_FORMAT,
+    idpCert: env.SAML_IDP_CRT && readCert(`${env.SAML_IDP_CRT}.crt`),
+    issuer: env.SAML_ENTITY_ID,
+    logoutCallbackUrl: env.SLO_CALLBACK,
+    logoutUrl: env.SAML_SLO,
+    privateKey: env.SAML_SP_CRT && readCert(`${env.SAML_SP_CRT}.pem`),
+    providerName: env.SAML_PROVIDER_NAME,
+    publicCert: env.SAML_SP_CRT && readCert(`${env.SAML_SP_CRT}.crt`),
+    signatureAlgorithm: env.SAML_SIGNATURE_ALGORITHM,
+    wantAssertionsSigned: parseBoolean(env.SAML_WANT_ASSERTIONS_SIGNED),
+    wantAuthnResponseSigned: parseBoolean(
+      env.SAML_AUTHN_RESPONSE_SIGNED,
+      false,
+    ),
+    disableRequestedAuthnContext:
+      env.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT === undefined
+        ? true
+        : env.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT === 'true',
+  };
+}
 
 let samlStrat;
 
@@ -79,7 +117,7 @@ export function createSamlHandler(strategy, redirectUser = redirect) {
 }
 
 function getSamlStrat() {
-  samlStrat ??= new SAML(samlConfig);
+  samlStrat ??= new SAML(createSamlConfig());
   return samlStrat;
 }
 
@@ -95,7 +133,7 @@ function samlHandler(req, res, strategy, redirectUser) {
       return metadata(res, strategy);
 
     case /\/saml\/logout\/callback/.test(req.url):
-      return logoutCallback(res);
+      return logoutCallback(req, res, strategy);
 
     case /\/saml\/logout/.test(req.url):
       return logout(req, res, strategy);
@@ -108,54 +146,130 @@ function samlHandler(req, res, strategy, redirectUser) {
   }
 }
 
+/**
+@function metadata
+
+@description
+Sends the service provider metadata. The SP certificate is published as the signing certificate for requests signed with the SP private key.
+
+@param {res} res HTTP response.
+@param {SAML} strategy The node-saml instance.
+*/
 function metadata(res, strategy) {
   res.setHeader('Content-Type', 'application/xml');
   const metadata = strategy.generateServiceProviderMetadata(
     null,
-    samlConfig.idpCert,
+    strategy.options.publicCert,
   );
   res.send(metadata);
 }
 
-function logoutCallback(res) {
+function clearUserCookie(res) {
+  res.setHeader(
+    'Set-Cookie',
+    `${xyzEnv.TITLE}=null; Max-Age=0; ${xyzEnv.COOKIE_PROPS}`,
+  );
+}
+
+function redirectHome(res) {
+  res.setHeader('location', `${xyzEnv.DIR || '/'}`);
+  return res.status(302).send();
+}
+
+/**
+@function logoutCallback
+@async
+
+@description
+The IdP returns to the logout callback with either a LogoutResponse to a logout started from XYZ or a LogoutRequest for a logout started at the IdP or another service provider.
+
+The user cookie is cleared in either case.
+
+A LogoutRequest is answered with a LogoutResponse redirect to the IdP once its signature is validated.
+
+A redirect binding LogoutRequest is validated from the raw query string. node-saml rejects a query string without a Signature parameter and returns the RelayState covered by the signature. A RelayState from the parsed req.query could hold a parameter the signature does not cover.
+
+Any other request is redirected to the base directory.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@param {SAML} strategy The node-saml instance.
+*/
+async function logoutCallback(req, res, strategy) {
+  clearUserCookie(res);
+
   try {
-    res.setHeader(
-      'Set-Cookie',
-      `${xyzEnv.TITLE}=null; Max-Age=0; ${xyzEnv.COOKIE_PROPS}`,
+    let result;
+    let relayState;
+
+    if (req.method === 'POST' && req.body?.SAMLRequest) {
+      result = await strategy.validatePostRequestAsync(req.body);
+      relayState = req.body.RelayState;
+    } else if (req.query?.SAMLRequest) {
+      const originalQuery = req.url.split('?')[1] || '';
+      result = await strategy.validateRedirectAsync(originalQuery);
+      relayState = result.relayState;
+    }
+
+    if (!result?.profile) return redirectHome(res);
+
+    const url = await strategy.getLogoutResponseUrlAsync(
+      result.profile,
+      relayState,
+      {},
+      true,
     );
 
-    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
+    res.setHeader('location', url);
     return res.status(302).send();
   } catch (error) {
-    console.error('Logout validation failed:', error);
-
-    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
-    return res.status(302).send();
+    console.error('SAML logout request validation failed:', error.message);
+    return redirectHome(res);
   }
 }
 
+/**
+@function logout
+@async
+
+@description
+The user cookie is cleared before the user is sent to the IdP. The local session ends even if the IdP does not return to the logout callback.
+
+A LogoutRequest is only created for a user cookie with a valid signature. An expired cookie with a valid signature still ends the IdP session. A LogoutRequest is signed with the SP private key and must not be created from an unverified nameID and sessionIndex.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@param {SAML} strategy The node-saml instance.
+*/
 async function logout(req, res, strategy) {
+  const token = req.cookies?.[`${xyzEnv.TITLE}`];
+
+  clearUserCookie(res);
+
+  if (!token) return redirectHome(res);
+
+  let user;
+
   try {
-    const user = await jwt.decode(req.cookies?.[`${xyzEnv.TITLE}`]);
+    // An expired token with a valid signature still holds the IdP session to end.
+    user = jwt.verify(token, xyzEnv.SECRET, {
+      algorithms: [xyzEnv.SECRET_ALGORITHM],
+      ignoreExpiration: true,
+    });
+  } catch {
+    return redirectHome(res);
+  }
 
-    if (!user) {
-      res.setHeader('location', `${xyzEnv.DIR || '/'}`);
-      return res.status(302).send();
-    }
+  if (!user.sessionIndex || !user.nameID) return redirectHome(res);
 
-    if (user.sessionIndex) {
-      const url = await strategy.getLogoutUrlAsync(user);
+  try {
+    const url = await strategy.getLogoutUrlAsync(user);
 
-      res.setHeader('location', url);
-      return res.status(302).send();
-    }
-
-    logoutCallback(res);
+    res.setHeader('location', url);
+    return res.status(302).send();
   } catch (error) {
     console.error('Logout process failed:', error);
-
-    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
-    return res.status(302).send();
+    return redirectHome(res);
   }
 }
 
@@ -179,26 +293,58 @@ async function login(req, res, strategy) {
   }
 }
 
+/**
+@function acs
+@async
+
+@description
+The assertion consumer service validates the SAML response posted by the IdP.
+
+An invalid response, or a response without an authenticated nameID, is rejected with a 401 status. Any other error is sent as a 500 status. The request must not be left without a response.
+
+The user from a valid response is passed to the redirect method for the ACL lookup and the user cookie.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@param {SAML} strategy The node-saml instance.
+@param {Function} redirectUser The redirect method.
+*/
 async function acs(req, res, strategy, redirectUser) {
+  let profile;
+
   try {
     const samlResponse = await strategy.validatePostResponseAsync(req.body);
+    profile = samlResponse?.profile;
+  } catch (error) {
+    console.error('SAML response validation failed:', error.message);
+    return res.status(401).send('SAML authentication failed.');
+  }
 
-    const user = {
-      email: samlResponse.profile.email || samlResponse.profile.nameID,
-      lookup: true,
-      nameID: samlResponse.profile.nameID,
-      nameIDFormat: samlResponse.profile.nameIDFormat,
-      nameQualifier: samlResponse.profile.nameQualifier,
-      redirect: req.body?.RelayState || req.query?.RelayState,
-      sessionIndex: samlResponse.profile.sessionIndex,
-      spNameQualifier: samlResponse.profile.spNameQualifier,
-    };
+  if (!profile?.nameID) {
+    return res.status(401).send('SAML authentication failed.');
+  }
 
+  const user = {
+    email: profile.email || profile.nameID,
+    lookup: true,
+    nameID: profile.nameID,
+    nameIDFormat: profile.nameIDFormat,
+    nameQualifier: profile.nameQualifier,
+    redirect: req.body?.RelayState || req.query?.RelayState,
+    sessionIndex: profile.sessionIndex,
+    spNameQualifier: profile.spNameQualifier,
+  };
+
+  try {
     documentRedirect(res);
 
     return await redirectUser(req, res, user);
   } catch (error) {
-    console.error(error);
+    console.error('SAML user redirect failed:', error);
+
+    if (!res.headersSent) {
+      return res.status(500).send('Authentication failed.');
+    }
   }
 }
 
