@@ -101,6 +101,57 @@ describe('saml flow:', async () => {
     });
   });
 
+  describe('login', () => {
+    function login(cookies = {}) {
+      const { req, res } = createMocks({
+        cookies,
+        headers: {},
+        url: '/app/saml/login',
+      });
+      return saml(req, res).then(() => res);
+    }
+
+    it('redirects to the IdP with a signed AuthnRequest and the redirect cookie as RelayState', async () => {
+      const res = await login({ TEST_APP_redirect: '/app/view' });
+
+      expect(res.statusCode).toBe(302);
+
+      const location = new URL(res.getHeader('location'));
+      expect(location.origin + location.pathname).toBe(
+        'https://idp.example.com/sso',
+      );
+      expect(location.searchParams.get('RelayState')).toBe('/app/view');
+      expect(location.searchParams.get('Signature')).toBeTruthy();
+
+      const authnRequest = String(
+        inflateRawSync(
+          Buffer.from(location.searchParams.get('SAMLRequest'), 'base64'),
+        ),
+      );
+      expect(authnRequest).toContain(ACS);
+      expect(authnRequest).toContain(ENTITY_ID);
+    });
+
+    it('uses DIR as RelayState without a redirect cookie', async () => {
+      const res = await login();
+
+      const location = new URL(res.getHeader('location'));
+      expect(location.searchParams.get('RelayState')).toBe('/app');
+    });
+
+    it('sends a 500 when the AuthnRequest cannot be created', async () => {
+      const failing = createSamlHandler({
+        getAuthorizeUrlAsync: () => Promise.reject(new Error('no IdP')),
+      });
+      const { req, res } = createMocks({ headers: {}, url: '/app/saml/login' });
+
+      await failing(req, res);
+
+      expect(res.statusCode).toBe(500);
+      expect(console.error).toHaveBeenCalled();
+    });
+  });
+
   describe('acs', () => {
     it('signs a user cookie from a valid IdP response', async () => {
       aclFn.mockResolvedValueOnce([aclUser]);

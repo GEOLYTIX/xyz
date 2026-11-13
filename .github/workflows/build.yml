@@ -44,10 +44,10 @@ jobs:
         run: pnpm install --ignore-scripts
       - name: Test & Coverage
         if: env.SKIP_SONAR != 'true'
-        run: pnpm test:xyz:coverage
+        run: pnpm test:coverage
       - name: Verify coverage report
         if: env.SKIP_SONAR != 'true'
-        run: test -s coverage/lcov.info
+        run: test -s coverage/lcov.info && test -s apps/saml/coverage/lcov.info
       - name: SonarQube Scan
         if: env.SKIP_SONAR != 'true'
         uses: SonarSource/sonarqube-scan-action@4d1dc0c91ee400dcf8a6dddf2f705ac36542e304 # v8.4.0
