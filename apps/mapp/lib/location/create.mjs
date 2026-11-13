@@ -63,6 +63,9 @@ export default async function createLocation(feature, interaction, layer) {
           template: 'location_new',
         }),
     });
+
+    // mapp.utils.xhr resolves with the Error of a failed request, it does not reject.
+    if (location.id instanceof Error) throw location.id;
   } catch (err) {
     console.error('Error saving location:', err);
     mapp.utils.alert({ text: mapp.dictionary.location_new_failed });

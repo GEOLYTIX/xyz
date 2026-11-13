@@ -12,6 +12,15 @@ const memoizedIcons = {
   dot: new Map(),
 };
 
+/**
+@global
+@typedef {Object} svgTemplates
+The svg strings loaded by the [svgTemplates]{@link module:/utils/svgTemplates~svgTemplates} method with the template key as property.
+
+The templates object is exported by the svgSymbols module and available as `mapp.utils.svgSymbols.templates`. The template properties must be assigned to the object. The module namespace of the svgSymbols module can't be extended or reassigned when the library runs from the source modules.
+*/
+export const templates = {};
+
 export function dot(style) {
   const lookup = Object.values({
     fillColor: style.fillColor,
@@ -192,8 +201,8 @@ export function circle(style) {
 
 // Assign template method to svgSymbols.
 export function template(icon) {
-  // Get svgString from svgSymbol.templates.
-  let svgString = mapp.utils.svgSymbols.templates?.[icon.template];
+  // Get svgString from the svg templates.
+  let svgString = templates[icon.template];
 
   // Return undefined if svgString not found in templates.
   if (!svgString) return;

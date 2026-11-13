@@ -4,21 +4,15 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./index.js",
-    "./globalSetup": "./globalSetup.js"
+    ".": "./index.js"
   },
   "scripts": {
-    "start": "node start.js",
-    "test": "vitest run"
+    "start": "node start.js"
   },
   "license": "MIT",
   "dependencies": {
     "@electric-sql/pglite": "catalog:",
     "@electric-sql/pglite-postgis": "catalog:",
     "@electric-sql/pglite-socket": "catalog:"
-  },
-  "devDependencies": {
-    "pg": "catalog:",
-    "vitest": "catalog:"
   }
 }

@@ -4,27 +4,42 @@
 @module /utils/verticeGeoms
 */
 
-export default (feature) => {
+/**
+@function verticeGeoms
+
+@description
+Returns a geometry with the vertices of the feature geometry. A Point returns a Point, every other geometry returns a MultiPoint.
+
+The vertices are selected by the geometry type:
+- A MultiPoint or LineString returns all its coordinates.
+- A MultiLineString returns the vertices of all its lines.
+- A Polygon returns the vertices of its exterior and interior rings.
+- A MultiPolygon returns the vertices of all rings of all its polygons.
+
+@param {ol.Feature} feature An Openlayers feature.
+@returns {ol.geom.Point|ol.geom.MultiPoint} The vertices geometry.
+*/
+export default function verticeGeoms(feature) {
   const geometry = feature.getGeometry();
 
-  if (geometry.getType() === 'Point')
-    return new ol.geom.Point(geometry.getCoordinates());
+  const coords = geometry.getCoordinates();
 
-  let coords = geometry.getCoordinates();
+  switch (geometry.getType()) {
+    case 'Point':
+      return new ol.geom.Point(coords);
 
-  const depth = getDepth(coords);
+    // Coordinates are already an array of vertices.
+    case 'MultiPoint':
+    case 'LineString':
+      return new ol.geom.MultiPoint(coords);
 
-  // Line string will have a depth of 2.
-  if (depth === 2) {
-    return new ol.geom.MultiPoint(coords);
+    // Flatten the lines or rings into a single array of vertices.
+    case 'MultiLineString':
+    case 'Polygon':
+      return new ol.geom.MultiPoint(coords.flat(1));
+
+    // Flatten the rings of all polygons into a single array of vertices.
+    case 'MultiPolygon':
+      return new ol.geom.MultiPoint(coords.flat(2));
   }
-
-  // Coords with a depth of more than 3 indicate multi geoms.
-  coords = depth > 3 ? coords.flat(2) : coords[0];
-
-  return new ol.geom.MultiPoint(coords);
-};
-
-function getDepth(arr) {
-  return Array.isArray(arr) ? 1 + Math.max(0, ...arr.map(getDepth)) : 0;
 }

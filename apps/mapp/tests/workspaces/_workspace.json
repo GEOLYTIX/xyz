@@ -1,0 +1,27 @@
+{
+  "dbs": "DEVDB",
+  "locale": {
+    "layers": {
+      "osm": {
+        "template": "osm"
+      }
+    }
+  },
+  "templates": {
+    "osm": {
+      "src": "file:packages/testhost/workspaces/templates/osm.json"
+    },
+    "smoke": {
+      "src": "file:apps/mapp/tests/workspaces/locales/smoke.json"
+    },
+    "grocery": {
+      "src": "file:apps/mapp/tests/workspaces/locales/grocery.json"
+    },
+    "countries": {
+      "src": "file:apps/mapp/tests/workspaces/locales/countries.json"
+    },
+    "scratch": {
+      "src": "file:apps/mapp/tests/workspaces/locales/scratch.json"
+    }
+  }
+}

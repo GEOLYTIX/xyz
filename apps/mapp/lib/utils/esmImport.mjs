@@ -25,7 +25,7 @@ The promise resolves to an error if the module can not be imported. The failed p
 @returns {Promise<Module|Error>} The promise resolves to the imported module or an error if the import failed.
 */
 export default async function esmImport(module) {
-  promises[module] ??= import(`https://esm.sh/${module}`)
+  promises[module] ??= import(/* @vite-ignore */ `https://esm.sh/${module}`)
     .then((esm) => {
       console.log(`${module} imported from esm.sh`);
       return esm;

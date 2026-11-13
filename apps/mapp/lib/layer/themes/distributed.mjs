@@ -28,13 +28,16 @@ export default function distributed(theme, feature) {
   theme.boxes ??= [];
   theme.field ??= 'id';
 
-  // Get feature identifier for theme.
-  const val = String(feature.properties[theme.field]);
+  // Get the feature field value for the theme.
+  const value = feature.properties[theme.field];
 
-  // Assign theme.style if val is falsy.
-  if (!val) {
+  // Do not style a feature without a value for the theme field.
+  if (value === undefined || value === null || value === '') {
     return;
   }
+
+  // The lookup key for the feature value.
+  const val = String(value);
 
   // The feature field property value already has a style assigned.
   if (theme.lookup[val]) {
@@ -103,8 +106,10 @@ export default function distributed(theme, feature) {
 
   // Assign the style to the lookup object for the feature field property value.
   theme.lookup[val] = theme.categories[bbox.themeIdx];
-  theme.categories[theme.index].values ??= [];
-  theme.categories[theme.index].values.push(val);
+
+  // The value is recorded on the assigned category, not the index in turn.
+  theme.categories[bbox.themeIdx].values ??= [];
+  theme.categories[bbox.themeIdx].values.push(val);
 
   feature.style = theme.lookup[val].style;
 }

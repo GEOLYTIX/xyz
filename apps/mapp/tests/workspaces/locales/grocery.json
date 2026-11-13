@@ -1,0 +1,184 @@
+{
+  "name": "Grocery",
+  "view": {
+    "lat": 51.48564,
+    "lng": -0.09938,
+    "z": 13
+  },
+  "layers": {
+    "retail_points": {
+      "name": "Grocery",
+      "display": true,
+      "format": "wkt",
+      "table": "geodata.uk_glx_open_retail_points",
+      "geom": "geom_p_4326",
+      "srid": "4326",
+      "qID": "id",
+      "cluster": {
+        "distance": 15,
+        "label": "store_name"
+      },
+      "params": {
+        "viewport": true
+      },
+      "filter": {
+        "exclude": ["add_one", "add_two"]
+      },
+      "infoj": [
+        {
+          "type": "key"
+        },
+        {
+          "field": "pin",
+          "fieldfx": "ARRAY[ST_X(geom_p_4326),ST_Y(geom_p_4326)]",
+          "type": "pin"
+        },
+        {
+          "title": "Retailer",
+          "field": "retailer",
+          "filter": {
+            "type": "in",
+            "distinct": true
+          },
+          "inline": true
+        },
+        {
+          "title": "Fascia",
+          "field": "fascia",
+          "filter": {
+            "type": "in",
+            "distinct": true
+          },
+          "inline": true
+        },
+        {
+          "title": "Name",
+          "field": "store_name",
+          "inline": true
+        },
+        {
+          "field": "add_one",
+          "inline": true,
+          "skipNullValue": true
+        },
+        {
+          "field": "add_two",
+          "inline": true,
+          "skipNullValue": true
+        },
+        {
+          "title": "Postcode",
+          "field": "postcode",
+          "inline": true,
+          "skipNullValue": true
+        },
+        {
+          "title": "Town",
+          "field": "town",
+          "inline": true,
+          "skipNullValue": true
+        },
+        {
+          "title": "Size Band",
+          "field": "size_band",
+          "inline": true
+        },
+        {
+          "title": "Open Date",
+          "field": "open_date",
+          "type": "date",
+          "skipNullValue": true,
+          "filter": {
+            "type": "date"
+          },
+          "inline": true
+        },
+        {
+          "title": "PQI",
+          "field": "pqi",
+          "inline": true
+        }
+      ],
+      "style": {
+        "icon_scaling": {
+          "icon": true,
+          "clusterScale": true
+        },
+        "label": {
+          "title": "Cluster Count",
+          "declutter": true,
+          "display": true,
+          "count": true,
+          "strokeColor": "#ffffff",
+          "strokeWidth": 3,
+          "minZoom": 6,
+          "maxZoom": 18
+        },
+        "default": {
+          "icon": {
+            "type": "target",
+            "fillColor": "#13336B"
+          }
+        },
+        "cluster": {
+          "icon": {
+            "type": "target",
+            "fillColor": "#E6FFFF",
+            "layers": {
+              "1": "#13336B",
+              "0.85": "#E6FFFF"
+            }
+          }
+        },
+        "highlight": {
+          "scale": 1.3
+        },
+        "hover": {
+          "field": "store_name",
+          "display": true
+        },
+        "themes": {
+          "retailer": {
+            "title": "Retailer",
+            "type": "categorized",
+            "field": "retailer",
+            "distribution": "count",
+            "cat": {
+              "Aldi": {
+                "icon": {
+                  "type": "dot",
+                  "fillColor": "#00005F"
+                }
+              },
+              "Lidl": {
+                "icon": {
+                  "type": "dot",
+                  "fillColor": "#FFF000"
+                }
+              },
+              "Sainsburys": {
+                "label": "Sainsbury's",
+                "icon": {
+                  "type": "dot",
+                  "fillColor": "#F06C00"
+                }
+              },
+              "Tesco": {
+                "icon": {
+                  "type": "dot",
+                  "fillColor": "#00539F"
+                }
+              },
+              "Waitrose": {
+                "icon": {
+                  "type": "dot",
+                  "fillColor": "#7F9C3B"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

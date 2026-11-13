@@ -42,12 +42,15 @@ jobs:
       - name: Install dependencies
         if: env.SKIP_SONAR != 'true'
         run: pnpm install --ignore-scripts
+      - name: Install Chromium for the MAPP browser tests
+        if: env.SKIP_SONAR != 'true'
+        run: pnpm --filter=@geolytix/mapp exec playwright install --with-deps chromium
       - name: Test & Coverage
         if: env.SKIP_SONAR != 'true'
-        run: pnpm test:xyz:coverage
+        run: pnpm test:xyz:coverage && pnpm test:mapp:coverage
       - name: Verify coverage report
         if: env.SKIP_SONAR != 'true'
-        run: test -s coverage/lcov.info
+        run: test -s coverage/lcov.info && test -s apps/mapp/coverage/lcov.info
       - name: SonarQube Scan
         if: env.SKIP_SONAR != 'true'
         uses: SonarSource/sonarqube-scan-action@4d1dc0c91ee400dcf8a6dddf2f705ac36542e304 # v8.4.0

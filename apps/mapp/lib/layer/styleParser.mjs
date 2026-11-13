@@ -381,6 +381,20 @@ function parseTheme(theme, layer) {
     delete theme.cat_arr;
   }
 
+  // A graduated theme without categories cannot map a feature value to a style.
+  // Warn and invalidate the theme by removing its type, so featureStyle and the
+  // legend ignore it instead of throwing for every feature.
+  if (theme.type === 'graduated' && !theme.categories?.length) {
+    console.warn(
+      `Layer: ${layer.key}; Graduated theme without categories ignored.`,
+    );
+
+    delete theme.type;
+    delete theme.distribution;
+
+    return;
+  }
+
   graduatedTheme(theme);
 
   theme.categories?.forEach((cat) => {
