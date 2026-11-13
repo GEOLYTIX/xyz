@@ -96,8 +96,8 @@ describe('saml flow:', async () => {
       const xml = res._getData().replace(/\s/g, '');
 
       expect(xml).toContain('use="signing"');
-      expect(xml).toContain(pemBody(keys.sp.publicKey));
-      expect(xml).not.toContain(pemBody(keys.idp.publicKey));
+      expect(xml).toContain(pemBody(keys.sp.certificate));
+      expect(xml).not.toContain(pemBody(keys.idp.certificate));
     });
   });
 
@@ -338,6 +338,20 @@ describe('saml flow:', async () => {
       expect(res.getHeader('Set-Cookie')).toMatch(/^TEST_APP=null; Max-Age=0/);
     });
 
+    it('does not answer a LogoutRequest with an unsigned RelayState added to the query', async () => {
+      const url = `${logoutRequestUrl({
+        callback: '/app/saml/logout/callback',
+        privateKey: keys.idp.privateKey,
+      })}&RelayState=${encodeURIComponent('https://evil.example')}`;
+
+      const { req, res } = createMocks({ query: queryOf(url), url });
+
+      await saml(req, res);
+
+      expect(res.statusCode).toBe(302);
+      expect(res.getHeader('location')).toBe('/app');
+    });
+
     it('does not answer a LogoutRequest signed by another key', async () => {
       const url = logoutRequestUrl({
         callback: '/app/saml/logout/callback',
@@ -412,9 +426,9 @@ describe('createSamlConfig:', async () => {
   it('reads the certificates from the cert directory', () => {
     const config = createSamlConfig(samlEnv, keys.certDir);
 
-    expect(config.idpCert).toBe(keys.idp.publicKey);
+    expect(config.idpCert).toBe(keys.idp.certificate);
     expect(config.privateKey).toBe(keys.sp.privateKey);
-    expect(config.publicCert).toBe(keys.sp.publicKey);
+    expect(config.publicCert).toBe(keys.sp.certificate);
   });
 
   it('checks assertion timestamps by default', () => {

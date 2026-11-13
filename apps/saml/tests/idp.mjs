@@ -3,9 +3,14 @@ Test identity provider for the SAML flow tests.
 
 The key pairs are generated for each test run and written to a temporary directory. No key material is committed.
 
-node-saml accepts a PEM public key as idpCert, so no X.509 certificate is required.
+node-saml parses the SP publicCert as an X.509 certificate for the metadata. Node can verify but not create a certificate, so a minimal self-signed certificate is DER encoded here.
 */
-import { generateKeyPairSync, sign } from 'node:crypto';
+import {
+  createPublicKey,
+  generateKeyPairSync,
+  sign,
+  X509Certificate,
+} from 'node:crypto';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -27,17 +32,105 @@ function keyPair() {
 /**
 Creates IdP and SP key pairs plus an unrelated attacker key pair.
 
-The IdP public key is written as idp.crt and the SP key pair as sp.pem and sp.crt, matching SAML_IDP_CRT=idp and SAML_SP_CRT=sp.
+The IdP certificate is written as idp.crt and the SP key pair as sp.pem and sp.crt, matching SAML_IDP_CRT=idp and SAML_SP_CRT=sp.
 */
 export function createKeys() {
   const keys = { attacker: keyPair(), idp: keyPair(), sp: keyPair() };
 
+  keys.idp.certificate = selfSignedCertificate(keys.idp, 'xyz-saml-test-idp');
+  keys.sp.certificate = selfSignedCertificate(keys.sp, 'xyz-saml-test-sp');
+
   const certDir = mkdtempSync(join(tmpdir(), 'xyz-saml-'));
-  writeFileSync(join(certDir, 'idp.crt'), keys.idp.publicKey);
+  writeFileSync(join(certDir, 'idp.crt'), keys.idp.certificate);
   writeFileSync(join(certDir, 'sp.pem'), keys.sp.privateKey);
-  writeFileSync(join(certDir, 'sp.crt'), keys.sp.publicKey);
+  writeFileSync(join(certDir, 'sp.crt'), keys.sp.certificate);
 
   return { ...keys, certDir };
+}
+
+function der(tag, ...content) {
+  const body = Buffer.concat(content);
+  let length;
+
+  if (body.length < 0x80) {
+    length = Buffer.from([body.length]);
+  } else {
+    const bytes = [];
+    for (let n = body.length; n > 0; n >>= 8) bytes.unshift(n & 0xff);
+    length = Buffer.from([0x80 | bytes.length, ...bytes]);
+  }
+
+  return Buffer.concat([Buffer.from([tag]), length, body]);
+}
+
+const SEQUENCE = 0x30;
+
+// sha256WithRSAEncryption 1.2.840.113549.1.1.11 with NULL parameters.
+const SHA256_WITH_RSA = der(
+  SEQUENCE,
+  Buffer.from('06092a864886f70d01010b', 'hex'),
+  Buffer.from('0500', 'hex'),
+);
+
+function name(commonName) {
+  // SEQUENCE { SET { SEQUENCE { commonName 2.5.4.3, UTF8String } } }
+  return der(
+    SEQUENCE,
+    der(
+      0x31,
+      der(
+        SEQUENCE,
+        Buffer.from('0603550403', 'hex'),
+        der(0x0c, Buffer.from(commonName)),
+      ),
+    ),
+  );
+}
+
+function generalizedTime(date) {
+  const time = date.toISOString().replace(/[-:T]/g, '').slice(0, 14);
+  return der(0x18, Buffer.from(`${time}Z`));
+}
+
+/**
+Returns a PEM X.509 v3 certificate for the key pair, signed with its own private key.
+*/
+function selfSignedCertificate({ privateKey, publicKey }, commonName) {
+  const now = Date.now();
+
+  const tbsCertificate = der(
+    SEQUENCE,
+    der(0xa0, der(0x02, Buffer.from([2]))),
+    der(0x02, Buffer.from([1])),
+    SHA256_WITH_RSA,
+    name(commonName),
+    der(
+      SEQUENCE,
+      generalizedTime(new Date(now - 60 * 60 * 1000)),
+      generalizedTime(new Date(now + 24 * 60 * 60 * 1000)),
+    ),
+    name(commonName),
+    createPublicKey(publicKey).export({ format: 'der', type: 'spki' }),
+  );
+
+  const signature = sign('sha256', tbsCertificate, privateKey);
+
+  const certificate = der(
+    SEQUENCE,
+    tbsCertificate,
+    SHA256_WITH_RSA,
+    der(0x03, Buffer.from([0]), signature),
+  );
+
+  const pem = `-----BEGIN CERTIFICATE-----\n${certificate
+    .toString('base64')
+    .match(/.{1,64}/g)
+    .join('\n')}\n-----END CERTIFICATE-----\n`;
+
+  // Throws for a malformed certificate.
+  new X509Certificate(pem);
+
+  return pem;
 }
 
 function pemBody(pem) {

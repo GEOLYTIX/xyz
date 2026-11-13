@@ -185,7 +185,9 @@ The IdP returns to the logout callback with either a LogoutResponse to a logout 
 
 The user cookie is cleared in either case.
 
-A LogoutRequest is answered with a LogoutResponse redirect to the IdP once its signature is validated. A redirect binding LogoutRequest must be signed. node-saml accepts a redirect binding message without a Signature parameter.
+A LogoutRequest is answered with a LogoutResponse redirect to the IdP once its signature is validated.
+
+A redirect binding LogoutRequest is validated from the raw query string. node-saml rejects a query string without a Signature parameter and returns the RelayState covered by the signature. A RelayState from the parsed req.query could hold a parameter the signature does not cover.
 
 Any other request is redirected to the base directory.
 
@@ -198,19 +200,18 @@ async function logoutCallback(req, res, strategy) {
 
   try {
     let result;
+    let relayState;
 
     if (req.method === 'POST' && req.body?.SAMLRequest) {
       result = await strategy.validatePostRequestAsync(req.body);
-    } else if (req.query?.SAMLRequest && req.query.Signature) {
-      result = await strategy.validateRedirectAsync(
-        req.query,
-        req.url.split('?')[1] || '',
-      );
+      relayState = req.body.RelayState;
+    } else if (req.query?.SAMLRequest) {
+      const originalQuery = req.url.split('?')[1] || '';
+      result = await strategy.validateRedirectAsync(originalQuery);
+      relayState = result.relayState;
     }
 
     if (!result?.profile) return redirectHome(res);
-
-    const relayState = req.body?.RelayState ?? req.query?.RelayState;
 
     const url = await strategy.getLogoutResponseUrlAsync(
       result.profile,

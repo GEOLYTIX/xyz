@@ -84,7 +84,9 @@ export default async function redirect(req, res, user) {
   const redirect = user.redirect || req.cookies?.[`${xyzEnv.TITLE}_redirect`];
 
   // The lookup flag and redirect target are instructions for this method and must not be signed into the user token.
-  const { lookup: _lookup, redirect: _redirect, ...claims } = user;
+  const claims = { ...user };
+  delete claims.lookup;
+  delete claims.redirect;
 
   let token;
   //If the user is granted from external providers,
