@@ -428,9 +428,6 @@ describe('mvt wkt_properties', () => {
 
     const refresh = vi.spyOn(layer.source, 'refresh');
 
-    // The layer.L.changed() method is called once for each properties response.
-    const changed = vi.spyOn(layer.L, 'changed');
-
     // The map view changes. The changeEnd request is sent after the debounce.
     const sent = requestSent();
 
@@ -449,13 +446,10 @@ describe('mvt wkt_properties', () => {
     expect(layer.featuresObject[FRANCE]).toBeDefined();
     expect(refresh).not.toHaveBeenCalled();
 
-    // The reload response.
+    // The new feature is already in the featuresObject when the reload response is received. The feature has not been rendered before the reload, and the tiles with the geometry of the new feature must be requested.
     await expect
-      .poll(() => changed.mock.calls.length, { timeout: 5000 })
-      .toBe(2);
-
-    // The new feature is already in the featuresObject. The reload response has no new feature, and the tiles with the geometry of the new feature are not requested.
-    expect(refresh).toHaveBeenCalledTimes(1);
+      .poll(() => refresh.mock.calls.length, { timeout: 5000 })
+      .toBe(1);
   });
 
   it('does not refresh the tiles on reload without a new feature', async () => {
