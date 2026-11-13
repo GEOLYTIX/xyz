@@ -68,6 +68,10 @@ Workspaces use the `DEVDB` connection and the devdb seed tables. Add new seed fi
 
 The test suites of the libraries keep their workspaces next to the tests, eg. [apps/mapp/tests/workspaces](../../apps/mapp/tests/workspaces/).
 
+## Source modules
+
+The XYZ views, eg. the default view at `/view`, load the built bundles `public/js/lib/mapp.js` and `ui.js` and the stylesheets `public/css/mapp.css` and `ui.css`. The testhost redirects these urls to the MAPP and MAPP.UI source modules and stylesheets, which it serves at `/mapp/lib`, `/mapp/css`, `/ui/lib` and `/ui/css`. The views run the current source without a build.
+
 ## Vector tiles
 
 The devdb PostGIS is compiled without protobuf-c, so `ST_AsMVT` and `ST_AsMVTGeom` raise an error. The testhost replaces the core `mvt` query template through the `CUSTOM_TEMPLATES` with the [testhost mvt template](templates/mvt.js). The template has the layer, fields and filter of the core template and returns the features with their GeoJSON geometry in tile pixel coordinates. The [mvtEncode](mvtEncode.js) middleware encodes the rows with [vt-pbf](https://github.com/mapbox/vt-pbf) as vector tile.

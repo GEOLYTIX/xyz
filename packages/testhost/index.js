@@ -38,6 +38,16 @@ export const DEFAULT_WORKSPACE = fileURLToPath(
   new URL('./workspaces/testview.json', import.meta.url),
 );
 
+/**
+The built bundles and stylesheets of the XYZ views with the source modules served by the testhost.
+*/
+export const SOURCE_MODULES = {
+  '/public/js/lib/mapp.js': '/mapp/lib/mapp.mjs',
+  '/public/js/lib/ui.js': '/ui/lib/ui.mjs',
+  '/public/css/mapp.css': '/mapp/css/_mapp.css',
+  '/public/css/ui.css': '/ui/css/_ui.css',
+};
+
 let started = false;
 
 /**
@@ -135,6 +145,25 @@ export async function startHost({
     express.static(
       fileURLToPath(new URL('../../apps/mapp/css', import.meta.url)),
     ),
+  );
+
+  app.use(
+    '/ui/lib',
+    express.static(
+      fileURLToPath(new URL('../../apps/ui/lib', import.meta.url)),
+    ),
+  );
+
+  app.use(
+    '/ui/css',
+    express.static(
+      fileURLToPath(new URL('../../apps/ui/css', import.meta.url)),
+    ),
+  );
+
+  // The XYZ views, eg. the default view at /view, load the built library bundles and stylesheets. The testhost redirects the bundle urls to the source modules, so the views run the current source without a build.
+  app.get(Object.keys(SOURCE_MODULES), (req, res) =>
+    res.redirect(SOURCE_MODULES[req.path]),
   );
 
   // The testview requires the locale and layers of the default workspace.
