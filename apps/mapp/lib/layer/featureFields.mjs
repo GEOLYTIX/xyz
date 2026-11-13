@@ -74,6 +74,9 @@ export async function process(layer) {
     // Call the corresponding distribution function.
     await distribution[theme.distribution](layer);
 
+    // The Openlayers layer may have been removed while the distribution was processed.
+    if (!layer.L) return;
+
     processedThemes.set(layer, theme);
 
     layer.L.changed();

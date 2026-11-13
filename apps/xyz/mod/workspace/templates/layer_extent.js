@@ -1,21 +1,22 @@
 /**
 ### /workspace/templates/layer_extent
 
-The layer extent query method returns a bounding box that describes the extent of a range of geometries. 
+The layer extent query method returns a bounding box that describes the extent of a range of geometries.
 
-a body with ids can be supplied optionally to limit the geometries considered. 
+A body with ids can be supplied optionally to limit the geometries considered. The ids are substituted as a query param, not written into the SQL string.
 
 @module /workspace/templates/layer_extent
 */
 export default (_) => {
   let condition = 'true';
 
-  //use ids where supplied
+  // Use ids where supplied.
   if (Array.isArray(_.body?.ids)) {
-    //Remove ids with invalid characters
-    const ids = _.body.ids.filter((id) => /^[A-Za-z0-9,"'._-\s]*$/.test(id));
+    // The ids are passed as a query param, so the id values are never part of the SQL string.
+    // The id column isn't cast, so an index on the column can be used. The database casts the param to an array of the column type.
+    _.body_ids = _.body.ids.map((id) => String(id));
 
-    condition = `\${qID} IN ('${ids.join("','")}')`;
+    condition = `\${qID} = ANY(%{body_ids})`;
   }
 
   return `

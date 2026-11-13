@@ -317,6 +317,33 @@ describe('Query: layer queries', () => {
       400,
     ],
     [
+      'a viewport with SQL in a bound',
+      {
+        layer: 'locations',
+        viewport: '(select 1 from pg_sleep(10))::int,45,5,55,4326',
+      },
+      400,
+    ],
+    [
+      'a viewport with SQL in the srid',
+      { layer: 'locations', viewport: '-5,45,5,55,4326) --' },
+      400,
+    ],
+    [
+      'a viewport with too few bounds',
+      { layer: 'locations', viewport: '-5,45,5' },
+      400,
+    ],
+    [
+      'a viewport with a geom param which is not whitelisted',
+      {
+        layer: 'locations',
+        viewport: '-5,45,5,55,4326',
+        geom: '(select geom from example.users limit 1)',
+      },
+      400,
+    ],
+    [
       'a field which is not in the layer',
       { layer: 'locations', fields: 'password' },
       400,
@@ -489,5 +516,23 @@ describe('Query: nonblocking queries', () => {
       status: 503,
       data: 'Failed to connect to database.',
     });
+  });
+});
+
+describe('Query: layer_extent', () => {
+  it('compares the ids param with the integer id column', async () => {
+    // Hyde Park [2] and Unnamed [3] in London. The client sends the ids as strings.
+    const res = await request(
+      {
+        template: 'layer_extent',
+        layer: 'features',
+        table: 'example.features',
+        proj: 3857,
+      },
+      { ids: ['2', '3'] },
+    );
+
+    expect(res.status).toBe(200);
+    expect(res.data).toEqual([-19000, 6711000, -15000, 6712000]);
   });
 });

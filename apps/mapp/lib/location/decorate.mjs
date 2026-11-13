@@ -370,6 +370,8 @@ async function flyTo(maxZoom) {
 
 @description
 The location method removes an OL layer from the locations mapview and Layers array.
+
+A pending reload request of the entry is cancelled and the loading of the entry is resolved before the OL layer is deleted. The response of a cancelled request is discarded by the layer.reload() method and will neither set the layer source nor end the loading of the removed layer.
 */
 function removeLayer(entry) {
   if (!entry.L) return;
@@ -377,6 +379,14 @@ function removeLayer(entry) {
   this.Layers = this.Layers.filter(
     (layer) => layer.L.ol_uid !== entry.L.ol_uid,
   );
+
+  // Cancel a pending reload of the entry layer.
+  clearTimeout(entry.timeout);
+  delete entry.request;
+
+  // Resolve the loading of the entry layer for pending source loaders to complete.
+  entry.loading?.resolve?.();
+  delete entry.loading;
 
   this.layer.mapview.Map.removeLayer(entry.L);
   delete entry.L;
