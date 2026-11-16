@@ -234,7 +234,7 @@ async function userExpiry(user, request) {
   if (!xyzEnv.APPROVAL_EXPIRY) return false;
 
   // Check whether user is expired.
-  if (user.expires_on !== null && user.expires_on < new Date() / 1000) {
+  if (user.expires_on !== null && user.expires_on < Date.now() / 1000) {
     if (user.approved) {
       // Remove approval of expired user.
       await acl(

@@ -79,6 +79,8 @@ The coverage runs also write an `lcov.info` for the SonarQube analysis in [CI](#
 
 The MAPP coverage has thresholds in [apps/mapp/vitest.config.mjs](apps/mapp/vitest.config.mjs). A coverage run fails if the coverage drops below the thresholds. Raise the thresholds when new tests increase the coverage.
 
+The [uhtml](apps/mapp/lib/utils/uhtml.mjs) module is a minified third party library. The module is excluded from the MAPP coverage in the Vitest config, and from the SonarQube coverage with the `sonar.coverage.exclusions` in the [sonar-project.properties](sonar-project.properties).
+
 ### Debugging
 
 **MAPP library tests** can run in a visible Chromium window:

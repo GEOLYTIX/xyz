@@ -213,7 +213,7 @@ function checkDataview(_this) {
     if (_this.chart) _this.dataview = 'chartjs';
 
     // Columns in entry indicate missing table config.
-    if (typeof _this.columns !== 'undefined') {
+    if (_this.columns !== undefined) {
       console.warn(
         'Table dataviews should be configured inside a tables object',
       );

@@ -125,7 +125,7 @@ function debounceRequest(req, res) {
   if (
     Object.hasOwn(previousAddress, req.params.remote_address) &&
     // within 5 seconds or less.
-    new Date() - previousAddress[req.params.remote_address] < 5000
+    Date.now() - previousAddress[req.params.remote_address] < 5000
   ) {
     res
       .status(429)

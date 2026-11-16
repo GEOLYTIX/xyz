@@ -16,7 +16,7 @@ The method creates a popup element that is displayed on the mapview at a specifi
 @param {mapview} mapview The mapview object to which the interaction will be added.
 */
 export default function Popup(params, mapview = this) {
-  if (typeof params === 'undefined') {
+  if (params === undefined) {
     // Returns undefined / falsy if popup.node has been removed.
     return popup.node?.parentNode;
   }

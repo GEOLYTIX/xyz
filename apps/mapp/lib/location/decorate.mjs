@@ -138,7 +138,7 @@ null will be returned if the user cancels the confirm dialog.
 async function confirmUpdate(callback) {
   // Check other infoj entries for unsaved changed.
   const unsavedChanges = this.infoj.some(
-    (entry) => typeof entry.newValue !== 'undefined',
+    (entry) => entry.newValue !== undefined,
   );
 
   if (unsavedChanges) {
@@ -215,7 +215,7 @@ async function updateLocation(callback) {
   this.infoj
     .filter((entry) => entry.jsonb_key)
     .filter((entry) => entry.jsonb_field)
-    .filter((entry) => typeof entry.newValue !== 'undefined')
+    .filter((entry) => entry.newValue !== undefined)
     .forEach((entry) => {
       entry.newValue = {
         jsonb: {
@@ -230,7 +230,7 @@ async function updateLocation(callback) {
   this.infoj
     .filter((entry) => entry.json_field)
     .filter((entry) => entry.json_key)
-    .filter((entry) => typeof entry.newValue !== 'undefined')
+    .filter((entry) => entry.newValue !== undefined)
     .forEach((entry) => {
       const fieldEntry = this.infoj.find(
         (_entry) => _entry.field === entry.json_field,
@@ -247,7 +247,7 @@ async function updateLocation(callback) {
   // A newValue set while the request is pending must not be marked as saved.
   // It is sent by the next update, which waits for this update to complete.
   const updated = this.infoj
-    .filter((entry) => typeof entry.newValue !== 'undefined')
+    .filter((entry) => entry.newValue !== undefined)
     .map((entry) => [entry, entry.newValue]);
 
   // Shortcircuit if no update is required.
@@ -368,7 +368,7 @@ async function syncFields(fields) {
   }
 
   this.infoj
-    .filter((entry) => typeof response[entry.field] !== 'undefined')
+    .filter((entry) => response[entry.field] !== undefined)
     .forEach((entry) => {
       entry.value = response[entry.field];
     });
