@@ -8,6 +8,16 @@ const idle = {
   idle: 600,
 };
 
+// The window events which are regarded as user activity.
+const ACTIVITY_EVENTS = [
+  'load',
+  'mousemove',
+  'mousedown',
+  'touchstart',
+  'click',
+  'keydown',
+];
+
 /**
 @function idleLogout
 
@@ -38,13 +48,13 @@ export default function idleLogout(params) {
 
   if (idle.idle === 0) return;
 
-  // Define window events that reset the lock timeout.
-  window.onload = resetTimer;
-  window.onmousemove = resetTimer;
-  window.onmousedown = resetTimer;
-  window.ontouchstart = resetTimer;
-  window.onclick = resetTimer;
-  window.onkeypress = resetTimer;
+  // Add listeners for the window events that reset the lock timeout.
+  // A listener does not replace the window event handler properties, eg. a window.onkeydown assigned by a plugin.
+  // Adding the same listener again is ignored if the method is called more than once.
+  for (const type of ACTIVITY_EVENTS) {
+    window.addEventListener(type, resetTimer);
+  }
+
   resetTimer();
   renewToken();
 }

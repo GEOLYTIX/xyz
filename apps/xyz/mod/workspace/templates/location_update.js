@@ -13,7 +13,7 @@ The values of the POST body are substituted as query params. A value is never wr
 /**
 Field names [body keys] must be SQL identifiers.
 */
-const FIELD = /^[A-Za-z_][A-Za-z0-9_]*$/;
+const FIELD = /^[A-Za-z_]\w*$/;
 
 export default (_) => {
   const keys = Object.keys(_.body);
