@@ -47,12 +47,10 @@ describe('plugins/layer_order', () => {
     expect(() => layer_order(['a'], {})).not.toThrow();
   });
 
-  // https://github.com/GEOLYTIX/xyz/issues/3083: layers are added in the order of
-  // the locale.layers array, each with an increasing zIndex, so a layer later in
-  // the array is drawn on top. A key which is not in the layer_order returns -1
-  // from indexOf, which sorts it to the front of the array, so it is drawn at the
-  // bottom. The module documents that unreferenced layers are on top.
-  it.fails('sorts the layers without a plugin key on top', () => {
+  // https://github.com/GEOLYTIX/xyz/issues/3083: an unreferenced key returned -1
+  // from indexOf, which sorted the layer to the front of the array, so it was
+  // drawn at the bottom. Fixed by sorting unreferenced keys to the end.
+  it('sorts the layers without a plugin key on top', () => {
     const mv = mapview(['a', 'x', 'b']);
 
     layer_order(['a', 'b'], mv);
@@ -61,10 +59,10 @@ describe('plugins/layer_order', () => {
     expect(keys(mv)).toEqual(['a', 'b', 'x']);
   });
 
-  // https://github.com/GEOLYTIX/xyz/issues/3083: the guard optional chains the
-  // mapview and locale, but not the layers array, so the sort throws when a
-  // locale has no layers.
-  it.fails('does not throw when the locale has no layers', () => {
+  // https://github.com/GEOLYTIX/xyz/issues/3083: the guard optional chained the
+  // mapview and locale, but not the layers array, so the sort threw when a
+  // locale had no layers. Fixed by extending the optional chain to the layers.
+  it('does not throw when the locale has no layers', () => {
     expect(() => layer_order(['a'], { locale: {} })).not.toThrow();
   });
 });
