@@ -261,11 +261,7 @@ function entrySkip(entry) {
   if (entry.skipFalsyValue && !entry.value && !entry.edit) return true;
 
   // Skip entries which are undefined if flagged.
-  if (
-    entry.skipUndefinedValue &&
-    typeof entry.value === 'undefined' &&
-    !entry.edit
-  )
+  if (entry.skipUndefinedValue && entry.value === undefined && !entry.edit)
     return true;
 
   // Skip entries which are null if flagged.
