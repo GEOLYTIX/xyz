@@ -25,7 +25,11 @@ function closed(node) {
 }
 
 afterEach(() => {
-  for (const node of document.querySelectorAll('dialog')) node.remove();
+  // The close event calls the close method of the dialog, which disconnects the ResizeObserver of a non-modal dialog from its target and removes the dialog. The event is dispatched, because the close() method of a dialog element which is not open doesn't dispatch the event.
+  for (const node of document.querySelectorAll('dialog')) {
+    node.dispatchEvent(new Event('close'));
+  }
+
   document.body.replaceChildren();
 });
 
