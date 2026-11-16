@@ -8,10 +8,21 @@
   "packageManager": "pnpm@10.10.0",
   "scripts": {
     "build": "vite build && pnpm css",
-    "css": "vite build --config vite.css.config.mjs"
+    "css": "vite build --config vite.css.config.mjs",
+    "test": "vitest run && playwright test",
+    "test:modules": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:view": "playwright test"
   },
   "license": "MIT",
   "devDependencies": {
-    "vite": "catalog:"
+    "@geolytix/xyz-testhost": "workspace:*",
+    "@playwright/test": "catalog:",
+    "@vitest/browser-playwright": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "ol": "catalog:",
+    "playwright": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
   }
 }
