@@ -55,7 +55,7 @@ async function acl(q, arr) {
     client = await pool.connect();
 
     const { rows } = await client.query(
-      q.replace(/acl_table/g, acl_table).replace(/acl_schema/g, acl_schema),
+      q.replaceAll('acl_table', acl_table).replaceAll('acl_schema', acl_schema),
       arr,
     );
 

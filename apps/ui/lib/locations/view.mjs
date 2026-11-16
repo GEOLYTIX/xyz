@@ -103,7 +103,7 @@ export default function view(location) {
   */
   async function location_remove() {
     const changesUnsaved = location.infoj.some(
-      (entry) => typeof entry.newValue !== 'undefined',
+      (entry) => entry.newValue !== undefined,
     );
 
     if (changesUnsaved) {
@@ -283,7 +283,7 @@ function valChange(e) {
 
   // Hide upload button if no location entry has a newValue.
   location.view.querySelector('.btn-save').style.display = location.infoj.some(
-    (entry) => typeof entry.newValue !== 'undefined',
+    (entry) => entry.newValue !== undefined,
   )
     ? 'inline-block'
     : 'none';

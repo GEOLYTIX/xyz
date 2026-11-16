@@ -25,7 +25,7 @@ export default (_) => {
   const buckets = Number.parseInt(_.buckets) || 7;
 
   let bucketCases = '';
-  for (const i of Array(buckets).keys()) {
+  for (const i of new Array(buckets).keys()) {
     bucketCases += `WHEN ${_.field} < p2 + ${i + 1} * (p98 - p2) / ${buckets} THEN ${i + 1} \n`;
   }
 

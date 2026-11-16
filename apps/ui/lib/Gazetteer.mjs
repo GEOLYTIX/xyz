@@ -34,7 +34,7 @@ export default (gazetteer) => {
     if (!e.target.value.length) return;
 
     // Get possible coordinates from input.
-    const ll = e.target.value.split(',').map(parseFloat);
+    const ll = e.target.value.split(',').map(Number.parseFloat);
 
     // Check whether coordinates are valid float values.
     if (
