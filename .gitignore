@@ -32,6 +32,8 @@ apps/mapp/tests-package/verdaccio/htpasswd
 
 resources
 coverage
+test-results
+playwright-report
 
 docs/*
 

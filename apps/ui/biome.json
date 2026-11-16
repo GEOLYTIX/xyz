@@ -16,7 +16,14 @@
     }
   },
   "files": {
-    "includes": ["**", "!package.json", "!**/.vscode"]
+    "includes": [
+      "**",
+      "!package.json",
+      "!**/.vscode",
+      "!coverage",
+      "!test-results",
+      "!playwright-report"
+    ]
   },
   "formatter": {
     "attributePosition": "auto",
