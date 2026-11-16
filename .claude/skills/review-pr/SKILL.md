@@ -69,7 +69,7 @@ Each app has its own Vitest config, and which suite covers a touched file decide
 
 - **XYZ API** — `apps/xyz/mod/**`, plus its `utils` and `plugins`. Covered by Vitest under `apps/xyz/tests/**`. Run `pnpm test:xyz:coverage` and read the per-file table for the touched files.
 - **MAPP library** — `apps/mapp/lib/**`. Covered by Vitest browser mode under `apps/mapp/tests/**`, which mirrors the `lib` paths and runs in Chromium against the testhost. Run `pnpm test:mapp:coverage` and read the per-file table for the touched files. The run fails if the coverage drops below the thresholds in `apps/mapp/vitest.config.mjs`. A test marked `it.fails` records a known bug; a fix for that bug must remove the `.fails`.
-- **MAPP.UI library** — `apps/ui/lib/**`. Has no test suite yet, so there is no coverage figure to quote. Say that plainly rather than reporting a coverage gap.
+- **MAPP.UI library** — `apps/ui/lib/**`. Covered by Vitest browser mode module tests (`*.test.mjs`) and Playwright default view tests (`*.spec.mjs`) under `apps/ui/tests/**`. Run `pnpm test:ui` for both and `pnpm test:ui:coverage` for the per-file table from the module tests. The run fails if the coverage drops below the thresholds in `apps/ui/vitest.config.mjs`. Many ui modules have no tests yet, so quote the current percentage and name the test file a change belongs in. A test marked `it.fails` records a known bug; a fix for that bug must remove the `.fails`.
 
 Then judge the change:
 

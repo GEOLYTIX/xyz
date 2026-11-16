@@ -25,7 +25,7 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --ignore-scripts
 
-      - name: Install Chromium for the MAPP browser tests
+      - name: Install Chromium for the MAPP and MAPP.UI browser tests
         run: pnpm --filter=@geolytix/mapp exec playwright install --with-deps chromium
 
       - name: Run tests
