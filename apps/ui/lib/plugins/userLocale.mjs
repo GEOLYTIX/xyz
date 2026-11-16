@@ -21,9 +21,9 @@ export function userLocale(plugin, mapview) {
   // The btnColumn element only exists in the default mapp view.
   if (!btnColumn) return;
 
-  plugin = {};
+  const params = {};
 
-  const content = mapp.ui.elements.userLocale(plugin, mapview);
+  const content = mapp.ui.elements.userLocale(params, mapview);
 
   const dialog = {
     closeBtn: true,

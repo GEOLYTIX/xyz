@@ -76,7 +76,7 @@ export default function olStyle(style, feature) {
     }
 
     // Create label style if label text is not undefined.
-    if (typeof style.label?.text !== 'undefined') {
+    if (style.label?.text !== undefined) {
       const text = new ol.style.Text({
         fill: new ol.style.Fill({
           color: style.label.fillColor || '#000',

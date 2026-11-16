@@ -30,10 +30,12 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: ['lib/**/*.mjs'],
+      // The uhtml module is a minified third party library.
+      exclude: ['lib/utils/uhtml.mjs'],
       // The coverage floor. Raise the thresholds with new tests.
       thresholds: {
         statements: 65,
-        branches: 63,
+        branches: 66,
         functions: 64,
         lines: 65,
       },

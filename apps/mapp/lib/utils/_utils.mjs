@@ -44,7 +44,7 @@ import { dataURLtoBlob } from './dataURLtoBlob.mjs';
 import { alert, confirm } from './dialogs.mjs';
 import * as gazetteer from './gazetteer.mjs';
 import getCurrentPosition from './getCurrentPosition.mjs';
-import { default as hexa } from './hexa.mjs';
+import hexa from './hexa.mjs';
 import jsonParser from './jsonParser.mjs';
 import { keyvalue_dictionary } from './keyvalue_dictionary.mjs';
 import loadDictionary from './loadDictionary.mjs';
@@ -70,7 +70,7 @@ import textFile from './textFile.mjs';
 import * as userIndexedDB from './userIndexedDB.mjs';
 import * as userLocale from './userLocale.mjs';
 import { versionCheck } from './versionCheck.mjs';
-import { default as verticeGeoms } from './verticeGeoms.mjs';
+import verticeGeoms from './verticeGeoms.mjs';
 import { xhr } from './xhr.mjs';
 
 export default {
