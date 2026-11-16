@@ -79,7 +79,8 @@ export default function MVT(layer) {
         );
       }
 
-      wktPropertiesLoad(layer);
+      // The reload method does not wait for the properties response.
+      void wktPropertiesLoad(layer);
       return;
     }
 

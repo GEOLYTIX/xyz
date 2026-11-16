@@ -261,9 +261,9 @@ async function properties(layer, id) {
 /**
 Stops the debounced mapview changeEnd of the initial view and resolves once the properties requests of the initial view have settled.
 
-The changeEnd loads the properties without the reload flag. A load from the changeEnd after the layer.reload() would supersede the debounced reload request, and the tiles would not be refreshed.
+A load from the changeEnd after the layer.reload() would supersede the debounced reload request and check the pending reload in its place. The tests call the changeEnd load themselves where this order is tested.
 
-A properties request from the changeEnd may also be debounced or in flight when the test calls the layer.reload(). Its response would assign the properties before the response of the reload request, which then has no new feature and does not refresh the tiles. The final load supersedes a debounced request, and is sent after a request in flight, so no response of the initial view is pending once the load has resolved.
+A properties request from the changeEnd may also be debounced or in flight when the test calls the layer.reload(). Its response would assign the properties before the response of the reload request. The final load supersedes a debounced request, and is sent after a request in flight, so no response of the initial view is pending once the load has resolved.
 */
 async function stopChangeEnd(layer) {
   clearTimeout(layer.mapview.changeEndTimer);
@@ -389,7 +389,7 @@ describe('mvt wkt_properties', () => {
     expect(layer.featuresObject[FRANCE]).toBeDefined();
   });
 
-  // The layer.reload() is called for a feature which has not been rendered, eg. after a location has been created. The reload flag is an argument of one wktPropertiesLoad call. The two tests below fail, because a load from a mapview changeEnd, which has no reload flag, takes the place of the reload.
+  // The layer.reload() is called for a feature which has not been rendered, eg. after a location has been created. The reload is pending with the layer.reloadFeatureIds until a response has checked it. The two tests below cover a load from a mapview changeEnd which takes the place of the reload.
   it('refreshes the tiles if a changeEnd load supersedes the debounced reload request', async () => {
     const layer = await countries(undefined, { wkt_properties: true });
 
@@ -413,7 +413,7 @@ describe('mvt wkt_properties', () => {
     // The changeEnd response has assigned the properties of the new feature.
     expect(layer.featuresObject[FRANCE]).toBeDefined();
 
-    // The reload request was never sent. The tiles with the geometry of the new feature are not requested.
+    // The reload request was never sent. The changeEnd response has checked the pending reload and refreshed the tiles for the geometry of the new feature.
     expect(refresh).toHaveBeenCalledTimes(1);
   });
 
@@ -440,7 +440,7 @@ describe('mvt wkt_properties', () => {
 
     layer.reload();
 
-    // The changeEnd response assigns the properties of the new feature. The load has no reload flag and does not refresh the tiles.
+    // The changeEnd response assigns the properties of the new feature. The load was called before the reload and does not check the pending reload.
     await changeEndLoad;
 
     expect(layer.featuresObject[FRANCE]).toBeDefined();
