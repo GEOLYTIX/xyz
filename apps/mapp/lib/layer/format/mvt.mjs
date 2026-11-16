@@ -66,7 +66,7 @@ export default function MVT(layer) {
 
   The MVT tiles of a wkt_properties layer hold feature geometries and ID only. The tile source is not affected by a change of the layer filter, style, or params. Clearing the tile source would render the layer blank before the wktPropertiesLoad method has returned the feature properties for the current layer filter. The layer is instead rendered from the wktPropertiesLoad method which will clear and refresh the tile sources itself for a feature which has not been rendered before, eg. after a location geometry has been created.
 
-  The feature IDs of the layer.featuresObject are assigned as layer.reloadFeatureIds before the wktPropertiesLoad method is called. The reload is pending until the response of a wktPropertiesLoad call after the reload has been checked for a feature which is not in the layer.reloadFeatureIds. A layer without a featuresObject has not been rendered. The tile source requests the tile geometries itself and the reload is not pending.
+  The feature IDs of the layer.featuresObject are assigned as layer.reloadFeatureIds before the wktPropertiesLoad method is called. The reload is pending until the response of a wktPropertiesLoad call after the reload has been checked for a feature which is not in the layer.reloadFeatureIds. A layer without a featuresObject has not been rendered. The tile source requests the tile geometries itself and the reload is not pending. The tile sources may also be refreshed without a new feature if the mapview is changed while the reload is pending, see the wktPropertiesLoad method.
 
   Otherwise the source and featureSource [Openlayers VectorTile]{@link https://openlayers.org/en/latest/apidoc/module-ol_source_VectorTile.html} sources are cleared and refreshed.
   */
@@ -242,7 +242,9 @@ The layer.reload method assigns the layer.reloadFeatureIds. A pending reload is 
 
 The response of a failed request does not check the reload, which remains pending for the next response. A reload is no longer pending if the tile source is cleared for a layer which is not displayed or has no table for the current zoom level.
 
-The response which checks the reload may be for a different view than the view of the reload, eg. if the mapview is changed before the debounced reload request has been sent. The features which were not in the view of the reload are not in the layer.reloadFeatureIds and the tile sources are refreshed. A tile in both views may be cached without the geometry of a new feature, so the reload is not discarded on a change of the view.
+The response which checks the reload may be for a different view than the view of the reload, eg. if the mapview is changed before the debounced reload request has been sent. The features which were not in the view of the reload are not in the layer.reloadFeatureIds and are compared as new features.
+
+This is a tradeoff. The tile sources are cleared and refreshed although no feature has been created: The layer renders blank until the tiles have been requested a second time. The reload is not discarded on a change of the view, eg. by a comparison of the view extent, since a tile which is in both views would stay cached without the geometry of a new feature. A refresh which is not required is preferred over a feature which is not rendered.
 
 @param {layer} layer A decorated format:mvt mapp layer.
 @property {boolean} [layer.wkt_properties] A flag whether feature properties should be loaded independent from MVT geometries.
@@ -332,6 +334,7 @@ async function wktPropertiesLoad(layer) {
   delete layer.reloadFeatureIds;
 
   // Features which are no longer in the featuresObject are not rendered by the featureStyle method. Only a feature which has not been rendered before the reload requires its geometry to be requested.
+  // The response may be for a different view than the reload. A feature which was not in the view of the reload is compared as a new feature and the tiles are refreshed without need. The reload must not be discarded for a changed view, since a tile in both views may be cached without the geometry of a new feature.
   const geometry = Object.keys(layer.featuresObject).some(
     (id) => !reloadFeatureIds.has(id),
   );
