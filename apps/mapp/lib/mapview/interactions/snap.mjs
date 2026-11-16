@@ -38,15 +38,18 @@ export default function (mapview) {
      * Removes the snap interaction and related resources.
      */
     remove: () => {
-      if (mapview.interaction.layer.featureSource) {
+      // The tile layer and the tileloadend event are for the featureSource of the snap layer, which may not be the layer of the interaction.
+      const featureSource = mapview.interaction.snap.layer?.featureSource;
+
+      if (featureSource) {
         // Detach tile load event,
-        mapview.interaction.layer.featureSource.un('tileloadend', tileloadend);
+        featureSource.un('tileloadend', tileloadend);
 
         // Remove featureSource layer from mapview.Map,
         mapview.Map.removeLayer(mapview.interaction.snap.vectorTileLayer);
 
         // And clear featureSource.
-        mapview.interaction.layer.featureSource.clear();
+        featureSource.clear();
       }
 
       mapview.Map.removeInteraction(mapview.interaction.snap.interaction);

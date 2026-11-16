@@ -166,7 +166,7 @@ function finish(feature) {
 function getFeature() {
   return JSON.parse(
     this.interaction.format.writeFeature(this.interaction.Feature, {
-      dataProjection: 'EPSG:' + this.interaction.srid || this.srid,
+      dataProjection: `EPSG:${this.interaction.srid || this.srid}`,
       featureProjection: 'EPSG:' + this.srid,
     }),
   );
@@ -201,8 +201,8 @@ function deleteCondition(e, mapview) {
       ${mapp.dictionary.delete_vertex}`);
   }
 
-  // Only allow to delete vertex on polygon with more than 3.
-  if (params.geomType === 'Polygon' && params.coords[0].length > 3) {
+  // Only allow to delete vertex on polygon with more than 3. The ring is closed with the first coordinate.
+  if (params.geomType === 'Polygon' && params.coords[0].length > 4) {
     params.content.push(mapp.utils.html`<li
       onclick=${() => removeVertex(e, mapview)}>
       ${mapp.dictionary.delete_vertex}`);
