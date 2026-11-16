@@ -175,18 +175,18 @@ describe('ui/elements/dialog', () => {
 
     const params = dialog({ target, header: 'Title' });
 
-    const removeEventListener = vi.spyOn(window, 'removeEventListener');
-
     params.node.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
 
     window.dispatchEvent(new MouseEvent('mouseup'));
 
-    expect(removeEventListener).toHaveBeenCalledWith(
-      'mouseup',
-      expect.any(Function),
-    );
+    expect(params.node.style.cursor).toBe('grab');
 
-    removeEventListener.mockRestore();
+    // The drag end method assigns the cursor. A mouseup after the drag must not call the method again.
+    params.node.style.cursor = 'wait';
+
+    window.dispatchEvent(new MouseEvent('mouseup'));
+
+    expect(params.node.style.cursor).toBe('wait');
   });
 
   it('doesn’t drag a headerDrag dialog outside the header', () => {

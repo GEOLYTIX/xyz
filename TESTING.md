@@ -113,13 +113,13 @@ The extension finds the `vitest.config.mjs` of each app and lists the tests by c
 | Run with Coverage | Runs the tests with the coverage settings of the config. The editor highlights covered and uncovered lines, and the Test Coverage view lists the coverage per file. |
 The extension runs the MAPP library tests in Chromium. Debug Test attaches the debugger to the browser, so breakpoints in `apps/mapp/lib` modules pause in VS Code. Debug a single test file at a time.
 
-The MAPP coverage thresholds apply to coverage runs in the extension. A run with coverage for a single file reports a threshold error, which can be ignored.
+The MAPP and MAPP.UI coverage thresholds apply to coverage runs in the extension. A run with coverage for a single file reports a threshold error, which can be ignored.
 
 ### CI
 
-The [Unit Tests](.github/workflows/unit_tests.yml) workflow runs `pnpm test` for pushes and pull requests to the `main`, `major`, `minor` and `patch` branches.
+The [Unit Tests](.github/workflows/unit_tests.yml) workflow runs `pnpm test`, which includes the MAPP.UI module and default view tests, for pushes and pull requests to the `main`, `major`, `minor` and `patch` branches.
 
-The [Build](.github/workflows/build.yml) workflow runs the XYZ API and MAPP library coverage for the SonarQube analysis.
+The [Build](.github/workflows/build.yml) workflow runs the XYZ API, MAPP library and MAPP.UI library coverage for the SonarQube analysis. The coverage runs fail below the coverage thresholds.
 
 ## Writing tests
 
@@ -265,7 +265,7 @@ describe('ui/elements/chkbox', () => {
 });
 ```
 
-Remove the elements which a test appends to the document, eg. dialogs and toasts, so they don't affect the next test.
+Remove the elements which a test appends to the document, eg. dialogs and toasts, so they don't affect the next test. The setup restores all `vi.spyOn` mocks after every test.
 
 [tests/helpers.mjs](apps/ui/tests/helpers.mjs) exports the [MAPP test helpers](#mapp-library-tests) and provides helpers for tests with layers and locations. The tests use the grocery and scratch locales from the MAPP library tests:
 

@@ -195,6 +195,24 @@ describe('ui/locations/infoj', () => {
     error.mockRestore();
   });
 
+  // Known bug https://github.com/GEOLYTIX/xyz/issues/3078: the text entry method passes an array value to uhtml as content, which throws for a null item. The scratchLocation helper inserts its records with a geometry, so the coords entry of the scratch_location layer has no null items.
+  it.fails(
+    'creates a text entry for an array value with a null item',
+    async () => {
+      const { location } = await lidlLocation();
+
+      const entries = [
+        { key: 'coords', title: 'Coordinates', value: [null, null] },
+      ];
+
+      infoj(location, entries);
+
+      expect(entries[0].node.querySelector('.label').textContent).toBe(
+        'Coordinates',
+      );
+    },
+  );
+
   it('assigns a jsonb key value and a json_field key value', async () => {
     const { location } = await scratchLocation(null, {
       name: 'Json',
