@@ -6,7 +6,7 @@
 |---|---|---|---|
 | XYZ API | [apps/xyz/tests](apps/xyz/tests/) | Node | API modules, query templates, providers, user and workspace modules |
 | MAPP library | [apps/mapp/tests](apps/mapp/tests/) | Headless Chromium | MAPP library modules against a local XYZ host |
-| MAPP.UI library | [apps/ui/tests](apps/ui/tests/) | Headless Chromium | The XYZ default view with the MAPP.UI library against a local XYZ host |
+| MAPP.UI library | [apps/ui/tests](apps/ui/tests/) | Headless Chromium | MAPP.UI modules and user flows in the XYZ default view against a local XYZ host |
 
 
 ## How we test
