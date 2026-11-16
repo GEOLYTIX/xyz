@@ -10,6 +10,12 @@ Supporting documents for the project [LICENCE](https://github.com/GEOLYTIX/xyz/b
 
 ## WIKI
 
+The [OKF knowledge bundle](knowledge/index.md) contains the first source-linked
+Wiki adaptations, authoring guidance and a migration inventory. Start there for
+covered topics; most Wiki content remains unmigrated. Concepts are reviewed in
+pull requests alongside code, with `pnpm knowledge:check` validating their
+structure and local links. See [agent guidance](AGENTS.md) for task navigation.
+
 The [XYZ repository wiki](https://github.com/GEOLYTIX/xyz/wiki) is intended as a place for workshops, getting started guidelines, process environment and workspace configuration references.
 
 ## JSDOCS
@@ -18,7 +24,9 @@ XYZ/MAPP source code is annotated via [JSDoc](https://jsdoc.app/) markup languag
 
 We are using the [clean-jsdoc-theme](https://github.com/ankitskvmdam/clean-jsdoc-theme-example) which is installed as one of the devDependencies.
 
-The script to build the docs requires the jsdoc_mapp.json and jsdoc_xyz.json config files in the root directory. The script can be executed with `pnpm generate-docs`.
+The script to build the docs uses `utils/jsdoc_mapp.json` and `utils/jsdoc_xyz.json`.
+It can be executed with `pnpm generate-docs`. Source JSDoc remains the API
+reference; the knowledge bundle supplies context and configuration guidance.
 
 The documentation pages are generated in the local `/docs` directory. The docs directory is [git] ignored will be built in an automated action.
 

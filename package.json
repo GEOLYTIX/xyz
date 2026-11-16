@@ -27,6 +27,8 @@
     "test:ui:coverage": "pnpm --filter=@geolytix/mapp-ui test:coverage",
     "build": "turbo run build",
     "generate-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose && jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
+    "knowledge:check": "node utils/knowledge/validate.mjs",
+    "knowledge:test": "node --test utils/knowledge/validate.test.mjs",
     "login-public-key": "varlock run -- node ./utils/printLoginPublicKey.js",
     "mapp-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose",
     "xyz-docs": "jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
@@ -47,9 +49,11 @@
     "@biomejs/biome": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "clean-jsdoc-theme": "catalog:",
+    "markdown-it": "catalog:",
     "node-mocks-http": "catalog:",
     "turbo": "catalog:",
     "undici": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "yaml": "catalog:"
   }
 }
