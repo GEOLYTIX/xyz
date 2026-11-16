@@ -486,6 +486,55 @@ describe('mvt wkt_properties', () => {
     layer.reload();
 
     expect(clear).toHaveBeenCalled();
+
+    // The cleared tile source requests the tile geometries itself once the layer is shown. The reload is not pending.
+    expect(layer.reloadFeatureIds).toBeUndefined();
+  });
+
+  it('keeps the reload pending if the properties request fails', async () => {
+    const layer = await countries(undefined, { wkt_properties: true });
+
+    await properties(layer, FRANCE);
+
+    const [load] = layer.changeEndCallbacks;
+
+    await stopChangeEnd(layer);
+
+    // The tiles are not requested again from the testhost.
+    const refresh = vi
+      .spyOn(layer.source, 'refresh')
+      .mockImplementation(() => {});
+
+    vi.spyOn(layer.source, 'clear').mockImplementation(() => {});
+    vi.spyOn(layer.featureSource, 'refresh').mockImplementation(() => {});
+
+    // France has not been rendered before.
+    delete layer.featuresObject[FRANCE];
+
+    // The mapp.utils.xhr method resolves with an Error for a failed request.
+    const xhr = vi
+      .spyOn(mapp.utils, 'xhr')
+      .mockResolvedValueOnce(new Error('HTTP 500'));
+
+    layer.reload();
+
+    // The failed response assigns an empty featuresObject.
+    await expect
+      .poll(() => Object.keys(layer.featuresObject).length, { timeout: 5000 })
+      .toBe(0);
+
+    xhr.mockRestore();
+
+    // The failed response has not checked the reload.
+    expect(layer.reloadFeatureIds).toBeInstanceOf(Set);
+    expect(refresh).not.toHaveBeenCalled();
+
+    // The next response checks the pending reload and refreshes the tiles for the new feature.
+    await load(layer);
+
+    expect(layer.featuresObject[FRANCE]).toBeDefined();
+    expect(layer.reloadFeatureIds).toBeUndefined();
+    expect(refresh).toHaveBeenCalledTimes(1);
   });
 });
 

@@ -240,6 +240,10 @@ The tile sources are cleared and refreshed if a layer.reload is pending and the 
 
 The layer.reload method assigns the layer.reloadFeatureIds. A pending reload is checked with the first response of a call after the reload. This may be the call from a mapview change, whose debounced request supersedes the request from the reload method. The response of a call before the reload does not check the reload, since its query may have been executed before the feature was created.
 
+The response of a failed request does not check the reload, which remains pending for the next response. A reload is no longer pending if the tile source is cleared for a layer which is not displayed or has no table for the current zoom level.
+
+The response which checks the reload may be for a different view than the view of the reload, eg. if the mapview is changed before the debounced reload request has been sent. The features which were not in the view of the reload are not in the layer.reloadFeatureIds and the tile sources are refreshed. A tile in both views may be cached without the geometry of a new feature, so the reload is not discarded on a change of the view.
+
 @param {layer} layer A decorated format:mvt mapp layer.
 @property {boolean} [layer.wkt_properties] A flag whether feature properties should be loaded independent from MVT geometries.
 @property {Set} [layer.reloadFeatureIds] The feature IDs which have been rendered before a pending layer.reload.
@@ -251,6 +255,9 @@ async function wktPropertiesLoad(layer) {
 
   if (!table || !layer.display) {
     layer.source.clear();
+
+    // The cleared tile source requests the tile geometries itself. A reload is no longer pending.
+    delete layer.reloadFeatureIds;
     return;
   }
 
@@ -317,6 +324,9 @@ async function wktPropertiesLoad(layer) {
   // The tile geometries are requested by the tile source itself on a mapview change.
   // A reload after the method was called is checked with the response of a later call. The reload has already been checked if another response was first.
   if (!reloadFeatureIds || reloadFeatureIds !== layer.reloadFeatureIds) return;
+
+  // A failed request can not check the reload. The reload remains pending for the next response.
+  if (response instanceof Error) return;
 
   // The reload is no longer pending.
   delete layer.reloadFeatureIds;
