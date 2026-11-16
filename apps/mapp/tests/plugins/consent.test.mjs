@@ -93,12 +93,15 @@ describe('plugins/consent', () => {
   it('defaults the dialog title from the dictionary', async () => {
     mapp.user = { email: 'user@geolytix.co.uk' };
 
-    // The consent_title entry is not in the shipped dictionaries, so it is set
-    // for the test to assert the plumbing of the title default.
-    mapp.dictionary.consent_title = 'Consent';
+    // The mapp.dictionary proxy reads the mapp.dictionaries and ignores
+    // properties written to it, so the dictionary is replaced with a stub. The
+    // distinct title is not the shipped 'Consent' entry, so a hardcoded title
+    // would fail the test.
+    const dictionary = mapp.dictionary;
+    mapp.dictionary = { consent_title: 'Test consent title' };
 
     onTestFinished(() => {
-      delete mapp.dictionary.consent_title;
+      mapp.dictionary = dictionary;
     });
 
     const confirm = vi.spyOn(mapp.utils, 'confirm').mockResolvedValue(true);
@@ -108,7 +111,7 @@ describe('plugins/consent', () => {
 
     await consent(plugin, {});
 
-    expect(plugin.title).toBe('Consent');
+    expect(plugin.title).toBe('Test consent title');
     expect(confirm).toHaveBeenCalledWith(plugin);
   });
 
