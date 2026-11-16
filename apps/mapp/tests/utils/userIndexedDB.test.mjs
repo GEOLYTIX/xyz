@@ -90,6 +90,14 @@ describe('utils/userIndexedDB', () => {
 
     const IDB = await userIndexedDB.openDB(params);
 
+    // Unlike the other tests, this one opens the real default MAPP database with
+    // a fixed name. Close and delete it so a later test which opens MAPP with
+    // another store is not blocked by the open connection.
+    onTestFinished(() => {
+      IDB.close();
+      indexedDB.deleteDatabase('MAPP');
+    });
+
     expect(params.indexedDB).toBe('MAPP');
     expect(IDB.name).toBe('MAPP');
   });
