@@ -14,7 +14,7 @@ export default (_) => {
   if (Array.isArray(_.body?.ids)) {
     // The ids are passed as a query param, so the id values are never part of the SQL string.
     // The id column isn't cast, so an index on the column can be used. The database casts the param to an array of the column type.
-    _.body_ids = _.body.ids.map((id) => String(id));
+    _.body_ids = _.body.ids.map(String);
 
     condition = `\${qID} = ANY(%{body_ids})`;
   }
