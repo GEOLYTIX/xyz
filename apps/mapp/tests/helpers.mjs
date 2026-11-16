@@ -214,3 +214,103 @@ export async function getRecord(layer, id) {
 
   return record ?? null;
 }
+
+/**
+@function pointerEvent
+
+@description
+Passes an Openlayers MapBrowserEvent for a pixel of the map to the mapview.Map. The Map dispatches the event to its listeners, eg. the pointermove and click methods of the highlight interaction, and to its interactions, eg. the Openlayers Draw and Modify interactions.
+
+This is how the Openlayers library tests its own interactions. The events are handled synchronously, and the test controls the pointerType, button and buttons of the original event. The mousedown, mouseup and mouseleave listeners on the map target are not called. Dispatch these events on the mapview.Map.getTargetElement().
+
+The Map only handles events once it has rendered a frame. The Map is rendered if the test has not awaited a render yet.
+
+The original event is a mouse PointerEvent with the primary pointer. The default condition of the Openlayers Modify interaction requires the primary pointer, and the Map only handles a pointerdown with a target in the document.
+
+@param {mapview} mapview The mapview.
+@param {string} type The event type: pointermove, pointerdown, pointerdrag, pointerup, click, singleclick or dblclick.
+@param {Array<number>} pixel The [x, y] pixel in the map viewport.
+@param {Object} [init] PointerEvent properties, eg. `{ pointerType: 'touch' }` or `{ buttons: 2 }`.
+@returns {ol.MapBrowserEvent} The handled event.
+*/
+export function pointerEvent(mapview, type, pixel, init = {}) {
+  // The Map has no frame state before the first render.
+  if (!mapview.Map.getCoordinateFromPixel([0, 0])) mapview.Map.renderSync();
+
+  const viewport = mapview.Map.getViewport();
+
+  const rect = viewport.getBoundingClientRect();
+
+  const originalEvent = new PointerEvent(type, {
+    bubbles: true,
+    clientX: rect.left + pixel[0],
+    clientY: rect.top + pixel[1],
+    isPrimary: true,
+    pointerId: 1,
+    pointerType: 'mouse',
+    ...init,
+  });
+
+  // The target of an event which is not dispatched is null.
+  Object.defineProperty(originalEvent, 'target', {
+    value: viewport.firstChild,
+  });
+
+  const event = new ol.MapBrowserEvent(type, mapview.Map, originalEvent);
+
+  mapview.Map.handleMapBrowserEvent(event);
+
+  return event;
+}
+
+/**
+@function pointerClick
+
+@description
+Passes the events of a click on a pixel of the map to the mapview.Map with the pointerEvent method: pointermove, pointerdown, pointerup, click and singleclick.
+
+Openlayers dispatches the singleclick 250ms after a click which is not a double click. The singleclick is passed right after the click here.
+
+@param {mapview} mapview The mapview.
+@param {Array<number>} pixel The [x, y] pixel in the map viewport.
+@param {Object} [init] PointerEvent properties for every event, eg. `{ pointerType: 'touch' }`. The pointerdown has the left button by default. Use `{ buttons: 2 }` for a right click.
+*/
+export function pointerClick(mapview, pixel, init = {}) {
+  pointerEvent(mapview, 'pointermove', pixel, { ...init, buttons: 0 });
+  pointerEvent(mapview, 'pointerdown', pixel, { buttons: 1, ...init });
+  pointerEvent(mapview, 'pointerup', pixel, { ...init, buttons: 0 });
+  pointerEvent(mapview, 'click', pixel, { ...init, buttons: 0 });
+  pointerEvent(mapview, 'singleclick', pixel, { ...init, buttons: 0 });
+}
+
+/**
+@function pointerDrag
+
+@description
+Passes the events of a drag from a pixel to another pixel of the map to the mapview.Map with the pointerEvent method: pointermove, pointerdown, pointerdrag and pointerup.
+
+@param {mapview} mapview The mapview.
+@param {Array<number>} from The [x, y] pixel of the pointerdown.
+@param {Array<number>} to The [x, y] pixel of the pointerup.
+*/
+export function pointerDrag(mapview, from, to) {
+  pointerEvent(mapview, 'pointermove', from);
+  pointerEvent(mapview, 'pointerdown', from, { buttons: 1 });
+  pointerEvent(mapview, 'pointerdrag', to, { buttons: 1 });
+  pointerEvent(mapview, 'pointerup', to);
+}
+
+/**
+@function pixelPosition
+
+@description
+Returns the position of a map pixel in the map target element for the userEvent methods of the vitest/browser module, eg. `userEvent.click(target, { position })`.
+
+The userEvent methods send real input to the browser through the Playwright provider. The events go through the event handling of the browser and of Openlayers, which the pointerEvent method skips. The methods are async and slower. Openlayers dispatches the click of a real input 250ms before the singleclick.
+
+@param {Array<number>} pixel The [x, y] pixel in the map viewport.
+@returns {Object} The position with x and y.
+*/
+export function pixelPosition(pixel) {
+  return { x: Math.round(pixel[0]), y: Math.round(pixel[1]) };
+}
