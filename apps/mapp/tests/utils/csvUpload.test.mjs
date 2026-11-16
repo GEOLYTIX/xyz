@@ -13,6 +13,31 @@ function stubXhr() {
 }
 
 /**
+Stubs the mapp.utils.xhr method with requests which stay in flight until the current task yields, so concurrent requests overlap.
+
+Tracks the highest number of requests in flight at the same time.
+*/
+function trackXhr() {
+  let requests = 0;
+  let inFlight = 0;
+  let maxInFlight = 0;
+
+  const xhr = vi.spyOn(mapp.utils, 'xhr').mockImplementation(async () => {
+    const request = ++requests;
+    inFlight++;
+    maxInFlight = Math.max(maxInFlight, inFlight);
+
+    // Defer the response past the current task, so overlapping requests are in flight at the same time.
+    await new Promise((resolve) => setTimeout(resolve));
+
+    inFlight--;
+    return request;
+  });
+
+  return { xhr, maxInFlight: () => maxInFlight };
+}
+
+/**
 Returns the parsed request bodies of the mapp.utils.xhr calls.
 */
 function bodies(xhr) {
@@ -142,7 +167,7 @@ describe('utils/csvUpload', () => {
     const xhr = stubXhr();
 
     await csvUpload(
-      csv("O'Brien,null,£1 200,-12.5%\nnull,It's,n/a,\nParis,city,-7.9,1e3"),
+      csv("O'Brien,null,£1 200,-12.5%\nnull,It's,n/a,\nParis,city,-7.9,1 000"),
       {
         query: 'insert',
         fields: {
@@ -161,7 +186,7 @@ describe('utils/csvUpload', () => {
         'category::varchar': [null, "It''s", 'city'],
         // Other characters than digits, dot and minus are removed. A value which is not a number is null.
         'size::int': [1200, null, -7],
-        'score::numeric': [-12.5, null, 13],
+        'score::numeric': [-12.5, null, 1000],
       },
     ]);
   });
@@ -195,25 +220,49 @@ describe('utils/csvUpload', () => {
     expect(xhr).not.toHaveBeenCalled();
   });
 
-  it.each([
-    ['in order', false],
-    ['at once if async', true],
-  ])('posts the values in chunks %s', async (_, async) => {
-    const xhr = stubXhr();
+  it('posts the chunks one at a time in order', async () => {
+    const { xhr, maxInFlight } = trackXhr();
 
     const names = Array.from({ length: 20 }, (_, i) => `name ${i}`);
 
-    const params = {
+    const responses = await csvUpload(csv(names.join('\n')), {
       query: 'insert',
-      async,
       // A small chunk size in bytes for several requests.
       chunkSize: 100,
       fields: { name: 'text' },
-    };
-
-    const responses = await csvUpload(csv(names.join('\n')), params);
+    });
 
     expect(xhr.mock.calls.length).toBeGreaterThan(1);
+
+    // A synchronous upload waits for each request, so only one is ever in flight.
+    expect(maxInFlight()).toBe(1);
+
+    // The responses are in the order of the chunks.
+    expect(responses).toEqual(xhr.mock.calls.map((_, i) => i + 1));
+
+    // Every value is posted once, in the order of the rows.
+    expect(bodies(xhr).flatMap((body) => body['name::text'])).toEqual(names);
+  });
+
+  it('posts all the chunks at once if async', async () => {
+    const { xhr, maxInFlight } = trackXhr();
+
+    const names = Array.from({ length: 20 }, (_, i) => `name ${i}`);
+
+    const responses = await csvUpload(csv(names.join('\n')), {
+      query: 'insert',
+      async: true,
+      // A small chunk size in bytes for several requests.
+      chunkSize: 100,
+      fields: { name: 'text' },
+    });
+
+    const chunks = xhr.mock.calls.length;
+
+    expect(chunks).toBeGreaterThan(1);
+
+    // An async upload posts every chunk before awaiting, so all are in flight at once.
+    expect(maxInFlight()).toBe(chunks);
 
     // The responses are in the order of the chunks.
     expect(responses).toEqual(xhr.mock.calls.map((_, i) => i + 1));
