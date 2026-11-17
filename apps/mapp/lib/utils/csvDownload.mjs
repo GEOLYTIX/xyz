@@ -17,7 +17,7 @@ The function turns an array of records into a text blob. The blob is transfomed 
 @property {String} [params.separator=','] The seperator used in the csv text file.
 @property {String} [params.type='text/csv;charset=utf-8;'] The type for the csv text file includes the charset required for character support.
 @property {String} [params.join='\r\n'] The characters used to join the row strings. The default being [carriage] return \r and [new] line feed \n.
-@property {String} [params.file='file'] The file name for the download generated from clicking the ObjectURL link.
+@property {String} [params.title='file'] The file name for the download generated from clicking the ObjectURL link.
 @property {Boolean} [params.header] Whether a header should be added to the CSV file.
 @property {Array} [params.fields] An array of field objects for the fieldsFunction and header row.
 */
@@ -47,7 +47,11 @@ export default function csvDownload(data, params = {}) {
 
   if (params.header && Array.isArray(params.fields)) {
     // Unshift the header row with either the title or field names.
-    rows.unshift(params.fields.map((field) => field.title || field.field));
+    rows.unshift(
+      params.fields
+        .map((field) => field.title || field.field)
+        .join(params.separator),
+    );
   }
 
   const blob = new Blob([rows.join(params.join)], { type: params.type });
