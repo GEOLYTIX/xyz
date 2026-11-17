@@ -12,8 +12,8 @@ functionality. Check the code and existing root documentation for uncovered topi
 - When changing behavior covered by a concept, update that concept and its source
   links in the same PR. Keep directory indexes current.
 - Read [the authoring workflow](knowledge/workflows/authoring.md) before editing
-  knowledge. Run `pnpm knowledge:check` and `pnpm knowledge:test` after changes to
-  the bundle or validator.
+  knowledge. Run `pnpm knowledge:check` after changes to the bundle, and
+  `pnpm knowledge:test` after changes to the validator.
 - Check Wiki claims against the current branch before migrating them. Record the
   source page and revision; retain `status: draft` until content review. Do not
   claim human verification or mark content verified merely because CI passes.

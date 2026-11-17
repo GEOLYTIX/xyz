@@ -29,10 +29,15 @@ Getting-Started-with-Codespaces, Getting-started, Home, MAPP.UI, Monorepo,
 Neon-Serverless-Postgres, Plugins, Roles-[Workspace], Security,
 Templates-[Workspace], Terminology, VERCEL, Workspace-Authorization and XYZ.
 
+The [TRUSTED_RETURN_HOSTS](../environment/trusted-return-hosts.md),
+[session token claims](../environment/jwt-claims.md) and
+[telemetry](../environment/telemetry.md) concepts are not migrations. They cover
+variables which the Wiki never documented, written from the current source.
+
 The two large environment/workspace pages are only partially covered. Track
-remaining sections before retiring either page. Further work includes the
-missing security/JWT/telemetry environment concepts identified in issue #3007,
-structured workspace validation, and source-change freshness warnings.
+remaining sections before retiring either page. The knowledge check lists the
+environment variables still without a concept. Further work includes structured
+workspace validation and source-change freshness warnings.
 
 Keep the existing Wiki available during the rollout. Decide on mirroring and
 release publishing in a later PR; this change does not publish or delete Wiki pages.

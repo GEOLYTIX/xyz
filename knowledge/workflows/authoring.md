@@ -26,6 +26,13 @@ sources:
    `pnpm knowledge:test`. These commands do not start the application or load
    deployment configuration.
 
+## Environment Variable concepts
+
+List the variables a concept documents in `variables`, an XYZ extension field.
+Entries are exact names or a `PREFIX_*` family, eg. `variables: [OTEL_*]`.
+Group variables that are configured together into one concept, and link the
+module that reads them as `resource` with its tests in `sources`.
+
 ## Provenance and review
 
 Record each migrated Wiki URL and its Git revision in `sources`. Record current
@@ -38,12 +45,24 @@ time of that check. A format/link check alone does not verify runtime claims.
 
 ## Checks and limits
 
-The checker parses YAML and Markdown, checks required type and reserved file
-rules, validates log dates, and fails on missing local link and source targets.
-Unknown types and metadata are accepted. Missing descriptions, missing directory
-indexes, malformed optional metadata and expired `stale_after` values warn.
+The checker fails on:
 
-External URLs, heading anchors, raw HTML links, full workspace schemas and
-environment-variable coverage are not checked by this first version. Source
+- missing or malformed frontmatter, or a missing `type`
+- a root index without `okf_version: '0.2'`, and frontmatter in other indexes or logs
+- log dates which are invalid or not newest first
+- missing local link and source targets, and paths escaping the repository
+- path-like `resource` values without a `./`, `../` or `/` prefix
+
+It warns on:
+
+- missing titles and descriptions, and malformed optional metadata
+- expired `stale_after` dates
+- a directory without an index, and a concept or subdirectory its index omits
+- environment variables read by the XYZ API (`apps/xyz/mod`, `router.js`,
+  `apps/saml`) which no concept lists in `variables`. Platform variables such as
+  `VERCEL_*` and `NODE_ENV` are ignored.
+
+Unknown types and metadata are accepted. External URLs, heading anchors, raw
+HTML links and workspace schemas are not checked. Source
 paths existing on disk does not mean their behavior still matches the prose.
 Review both when code changes. See [migration inventory](wiki-migration.md).

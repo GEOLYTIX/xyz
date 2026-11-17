@@ -5,6 +5,7 @@ description: WORKSPACE selects the JSON workspace and WORKSPACE_AGE controls cac
 resource: ../../apps/xyz/mod/workspace/cache.js
 tags: [xyz, environment, workspace]
 status: draft
+variables: [WORKSPACE, WORKSPACE_AGE]
 sources:
   - resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment
     revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
@@ -31,9 +32,10 @@ WORKSPACE=file:/public/workspace.json
 WORKSPACE_AGE=3600000
 ```
 
-This is an illustrative path: supply your own JSON file. Local file paths are
-resolved relative to `xyzEnv.XYZ_CWD` (falling back to the process working
-directory in the file provider). A workspace describes
+`public/workspace.json` is the minimal workspace in the repository, used by
+[SETUP.md](../../SETUP.md). Local file paths are resolved relative to
+`xyzEnv.XYZ_CWD`, which `processEnv.js` sets to the `XYZ_CWD` variable or the
+repository root. A workspace describes
 [default and named locales](../workspace/locales.md).
 
 ## Cache behavior

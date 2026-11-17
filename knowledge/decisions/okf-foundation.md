@@ -16,8 +16,9 @@ generated JSDoc output. Keep root setup and development guides in place during
 this migration. Link to source JSDoc rather than copying API signatures into
 knowledge pages.
 
-The first PR includes three representative Wiki adaptations, source and link
-checks, and agent navigation. Portal generation, JSDoc JSON exports, Wiki
+The first PR includes three representative Wiki adaptations, the environment
+variables issue #3007 names as drift, source and link checks, environment
+coverage warnings, and agent navigation. Portal generation, JSDoc JSON exports, Wiki
 publishing, complete environment coverage and workspace schema validation remain
 follow-up work on issue #3007. The Wiki is not yet a generated mirror.
 
@@ -33,9 +34,21 @@ types, so the validator accepts unknown nonempty type strings.
 
 ## Validation boundary
 
-Missing or invalid concept frontmatter and an empty or non-string `type` are
-format errors. XYZ additionally fails on broken local Markdown links and missing
-local resource/source paths to catch moved code. These stricter checks are
-repository authoring policy, not a claim that broken links invalidate OKF.
-Optional quality signals are warnings. External URLs and anchor fragments are
-not fetched or checked. Passing validation does not establish content accuracy.
+Format errors fail. XYZ additionally fails on broken local links, missing local
+resource paths and unprefixed path-like resources, to catch moved code. These
+stricter checks are repository authoring policy, not a claim that they
+invalidate OKF. The [authoring workflow](../workflows/authoring.md) lists the
+checks. Passing validation does not establish content accuracy.
+
+## Environment coverage
+
+A variable read in code without a concept warns rather than fails (open
+question 4 on #3007). Most variables are still undocumented; the check switches
+to failing once `knowledge/environment/` covers all of them, so new variables
+cannot land without a concept.
+
+## Tests
+
+The checker tests use Vitest like the application suites, but run with
+`pnpm knowledge:test` and the knowledge workflow rather than turbo's
+`pnpm test`, because the checker is repository tooling and not part of an app.

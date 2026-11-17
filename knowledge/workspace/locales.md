@@ -12,21 +12,15 @@ sources:
   - resource: ../../apps/xyz/mod/workspace/getLocale.js
   - resource: ../../apps/xyz/mod/workspace/composeObj.js
   - resource: ../../apps/xyz/tests/mod/workspace/getLocale.test.mjs
-configuration:
-  keys: [locale, locales]
-  value_type: object
-  layer_formats: all
-  dependencies: [workspace source, template composition, user authorization]
-  defaults:
-    locale: {layers: {}}
-    locales: 'When omitted, contains a locale entry referring to workspace.locale.'
 ---
 # Default and named locales
 
 A locale groups configuration used by a MAPP mapview. `workspace.locale` is the
 default locale and provides defaults when resolving a named locale.
-`workspace.locales` maps names to locale objects. The metadata above is descriptive
-configuration information, not a complete JSON Schema or runtime validator.
+`workspace.locales` maps names to locale objects.
+
+Structured Workspace Key metadata for generating and validating
+workspaces is planned with the workspace split in issue #3007.
 
 When missing, the workspace cache initializes `workspace.locale` to
 `{ "layers": {} }` and `workspace.locales` to an object with a `locale` entry

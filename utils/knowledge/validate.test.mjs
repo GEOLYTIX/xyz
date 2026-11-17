@@ -1,14 +1,26 @@
-import assert from 'node:assert/strict';
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
-import { test } from 'node:test';
-import { splitDocument, validateBundle } from './validate.mjs';
+import { afterEach, describe, expect, it } from 'vitest';
+import { readEnvironment, splitDocument, validateBundle } from './validate.mjs';
 
-function fixture(t, files) {
+const roots = [];
+
+afterEach(() => {
+  for (const root of roots.splice(0))
+    rmSync(root, { recursive: true, force: true });
+});
+
+const INDEX = "---\nokf_version: '0.2'\n---\n# Index";
+
+function fixture(files) {
   const root = mkdtempSync(join(tmpdir(), 'xyz-knowledge-'));
-  t.after(() => rmSync(root, { recursive: true, force: true }));
-  for (const [path, content] of Object.entries(files)) {
+  roots.push(root);
+  for (const [path, content] of Object.entries({
+    'knowledge/index.md': INDEX,
+    ...files,
+  })) {
+    if (content === null) continue;
     const target = join(root, path);
     mkdirSync(dirname(target), { recursive: true });
     writeFileSync(target, content);
@@ -16,119 +28,233 @@ function fixture(t, files) {
   return root;
 }
 
-test('accepts minimal concepts, arbitrary types and extension fields', (t) => {
-  const root = fixture(t, {
-    'knowledge/index.md': "---\nokf_version: '0.2'\n---\n# Index",
-    'knowledge/a.md': '---\ntype: Future Type\ncustom: {value: true}\n---\n# A',
-  });
-  assert.deepEqual(validateBundle(root).errors, []);
-});
-
-test('rejects missing, empty, numeric and malformed type/frontmatter', (t) => {
-  for (const text of [
-    '# No metadata',
-    '---\ntype: ""\n---',
-    '---\ntype: 4\n---',
-    '---\ntype: [broken\n---',
-    '---\ntype: Guide\ntype: Other\n---',
-    '---\ntype: Guide',
-  ]) {
-    const root = fixture(t, { 'knowledge/a.md': text });
-    assert.equal(validateBundle(root).errors.length, 1, text);
-  }
-});
-
-test('parses BOM, CRLF, quoted colons and multiline YAML', () => {
-  const doc = splitDocument(
-    '\uFEFF---\r\ntype: Guide\r\ntitle: "A: B"\r\ndescription: >\r\n  Two\r\n  lines\r\n---\r\nBody',
-  );
-  assert.equal(doc.metadata.title, 'A: B');
-  assert.equal(doc.metadata.description, 'Two lines\n');
-  assert.equal(doc.body, 'Body');
-});
-
-test('resolves bundle-root and repository-relative paths and encoded spaces', (t) => {
-  const root = fixture(t, {
-    'apps/source.js': '// implementation',
-    'knowledge/folder/a.md':
-      '---\ntype: Guide\nresource: ../../apps/source.js\nsources:\n  - resource: /other%20page.md\n---\n[Page](/other%20page.md#heading)',
-    'knowledge/other page.md': '---\ntype: Guide\n---',
-  });
-  assert.deepEqual(validateBundle(root).errors, []);
-});
-
-test('detects broken inline, image and reference links but ignores code fences', (t) => {
-  for (const body of [
-    '[bad](missing.md)',
-    '![bad](missing.png)',
-    '[bad][ref]\n\n[ref]: missing.md',
-  ]) {
-    const root = fixture(t, {
-      'knowledge/a.md': `---\ntype: Guide\n---\n${body}`,
+describe('knowledge validator:', () => {
+  it('accepts minimal concepts, arbitrary types and extension fields', () => {
+    const root = fixture({
+      'knowledge/a.md':
+        '---\ntype: Future Type\ncustom: {value: true}\n---\n# A',
     });
-    assert.match(validateBundle(root).errors[0], /Missing local target/);
-  }
-  const root = fixture(t, {
-    'knowledge/a.md':
-      '---\ntype: Guide\n---\n```md\n[example](missing.md)\n```\n[web](https://example.invalid/) [anchor](#heading)',
+    expect(validateBundle(root).errors).toEqual([]);
   });
-  assert.deepEqual(validateBundle(root).errors, []);
-});
 
-test('detects missing metadata resources and paths escaping the repository', (t) => {
-  for (const metadata of [
-    'resource: ../missing.js',
-    'sources: [{resource: ../missing.js}]',
-    'resource: ../../outside.md',
-  ]) {
-    const root = fixture(t, {
-      'knowledge/a.md': `---\ntype: Guide\n${metadata}\n---`,
+  it('rejects missing, empty, numeric and malformed type/frontmatter', () => {
+    for (const text of [
+      '# No metadata',
+      '---\ntype: ""\n---',
+      '---\ntype: 4\n---',
+      '---\ntype: [broken\n---',
+      '---\ntype: Guide\ntype: Other\n---',
+      '---\ntype: Guide',
+      '---\n---',
+    ]) {
+      const root = fixture({ 'knowledge/a.md': text });
+      expect(validateBundle(root).errors, text).toHaveLength(1);
+    }
+  });
+
+  it('reports empty frontmatter as a missing type, not an unclosed block', () => {
+    const root = fixture({ 'knowledge/a.md': '---\n---\n# A' });
+    expect(validateBundle(root).errors[0]).toMatch(/requires a nonempty/);
+  });
+
+  it('parses BOM, CRLF, quoted colons and multiline YAML', () => {
+    const doc = splitDocument(
+      '﻿---\r\ntype: Guide\r\ntitle: "A: B"\r\ndescription: >\r\n  Two\r\n  lines\r\n---\r\nBody',
+    );
+    expect(doc.metadata.title).toBe('A: B');
+    expect(doc.metadata.description).toBe('Two lines\n');
+    expect(doc.body).toBe('Body');
+  });
+
+  it('resolves bundle-root and repository-relative paths and encoded spaces', () => {
+    const root = fixture({
+      'apps/source.js': '// implementation',
+      'knowledge/folder/a.md':
+        '---\ntype: Guide\nresource: ../../apps/source.js\nsources:\n  - resource: /other%20page.md\n---\n[Page](/other%20page.md#heading)',
+      'knowledge/other page.md': '---\ntype: Guide\n---',
     });
-    assert.equal(validateBundle(root).errors.length, 1);
-  }
-});
-
-test('optional quality failures warn while scope descriptions remain valid', (t) => {
-  const root = fixture(t, {
-    'knowledge/a.md':
-      '---\ntype: Guide\ntags: scalar\nstatus: custom\nstale_after: 2000-01-01T00:00:00Z\nsources: [{resource: all workspace requests}]\n---',
+    expect(validateBundle(root).errors).toEqual([]);
   });
-  const result = validateBundle(root, Date.parse('2026-11-16'));
-  assert.deepEqual(result.errors, []);
-  assert.ok(
-    result.warnings.some((warning) => warning.includes('past stale_after')),
-  );
-});
 
-test('reserved indexes and logs cannot masquerade as concepts', (t) => {
-  for (const path of [
-    'knowledge/index.md',
-    'knowledge/sub/index.md',
-    'knowledge/log.md',
-  ]) {
-    const root = fixture(t, { [path]: '---\ntype: Guide\n---' });
-    assert.equal(validateBundle(root).errors.length, 1);
-  }
-});
-
-test('log dates must be real dates in descending order', (t) => {
-  for (const body of [
-    '## Yesterday',
-    '## 2026-02-30',
-    '## 2026-01-01\n\n## 2026-02-01',
-  ]) {
-    const root = fixture(t, { 'knowledge/log.md': body });
-    assert.equal(validateBundle(root).errors.length, 1);
-  }
-  const root = fixture(t, {
-    'knowledge/log.md': '## 2026-11-16\n\n## 2026-10-01',
+  it('detects broken inline, image and reference links but ignores code fences', () => {
+    for (const body of [
+      '[bad](missing.md)',
+      '![bad](missing.png)',
+      '[bad][ref]\n\n[ref]: missing.md',
+    ]) {
+      const root = fixture({
+        'knowledge/a.md': `---\ntype: Guide\n---\n${body}`,
+      });
+      expect(validateBundle(root).errors[0]).toMatch(/Missing local target/);
+    }
+    const root = fixture({
+      'knowledge/a.md':
+        '---\ntype: Guide\n---\n```md\n[example](missing.md)\n```\n[web](https://example.invalid/) [anchor](#heading)',
+    });
+    expect(validateBundle(root).errors).toEqual([]);
   });
-  assert.deepEqual(validateBundle(root).errors, []);
+
+  it('detects missing metadata resources and paths escaping the repository', () => {
+    for (const [metadata, message] of [
+      ['resource: ../missing.js', /Missing local target/],
+      ['sources: [{resource: ../missing.js}]', /Missing local target/],
+      ['resource: ../../outside.md', /escapes repository/],
+    ]) {
+      const root = fixture({
+        'knowledge/a.md': `---\ntype: Guide\n${metadata}\n---`,
+      });
+      const { errors } = validateBundle(root);
+      expect(errors).toHaveLength(1);
+      expect(errors[0]).toMatch(message);
+    }
+  });
+
+  it('rejects path-like resources without a local prefix', () => {
+    for (const metadata of [
+      'resource: apps/missing.js',
+      'sources: [{resource: apps/also-missing.js}]',
+      'resource: README.md',
+    ]) {
+      const root = fixture({
+        'knowledge/a.md': `---\ntype: Guide\n${metadata}\n---`,
+      });
+      const { errors } = validateBundle(root);
+      expect(errors, metadata).toHaveLength(1);
+      expect(errors[0]).toMatch(/needs a \.\/, \.\.\/ or \/ prefix/);
+    }
+  });
+
+  it('optional quality failures warn while scope descriptions remain valid', () => {
+    const root = fixture({
+      'knowledge/a.md':
+        '---\ntype: Guide\ntags: scalar\nstatus: custom\nstale_after: 2000-01-01T00:00:00Z\nsources: [{resource: all workspace requests}, {resource: "https://example.invalid/a"}]\n---',
+    });
+    const result = validateBundle(root, Date.parse('2026-11-16'));
+    expect(result.errors).toEqual([]);
+    for (const message of [
+      'past stale_after',
+      'tags should be an array',
+      'status should be draft',
+      'title is missing',
+    ]) {
+      expect(
+        result.warnings.some((warning) => warning.includes(message)),
+        message,
+      ).toBe(true);
+    }
+  });
+
+  it('reserved indexes and logs cannot masquerade as concepts', () => {
+    for (const path of [
+      'knowledge/index.md',
+      'knowledge/sub/index.md',
+      'knowledge/log.md',
+    ]) {
+      const root = fixture({ [path]: '---\ntype: Guide\n---' });
+      expect(validateBundle(root).errors, path).toHaveLength(1);
+    }
+  });
+
+  it('requires okf_version 0.2 on the root index', () => {
+    for (const [index, message] of [
+      ['# Index', /must declare okf_version/],
+      ["---\nokf_version: '0.3'\n---\n# Index", /supports okf_version 0.2/],
+    ]) {
+      const root = fixture({ 'knowledge/index.md': index });
+      const { errors } = validateBundle(root);
+      expect(errors).toHaveLength(1);
+      expect(errors[0]).toMatch(message);
+    }
+  });
+
+  it('log dates must be real dates in descending order', () => {
+    for (const body of [
+      '## Yesterday',
+      '## 2026-02-30',
+      '## 2026-01-01\n\n## 2026-02-01',
+    ]) {
+      const root = fixture({ 'knowledge/log.md': body });
+      expect(validateBundle(root).errors, body).toHaveLength(1);
+    }
+    const root = fixture({
+      'knowledge/log.md': '## 2026-11-16\n\n## 2026-10-01',
+    });
+    expect(validateBundle(root).errors).toEqual([]);
+  });
+
+  it('warns on missing indexes and on concepts or folders an index omits', () => {
+    const root = fixture({
+      'knowledge/index.md': `${INDEX}\n\n- [Listed](listed.md)`,
+      'knowledge/listed.md': '---\ntype: Guide\ntitle: L\ndescription: L\n---',
+      'knowledge/orphan.md': '---\ntype: Guide\ntitle: O\ndescription: O\n---',
+      'knowledge/a/b/c.md': '---\ntype: Guide\ntitle: C\ndescription: C\n---',
+    });
+    const { errors, warnings } = validateBundle(root);
+    expect(errors).toEqual([]);
+    expect(warnings).toEqual(
+      expect.arrayContaining([
+        'knowledge: index does not list orphan.md',
+        'knowledge: index does not list a',
+        'knowledge/a: missing directory index',
+        'knowledge/a/b: missing directory index',
+      ]),
+    );
+    expect(warnings.join('\n')).not.toMatch(/listed\.md/);
+  });
+
+  it('missing and empty bundles fail instead of passing without validation', () => {
+    const root = fixture({ 'knowledge/index.md': null });
+    expect(validateBundle(root).errors).toHaveLength(1);
+    mkdirSync(join(root, 'knowledge'));
+    expect(validateBundle(root).errors).toHaveLength(1);
+  });
 });
 
-test('missing and empty bundles fail instead of passing without validation', (t) => {
-  const root = fixture(t, {});
-  assert.equal(validateBundle(root).errors.length, 1);
-  mkdirSync(join(root, 'knowledge'));
-  assert.equal(validateBundle(root).errors.length, 1);
+describe('environment coverage:', () => {
+  const code = [
+    '/** xyzEnv.IN_BLOCK_COMMENT */',
+    '// xyzEnv.IN_LINE_COMMENT',
+    'const a = xyzEnv.DOCUMENTED;',
+    "const b = xyzEnv['BRACKET_NAME'];",
+    'const c = process.env.FAMILY_ONE || process.env.VERCEL_ENV;',
+    'const d = xyzEnv.WALLET[key] ?? process.env.NODE_ENV;',
+  ].join('\n');
+
+  it('collects variables read in code and ignores comments and platform names', () => {
+    const root = fixture({
+      'apps/xyz/mod/a.js': code,
+      'apps/xyz/tests/ignored.test.mjs': 'xyzEnv.TEST_ONLY',
+    });
+    expect([...readEnvironment(root)].sort()).toEqual([
+      'BRACKET_NAME',
+      'DOCUMENTED',
+      'FAMILY_ONE',
+    ]);
+  });
+
+  it('warns once for variables without a concept, honouring PREFIX_* entries', () => {
+    const root = fixture({
+      'apps/xyz/mod/a.js': code,
+      'knowledge/index.md': `${INDEX}\n\n- [Env](env.md)`,
+      'knowledge/env.md':
+        '---\ntype: Environment Variable\ntitle: E\ndescription: E\nvariables: [DOCUMENTED, FAMILY_*]\n---',
+    });
+    const { errors, warnings, undocumented } = validateBundle(root);
+    expect(errors).toEqual([]);
+    expect(undocumented).toEqual(['BRACKET_NAME']);
+    expect(warnings).toEqual([
+      'knowledge/environment: 1 variables read in code have no concept: BRACKET_NAME',
+    ]);
+  });
+
+  it('warns on malformed variables metadata', () => {
+    const root = fixture({
+      'knowledge/index.md': `${INDEX}\n\n- [Env](env.md)`,
+      'knowledge/env.md':
+        '---\ntype: Environment Variable\ntitle: E\ndescription: E\nvariables: lowercase\n---',
+    });
+    expect(validateBundle(root).warnings).toEqual([
+      'knowledge/env.md: variables should be an array of NAME or PREFIX_* strings',
+    ]);
+  });
 });

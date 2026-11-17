@@ -38,7 +38,7 @@ Please delete options that are not relevant, and select all options that apply.
 - ✅ My code follows the guidelines of XYZ
 - ✅ My code has been commented
 - ✅ Documentation has been updated
-- [ ] Updated relevant knowledge concepts and source links, or explained why no concept applies.
-- [ ] Ran `pnpm knowledge:check` when changing knowledge or files referenced by it.
+- ✅ Knowledge concepts and their source links are updated, or no concept applies
+- ✅ `pnpm knowledge:check` passes
 - ✅ New and existing unit tests pass locally with my changes
 - ✅ Main has been merged into this PR

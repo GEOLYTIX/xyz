@@ -55,6 +55,7 @@ Run a suite:
 | `pnpm test:xyz` | XYZ API |
 | `pnpm test:mapp` | MAPP library |
 | `pnpm test:ui` | MAPP.UI library |
+| `pnpm knowledge:test` | Knowledge bundle checker, not part of `pnpm test` |
 
 Run a single file or the tests matching a name from the package directory:
 
