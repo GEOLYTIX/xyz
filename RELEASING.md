@@ -135,9 +135,28 @@ The deployment rules of the `npm` environment apply to the dispatched ref, so on
 
 ### Check the published version
 
+The workflow checks the published version after the publish:
+
+- the dist-tag points to the version.
+- the published `dist.integrity` is the integrity of the tested tarball.
+- the version has a provenance attestation, and `npm audit signatures` verifies it.
+- the package test passes with the version installed from npmjs.com.
+- jsDelivr serves the same `mapp.js` and `mapp.css`. The workflow then purges the jsDelivr cache of the dist-tag urls, eg. `@next/dist/mapp.js`, which jsDelivr caches for 12 hours.
+
+These checks can't undo the publish. If one fails, check the version, and if it is broken:
+
+- move the dist-tag back to the previous version, eg. `npm dist-tag add @geolytix/mapp@5.1.0-rc.1 next`.
+- deprecate the version, eg. `npm deprecate @geolytix/mapp@5.1.0-rc.2 "Broken, use 5.1.0-rc.3"`.
+- publish a fixed version. A published version can't be reused.
+
+Trusted publishing only covers `npm publish`, so an owner of the `geolytix` npm organisation runs these commands locally.
+
+To check a published version locally:
+
 - The [npm page](https://www.npmjs.com/package/@geolytix/mapp) shows the version, the dist-tag and the provenance.
 - The jsDelivr CDN serves the version, eg. `https://cdn.jsdelivr.net/npm/@geolytix/mapp@5.1.0/dist/mapp.js`.
 - The [cdn view](./packages/testhost/README.md#cdn) of the testhost loads the version from jsDelivr: `pnpm testview` and open `/views/cdn/?version=5.1.0`.
+- The package test runs with the version from npmjs.com: `node scripts/installPackage.mjs --version=5.1.0` and `pnpm test:package` from `apps/mapp`.
 
 ### Publish locally
 

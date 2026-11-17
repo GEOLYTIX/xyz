@@ -134,8 +134,92 @@ jobs:
       - name: Package test
         run: pnpm --filter=@geolytix/mapp test:package
 
+      # npm publishes the tarball as it is, so the published dist.integrity is
+      # the integrity of the tested tarball.
+      - name: Record the tarball integrity
+        id: tarball
+        working-directory: apps/mapp/.pack
+        run: echo "integrity=sha512-$(openssl dgst -sha512 -binary geolytix-mapp.tgz | base64 -w0)" >> "$GITHUB_OUTPUT"
+
       - name: Publish
         working-directory: apps/mapp/.pack
         env:
           DIST_TAG: ${{ inputs.dist_tag }}
         run: npm publish geolytix-mapp.tgz --provenance --access public --tag "$DIST_TAG"
+
+      # The steps after the publish can't undo it. A failure is an alarm, see
+      # "Check the published version" in RELEASING.md.
+      - name: Verify the published version
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          DIST_TAG: ${{ inputs.dist_tag }}
+          INTEGRITY: ${{ steps.tarball.outputs.integrity }}
+        run: |
+          for i in $(seq 1 30); do
+            if [ "$(npm view @geolytix/mapp "dist-tags.$DIST_TAG" --prefer-online 2>/dev/null)" = "$VERSION" ]; then
+              found=1
+              break
+            fi
+            sleep 10
+          done
+          if [ -z "$found" ]; then
+            echo "::error::The $DIST_TAG dist-tag isn't $VERSION after 5 minutes."
+            exit 1
+          fi
+
+          published=$(npm view "@geolytix/mapp@$VERSION" dist.integrity --prefer-online)
+          if [ "$published" != "$INTEGRITY" ]; then
+            echo "::error::The published integrity $published isn't the integrity of the tested tarball $INTEGRITY."
+            exit 1
+          fi
+
+          provenance=$(npm view "@geolytix/mapp@$VERSION" dist.attestations.provenance.predicateType --prefer-online)
+          if [ "$provenance" != "https://slsa.dev/provenance/v1" ]; then
+            echo "::error::@geolytix/mapp@$VERSION has no provenance attestation."
+            exit 1
+          fi
+
+          # npm audit signatures verifies the registry signature and the
+          # attestation of the installed package.
+          audit="$RUNNER_TEMP/audit"
+          mkdir "$audit"
+          cd "$audit"
+          npm init -y > /dev/null
+          npm install "@geolytix/mapp@$VERSION" --no-audit --no-fund
+          npm audit signatures
+
+      - name: Package test with the published version
+        working-directory: apps/mapp
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          node scripts/installPackage.mjs --version="$VERSION"
+          pnpm test:package
+
+      # The exact version url is only requested once the registry has the
+      # version. jsDelivr caches the dist-tag urls for 12 hours, the purge
+      # updates them to the new version.
+      - name: Check jsDelivr serves the published version
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          DIST_TAG: ${{ inputs.dist_tag }}
+        run: |
+          cdn="https://cdn.jsdelivr.net/npm/@geolytix/mapp@$VERSION/dist"
+          for i in $(seq 1 12); do
+            if curl -sf "$cdn/mapp.js" -o "$RUNNER_TEMP/mapp.js" && curl -sf "$cdn/mapp.css" -o "$RUNNER_TEMP/mapp.css"; then
+              served=1
+              break
+            fi
+            sleep 10
+          done
+          if [ -z "$served" ]; then
+            echo "::error::jsDelivr doesn't serve @geolytix/mapp@$VERSION after 2 minutes."
+            exit 1
+          fi
+          cmp "$RUNNER_TEMP/mapp.js" apps/mapp/dist/mapp.js
+          cmp "$RUNNER_TEMP/mapp.css" apps/mapp/dist/mapp.css
+
+          for file in mapp.js mapp.js.map mapp.css; do
+            curl -sf "https://purge.jsdelivr.net/npm/@geolytix/mapp@$DIST_TAG/dist/$file" > /dev/null \
+              || echo "::warning::The jsDelivr purge of @$DIST_TAG/dist/$file failed."
+          done

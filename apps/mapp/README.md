@@ -134,12 +134,25 @@ pnpm test:mapp
 The npm package is checked in three steps, from `apps/mapp` after the build:
 
 ```bash
-pnpm pack:check     # packs .pack/geolytix-mapp.tgz, checks its files and manifest, and runs npm publish --dry-run
+pnpm pack:check     # packs .pack/geolytix-mapp.tgz and checks it, see below
 pnpm pack:install   # installs the tarball into tests-package/node_modules
 pnpm test:package   # runs tests-package in the browser against the testhost
 ```
 
-[scripts/pack.mjs](scripts/pack.mjs) packs the package from a staged copy with a package.json without the `devDependencies` and `scripts`. The tarball only has `dist`, the README, the licence and the package.json.
+[scripts/pack.mjs](scripts/pack.mjs) packs the package from a staged copy with a package.json without the `devDependencies` and `scripts`. The tarball only has `dist`, the README, the licence and the package.json. The script checks:
+
+- the tarball files, and that the packed package.json has no `workspace:` or `catalog:` specifiers and its `exports` targets are in the tarball.
+- the gzipped size of `mapp.js` and `mapp.css` against a budget, which catches eg. Openlayers bundled by mistake.
+- that the source map has no absolute paths.
+- the package.json fields and `exports` with [publint](https://publint.dev) `--strict`.
+- `npm publish --dry-run`.
+
+The package test runs with a published version too. `--version` takes a version or dist-tag from https://registry.npmjs.org, and `--ol` the `ol` version, eg. the lowest of the peer range. Run the script with node from `apps/mapp`, pnpm would read the options as its own:
+
+```bash
+node scripts/installPackage.mjs --version=next --ol=10.8.0
+pnpm test:package
+```
 
 The [package test](tests-package/package.test.mjs) imports `@geolytix/mapp` by its name from `tests-package/node_modules`, loads Openlayers from the installed `ol` peer dependency, sets `mapp.host` and renders the layers of a locale from the testhost.
 

@@ -51,6 +51,7 @@
     "@vitest/coverage-v8": "catalog:",
     "ol": "catalog:",
     "playwright": "catalog:",
+    "publint": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:"
   }

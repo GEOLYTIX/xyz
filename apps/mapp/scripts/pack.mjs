@@ -7,7 +7,9 @@ The package must be built first. The script:
 2. packs the staged package with `npm pack` into `.pack/geolytix-mapp.tgz`.
 3. checks that the tarball contains only the expected files.
 4. checks that the packed package.json has no `workspace:` or `catalog:` specifiers, and that the `exports` targets are in the tarball.
-5. runs `npm publish --dry-run` with the tarball. A prerelease version is checked with the `next` dist-tag.
+5. checks the gzipped size of the bundle files against a budget, and that the source map has no absolute paths.
+6. runs publint with the tarball, which checks the package.json fields and `exports`.
+7. runs `npm publish --dry-run` with the tarball. A prerelease version is checked with the `next` dist-tag.
 
 The tarball is installed for the package test with scripts/installPackage.mjs, and published from `.pack/geolytix-mapp.tgz`.
 
@@ -28,6 +30,7 @@ import {
 } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { gzipSync } from 'node:zlib';
 import { run } from './run.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -43,6 +46,13 @@ const expectedFiles = [
   'package/dist/mapp.js.map',
   'package/package.json',
 ];
+
+// The gzipped size budget in bytes. mapp.js is ~32 KB and mapp.css ~1 KB gzipped in v5.1.0.
+// A larger bundle may have bundled Openlayers or a module which is imported from esm.sh.
+const budget = {
+  'dist/mapp.css': 4_000,
+  'dist/mapp.js': 45_000,
+};
 
 function fail(message) {
   console.error(message);
@@ -118,6 +128,32 @@ for (const target of targets) {
   }
 }
 
+const sizes = Object.entries(budget).map(([file, limit]) => {
+  const size = gzipSync(readFileSync(join(root, file))).length;
+  if (size > limit) {
+    fail(
+      `${file} is ${size} bytes gzipped, above the budget of ${limit} bytes.`,
+    );
+  }
+  return `  ${file}: ${size} of ${limit} bytes gzipped`;
+});
+
+const sourcemap = JSON.parse(
+  readFileSync(join(root, 'dist/mapp.js.map'), 'utf-8'),
+);
+
+const absolute = sourcemap.sources.filter((source) =>
+  /^(\/|[A-Za-z]:|file:)/.test(source),
+);
+
+if (absolute.length) {
+  fail(`The source map has absolute paths: ${absolute.join(', ')}`);
+}
+
+run('pnpm', ['exec', 'publint', join(packDir, tarball), '--strict'], {
+  cwd: root,
+});
+
 // npm requires a dist-tag to publish a prerelease version.
 const tag = pkg.version.includes('-') ? 'next' : 'latest';
 
@@ -130,4 +166,7 @@ run(
 console.log(`Packed ${pkg.name}@${pkg.version} into .pack/${tarball}:
 ${files.map((file) => `  ${file}`).join('\n')}
 
-npm publish --dry-run --tag ${tag} passed.`);
+Size budget:
+${sizes.join('\n')}
+
+publint and npm publish --dry-run --tag ${tag} passed.`);
