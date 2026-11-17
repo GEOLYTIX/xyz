@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { playwright } from '@vitest/browser-playwright';
+import { loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
 
 const repoRoot = fileURLToPath(new URL('../..', import.meta.url));
@@ -9,11 +10,19 @@ process.env.TESTHOST_WORKSPACE = fileURLToPath(
   new URL('./tests/workspaces/_workspace.json', import.meta.url),
 );
 
+// The Mapbox tests need an access token. The token is read from the environment, or from a gitignored .env.local or .env.test.local file in the repository root. The tests are skipped without a token.
+const env = loadEnv('test', repoRoot, 'MAPBOX_');
+
 export default defineConfig({
   root: fileURLToPath(new URL('.', import.meta.url)),
   test: {
     include: ['tests/**/*.test.mjs'],
     setupFiles: ['tests/setup.mjs'],
+    // Provided to the browser tests as inject('MAPBOX_ACCESS_TOKEN') and inject('MAPBOX_STYLE_URL').
+    provide: {
+      MAPBOX_ACCESS_TOKEN: env.MAPBOX_ACCESS_TOKEN ?? '',
+      MAPBOX_STYLE_URL: env.MAPBOX_STYLE_URL ?? '',
+    },
     // Starts the devdb and the XYZ host once for the run.
     globalSetup: ['@geolytix/xyz-testhost/globalSetup'],
     // Loading the PostGIS extension into PGlite takes a few seconds.
