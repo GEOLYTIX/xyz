@@ -166,6 +166,8 @@ The feature properties are assigned to the layer.featuresObject{} with the featu
 
 The layer.params.fields[] property values will be added to the layer.featureFields field values arrays to be processed by the featureFields.process() method.
 
+The id is the first entry in a feature record. The query responds with a single id column for an id field, eg. the id field of a theme on the qID. The id field is therefore read from the first entry, as the id field in the wkt featureFormats method.
+
 @param {layer} layer A decorated mapp layer object.
 @param {array} features An array of WKT features.
 @property {Object} layer.featuresObject Store feature properties with the feature ID as property key for lookup in the featureStyle method.
@@ -175,19 +177,20 @@ The layer.params.fields[] property values will be added to the layer.featureFiel
 export function wkt_properties(layer, features) {
   mapp.layer.featureFields.reset(layer);
 
+  // Append params.fields to the id which is the first entry in a feature record. The id field is not repeated in the record.
+  const fields = Array.from(new Set(['id', ...(layer.params.fields ?? [])]));
+
   for (const feature of features) {
-    const properties = {
-      id: feature[0],
-    };
+    const properties = {};
 
     // Assign field key and value to properties object
-    layer.params.fields?.forEach((field, i) => {
-      layer.featureFields[field].values.push(feature[i + 1]);
+    fields.forEach((field, i) => {
+      layer.featureFields?.[field]?.values.push(feature[i]);
 
-      properties[field] = feature[i + 1];
+      properties[field] = feature[i];
     });
 
-    layer.featuresObject[feature.shift()] = properties;
+    layer.featuresObject[properties.id] = properties;
   }
 
   mapp.layer.featureFields.process(layer);
