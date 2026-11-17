@@ -64,7 +64,7 @@ async function drawOnclick(e, layer, interaction) {
     }
 
     if (confirmUpdate === true) {
-      drawOnclick(e, layer, interaction);
+      void drawOnclick(e, layer, interaction);
       return;
     }
 
@@ -76,7 +76,7 @@ async function drawOnclick(e, layer, interaction) {
   const btn = interaction.btn || e.target;
 
   interaction.callback ??= (feature) => {
-    mapp.location.create(feature, interaction, layer);
+    void mapp.location.create(feature, interaction, layer);
 
     btn.classList.remove('active');
 
@@ -514,7 +514,7 @@ function locator(layer) {
               }),
           });
 
-          mapp.location.get(location);
+          void mapp.location.get(location);
         });
       }}>
       <span class="notranslate material-symbols-outlined">my_location</span>
