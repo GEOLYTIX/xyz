@@ -16,7 +16,7 @@ catalog:
   "@electric-sql/pglite": 0.5.8
   "@electric-sql/pglite-postgis": 0.2.8
   "@electric-sql/pglite-socket": 0.2.11
-  "@node-saml/node-saml": ^5.0.1
+  "@node-saml/node-saml": ^5.2.0
   "@opentelemetry/api": ^1.9.1
   "@opentelemetry/exporter-trace-otlp-http": ^0.222.0
   "@opentelemetry/resources": ^2.11.0
@@ -38,6 +38,7 @@ catalog:
   varlock: 1.7.2
   vite: 8.0.16
   vitest: 4.1.10
+  xml-crypto: ^6.1.2
 minimumReleaseAgeExclude:
   - '@varlock/google-secret-manager-plugin'
   - varlock

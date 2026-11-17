@@ -23,6 +23,7 @@
     "test": "turbo run test",
     "test:saml": "turbo run test --filter=@geolytix/xyz-saml-app",
     "test:xyz": "turbo run test --filter=@geolytix/xyz-app",
+    "test:coverage": "turbo run test:coverage --filter=@geolytix/xyz-app --filter=@geolytix/xyz-saml-app",
     "test:xyz:coverage": "turbo run test:coverage --filter=@geolytix/xyz-app",
     "build": "turbo run build",
     "generate-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose && jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
