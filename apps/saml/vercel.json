@@ -10,7 +10,8 @@
           ".varlock.blob",
           "public/**",
           "apps/saml/*.crt",
-          "apps/saml/*.pem"
+          "apps/saml/*.pem",
+          "apps/xyz/*.pem"
         ]
       }
     }

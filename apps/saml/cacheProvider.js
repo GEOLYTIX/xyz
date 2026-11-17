@@ -63,11 +63,11 @@ Keys are kept until they expire. An expired key reads as absent and is replaced 
 
 @param {number} [expirationMs] The time in milliseconds for which a key saved with saveAsync is kept.
 @returns {Object} The node-saml cache provider.
-@throws {Error} The SAML app requires an ACL connection.
+@throws {TypeError} The SAML app requires an ACL connection.
 */
 export function createAclCacheProvider(expirationMs = DEFAULT_EXPIRATION_MS) {
   if (typeof acl !== 'function') {
-    throw new Error(
+    throw new TypeError(
       'SAML requires an ACL connection in the PRIVATE or PUBLIC environment variable.',
     );
   }

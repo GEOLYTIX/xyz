@@ -113,6 +113,7 @@ describe('saml cache provider without an ACL:', () => {
 
     const { createAclCacheProvider } = await import('../cacheProvider.js');
 
+    expect(() => createAclCacheProvider()).toThrow(TypeError);
     expect(() => createAclCacheProvider()).toThrow(
       'SAML requires an ACL connection in the PRIVATE or PUBLIC environment variable.',
     );
