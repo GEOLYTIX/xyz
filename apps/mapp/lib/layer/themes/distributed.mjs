@@ -31,16 +31,11 @@ export default function distributed(theme, feature) {
   theme.boxes ??= [];
   theme.field ??= 'id';
 
-  // Get the feature field value for the theme.
-  const value = feature.properties[theme.field];
+  // The lookup key for the feature value.
+  const val = lookupKey(theme, feature.properties);
 
   // Do not style a feature without a value for the theme field.
-  if (value === undefined || value === null || value === '') {
-    return;
-  }
-
-  // The lookup key for the feature value.
-  const val = String(value);
+  if (val === undefined) return;
 
   // The feature field property value already has a style assigned.
   if (theme.lookup[val]) {
@@ -48,22 +43,8 @@ export default function distributed(theme, feature) {
     return;
   }
 
-  // The index of the category which was assigned to the value before it was retired.
-  const previous = theme.categories.indexOf(theme.retired?.[val]);
-
-  // The index in turn is not advanced for the previous category.
-  if (previous < 0) {
-    // Define as 0 or increase theme.index
-    theme.index = theme.index === undefined ? 0 : theme.index + 1;
-
-    // Reset cat index to 0 if the index reaches the length of the cat array.
-    if (theme.index === theme.categories.length) {
-      theme.index = 0;
-    }
-  }
-
   // The previous category or the category in turn.
-  const index = previous >= 0 ? previous : theme.index;
+  const index = categoryIndex(theme, val);
 
   // Get feature bounding box from geometry extent.
   const bbox = {
@@ -79,36 +60,80 @@ export default function distributed(theme, feature) {
     return;
   }
 
-  // Find intersecting bounding boxes with their assigned cat index.
-  const intersects = theme.boxes.filter(
-    (b) =>
-      !(
-        bbox.extent[0] > b.extent[2] ||
-        bbox.extent[2] < b.extent[0] ||
-        bbox.extent[1] > b.extent[3] ||
-        bbox.extent[3] < b.extent[1]
-      ),
-  );
+  // The category must not be used by an intersecting bounding box if possible.
+  bbox.themeIdx = freeIndex(theme, bbox.extent, index);
 
   // Push the current bbox into the array.
   theme.boxes.push(bbox);
 
-  const set = new Set(intersects.map((item) => item.themeIdx));
+  assign(theme, val, bbox.themeIdx, feature);
+}
 
-  // Current index is already in set of intersecting boxes.
-  if (set.has(index)) {
-    // Find index which is not in set if possible.
-    for (let free = 0; free < theme.categories.length; free++) {
-      if (set.has(free)) continue;
-      // Assign free index and break loop.
-      bbox.themeIdx = free;
-      break;
-    }
+/**
+@function lookupKey
+@description
+Returns the theme field value of the feature properties as string lookup key. A feature without a value for the theme field has no lookup key.
+
+@param {Object} theme The theme configuration object.
+@param {Object} properties The feature properties.
+@returns {string|undefined} The lookup key for the feature value.
+*/
+function lookupKey(theme, properties) {
+  const value = properties[theme.field];
+
+  if (value === undefined || value === null || value === '') return;
+
+  return String(value);
+}
+
+/**
+@function categoryIndex
+@description
+Returns the index of the category which was assigned to the value before it was retired. The theme.index is not advanced for the previous category.
+
+Otherwise the theme.index is defined as 0 or increased, and reset to 0 if the index reaches the length of the categories array.
+
+@param {Object} theme The theme configuration object.
+@param {string} val The lookup key for the feature value.
+@returns {number} The index of the previous category or the category in turn.
+*/
+function categoryIndex(theme, val) {
+  const previous = theme.categories.indexOf(theme.retired?.[val]);
+
+  if (previous >= 0) return previous;
+
+  theme.index = theme.index === undefined ? 0 : theme.index + 1;
+
+  if (theme.index === theme.categories.length) {
+    theme.index = 0;
   }
 
-  bbox.themeIdx ??= index;
+  return theme.index;
+}
 
-  assign(theme, val, bbox.themeIdx, feature);
+/**
+@function freeIndex
+@description
+Returns the category index if the category is not used by a bounding box in theme.boxes which intersects the extent. Otherwise the first index of a category which is not used by an intersecting bounding box is returned. The category index is returned if all categories are used.
+
+@param {Object} theme The theme configuration object.
+@param {Array} extent The bounding box extent of the feature.
+@param {number} index The index of the previous category or the category in turn.
+@returns {number} The index of the category to assign.
+*/
+function freeIndex(theme, extent, index) {
+  // The cat index of the intersecting bounding boxes.
+  const used = new Set(
+    theme.boxes
+      .filter((bbox) => ol.extent.intersects(extent, bbox.extent))
+      .map((bbox) => bbox.themeIdx),
+  );
+
+  if (!used.has(index)) return index;
+
+  const free = theme.categories.findIndex((_cat, i) => !used.has(i));
+
+  return free < 0 ? index : free;
 }
 
 /**
@@ -154,11 +179,9 @@ function retain(theme, features) {
   const values = new Set();
 
   for (const properties of Object.values(features)) {
-    const value = properties[theme.field];
+    const val = lookupKey(theme, properties);
 
-    if (value === undefined || value === null || value === '') continue;
-
-    values.add(String(value));
+    if (val !== undefined) values.add(val);
   }
 
   theme.retired ??= {};
