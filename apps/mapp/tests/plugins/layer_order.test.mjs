@@ -24,13 +24,14 @@ describe('plugins/layer_order', () => {
     expect(keys(mv)).toEqual(['a', 'b', 'c']);
   });
 
-  it('keeps the relative order of the referenced layers', () => {
-    const mv = mapview(['b', 'a']);
+  it('keeps the original order of the unreferenced layers', () => {
+    const mv = mapview(['y', 'b', 'x', 'a', 'z']);
 
-    // Both keys are first in the layer_order, so their order is kept.
     layer_order(['a', 'b'], mv);
 
-    expect(keys(mv)).toEqual(['a', 'b']);
+    // The referenced layers follow the plugin order, the unreferenced layers
+    // follow in their original order.
+    expect(keys(mv)).toEqual(['a', 'b', 'y', 'x', 'z']);
   });
 
   it('does not sort when the plugin is not an array', () => {
