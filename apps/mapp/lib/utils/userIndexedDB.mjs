@@ -45,14 +45,19 @@ export async function openDB(params, version = 3) {
     };
 
     IDBRequest.onsuccess = (event) => {
-      if (!event.target.result.objectStoreNames.contains(params.store)) {
-        // Increment the version number to trigger onupgradeneeded and create the new store.
-        return openDB(params, db.version + 1);
+      const IDB = event.target.result;
 
-        // event.target.result.createObjectStore(params.store);
-      } else {
-        resolve(event.target.result);
+      // Close the connection if another connection requests a version upgrade, eg. to create a new store. An open connection blocks the upgrade.
+      IDB.onversionchange = () => IDB.close();
+
+      if (!IDB.objectStoreNames.contains(params.store)) {
+        // Close this connection and open the database with an incremented version number to trigger onupgradeneeded and create the new store.
+        IDB.close();
+        resolve(openDB(params, IDB.version + 1));
+        return;
       }
+
+      resolve(IDB);
     };
 
     // will be called on database versioning. 10941 user
@@ -70,9 +75,10 @@ export async function openDB(params, version = 3) {
 /**
 @function add
 @description
-The add method will add new records to the userIndexedDB.
+The add method will add new records to the userIndexedDB. The add request fails if the store has a record with the key.
 
 @param {Object} params
+@property {string} params.name The key of the record to add.
 @property {string} params.store Identifier for the object store in the userIndexedDB.
 @property {object} params.obj Object to be stored in the userIndexedDB store.
 @returns {Promise} addPromise
@@ -85,7 +91,8 @@ export async function add(params) {
 
     const objectStore = IDBTransaction.objectStore(params.store);
 
-    const IDBRequest = objectStore.add(params.obj);
+    // The store has no key path or key generator, so the key must be provided.
+    const IDBRequest = objectStore.add(params.obj, params.name);
 
     IDBRequest.onerror = (event) => {
       console.error(IDBRequest.error);
