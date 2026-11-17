@@ -21,7 +21,7 @@ The pendingRedraw WeakSet holds the distributed themes for which a postrender li
 const pendingRedraw = new WeakSet();
 
 /**
-The drawnValues WeakMap holds the number of category values for which the legend of a distributed theme was last drawn.
+The drawnValues WeakMap holds the category values for which the legend of a distributed theme was last drawn.
 */
 const drawnValues = new WeakMap();
 
@@ -31,9 +31,9 @@ const drawnValues = new WeakMap();
 @description
 The distributedTheme method creates and returns a distributed theme legend for the current layer.style.theme.
 
-The category values are assigned by the distributed theme method as features are rendered. Only categories with values assigned from the layer data are drawn in the legend, and only the icons of these categories are created.
+The category values are assigned by the distributed theme method as features are rendered, and may be removed by the retain method of the theme if a feature is no longer in the layer data. Only categories with values assigned from the layer data are drawn in the legend, and only the icons of these categories are created.
 
-The legend is redrawn after a render only if values have been assigned to categories since the legend was last drawn.
+The legend is redrawn after a render only if the category values have changed since the legend was last drawn. A value may be removed and another value assigned before the render, so the number of values may not have changed.
 
 @param {layer} layer The decorated mapp layer.
 
@@ -55,9 +55,9 @@ export default function distributedTheme(layer) {
   for (const cat of theme.categories) {
     cat.label = cat.values?.join(', ');
 
-    // Only create a legend item if the category has a label defined
-    // If no label, it means that category is not being used.
-    if (cat.label !== undefined) {
+    // Only create a legend item if the category has values.
+    // If no values, it means that category is not being used.
+    if (cat.values?.length) {
       theme.legend.grid.push(catElement(cat, theme, layer));
     }
   }
@@ -73,7 +73,7 @@ export default function distributedTheme(layer) {
 
   renderLegend(layer, theme.legend.node);
 
-  drawnValues.set(theme, valuesCount(theme));
+  drawnValues.set(theme, categoryValues(theme));
 
   redrawOnRender(layer, theme);
 
@@ -84,7 +84,7 @@ export default function distributedTheme(layer) {
 @function redrawOnRender
 
 @description
-The redrawOnRender method registers a single postrender listener for the theme. The legend is redrawn once the render is complete if values have been assigned to the theme categories since the legend was last drawn.
+The redrawOnRender method registers a single postrender listener for the theme. The legend is redrawn once the render is complete if the values of the theme categories have changed since the legend was last drawn.
 
 The listener is registered again after each render for as long as the distributed theme is the current layer theme.
 
@@ -102,7 +102,7 @@ function redrawOnRender(layer, theme) {
     // The theme may have been changed. A theme without a key would pass a comparison of theme keys.
     if (theme !== layer.style.theme) return;
 
-    if (valuesCount(theme) === drawnValues.get(theme)) {
+    if (categoryValues(theme) === drawnValues.get(theme)) {
       redrawOnRender(layer, theme);
       return;
     }
@@ -112,18 +112,15 @@ function redrawOnRender(layer, theme) {
 }
 
 /**
-@function valuesCount
+@function categoryValues
 
 @description
-The valuesCount method returns the number of values assigned to the categories of a distributed theme.
+The categoryValues method returns the values assigned to the categories of a distributed theme as a string for comparison.
 
 @param {Object} theme The distributed theme.
 
-@returns {number} The number of assigned category values.
+@returns {string} The assigned category values.
 */
-function valuesCount(theme) {
-  return theme.categories.reduce(
-    (count, cat) => count + (cat.values?.length || 0),
-    0,
-  );
+function categoryValues(theme) {
+  return JSON.stringify(theme.categories.map((cat) => cat.values ?? []));
 }

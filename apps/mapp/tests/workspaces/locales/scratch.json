@@ -86,8 +86,7 @@
             { "style": { "fillColor": "#3cb44b" } },
             { "style": { "fillColor": "#4363d8" } },
             { "style": { "fillColor": "#f58231" } },
-            { "style": { "fillColor": "#911eb4" } },
-            { "style": { "fillColor": "#46f0f0" } }
+            { "style": { "fillColor": "#911eb4" } }
           ]
         }
       },

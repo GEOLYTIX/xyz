@@ -234,6 +234,8 @@ The wktPropertiesLoad method is triggered from the layer.changeEndCallbacks meth
 
 The wktPropertiesLoad method send a query to the wkt template. The response is passed to the [featureFormats.wkt_properties]{@link module:/layer/featureFormats~wkt_properties} method.
 
+The retain method of the layer theme is called with the layer.featuresObject, eg. the [distributed theme]{@link module:/layer/themes/distributed~retain} removes the values of features which are no longer in the layer data from its lookup and category values.
+
 Finally the layer.L.changed() method is called to trigger the [layer.featureStyle]{@link module:/layer/featureStyle~featureProperties} method which assigns feature properties from the layer.featuresObject.
 
 The tile sources are cleared and refreshed if a layer.reload is pending and the response holds a feature which has not been rendered before, eg. after a location geometry has been created. The tile geometries are otherwise requested by the tile source itself for the current mapview.
@@ -319,6 +321,12 @@ async function wktPropertiesLoad(layer) {
     // Set request params.fields for styling.
     mapp.layer.featureFormats.wkt_properties(layer, response);
   }
+
+  // A theme may keep the values of features which are no longer in the layer data, eg. the distributed theme lookup.
+  mapp.layer.themes[layer.style.theme?.type]?.retain?.(
+    layer.style.theme,
+    layer.featuresObject,
+  );
 
   // Triggers the featureStyle method.
   layer.L.changed();

@@ -6,10 +6,13 @@ import {
   createPolygon,
   getLocale,
   getRecord,
+  panTo,
+  renameLocation,
   render,
   resetTable,
   scratchPolygonLayer,
   tableRows,
+  themeColours,
   themeStyles,
   themeValues,
   trashLocation,
@@ -547,16 +550,24 @@ describe('mvt wkt_properties', () => {
   });
 });
 
-// The scratch_polygon polygon which is created and deleted by the tests.
+// The scratch_polygon polygon which is created, renamed and deleted by the tests.
 const ADDED = 'Added';
+const RENAMED = 'Renamed';
 const ADDED_EXTENT = [15000, 6690000, 25000, 6700000];
+
+// The centre of the scratch locale view, and a centre without scratch polygons in the view.
+const LONDON = ol.proj.fromLonLat([-0.1, 51.5]);
+const AWAY = ol.proj.fromLonLat([5, 51.5]);
 
 /**
 Review of #3079: an mvt layer with wkt_properties and a distributed theme. The legend and the colours are not updated after a polygon has been created or deleted.
 
-The tests run in order and depend on each other. The add test creates a polygon with the mapp.location.create method, and the delete test deletes the same polygon with the location.trash() method. The table is reset to the rows before the tests once in the afterAll hook, also if a test fails.
+The tests run in order and depend on each other. The add test creates a polygon with the mapp.location.create method, the rename test updates its name with the location.update() method, and the delete test deletes the same polygon with the location.trash() method. The table is reset to the rows before the tests once in the afterAll hook, also if a test fails.
+
+The seeded polygons must keep their colours throughout.
 */
 describe.sequential('mvt wkt_properties distributed theme', () => {
+  let colours;
   let dispose;
   let layer;
   let location;
@@ -580,6 +591,17 @@ describe.sequential('mvt wkt_properties distributed theme', () => {
     }
   });
 
+  /**
+  Asserts that every rendered polygon has the colour of its category in the lookup, and that the seeded polygons have the colours of the first render.
+  */
+  function expectColours() {
+    for (const s of themeStyles(layer)) {
+      expect(s.fillColor, s.name).toBe(s.lookup);
+    }
+
+    expect(themeColours(layer)).toMatchObject(colours);
+  }
+
   it('renders the seeded polygons with the categories of the theme lookup', async () => {
     expect(seeded.map(([, name]) => name)).toEqual([
       'North',
@@ -602,6 +624,11 @@ describe.sequential('mvt wkt_properties distributed theme', () => {
         { timeout: 5000 },
       )
       .toEqual(['East', 'North', 'South', 'West']);
+
+    colours = themeColours(layer);
+
+    // The seeded polygons have different categories.
+    expect(new Set(Object.values(colours)).size).toBe(4);
   });
 
   it('assigns a category to a polygon created with the location create method', async () => {
@@ -633,45 +660,91 @@ describe.sequential('mvt wkt_properties distributed theme', () => {
 
     await render(layer);
 
-    // Every rendered polygon has the colour of its category in the lookup.
-    for (const s of themeStyles(layer)) {
-      expect(s.fillColor, s.name).toBe(s.lookup);
-    }
+    expectColours();
 
     expect(themeStyles(layer).map((s) => s.name)).toContain(ADDED);
   }, 20000);
 
-  // The distributed theme assigns the values of the rendered features to its lookup and categories. A value is never removed, so the value of a deleted feature remains in the theme and the legend.
-  it.fails(
-    'removes the value of the polygon deleted with the location trash method',
-    async () => {
-      expect(location).toBeDefined();
+  it('replaces the value of a polygon renamed with the location update method', async () => {
+    expect(location).toBeDefined();
 
-      const id = Number(location.id);
+    const id = Number(location.id);
 
-      await trashLocation(location);
+    await renameLocation(location, RENAMED);
 
-      expect(await getRecord(layer, id)).toBeNull();
+    // The update method reloads the layer.
+    await expect
+      .poll(() => layer.featuresObject?.[id]?.name, { timeout: 5000 })
+      .toBe(RENAMED);
 
-      // The trash method removes the location, which reloads the layer.
-      await expect
-        .poll(() => layer.featuresObject?.[id], { timeout: 5000 })
-        .toBeUndefined();
+    await render(layer);
 
-      await render(layer);
+    expect(Object.keys(layer.style.theme.lookup)).not.toContain(ADDED);
+    expect(Object.keys(layer.style.theme.lookup)).toContain(RENAMED);
 
-      // The deleted polygon is not rendered, every remaining polygon has the colour of its category in the lookup.
-      expect(themeStyles(layer).map((s) => s.id)).not.toContain(id);
+    // The number of values is unchanged.
+    expect(themeValues(layer).sort()).toEqual([
+      'East',
+      'North',
+      RENAMED,
+      'South',
+      'West',
+    ]);
 
-      for (const s of themeStyles(layer)) {
-        expect(s.fillColor, s.name).toBe(s.lookup);
-      }
+    expectColours();
+  }, 20000);
 
-      expect(Object.keys(layer.style.theme.lookup)).not.toContain(ADDED);
-      expect(themeValues(layer)).not.toContain(ADDED);
-    },
-    20000,
-  );
+  it('removes the value of the polygon deleted with the location trash method', async () => {
+    expect(location).toBeDefined();
+
+    const id = Number(location.id);
+
+    await trashLocation(location);
+
+    expect(await getRecord(layer, id)).toBeNull();
+
+    // The trash method removes the location, which reloads the layer.
+    await expect
+      .poll(() => layer.featuresObject?.[id], { timeout: 5000 })
+      .toBeUndefined();
+
+    await render(layer);
+
+    // The deleted polygon is not rendered, every remaining polygon has the colour of its category in the lookup.
+    expect(themeStyles(layer).map((s) => s.id)).not.toContain(id);
+
+    expectColours();
+
+    expect(Object.keys(layer.style.theme.lookup).sort()).toEqual([
+      'East',
+      'North',
+      'South',
+      'West',
+    ]);
+    expect(themeValues(layer)).not.toContain(RENAMED);
+  }, 20000);
+
+  it('assigns the previous categories to the polygons after the mapview is panned away and back', async () => {
+    // No polygon is in the properties of the view.
+    await panTo(
+      layer,
+      AWAY,
+      () => Object.keys(layer.featuresObject ?? {}).length === 0,
+    );
+
+    expect(layer.style.theme.lookup).toEqual({});
+    expect(themeValues(layer)).toEqual([]);
+
+    await panTo(layer, LONDON, () =>
+      seeded.every(([id]) => Object.hasOwn(layer.featuresObject ?? {}, id)),
+    );
+
+    await expect
+      .poll(() => Object.keys(themeColours(layer)).sort(), { timeout: 5000 })
+      .toEqual(['East', 'North', 'South', 'West']);
+
+    expectColours();
+  }, 20000);
 });
 
 describe('mvt featureLookup', () => {

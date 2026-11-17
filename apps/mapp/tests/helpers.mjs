@@ -456,3 +456,52 @@ export function render(layer) {
 
   return rendered;
 }
+
+/**
+@function themeColours
+@description
+Returns the fill colour of each rendered feature by its theme field value, eg. the name of a scratch_polygon.
+
+@param {layer} layer A decorated mvt layer with wkt_properties and a distributed theme on the name field.
+@returns {Object} The fill colours keyed by name.
+*/
+export function themeColours(layer) {
+  return Object.fromEntries(
+    themeStyles(layer).map((s) => [s.name, s.fillColor]),
+  );
+}
+
+/**
+@function renameLocation
+@async
+
+@description
+Updates the name of a location record with the location.update() method, as the name input of the location view does. The update method reloads the layer.
+
+@param {location} location The location to update.
+@param {string} name The new name.
+*/
+export async function renameLocation(location, name) {
+  location.infoj.find((entry) => entry.field === 'name').newValue = name;
+
+  await location.update();
+}
+
+/**
+@function panTo
+@async
+
+@description
+Centres the mapview on the coordinate and resolves once the layer properties for the new view have been loaded.
+
+@param {layer} layer A decorated mvt layer with wkt_properties.
+@param {Array} coordinate The EPSG:3857 centre.
+@param {Function} loaded A method which returns true once the properties of the new view are loaded.
+*/
+export async function panTo(layer, coordinate, loaded) {
+  layer.mapview.Map.getView().setCenter(coordinate);
+
+  await expect.poll(loaded, { timeout: 5000 }).toBe(true);
+
+  await render(layer);
+}
