@@ -80,7 +80,7 @@ The Mapbox API tests need a Mapbox access token. The [MAPP vitest config](apps/m
 # .env.local
 MAPBOX_ACCESS_TOKEN=pk.xxx
 
-# Optional, a Mapbox style of our account instead of the public mapbox/light-v11 style.
+# Optional, another Mapbox style instead of the default Mapbox Studio style of the tests.
 MAPBOX_STYLE_URL=mapbox://styles/{account}/{style}
 ```
 

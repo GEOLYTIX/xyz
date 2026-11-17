@@ -133,47 +133,56 @@ describe('maplibre', () => {
     expect(MaplibreGL.getVersion()).toBe(MAPLIBRE.split('@')[1]);
   });
 
-  it('renders the devdb countries as maplibre vector tiles', async () => {
-    const esmImport = vi.spyOn(mapp.utils, 'esmImport');
+  // The devdb serves one tile query at a time, so the tiles may wait for the queries of other test files.
+  it(
+    'renders the devdb countries as maplibre vector tiles',
+    {
+      timeout: 30000,
+    },
+    async () => {
+      const esmImport = vi.spyOn(mapp.utils, 'esmImport');
 
-    const { mapview, layer, map } = await maplibreLayer({
-      style: { object: devdbStyle() },
-    });
+      const { mapview, layer, map } = await maplibreLayer({
+        style: { object: devdbStyle() },
+      });
 
-    // The format imports maplibre-gl from esm.sh for the first layer.
-    expect(esmImport).toHaveBeenCalledWith(MAPLIBRE);
+      // The format imports maplibre-gl from esm.sh for the first layer.
+      expect(esmImport).toHaveBeenCalledWith(MAPLIBRE);
 
-    expect(layer.L).toBeInstanceOf(ol.layer.Layer);
-    expect(layer.container.classList).toContain('maplibre');
-    // The render method returns the container to the Openlayers layers element.
-    expect(mapview.Map.getTargetElement().contains(layer.container)).toBe(true);
-    expect(layer.container.style.visibility).toBe('visible');
+      expect(layer.L).toBeInstanceOf(ol.layer.Layer);
+      expect(layer.container.classList).toContain('maplibre');
+      // The render method returns the container to the Openlayers layers element.
+      expect(mapview.Map.getTargetElement().contains(layer.container)).toBe(
+        true,
+      );
+      expect(layer.container.style.visibility).toBe('visible');
 
-    await loaded(map);
+      await loaded(map);
 
-    // The maplibre zoom is one less than the Openlayers zoom, because maplibre has 512px tiles.
-    expect(map.getZoom()).toBeCloseTo(mapview.Map.getView().getZoom() - 1);
+      // The maplibre zoom is one less than the Openlayers zoom, because maplibre has 512px tiles.
+      expect(map.getZoom()).toBeCloseTo(mapview.Map.getView().getZoom() - 1);
 
-    const sourceNames = map
-      .querySourceFeatures('countries', { sourceLayer: 'countries' })
-      .map((F) => F.properties.name);
+      const sourceNames = map
+        .querySourceFeatures('countries', { sourceLayer: 'countries' })
+        .map((F) => F.properties.name);
 
-    expect(sourceNames).toEqual(
-      expect.arrayContaining(['Germany', 'France', 'Poland']),
-    );
-    expect(sourceNames).not.toContain('Australia');
+      expect(sourceNames).toEqual(
+        expect.arrayContaining(['Germany', 'France', 'Poland']),
+      );
+      expect(sourceNames).not.toContain('Australia');
 
-    // The feature at the center of Germany is rendered with the continent property for the data driven fill-color.
-    const [feature] = map.queryRenderedFeatures(map.project([10.4, 51.1]), {
-      layers: ['countries-fill'],
-    });
+      // The feature at the center of Germany is rendered with the continent property for the data driven fill-color.
+      const [feature] = map.queryRenderedFeatures(map.project([10.4, 51.1]), {
+        layers: ['countries-fill'],
+      });
 
-    expect(feature.properties).toEqual({
-      id: expect.any(Number),
-      name: 'Germany',
-      continent: 'Europe',
-    });
-  });
+      expect(feature.properties).toEqual({
+        id: expect.any(Number),
+        name: 'Germany',
+        continent: 'Europe',
+      });
+    },
+  );
 
   it('warns and does not add a layer without a style', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -231,9 +240,10 @@ describe('maplibre', () => {
       },
       async () => {
         const xhr = vi.spyOn(mapp.utils, 'xhr');
-        const error = vi.spyOn(console, 'error');
+        // The errors are recorded and not printed, because the Mapbox request urls in the errors have the accessToken.
+        const error = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-        // Maplibre logs style validation and request errors to the console. The errors are reported if the map doesn't load.
+        // Maplibre logs style validation and request errors to the console. The errors are reported redacted if the map doesn't load.
         const errors = () =>
           error.mock.calls.map((args) => redact(args.join(' ')));
 
