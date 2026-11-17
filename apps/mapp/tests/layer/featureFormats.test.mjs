@@ -141,6 +141,25 @@ describe('layer/featureFormats', () => {
 
       expect(l.featureFields.category.values).toEqual(['city', 'office']);
     });
+
+    // The query selects the qID as id. An id field, eg. of a theme on the qID, is not repeated in the record.
+    it('assigns the id field from the first entry of the record', () => {
+      const l = layer(['id', 'name']);
+      l.featuresObject = {};
+
+      featureFormats.wkt_properties(l, [
+        [1, 'Paris'],
+        [2, 'Geolytix'],
+      ]);
+
+      expect(l.featuresObject).toEqual({
+        1: { id: 1, name: 'Paris' },
+        2: { id: 2, name: 'Geolytix' },
+      });
+
+      expect(l.featureFields.id.values).toEqual([1, 2]);
+      expect(l.featureFields.name.values).toEqual(['Paris', 'Geolytix']);
+    });
   });
 
   describe('wkth3', () => {

@@ -62,6 +62,24 @@ describe('layer/featureStyle', () => {
       expect(featureProperties(l, { id: 2 })).toBeNull();
     });
 
+    // The properties of a tile feature are kept between renders.
+    it('does not change the feature id with the properties from the featuresObject', () => {
+      const l = { featuresObject: { 1: { id: undefined, category: 'city' } } };
+
+      const properties = { id: 1 };
+
+      expect(featureProperties(l, properties)).toEqual({
+        id: 1,
+        category: 'city',
+      });
+
+      // The feature is found again on the next render.
+      expect(featureProperties(l, properties)).toEqual({
+        id: 1,
+        category: 'city',
+      });
+    });
+
     it('assigns the properties from the featureLookup', () => {
       const l = { featureLookup: [{ id: 1, value: 10 }] };
 
