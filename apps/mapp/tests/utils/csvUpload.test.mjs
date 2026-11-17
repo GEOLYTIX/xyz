@@ -146,6 +146,44 @@ describe('utils/csvUpload', () => {
     ]);
   });
 
+  it.each([
+    ['UTF-8', [0xef, 0xbb, 0xbf], (text) => new TextEncoder().encode(text)],
+    [
+      'UTF-16LE',
+      [0xff, 0xfe],
+      (text) =>
+        [...text].flatMap((char) => {
+          const code = char.charCodeAt(0);
+          return [code & 0xff, code >> 8];
+        }),
+    ],
+    [
+      'UTF-16BE',
+      [0xfe, 0xff],
+      (text) =>
+        [...text].flatMap((char) => {
+          const code = char.charCodeAt(0);
+          return [code >> 8, code & 0xff];
+        }),
+    ],
+  ])(
+    'decodes a %s file with a byte order mark',
+    async (_encoding, bom, encode) => {
+      const xhr = stubXhr();
+
+      const bytes = new Uint8Array([...bom, ...encode('Zürich,12\nBerlin,7')]);
+
+      await csvUpload(new File([bytes], 'upload.csv', { type: 'text/csv' }), {
+        query: 'insert',
+        fields: { name: 'text', size: 'int' },
+      });
+
+      expect(bodies(xhr)).toEqual([
+        { 'name::text': ['Zürich', 'Berlin'], 'size::int': [12, 7] },
+      ]);
+    },
+  );
+
   it('splits a row on the commas which are not in double quotes', async () => {
     const xhr = stubXhr();
 

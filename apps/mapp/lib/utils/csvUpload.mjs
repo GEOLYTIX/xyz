@@ -132,7 +132,7 @@ export default async function csvUpload(file, params = {}) {
     }
   }
 
-  const text = await file.text();
+  const text = await readText(file);
 
   // Split text file into rows on carriage return / new line.
   const rows = text.trim().split(/\r?\n/);
@@ -172,6 +172,30 @@ export default async function csvUpload(file, params = {}) {
   }
 
   return responses;
+}
+
+/**
+@function readText
+@description
+Reads the text content of a file.
+
+A UTF-16 byte order mark selects the UTF-16LE or UTF-16BE encoding, like FileReader.readAsText(). Files without a UTF-16 byte order mark are decoded as UTF-8. The byte order mark is removed from the text.
+
+@param {File} file The file to read.
+@returns {Promise<String>} The decoded text of the file.
+*/
+async function readText(file) {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+
+  let encoding = 'utf-8';
+
+  if (bytes[0] === 0xff && bytes[1] === 0xfe) {
+    encoding = 'utf-16le';
+  } else if (bytes[0] === 0xfe && bytes[1] === 0xff) {
+    encoding = 'utf-16be';
+  }
+
+  return new TextDecoder(encoding).decode(bytes);
 }
 
 /**
