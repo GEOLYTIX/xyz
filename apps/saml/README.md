@@ -35,34 +35,10 @@ Replace `SAML_LOGIN=true` with `AUTH_PATH=/saml`.
 The SAML configuration is created when the server starts. The server does not start if:
 
 - `SAML_ACS`, `SAML_ENTITY_ID`, `SAML_IDP_CRT` or `SAML_SSO` is not set.
-- No ACL connection is set in `PRIVATE` or `PUBLIC`.
 - A certificate or key file cannot be read from `apps/saml`.
 - The `${SAML_SP_CRT}.crt` file does not hold exactly one X.509 certificate, or the certificate does not match the private key in `${SAML_SP_CRT}.pem`.
 
 The error names the missing variable or file.
-
-### Replayed assertions
-
-The ID of every assertion accepted at `/saml/acs` is recorded until the assertion expires. An assertion presented again is rejected with a `401`. The IDs are stored in a `saml_cache` table in the ACL schema, so that every serverless instance sees them. Create the table in the ACL database before you deploy:
-
-```sql
-CREATE TABLE IF NOT EXISTS acl_schema.saml_cache (
-  key text PRIMARY KEY,
-  value text NOT NULL,
-  expires_at timestamptz NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS saml_cache_expires_at
-  ON acl_schema.saml_cache (expires_at);
-```
-
-Replace `acl_schema` with the schema of the ACL table in `PRIVATE` or `PUBLIC`. The ACL connection role needs `SELECT`, `INSERT`, `UPDATE` and `DELETE` on the table. Expired rows are removed when a new assertion is recorded.
-
-Without the table every login fails with a `401`, and the log names the missing `saml_cache` table.
-
-The IdP must set a `NotOnOrAfter` on the assertion `Conditions` or on the bearer `SubjectConfirmationData`. An assertion without one would be valid for ever, and is rejected.
-
-`InResponseTo` is not validated, so IdP-initiated logins are still accepted.
 
 ### Cookies
 

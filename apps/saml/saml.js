@@ -26,7 +26,6 @@ import { fileURLToPath } from 'node:url';
 import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
 import { SAML } from '@node-saml/node-saml';
 import jwt from 'jsonwebtoken';
-import { createAclCacheProvider } from './cacheProvider.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -118,19 +117,14 @@ Creates the node-saml configuration from the environment. The certificate files 
 
 The configuration is checked when it is created, so that a SAML app with a missing environment variable or certificate file fails when the server starts instead of on the first login.
 
-Every assertion ID received is recorded in the cache provider for as long as the assertion is valid. node-saml rejects an assertion with an ID it has received before as a replay. InResponseTo is not validated, so IdP-initiated logins are still accepted.
+InResponseTo is not validated, so IdP-initiated logins are accepted.
 
 @param {Object} [env=xyzEnv] The environment.
 @param {string} [certDir] The directory with the IdP certificate and SP key pair.
-@param {Object} [cacheProvider] The node-saml cache provider for the assertion IDs. Defaults to the saml_cache table in the ACL database.
 @returns {Object} The node-saml configuration.
 @throws {Error} A required environment variable or certificate file is missing or invalid.
 */
-export function createSamlConfig(
-  env = xyzEnv,
-  certDir = __dirname,
-  cacheProvider = createAclCacheProvider(),
-) {
+export function createSamlConfig(env = xyzEnv, certDir = __dirname) {
   const missing = REQUIRED_ENV.filter((key) => !env[key]);
 
   if (missing.length) {
@@ -158,7 +152,6 @@ export function createSamlConfig(
 
   return {
     acceptedClockSkewMs: parseClockSkew(env.SAML_ACCEPTED_CLOCK_SKEW),
-    cacheProvider,
     callbackUrl: env.SAML_ACS,
     entryPoint: env.SAML_SSO,
     identifierFormat: env.SAML_IDENTIFIER_FORMAT,
@@ -169,7 +162,6 @@ export function createSamlConfig(
     privateKey,
     providerName: env.SAML_PROVIDER_NAME,
     publicCert,
-    rejectReplayedAssertions: true,
     signatureAlgorithm: env.SAML_SIGNATURE_ALGORITHM,
     validateInResponseTo: 'never',
     wantAssertionsSigned: parseBoolean(env.SAML_WANT_ASSERTIONS_SIGNED),

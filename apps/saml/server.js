@@ -18,7 +18,7 @@ const [{ default: app }, { default: saml, getSamlStrat }] = await Promise.all([
   import('./saml.js'),
 ]);
 
-// The SAML configuration is created on startup. A missing environment variable or certificate file, or a missing ACL connection, fails the server start instead of the first login.
+// The SAML configuration is created on startup. A missing environment variable or certificate file fails the server start instead of the first login.
 getSamlStrat();
 
 app.get(`${xyzEnv.DIR}/saml/metadata`, saml);

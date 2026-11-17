@@ -7,7 +7,7 @@ import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { inflateRawSync } from 'node:zlib';
-import { InMemoryCacheProvider, SAML } from '@node-saml/node-saml';
+import { SAML } from '@node-saml/node-saml';
 import jwt from 'jsonwebtoken';
 import { createMocks } from 'node-mocks-http';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -65,11 +65,7 @@ describe('saml flow:', async () => {
   const { createSamlConfig, createSamlHandler } = await import('../saml.js');
 
   const keys = createKeys();
-  const config = createSamlConfig(
-    samlEnv,
-    keys.certDir,
-    new InMemoryCacheProvider(),
-  );
+  const config = createSamlConfig(samlEnv, keys.certDir);
   const strategy = new SAML(config);
   const saml = createSamlHandler(strategy);
 
@@ -220,47 +216,6 @@ describe('saml flow:', async () => {
       vi.useFakeTimers({ now: Date.now() + 60 * 60 * 1000, toFake: ['Date'] });
 
       expect((await postACS({ SAMLResponse })).statusCode).toBe(401);
-    });
-
-    it('rejects a replayed assertion while it is still valid', async () => {
-      aclFn.mockResolvedValue([aclUser]);
-
-      const SAMLResponse = samlResponse({
-        acs: ACS,
-        audience: ENTITY_ID,
-        privateKey: keys.idp.privateKey,
-      });
-
-      expect((await postACS({ SAMLResponse })).statusCode).toBe(200);
-
-      const replay = await postACS({ SAMLResponse });
-
-      expect(replay.statusCode).toBe(401);
-      expect(replay.getHeader('Set-Cookie')).toBeUndefined();
-      expect(aclFn).toHaveBeenCalledTimes(1);
-      expect(console.error).toHaveBeenCalledWith(
-        'SAML response validation failed:',
-        expect.stringContaining('has already been received'),
-      );
-    });
-
-    it('rejects a replayed assertion in a new response', async () => {
-      aclFn.mockResolvedValue([aclUser]);
-
-      const response = () =>
-        samlResponse({
-          acs: ACS,
-          assertionID: '_same_assertion',
-          audience: ENTITY_ID,
-          privateKey: keys.idp.privateKey,
-        });
-
-      expect((await postACS({ SAMLResponse: response() })).statusCode).toBe(
-        200,
-      );
-      expect((await postACS({ SAMLResponse: response() })).statusCode).toBe(
-        401,
-      );
     });
 
     it('rejects a response signed by another key', async () => {
@@ -549,12 +504,10 @@ describe('createSamlConfig:', async () => {
     expect(console.warn).toHaveBeenCalledTimes(2);
   });
 
-  it('rejects replayed assertions without requiring InResponseTo', () => {
+  it('does not require InResponseTo, so IdP-initiated logins are accepted', () => {
     const config = createSamlConfig(samlEnv, keys.certDir);
 
-    expect(config.rejectReplayedAssertions).toBe(true);
     expect(config.validateInResponseTo).toBe('never');
-    expect(config.cacheProvider.saveIfAbsentAsync).toBeTypeOf('function');
   });
 
   it('names the missing environment variables', () => {
