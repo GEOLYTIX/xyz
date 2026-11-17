@@ -222,15 +222,15 @@ export async function getRecord(layer, id) {
 @async
 
 @description
-Requests the id and name of every row with a geometry in the layer table with the wkt query template. The rows are sorted by id.
+Requests the id and theme field value of every row with a geometry in the layer table with the wkt query template. The rows are sorted by id.
 
-@param {layer} layer A decorated layer with a name field.
-@returns {Promise<Array>} The [id, name] rows of the layer table.
+@param {layer} layer A decorated layer with a theme field, eg. name.
+@returns {Promise<Array>} The [id, value] rows of the layer table.
 */
 export async function tableRows(layer) {
   const rows = await mapp.utils.xhr(
     `${mapp.host}/api/query?${mapp.utils.paramString({
-      fields: 'name',
+      fields: layer.style?.theme?.field ?? 'name',
       geom: layer.geom,
       layer: layer.key,
       locale: layer.mapview.locale.key,
@@ -283,18 +283,19 @@ export async function resetTable(layer, rows) {
 @async
 
 @description
-Creates a mapview for the scratch locale and adds the scratch_polygon mvt layer with wkt_properties and a distributed theme on the name field.
+Creates a mapview for the scratch locale and adds a layer of the example.scratch_polygon table, eg. the scratch_polygon mvt layer with wkt_properties and a distributed theme on the name field.
 
 The layer is shown and its properties are loaded for the locale view when the promise resolves. The mapview.changeEnd is not stopped, so a location create or trash runs the same properties loads as in the default view.
 
 The mapview is kept for the tests of a describe block, which depend on each other. It must be disposed with the returned dispose method in an afterAll hook.
 
-@returns {Promise<Object>} The scratch_polygon layer and the dispose method.
+@param {string} [key='scratch_polygon'] The key of the layer in the scratch locale.
+@returns {Promise<Object>} The layer and the dispose method.
 */
-export async function scratchPolygonLayer() {
+export async function scratchPolygonLayer(key = 'scratch_polygon') {
   const locale = await getLocale('scratch');
 
-  const layers = locale.layers.filter((l) => l.key === 'scratch_polygon');
+  const layers = locale.layers.filter((l) => l.key === key);
 
   layers[0].display = true;
 
@@ -315,7 +316,7 @@ export async function scratchPolygonLayer() {
 
   await mapview.renderComplete;
 
-  const layer = mapview.layers.scratch_polygon;
+  const layer = mapview.layers[key];
 
   function dispose() {
     clearTimeout(mapview.changeEndTimer);
@@ -406,16 +407,16 @@ export function renderedFeatures(layer) {
 /**
 @function themeStyles
 @description
-Returns the name, fill colour and lookup fill colour of the distributed theme for each rendered feature. The fill colour is from the feature style of the last render.
+Returns the theme field value as name, the fill colour and the lookup fill colour of the distributed theme for each rendered feature. The fill colour is from the feature style of the last render.
 
-@param {layer} layer A decorated mvt layer with wkt_properties and a distributed theme on the name field.
+@param {layer} layer A decorated mvt layer with wkt_properties and a distributed theme.
 @returns {Array<Object>} The rendered feature styles.
 */
 export function themeStyles(layer) {
   const theme = layer.style.theme;
 
   return renderedFeatures(layer).map((F) => {
-    const { name } = layer.featuresObject[F.get('id')];
+    const name = String(layer.featuresObject[F.get('id')][theme.field]);
 
     return {
       fillColor: F.style?.fillColor,
@@ -504,4 +505,52 @@ export async function panTo(layer, coordinate, loaded) {
   await expect.poll(loaded, { timeout: 5000 }).toBe(true);
 
   await render(layer);
+}
+
+/**
+@function drawPolygon
+@async
+
+@description
+Draws a polygon with the mapview draw interaction of the layer.draw.polygon config, as the polygon button of the drawing element does. The feature of the draw interaction source is saved with the interaction.finish() method, as the save option of the draw context menu does. The callback creates the location with the mapp.location.create method without waiting for it, as the drawing element does.
+
+@param {layer} layer A decorated layer with a draw.polygon config.
+@param {Array} extent The extent of the polygon in the mapview projection.
+@returns {Promise<location>} The location of the new polygon.
+*/
+export async function drawPolygon(layer, extent) {
+  const mapview = layer.mapview;
+
+  const interaction = {
+    type: 'Polygon',
+    ...layer.draw.polygon,
+    layer,
+    callback: (feature) => {
+      mapp.location.create(feature, interaction, layer);
+
+      delete mapview.interaction;
+    },
+  };
+
+  mapview.interactions.draw(interaction);
+
+  mapview.interaction.source.addFeature(
+    new ol.Feature(ol.geom.Polygon.fromExtent(extent)),
+  );
+
+  mapview.interaction.finish(mapview.interaction.getFeature());
+
+  let location;
+
+  await expect
+    .poll(
+      () =>
+        (location = Object.values(mapview.locations).find(
+          (l) => l.layer === layer,
+        )),
+      { timeout: 5000 },
+    )
+    .toBeDefined();
+
+  return location;
 }

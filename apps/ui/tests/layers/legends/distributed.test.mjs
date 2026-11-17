@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   createPolygon,
+  drawPolygon,
   getRecord,
   renameLocation,
   render,
@@ -186,4 +187,51 @@ describe.sequential('ui/layers/legends/distributed', () => {
     expect(Object.keys(layer.style.theme.lookup)).not.toContain(RENAMED);
     expect(themeValues(layer)).not.toContain(RENAMED);
   }, 20000);
+});
+
+// The extent of the polygon which is drawn and deleted by the compare_areas tests.
+const DRAWN_EXTENT = [15000, 6705000, 25000, 6715000];
+
+/**
+Review of #3079: Simon's layer config, the compare_areas layer of the scratch locale. A distributed theme on the id field, which is also the qID.
+
+The tests fail, see the compare_areas tests in apps/mapp/tests/layer/format/mvt.test.mjs. The id property of the features is undefined in the layer.featuresObject. The ids of the seeded polygons are assigned to the theme categories from the render before the first properties response, but the id of a drawn polygon is never assigned.
+
+The table is reset to the rows before the tests once in the afterAll hook, also if a test fails.
+*/
+describe.sequential('ui/layers/legends/distributed on the qID field', () => {
+  let dispose;
+  let layer;
+  let location;
+  let seeded;
+
+  beforeAll(async () => {
+    ({ dispose, layer } = await scratchPolygonLayer('compare_areas'));
+
+    seeded = await tableRows(layer);
+
+    mapp.ui.layers.legends.distributed(layer);
+  });
+
+  afterAll(async () => {
+    try {
+      expect(await resetTable(layer, seeded)).toEqual(seeded);
+    } finally {
+      location?.remove?.();
+
+      dispose();
+    }
+  });
+
+  it.fails(
+    'draws the id of a polygon drawn with the draw interaction in the legend',
+    async () => {
+      location = await drawPolygon(layer, DRAWN_EXTENT);
+
+      await expect
+        .poll(() => legendValues(layer), { timeout: 10000 })
+        .toContain(String(location.id));
+    },
+    20000,
+  );
 });

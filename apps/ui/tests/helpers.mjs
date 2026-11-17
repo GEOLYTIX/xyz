@@ -23,6 +23,7 @@ export {
   changeEnd,
   createMapview,
   createPolygon,
+  drawPolygon,
   getLocale,
   getRecord,
   newLocation,

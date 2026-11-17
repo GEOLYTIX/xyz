@@ -4,6 +4,7 @@ import {
   changeEnd,
   createMapview,
   createPolygon,
+  drawPolygon,
   getLocale,
   getRecord,
   panTo,
@@ -746,6 +747,200 @@ describe.sequential('mvt wkt_properties distributed theme', () => {
     expectColours();
   }, 20000);
 });
+
+// The extent of the polygon which is drawn and deleted by the compare_areas tests.
+const DRAWN_EXTENT = [15000, 6705000, 25000, 6715000];
+
+/**
+Returns the fill colour of the last render for each tile feature of the layer in the view extent, with the feature geometry extent.
+*/
+function tileColours(layer) {
+  const extent = layer.mapview.Map.getView().calculateExtent();
+
+  return layer.L.getFeaturesInExtent(extent).map((F) => ({
+    extent: F.getExtent(),
+    fillColor: F.style?.fillColor,
+  }));
+}
+
+/**
+Review of #3079: Simon's layer config, the compare_areas layer of the scratch locale. A distributed theme on the id field, which is also the qID, with cat_arr categories in a themes object, a polygon draw config and deleteLocation.
+
+Every polygon must have a category colour of the theme, not the default style fill colour #00f.
+
+The tests run in order and depend on each other. The add test draws a polygon with the mapview draw interaction and the draw callback of the drawing element, and the delete test deletes the same polygon with the location.trash() method. The table is reset to the rows before the tests once in the afterAll hook, also if a test fails.
+*/
+describe.sequential(
+  'mvt wkt_properties distributed theme on the qID field',
+  () => {
+    let categoryColours;
+    let dispose;
+    let layer;
+    let location;
+    let seeded;
+
+    beforeAll(async () => {
+      ({ dispose, layer } = await scratchPolygonLayer('compare_areas'));
+
+      seeded = await tableRows(layer);
+
+      categoryColours = layer.style.theme.categories.map(
+        (cat) => cat.style.fillColor,
+      );
+    });
+
+    afterAll(async () => {
+      try {
+        // The drawn polygon is deleted with the location_delete query if a test has failed before the delete.
+        expect(await resetTable(layer, seeded)).toEqual(seeded);
+      } finally {
+        // The trash method has already removed the location and its remove method.
+        location?.remove?.();
+
+        dispose();
+      }
+    });
+
+    /**
+  Resolves once every tile feature in the view has been rendered with a category colour of the theme.
+  */
+    async function expectCategoryColours() {
+      await render(layer);
+
+      await expect
+        .poll(
+          () =>
+            tileColours(layer).filter(
+              (F) => !categoryColours.includes(F.fillColor),
+            ),
+          { timeout: 5000 },
+        )
+        .toEqual([]);
+    }
+
+    it.fails(
+      'renders the seeded polygons with the categories of the theme',
+      async () => {
+        expect(layer.style.theme.key).toBe('Compare Areas');
+        expect(categoryColours).toHaveLength(9);
+        expect(seeded).toHaveLength(4);
+
+        // The properties of the seeded polygons are loaded.
+        await expect
+          .poll(() => Object.keys(layer.featuresObject ?? {}).sort(), {
+            timeout: 5000,
+          })
+          .toEqual(seeded.map(([id]) => String(id)).sort());
+
+        // The id of a feature is the theme field value.
+        expect(Object.values(layer.featuresObject).map((p) => p.id)).toEqual(
+          Object.keys(layer.featuresObject).map(Number),
+        );
+
+        expect(tileColours(layer).length).toBeGreaterThanOrEqual(4);
+
+        await expectCategoryColours();
+
+        expect(Object.keys(layer.style.theme.lookup).sort()).toEqual(
+          seeded.map(([id]) => String(id)).sort(),
+        );
+      },
+    );
+
+    it.fails(
+      'renders a polygon drawn with the draw interaction with a category of the theme',
+      async () => {
+        location = await drawPolygon(layer, DRAWN_EXTENT);
+
+        const id = String(location.id);
+
+        // The create method reloads the layer. The tiles must be refreshed for the geometry of the new polygon.
+        await expect
+          .poll(
+            () =>
+              tileColours(layer).some((F) =>
+                ol.extent.containsCoordinate(
+                  F.extent,
+                  ol.extent.getCenter(DRAWN_EXTENT),
+                ),
+              ),
+            { timeout: 10000 },
+          )
+          .toBe(true);
+
+        // The create method checks the loaded tiles for the new feature after a second and reloads the layer again if the feature has not been found.
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+
+        await expectCategoryColours();
+
+        expect(Object.keys(layer.style.theme.lookup)).toContain(id);
+        expect(themeValues(layer)).toContain(id);
+      },
+      20000,
+    );
+
+    it.fails(
+      'renders the polygons with the categories of the theme after a zoom out and in',
+      async () => {
+        const view = layer.mapview.Map.getView();
+
+        const zoom = view.getZoom();
+
+        // The properties are loaded for the view after the changeEnd.
+        let loaded = changeEnd(layer.mapview);
+
+        view.setZoom(zoom - 1);
+
+        await loaded;
+
+        await expect
+          .poll(() => Object.keys(layer.featuresObject ?? {}).length, {
+            timeout: 5000,
+          })
+          .toBeGreaterThanOrEqual(4);
+
+        await expectCategoryColours();
+
+        loaded = changeEnd(layer.mapview);
+
+        view.setZoom(zoom);
+
+        await loaded;
+
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        await expectCategoryColours();
+      },
+      20000,
+    );
+
+    it.fails(
+      'removes the value of the polygon deleted with the location trash method',
+      async () => {
+        expect(location).toBeDefined();
+
+        const id = String(location.id);
+
+        await trashLocation(location);
+
+        expect(await getRecord(layer, id)).toBeNull();
+
+        // The trash method removes the location, which reloads the layer.
+        await expect
+          .poll(() => layer.featuresObject?.[id], { timeout: 5000 })
+          .toBeUndefined();
+
+        await expectCategoryColours();
+
+        expect(Object.keys(layer.style.theme.lookup).sort()).toEqual(
+          seeded.map(([id]) => String(id)).sort(),
+        );
+        expect(themeValues(layer)).not.toContain(id);
+      },
+      20000,
+    );
+  },
+);
 
 describe('mvt featureLookup', () => {
   const featureLookup = [
