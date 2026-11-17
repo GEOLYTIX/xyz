@@ -63,6 +63,101 @@
           "fieldfx": "ARRAY[ST_X(geom),ST_Y(geom)]"
         }
       ]
+    },
+    "scratch_polygon": {
+      "display": false,
+      "format": "mvt",
+      "table": "example.scratch_polygon",
+      "qID": "id",
+      "geom": "geom_3857",
+      "srid": "3857",
+      "wkt_properties": true,
+      "style": {
+        "default": {
+          "strokeColor": "#333",
+          "fillColor": "#9996"
+        },
+        "theme": {
+          "title": "Name",
+          "type": "distributed",
+          "field": "name",
+          "categories": [
+            { "style": { "fillColor": "#e6194b" } },
+            { "style": { "fillColor": "#3cb44b" } },
+            { "style": { "fillColor": "#4363d8" } },
+            { "style": { "fillColor": "#f58231" } },
+            { "style": { "fillColor": "#911eb4" } }
+          ]
+        }
+      },
+      "infoj": [
+        { "type": "key" },
+        { "title": "Name", "field": "name", "edit": true }
+      ]
+    },
+    "compare_areas": {
+      "name": "Compare custom areas",
+      "display": false,
+      "format": "mvt",
+      "table": "example.scratch_polygon",
+      "geom": "geom_3857",
+      "srid": "3857",
+      "draw": {
+        "drawer": false,
+        "polygon": { "label": "Create new polygon" }
+      },
+      "deleteLocation": true,
+      "toggleLocationViewEdits": true,
+      "multi_filter": { "target": "dialog" },
+      "qID": "id",
+      "infoj": [
+        { "type": "key", "key": "key" },
+        {
+          "field": "pin",
+          "type": "pin",
+          "fieldfx": "ARRAY[ST_X(ST_CENTROID(geom_3857)),ST_Y(ST_CENTROID(geom_3857))]"
+        },
+        {
+          "field": "geom_3857",
+          "fieldfx": "ST_asGeoJSON(geom_3857)",
+          "type": "geometry",
+          "display": true,
+          "draw": { "geometry": true }
+        }
+      ],
+      "wkt_properties": true,
+      "style": {
+        "highlight": { "strokeColor": "#f00", "strokeWidth": 2 },
+        "default": {
+          "fillColor": "#00f",
+          "fillOpacity": 0.3,
+          "strokeColor": "#00f",
+          "strokeWidth": 1
+        },
+        "themes": {
+          "Compare Areas": {
+            "type": "distributed",
+            "title": "Compare Areas",
+            "field": "id",
+            "cat_arr": [
+              { "fillColor": "#E41A1C", "strokeColor": "#E41A1C" },
+              { "fillColor": "#377EB8", "strokeColor": "#377EB8" },
+              { "fillColor": "#4DAF4A", "strokeColor": "#4DAF4A" },
+              { "fillColor": "#984EA3", "strokeColor": "#984EA3" },
+              { "fillColor": "#FF7F00", "strokeColor": "#FF7F00" },
+              { "fillColor": "#FFFF33", "strokeColor": "#FFFF33" },
+              { "fillColor": "#A65628", "strokeColor": "#A65628" },
+              { "fillColor": "#F781BF", "strokeColor": "#F781BF" },
+              { "fillColor": "#999999", "strokeColor": "#999999" }
+            ]
+          },
+          "Boundary Only": {
+            "type": "basic",
+            "title": "Boundary Only",
+            "style": { "strokeColor": "#000" }
+          }
+        }
+      }
     }
   }
 }
