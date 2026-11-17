@@ -1,7 +1,7 @@
 /**
 The cdn view loads the published @geolytix/mapp package from the jsDelivr CDN instead of the /mapp/lib source modules, the way a page outside of XYZ uses the MAPP library.
 
-The package version or dist-tag is read from the `version` URL parameter, eg. `/views/cdn/?version=next` or `/views/cdn/?version=5.1.0`. The default is `latest`.
+The package version or dist-tag is read from the `version` URL parameter, eg. `/views/cdn/?version=next` or `/views/cdn/?version=5.1.0`. The default is `latest`. The view throws for a value which isn't a version, range or dist-tag, so a path like `/../other-package@1.0.0` can't load another package from the CDN.
 
 The page is not an XYZ view and has no `data-dir`, so the `mapp.host` is set after the import. A page on another origin sets the url of the XYZ instance, which must allow the cross-origin requests.
 
@@ -9,6 +9,11 @@ The view creates a mapview with the `osm` base layer and the `locations_categori
 */
 
 const version = new URLSearchParams(location.search).get('version') || 'latest';
+
+// A version, range or dist-tag without path, query or fragment separators.
+if (!/^[0-9A-Za-z^~][0-9A-Za-z.+-]*$/.test(version)) {
+  throw new Error(`Invalid @geolytix/mapp version: ${version}`);
+}
 
 const cdn = `https://cdn.jsdelivr.net/npm/@geolytix/mapp@${version}`;
 

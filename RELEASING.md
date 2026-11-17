@@ -112,27 +112,26 @@ A published version can't be changed or reused, and npm limits unpublishing. Rel
 
 ### Publish with the workflow
 
-The [Publish MAPP workflow](./.github/workflows/publish_mapp.yml) only runs on a manual dispatch from [Actions → Publish MAPP](https://github.com/GEOLYTIX/xyz/actions/workflows/publish_mapp.yml), or with the GitHub CLI:
+The [Publish MAPP workflow](./.github/workflows/publish_mapp.yml) only runs on a manual dispatch from [Actions → Publish MAPP](https://github.com/GEOLYTIX/xyz/actions/workflows/publish_mapp.yml), or with the GitHub CLI. It publishes the branch or tag it is dispatched from, the **Use workflow from** ref or the `--ref` of the CLI:
 
 ```bash
 # A release, after the release workflow pushed the tag.
-gh workflow run publish_mapp.yml -f ref=v5.1.0 -f dist_tag=latest
+gh workflow run publish_mapp.yml --ref v5.1.0 -f dist_tag=latest
 
 # A prerelease from a development branch, published as 5.1.0-rc.2.
-gh workflow run publish_mapp.yml -f ref=minor -f dist_tag=next -f prerelease=rc.2
+gh workflow run publish_mapp.yml --ref minor -f dist_tag=next -f prerelease=rc.2
 ```
 
 | Input | Description |
 | --- | --- |
-| `ref` | The release tag for `latest`, eg. `v5.1.0`. A branch or tag for `next`. |
-| `dist_tag` | `latest` for a release, `next` for a prerelease. |
+| `dist_tag` | `latest` for a release, dispatched from the release tag, eg. `v5.1.0`. `next` for a prerelease of a branch or tag. |
 | `prerelease` | The prerelease identifier for `next`, eg. `rc.2`. The version is the `apps/mapp/package.json` version with the identifier, eg. `5.1.0-rc.2`. |
 
 The workflow checks that the versions match and that the version isn't published yet. It runs the MAPP library tests, builds and packs the package, runs the package test with the tarball, and publishes the tarball with provenance. The prerelease version is only set in the workflow checkout and isn't committed.
 
 The publish job runs in the `npm` environment, which requires the approval of a reviewer. npm authenticates the workflow with trusted publishing (OIDC), so there is no npm token.
 
-GitHub only lists a manually dispatched workflow once the workflow file is on `main`. Until then, publish locally.
+The deployment rules of the `npm` environment apply to the dispatched ref, so only the permitted branches and tags can be published. The ref must contain the workflow file. GitHub only lists a manually dispatched workflow once the workflow file is on `main`. Until then, publish locally.
 
 ### Check the published version
 

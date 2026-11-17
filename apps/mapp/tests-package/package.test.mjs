@@ -11,11 +11,11 @@ import { beforeAll, describe, expect, inject, it, vi } from 'vitest';
 
 let mapp;
 let pkg;
-let warn;
+let warnings;
 
 beforeAll(async () => {
   // The import warns if Openlayers is not loaded or below the current version.
-  warn = vi.spyOn(console, 'warn');
+  const warn = vi.spyOn(console, 'warn');
 
   await new Promise((resolve, reject) => {
     const script = document.createElement('script');
@@ -30,6 +30,8 @@ beforeAll(async () => {
 
   await import('@geolytix/mapp/css');
 
+  // mockRestore() clears the recorded calls, so they are copied first.
+  warnings = warn.mock.calls.map(([message]) => String(message));
   warn.mockRestore();
 });
 
@@ -47,7 +49,9 @@ describe('@geolytix/mapp package', () => {
     expect(ol.util.VERSION).toMatch(/^10\./);
 
     // The installed ol is the latest of the ^10.8.0 peer range, eg. v10.11.
-    expect(warn).not.toHaveBeenCalledWith(expect.stringMatching(/^Openlayers/));
+    expect(
+      warnings.filter((message) => message.startsWith('Openlayers')),
+    ).toEqual([]);
   });
 
   it('has no host outside of an XYZ view', () => {
@@ -56,10 +60,11 @@ describe('@geolytix/mapp package', () => {
 
   it('applies the css export', () => {
     const element = document.createElement('div');
-    element.className = 'ol-scale-line';
+    element.className = 'ol-scale-line-inner';
     document.body.append(element);
 
-    expect(getComputedStyle(element).position).toBe('static');
+    // The border from css/layout/_ol.css, a div has no border by default.
+    expect(getComputedStyle(element).borderBottomWidth).toBe('2px');
 
     element.remove();
   });

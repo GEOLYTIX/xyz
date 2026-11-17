@@ -4,6 +4,10 @@ name: Publish MAPP
 # manual dispatch, after a maintainer decided that a release has MAPP changes
 # to publish, see RELEASING.md.
 #
+# The workflow publishes the ref it is dispatched from, the "Use workflow
+# from" branch or tag. The deployment branch and tag rules of the npm
+# environment apply to this ref, so only a permitted ref can be published.
+#
 # - latest: publishes the version of a release tag, eg. v5.1.0.
 # - next: publishes a prerelease of a branch or tag, eg. 5.1.0-rc.2 from minor.
 #
@@ -17,10 +21,6 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      ref:
-        description: 'The release tag for latest, eg. v5.1.0, or a branch or tag for next.'
-        required: true
-        type: string
       dist_tag:
         description: 'The npm dist-tag.'
         required: true
@@ -48,9 +48,8 @@ jobs:
       id-token: write
 
     steps:
+      # Checks out github.ref, the ref the workflow is dispatched from.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ inputs.ref }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -73,7 +72,7 @@ jobs:
       - name: Resolve the version
         id: version
         env:
-          REF: ${{ inputs.ref }}
+          REF: ${{ github.ref }}
           DIST_TAG: ${{ inputs.dist_tag }}
           PRERELEASE: ${{ inputs.prerelease }}
         run: |
@@ -85,8 +84,8 @@ jobs:
               echo "::error::A prerelease is published with the next dist-tag."
               exit 1
             fi
-            if [ "$REF" != "v$base" ] || ! git ls-remote --exit-code --tags origin "refs/tags/$REF" > /dev/null; then
-              echo "::error::latest publishes a release tag. The ref must be the tag v$base."
+            if [ "$REF" != "refs/tags/v$base" ]; then
+              echo "::error::latest publishes a release tag. Dispatch the workflow from the tag v$base, not $REF."
               exit 1
             fi
             version="$base"
