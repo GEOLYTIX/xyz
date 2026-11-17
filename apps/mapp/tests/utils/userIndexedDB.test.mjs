@@ -1,4 +1,4 @@
-import { describe, expect, it, onTestFinished } from 'vitest';
+import { describe, expect, it, onTestFinished, vi } from 'vitest';
 import * as userIndexedDB from '../../lib/utils/userIndexedDB.mjs';
 
 /**
@@ -100,6 +100,57 @@ describe('utils/userIndexedDB', () => {
 
     expect(params.indexedDB).toBe('MAPP');
     expect(IDB.name).toBe('MAPP');
+  });
+
+  // The openDB method returned a new openDB call from the onsuccess handler instead of resolving with it, and the open connection blocked the version upgrade, so the promise for a second store never resolved.
+  it('creates a second store in a database', async () => {
+    const indexedDB = dbName();
+
+    await userIndexedDB.put({
+      indexedDB,
+      store: 'locales',
+      name: 'locale',
+      obj: { key: 'smoke' },
+    });
+
+    // The database is opened with a new version to create the store.
+    await userIndexedDB.put({
+      indexedDB,
+      store: 'user',
+      name: 'user',
+      obj: { language: 'en' },
+    });
+
+    expect(await database(indexedDB)).toEqual({ name: indexedDB, version: 4 });
+
+    expect(
+      await userIndexedDB.get({ indexedDB, store: 'locales', name: 'locale' }),
+    ).toEqual({ key: 'smoke' });
+
+    expect(
+      await userIndexedDB.get({ indexedDB, store: 'user', name: 'user' }),
+    ).toEqual({ language: 'en' });
+  });
+
+  // The add method was called without a key, which the store requires.
+  it('adds an object with its name and rejects an existing name', async () => {
+    const params = { indexedDB: dbName(), store: 'locales', name: 'locale' };
+
+    expect(await userIndexedDB.add({ ...params, obj: { version: 1 } })).toBe(
+      'locale',
+    );
+
+    expect(await userIndexedDB.get({ ...params })).toEqual({ version: 1 });
+
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    // Unlike the put method, the add method does not overwrite a record.
+    await expect(
+      userIndexedDB.add({ ...params, obj: { version: 2 } }),
+    ).rejects.toHaveProperty('name', 'ConstraintError');
+
+    expect(error).toHaveBeenCalled();
+    expect(await userIndexedDB.get({ ...params })).toEqual({ version: 1 });
   });
 
   it('puts and gets an object by its name', async () => {

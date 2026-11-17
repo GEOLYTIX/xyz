@@ -139,6 +139,19 @@ describe('utils/csvDownload', () => {
     click.mock.contexts[0].remove();
   });
 
+  // The header array was joined with a comma regardless of the separator param.
+  it('joins the header row with the separator', async () => {
+    csvDownload([{ id: 1, name: 'Paris' }], {
+      header: true,
+      separator: ';',
+      fields: [{ field: 'id', title: 'ID' }, { field: 'name' }],
+    });
+
+    expect(await blob().text()).toBe('ID;name\r\n1;Paris');
+
+    click.mock.contexts[0].remove();
+  });
+
   it('has no header row without fields', async () => {
     csvDownload([{ id: 1, name: 'Paris' }], { header: true });
 

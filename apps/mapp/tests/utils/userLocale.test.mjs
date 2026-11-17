@@ -22,7 +22,6 @@ async function smoke(name) {
 
 describe('utils/userLocale', () => {
   beforeEach(() => {
-    // The userLocale methods require the mapp.user.
     mapp.user = { email: 'test@geolytix.co.uk' };
   });
 
@@ -122,6 +121,27 @@ describe('utils/userLocale', () => {
     expect(await userLocale.remove({ workspace, name })).toBeUndefined();
 
     expect(await userLocale.get({ workspace, name })).toBeUndefined();
+    expect(await userLocale.list(workspace)).toEqual([]);
+  });
+
+  // The methods read the mapp.user.email and threw without a mapp.user.
+  it('stores, lists and removes a locale without a mapp.user', async () => {
+    delete mapp.user;
+
+    const mapview = await smoke('Anonymous smoke');
+
+    const { workspace, name } = mapview.locale;
+
+    expect(await userLocale.putLocale(mapview)).toBe('Anonymous smoke');
+    expect((await userLocale.get({ workspace, name })).name).toBe(
+      'Anonymous smoke',
+    );
+    expect(await userLocale.list(workspace)).toEqual([
+      { key: 'smoke', name: 'Anonymous smoke' },
+    ]);
+
+    await userLocale.remove({ workspace, name });
+
     expect(await userLocale.list(workspace)).toEqual([]);
   });
 });

@@ -35,7 +35,7 @@ export async function get(locale) {
   const storedLocale = await mapp.utils.userIndexedDB.get({
     indexedDB: locale.workspace,
     store: 'locales',
-    user: mapp.user.email || 'anonymous',
+    user: mapp.user?.email || 'anonymous',
     name: locale.name,
   });
 
@@ -61,7 +61,7 @@ export async function putLocale(mapview, params) {
   const response = await mapp.utils.userIndexedDB.put({
     indexedDB: locale.workspace,
     store: 'locales',
-    user: mapp.user.email || 'anonymous',
+    user: mapp.user?.email || 'anonymous',
     name: locale.name,
     obj: locale,
   });
@@ -82,7 +82,7 @@ export async function list(workspace) {
   const locales = await mapp.utils.userIndexedDB.list({
     indexedDB: workspace,
     store: 'locales',
-    user: mapp.user.email || 'anonymous',
+    user: mapp.user?.email || 'anonymous',
   });
 
   return locales;
@@ -103,7 +103,7 @@ export async function remove(locale) {
   const response = await mapp.utils.userIndexedDB.remove({
     indexedDB: locale.workspace,
     store: 'locales',
-    user: mapp.user.email || 'anonymous',
+    user: mapp.user?.email || 'anonymous',
     name: locale.name,
   });
 
