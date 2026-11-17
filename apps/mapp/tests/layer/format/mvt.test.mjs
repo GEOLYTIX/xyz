@@ -1,9 +1,22 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import {
   addLayers,
   changeEnd,
   createMapview,
+  createPolygon,
+  drawPolygon,
   getLocale,
+  getRecord,
+  panTo,
+  renameLocation,
+  render,
+  resetTable,
+  scratchPolygonLayer,
+  tableRows,
+  themeColours,
+  themeStyles,
+  themeValues,
+  trashLocation,
 } from '../../helpers.mjs';
 
 /**
@@ -259,12 +272,37 @@ async function properties(layer, id) {
 }
 
 /**
-Stops the debounced mapview changeEnd of the initial view. The changeEnd loads the properties without the reload flag. A load from the changeEnd after the layer.reload() would supersede the debounced reload request, and the tiles would not be refreshed.
+Stops the debounced mapview changeEnd of the initial view and resolves once the properties requests of the initial view have settled.
+
+A load from the changeEnd after the layer.reload() would supersede the debounced reload request and check the pending reload in its place. The tests call the changeEnd load themselves where this order is tested.
+
+A properties request from the changeEnd may also be debounced or in flight when the test calls the layer.reload(). Its response would assign the properties before the response of the reload request. The final load supersedes a debounced request, and is sent after a request in flight, so no response of the initial view is pending once the load has resolved.
 */
-function stopChangeEnd(layer) {
+async function stopChangeEnd(layer) {
   clearTimeout(layer.mapview.changeEndTimer);
 
+  const [load] = layer.changeEndCallbacks;
+
   layer.changeEndCallbacks.length = 0;
+
+  await load(layer);
+}
+
+/**
+Resolves as soon as the next XMLHttpRequest has been sent, before its response can be received. A debounced mapp.utils.xhr request is sent from a timeout.
+*/
+function requestSent() {
+  return new Promise((resolve) => {
+    const send = vi
+      .spyOn(XMLHttpRequest.prototype, 'send')
+      .mockImplementation(function (body) {
+        send.mockRestore();
+
+        this.send(body);
+
+        resolve();
+      });
+  });
 }
 
 describe('mvt wkt_properties', () => {
@@ -329,9 +367,9 @@ describe('mvt wkt_properties', () => {
 
     await properties(layer, MOROCCO);
 
-    layer.filter.current = { continent: { in: ['Europe'] } };
+    await stopChangeEnd(layer);
 
-    stopChangeEnd(layer);
+    layer.filter.current = { continent: { in: ['Europe'] } };
 
     layer.reload();
 
@@ -348,12 +386,12 @@ describe('mvt wkt_properties', () => {
 
     await properties(layer, FRANCE);
 
+    await stopChangeEnd(layer);
+
     const refresh = vi.spyOn(layer.source, 'refresh');
 
     // France has not been rendered before, eg. after a location has been created.
     delete layer.featuresObject[FRANCE];
-
-    stopChangeEnd(layer);
 
     layer.reload();
 
@@ -364,15 +402,78 @@ describe('mvt wkt_properties', () => {
     expect(layer.featuresObject[FRANCE]).toBeDefined();
   });
 
+  // The layer.reload() is called for a feature which has not been rendered, eg. after a location has been created. The reload is pending with the layer.reloadFeatureIds until a response has checked it. The two tests below cover a load from a mapview changeEnd which takes the place of the reload.
+  it('refreshes the tiles if a changeEnd load supersedes the debounced reload request', async () => {
+    const layer = await countries(undefined, { wkt_properties: true });
+
+    await properties(layer, FRANCE);
+
+    const [load] = layer.changeEndCallbacks;
+
+    await stopChangeEnd(layer);
+
+    const refresh = vi.spyOn(layer.source, 'refresh');
+
+    // France has not been rendered before.
+    delete layer.featuresObject[FRANCE];
+
+    // The reload request is debounced by 500ms.
+    layer.reload();
+
+    // The map view changes before the reload request has been sent. The changeEnd load has the same debounce key and supersedes the reload request.
+    await load(layer);
+
+    // The changeEnd response has assigned the properties of the new feature.
+    expect(layer.featuresObject[FRANCE]).toBeDefined();
+
+    // The reload request was never sent. The changeEnd response has checked the pending reload and refreshed the tiles for the geometry of the new feature.
+    expect(refresh).toHaveBeenCalledTimes(1);
+  });
+
+  it('refreshes the tiles if a changeEnd response assigns the new feature before the reload response', async () => {
+    const layer = await countries(undefined, { wkt_properties: true });
+
+    await properties(layer, FRANCE);
+
+    const [load] = layer.changeEndCallbacks;
+
+    await stopChangeEnd(layer);
+
+    const refresh = vi.spyOn(layer.source, 'refresh');
+
+    // The map view changes. The changeEnd request is sent after the debounce.
+    const sent = requestSent();
+
+    const changeEndLoad = load(layer);
+
+    await sent;
+
+    // France has not been rendered before. The changeEnd request is in flight when the layer is reloaded.
+    delete layer.featuresObject[FRANCE];
+
+    layer.reload();
+
+    // The changeEnd response assigns the properties of the new feature. The load was called before the reload and does not check the pending reload.
+    await changeEndLoad;
+
+    expect(layer.featuresObject[FRANCE]).toBeDefined();
+    expect(refresh).not.toHaveBeenCalled();
+
+    // The new feature is already in the featuresObject when the reload response is received. The feature has not been rendered before the reload, and the tiles with the geometry of the new feature must be requested.
+    await expect
+      .poll(() => refresh.mock.calls.length, { timeout: 5000 })
+      .toBe(1);
+  });
+
   it('does not refresh the tiles on reload without a new feature', async () => {
     const layer = await countries(undefined, { wkt_properties: true });
 
     await properties(layer, FRANCE);
 
+    await stopChangeEnd(layer);
+
     const refresh = vi.spyOn(layer.source, 'refresh');
     const changed = vi.spyOn(layer.L, 'changed');
-
-    stopChangeEnd(layer);
 
     layer.reload();
 
@@ -389,17 +490,453 @@ describe('mvt wkt_properties', () => {
 
     await properties(layer, GERMANY);
 
+    await stopChangeEnd(layer);
+
     const clear = vi.spyOn(layer.source, 'clear');
 
     layer.display = false;
 
-    stopChangeEnd(layer);
-
     layer.reload();
 
     expect(clear).toHaveBeenCalled();
+
+    // The cleared tile source requests the tile geometries itself once the layer is shown. The reload is not pending.
+    expect(layer.reloadFeatureIds).toBeUndefined();
+  });
+
+  it('keeps the reload pending if the properties request fails', async () => {
+    const layer = await countries(undefined, { wkt_properties: true });
+
+    await properties(layer, FRANCE);
+
+    const [load] = layer.changeEndCallbacks;
+
+    await stopChangeEnd(layer);
+
+    // The tiles are not requested again from the testhost.
+    const refresh = vi
+      .spyOn(layer.source, 'refresh')
+      .mockImplementation(() => {});
+
+    vi.spyOn(layer.source, 'clear').mockImplementation(() => {});
+    vi.spyOn(layer.featureSource, 'refresh').mockImplementation(() => {});
+
+    // France has not been rendered before.
+    delete layer.featuresObject[FRANCE];
+
+    // The mapp.utils.xhr method resolves with an Error for a failed request.
+    const xhr = vi
+      .spyOn(mapp.utils, 'xhr')
+      .mockResolvedValueOnce(new Error('HTTP 500'));
+
+    layer.reload();
+
+    // The failed response assigns an empty featuresObject.
+    await expect
+      .poll(() => Object.keys(layer.featuresObject).length, { timeout: 5000 })
+      .toBe(0);
+
+    xhr.mockRestore();
+
+    // The failed response has not checked the reload.
+    expect(layer.reloadFeatureIds).toBeInstanceOf(Set);
+    expect(refresh).not.toHaveBeenCalled();
+
+    // The next response checks the pending reload and refreshes the tiles for the new feature.
+    await load(layer);
+
+    expect(layer.featuresObject[FRANCE]).toBeDefined();
+    expect(layer.reloadFeatureIds).toBeUndefined();
+    expect(refresh).toHaveBeenCalledTimes(1);
   });
 });
+
+// The scratch_polygon polygon which is created, renamed and deleted by the tests.
+const ADDED = 'Added';
+const RENAMED = 'Renamed';
+const ADDED_EXTENT = [15000, 6690000, 25000, 6700000];
+
+// The centre of the scratch locale view, and a centre without scratch polygons in the view.
+const LONDON = ol.proj.fromLonLat([-0.1, 51.5]);
+const AWAY = ol.proj.fromLonLat([5, 51.5]);
+
+/**
+Review of #3079: an mvt layer with wkt_properties and a distributed theme. The legend and the colours are not updated after a polygon has been created or deleted.
+
+The tests run in order and depend on each other. The add test creates a polygon with the mapp.location.create method, the rename test updates its name with the location.update() method, and the delete test deletes the same polygon with the location.trash() method. The table is reset to the rows before the tests once in the afterAll hook, also if a test fails.
+
+The seeded polygons must keep their colours throughout.
+*/
+describe.sequential('mvt wkt_properties distributed theme', () => {
+  let colours;
+  let dispose;
+  let layer;
+  let location;
+  let seeded;
+
+  beforeAll(async () => {
+    ({ dispose, layer } = await scratchPolygonLayer());
+
+    seeded = await tableRows(layer);
+  });
+
+  afterAll(async () => {
+    try {
+      // The created polygon is deleted with the location_delete query if a test has failed before the delete.
+      expect(await resetTable(layer, seeded)).toEqual(seeded);
+    } finally {
+      // The trash method has already removed the location and its remove method.
+      location?.remove?.();
+
+      dispose();
+    }
+  });
+
+  /**
+  Asserts that every rendered polygon has the colour of its category in the lookup, and that the seeded polygons have the colours of the first render.
+  */
+  function expectColours() {
+    for (const s of themeStyles(layer)) {
+      expect(s.fillColor, s.name).toBe(s.lookup);
+    }
+
+    expect(themeColours(layer)).toMatchObject(colours);
+  }
+
+  it('renders the seeded polygons with the categories of the theme lookup', async () => {
+    expect(seeded.map(([, name]) => name)).toEqual([
+      'North',
+      'East',
+      'South',
+      'West',
+    ]);
+
+    await expect
+      .poll(
+        // A polygon in more than one tile is rendered once for each tile.
+        () =>
+          [
+            ...new Set(
+              themeStyles(layer)
+                .filter((s) => s.fillColor && s.fillColor === s.lookup)
+                .map((s) => s.name),
+            ),
+          ].sort(),
+        { timeout: 5000 },
+      )
+      .toEqual(['East', 'North', 'South', 'West']);
+
+    colours = themeColours(layer);
+
+    // The seeded polygons have different categories.
+    expect(new Set(Object.values(colours)).size).toBe(4);
+  });
+
+  it('assigns a category to a polygon created with the location create method', async () => {
+    location = await createPolygon(layer, ADDED, ADDED_EXTENT);
+
+    const id = Number(location.id);
+
+    expect(seeded.map(([id]) => id)).not.toContain(id);
+
+    // The create method reloads the layer. The tiles must be refreshed for the geometry of the new polygon.
+    await expect
+      .poll(() => themeStyles(layer).find((s) => s.id === id)?.fillColor, {
+        timeout: 10000,
+      })
+      .toBeDefined();
+
+    const theme = layer.style.theme;
+
+    expect(Object.keys(theme.lookup)).toContain(ADDED);
+    expect(themeValues(layer)).toContain(ADDED);
+
+    // The new polygon has a category colour.
+    expect(theme.categories.map((cat) => cat.style.fillColor)).toContain(
+      themeStyles(layer).find((s) => s.id === id).fillColor,
+    );
+
+    // The create method checks the loaded tiles for the new feature after a second and reloads the layer again if the feature has not been found.
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    await render(layer);
+
+    expectColours();
+
+    expect(themeStyles(layer).map((s) => s.name)).toContain(ADDED);
+  }, 20000);
+
+  it('replaces the value of a polygon renamed with the location update method', async () => {
+    expect(location).toBeDefined();
+
+    const id = Number(location.id);
+
+    await renameLocation(location, RENAMED);
+
+    // The update method reloads the layer.
+    await expect
+      .poll(() => layer.featuresObject?.[id]?.name, { timeout: 5000 })
+      .toBe(RENAMED);
+
+    await render(layer);
+
+    expect(Object.keys(layer.style.theme.lookup)).not.toContain(ADDED);
+    expect(Object.keys(layer.style.theme.lookup)).toContain(RENAMED);
+
+    // The number of values is unchanged.
+    expect(themeValues(layer).sort()).toEqual([
+      'East',
+      'North',
+      RENAMED,
+      'South',
+      'West',
+    ]);
+
+    expectColours();
+  }, 20000);
+
+  it('removes the value of the polygon deleted with the location trash method', async () => {
+    expect(location).toBeDefined();
+
+    const id = Number(location.id);
+
+    await trashLocation(location);
+
+    expect(await getRecord(layer, id)).toBeNull();
+
+    // The trash method removes the location, which reloads the layer.
+    await expect
+      .poll(() => layer.featuresObject?.[id], { timeout: 5000 })
+      .toBeUndefined();
+
+    await render(layer);
+
+    // The deleted polygon is not rendered, every remaining polygon has the colour of its category in the lookup.
+    expect(themeStyles(layer).map((s) => s.id)).not.toContain(id);
+
+    expectColours();
+
+    expect(Object.keys(layer.style.theme.lookup).sort()).toEqual([
+      'East',
+      'North',
+      'South',
+      'West',
+    ]);
+    expect(themeValues(layer)).not.toContain(RENAMED);
+  }, 20000);
+
+  it('assigns the previous categories to the polygons after the mapview is panned away and back', async () => {
+    // No polygon is in the properties of the view.
+    await panTo(
+      layer,
+      AWAY,
+      () => Object.keys(layer.featuresObject ?? {}).length === 0,
+    );
+
+    expect(layer.style.theme.lookup).toEqual({});
+    expect(themeValues(layer)).toEqual([]);
+
+    await panTo(layer, LONDON, () =>
+      seeded.every(([id]) => Object.hasOwn(layer.featuresObject ?? {}, id)),
+    );
+
+    await expect
+      .poll(() => Object.keys(themeColours(layer)).sort(), { timeout: 5000 })
+      .toEqual(['East', 'North', 'South', 'West']);
+
+    expectColours();
+  }, 20000);
+});
+
+// The extent of the polygon which is drawn and deleted by the compare_areas tests. The polygon overlaps the seeded East polygon.
+const DRAWN_EXTENT = [5000, 6700000, 25000, 6712000];
+
+// The id of the seeded East polygon.
+const EAST = 2;
+
+/**
+Returns the fill colour of the last render for each tile feature of the layer in the view extent, with the feature geometry extent.
+*/
+function tileColours(layer) {
+  const extent = layer.mapview.Map.getView().calculateExtent();
+
+  return layer.L.getFeaturesInExtent(extent).map((F) => ({
+    extent: F.getExtent(),
+    fillColor: F.style?.fillColor,
+  }));
+}
+
+/**
+Review of #3079: Simon's layer config, the compare_areas layer of the scratch locale. A distributed theme on the id field, which is also the qID, with cat_arr categories in a themes object, a polygon draw config and deleteLocation.
+
+Every polygon must have a category colour of the theme, not the default style fill colour #00f.
+
+The tests run in order and depend on each other. The add test draws a polygon with the mapview draw interaction and the draw callback of the drawing element, and the delete test deletes the same polygon with the location.trash() method. The table is reset to the rows before the tests once in the afterAll hook, also if a test fails.
+*/
+describe.sequential(
+  'mvt wkt_properties distributed theme on the qID field',
+  () => {
+    let categoryColours;
+    let dispose;
+    let layer;
+    let location;
+    let seeded;
+
+    beforeAll(async () => {
+      ({ dispose, layer } = await scratchPolygonLayer('compare_areas'));
+
+      seeded = await tableRows(layer);
+
+      categoryColours = layer.style.theme.categories.map(
+        (cat) => cat.style.fillColor,
+      );
+    });
+
+    afterAll(async () => {
+      try {
+        // The drawn polygon is deleted with the location_delete query if a test has failed before the delete.
+        expect(await resetTable(layer, seeded)).toEqual(seeded);
+      } finally {
+        // The trash method has already removed the location and its remove method.
+        location?.remove?.();
+
+        dispose();
+      }
+    });
+
+    /**
+  Resolves once every tile feature in the view has been rendered with a category colour of the theme.
+  */
+    async function expectCategoryColours() {
+      await render(layer);
+
+      await expect
+        .poll(
+          () =>
+            tileColours(layer).filter(
+              (F) => !categoryColours.includes(F.fillColor),
+            ),
+          { timeout: 5000 },
+        )
+        .toEqual([]);
+    }
+
+    it('renders the seeded polygons with the categories of the theme', async () => {
+      expect(layer.style.theme.key).toBe('Compare Areas');
+      expect(categoryColours).toHaveLength(9);
+      expect(seeded).toHaveLength(4);
+
+      // The properties of the seeded polygons are loaded.
+      await expect
+        .poll(() => Object.keys(layer.featuresObject ?? {}).sort(), {
+          timeout: 5000,
+        })
+        .toEqual(seeded.map(([id]) => String(id)).sort());
+
+      // The id of a feature is the theme field value.
+      expect(Object.values(layer.featuresObject).map((p) => p.id)).toEqual(
+        Object.keys(layer.featuresObject).map(Number),
+      );
+
+      expect(tileColours(layer).length).toBeGreaterThanOrEqual(4);
+
+      await expectCategoryColours();
+
+      expect(Object.keys(layer.style.theme.lookup).sort()).toEqual(
+        seeded.map(([id]) => String(id)).sort(),
+      );
+    });
+
+    it('renders a polygon drawn with the draw interaction with a category of the theme', async () => {
+      location = await drawPolygon(layer, DRAWN_EXTENT);
+
+      const id = String(location.id);
+
+      // The create method reloads the layer. The tiles must be refreshed for the geometry of the new polygon.
+      await expect
+        .poll(
+          () =>
+            tileColours(layer).some((F) =>
+              ol.extent.containsCoordinate(
+                F.extent,
+                ol.extent.getCenter(DRAWN_EXTENT),
+              ),
+            ),
+          { timeout: 10000 },
+        )
+        .toBe(true);
+
+      // The create method checks the loaded tiles for the new feature after a second and reloads the layer again if the feature has not been found.
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      await expectCategoryColours();
+
+      expect(Object.keys(layer.style.theme.lookup)).toContain(id);
+      expect(themeValues(layer)).toContain(id);
+
+      // The drawn polygon overlaps the East polygon and has a different category.
+      const fill = (fid) =>
+        themeStyles(layer).find((s) => s.id === fid)?.fillColor;
+
+      expect(fill(Number(id))).toBeDefined();
+      expect(fill(EAST)).toBeDefined();
+      expect(fill(Number(id))).not.toBe(fill(EAST));
+    }, 20000);
+
+    it('renders the polygons with the categories of the theme after a zoom out and in', async () => {
+      const view = layer.mapview.Map.getView();
+
+      const zoom = view.getZoom();
+
+      // The properties are loaded for the view after the changeEnd.
+      let loaded = changeEnd(layer.mapview);
+
+      view.setZoom(zoom - 1);
+
+      await loaded;
+
+      await expect
+        .poll(() => Object.keys(layer.featuresObject ?? {}).length, {
+          timeout: 5000,
+        })
+        .toBeGreaterThanOrEqual(4);
+
+      await expectCategoryColours();
+
+      loaded = changeEnd(layer.mapview);
+
+      view.setZoom(zoom);
+
+      await loaded;
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      await expectCategoryColours();
+    }, 20000);
+
+    it('removes the value of the polygon deleted with the location trash method', async () => {
+      expect(location).toBeDefined();
+
+      const id = String(location.id);
+
+      await trashLocation(location);
+
+      expect(await getRecord(layer, id)).toBeNull();
+
+      // The trash method removes the location, which reloads the layer.
+      await expect
+        .poll(() => layer.featuresObject?.[id], { timeout: 5000 })
+        .toBeUndefined();
+
+      await expectCategoryColours();
+
+      expect(Object.keys(layer.style.theme.lookup).sort()).toEqual(
+        seeded.map(([id]) => String(id)).sort(),
+      );
+      expect(themeValues(layer)).not.toContain(id);
+    }, 20000);
+  },
+);
 
 describe('mvt featureLookup', () => {
   const featureLookup = [
