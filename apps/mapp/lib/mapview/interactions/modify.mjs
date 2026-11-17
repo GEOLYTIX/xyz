@@ -201,8 +201,11 @@ function deleteCondition(e, mapview) {
       ${mapp.dictionary.delete_vertex}`);
   }
 
-  // Only allow to delete vertex on polygon with more than 3. The ring is closed with the first coordinate.
-  if (params.geomType === 'Polygon' && params.coords[0].length > 4) {
+  // Only allow to delete vertex on a polygon ring with more than 3 vertices. The ring may be a hole.
+  if (
+    params.geomType === 'Polygon' &&
+    closestRingLength(params.geom, e.coordinate) > 4
+  ) {
     params.content.push(mapp.utils.html`<li
       onclick=${() => removeVertex(e, mapview)}>
       ${mapp.dictionary.delete_vertex}`);
@@ -215,6 +218,33 @@ function deleteCondition(e, mapview) {
     content: mapp.utils.html.node`<ul>${params.content}`,
     coords: params.geom.getClosestPoint(e.coordinate),
   });
+}
+
+/**
+@function closestRingLength
+@description
+Returns the number of coordinates of the polygon ring closest to a coordinate. The ring may be the exterior ring or a hole. The Openlayers Modify interaction doesn't remove a vertex from a ring with 4 coordinates, because a ring is closed with its first coordinate.
+
+@param {ol.geom.Polygon} polygon The polygon geometry.
+@param {Array<number>} coordinate The clicked coordinate.
+@returns {number} The number of coordinates of the closest ring.
+*/
+function closestRingLength(polygon, coordinate) {
+  let ringLength;
+  let minDist = Infinity;
+
+  for (const ring of polygon.getCoordinates()) {
+    const [x, y] = new ol.geom.LineString(ring).getClosestPoint(coordinate);
+
+    const dist = (x - coordinate[0]) ** 2 + (y - coordinate[1]) ** 2;
+
+    if (dist < minDist) {
+      minDist = dist;
+      ringLength = ring.length;
+    }
+  }
+
+  return ringLength;
 }
 
 function removeVertex(e, mapview) {
@@ -255,7 +285,7 @@ function multipolygon(e, mapview, params) {
     if (dist < params.minDist) {
       params.minDist = dist;
       params.clickedPolyIndex = idx;
-      params.ringLength = poly.getCoordinates()[0].length;
+      params.ringLength = closestRingLength(poly, e.coordinate);
     }
   });
 
@@ -279,9 +309,8 @@ function multipolygon(e, mapview, params) {
     );
 
     if (remaining.length === 0) {
-      // If they deleted the last part, end the interaction and nullify
-      mapview.interaction.finish();
-      mapview.interaction.callback?.(null);
+      // The last part is deleted. The finish method calls the callback with null. A callback may delete the mapview.interaction.
+      mapview.interaction.finish(null);
     } else {
       // Apply the filtered coordinates back to the geometry
       params.geom.setCoordinates(remaining.map((p) => p.getCoordinates()));

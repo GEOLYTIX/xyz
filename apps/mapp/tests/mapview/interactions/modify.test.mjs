@@ -32,6 +32,16 @@ function ring(view, [x, y], size = 100) {
   ]);
 }
 
+// The top left pixel of a square hole in the LINE triangle.
+const HOLE = [250, 130];
+
+/**
+Returns the rings of a polygon with the LINE triangle and a square hole. A vertex of the triangle can't be removed, a vertex of the hole can.
+*/
+function triangleWithHole(view) {
+  return [coordinates(view, [...LINE, LINE[0]]), ring(view, HOLE, 40)];
+}
+
 /**
 Creates the smoke mapview with a modify interaction for a feature. The geometry method is called with the mapview and returns the geometry of the feature. The default is a line with three vertices.
 
@@ -321,6 +331,65 @@ describe('mapview interactions modify', () => {
       );
     });
 
+    // The vertex limit was checked against the exterior ring, so the menu of a triangle with a hole had no entry to remove a vertex of the hole.
+    it.each([
+      [
+        'a vertex of the hole of a polygon',
+        (view) => new ol.geom.Polygon(triangleWithHole(view)),
+        HOLE,
+        ['delete_vertex'],
+      ],
+      [
+        'a vertex of the triangle of a polygon',
+        (view) => new ol.geom.Polygon(triangleWithHole(view)),
+        LINE[0],
+        [],
+      ],
+      [
+        'a vertex of the hole of a multi polygon part',
+        (view) => new ol.geom.MultiPolygon([triangleWithHole(view)]),
+        HOLE,
+        ['delete_vertex', 'delete_polygon_part'],
+      ],
+      [
+        'a vertex of the triangle of a multi polygon part',
+        (view) => new ol.geom.MultiPolygon([triangleWithHole(view)]),
+        LINE[0],
+        ['delete_polygon_part'],
+      ],
+    ])('shows the menu for %s', async (_, geometry, pixel, entries) => {
+      const view = await mapview(geometry);
+
+      view.interaction.deleteCondition({
+        type: 'singleclick',
+        coordinate: view.Map.getCoordinateFromPixel(pixel),
+      });
+
+      expect(menuText(view)).toEqual(
+        entries.map((entry) => mapp.dictionary[entry]),
+      );
+    });
+
+    it('removes a vertex of the hole of a polygon', async () => {
+      const view = await mapview(
+        (view) => new ol.geom.Polygon(triangleWithHole(view)),
+      );
+
+      const [triangle] = triangleWithHole(view);
+
+      pointerClick(view, HOLE);
+
+      menuItems(view)[0].click();
+
+      const [exterior, hole] =
+        view.interaction.Feature.getGeometry().getCoordinates();
+
+      // The triangle is kept and the hole has three vertices.
+      expect(exterior).toEqual(triangle);
+      expect(hole).toHaveLength(4);
+      expect(hole).not.toContainEqual(view.Map.getCoordinateFromPixel(HOLE));
+    });
+
     it('deletes the part of a multi polygon closest to the click', async () => {
       const view = await mapview(
         (view) =>
@@ -351,8 +420,12 @@ describe('mapview interactions modify', () => {
       expect(view.interaction.modifyend).toHaveBeenCalledTimes(1);
     });
 
+    // The multipolygon method finished the interaction and then called the callback again with null. The geometry entry callback deletes the mapview.interaction, so the second call threw.
     it('finishes the interaction with null if the last part is deleted', async () => {
-      const callback = vi.fn();
+      // The callback deletes the interaction like the updateCallback of the geometry entry.
+      const callback = vi.fn(() => {
+        delete view.interaction;
+      });
 
       const view = await mapview(
         (view) => new ol.geom.MultiPolygon([[ring(view, [100, 100])]]),
@@ -373,7 +446,8 @@ describe('mapview interactions modify', () => {
         .click();
 
       expect(mapInteractions(view)).not.toContain(interaction);
-      expect(callback).toHaveBeenLastCalledWith(null);
+      expect(callback).toHaveBeenCalledTimes(1);
+      expect(callback).toHaveBeenCalledWith(null);
       expect(view.popup()).toBeFalsy();
     });
   });
