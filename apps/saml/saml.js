@@ -152,15 +152,25 @@ function samlHandler(req, res, strategy, redirectUser) {
 @description
 Sends the service provider metadata. The SP certificate is published as the signing certificate for requests signed with the SP private key.
 
+node-saml throws if the SP certificate file does not hold exactly one X.509 certificate, eg. a bare public key or a certificate chain. The error is logged and sent as a 500 status. The request must not be left without a response.
+
 @param {res} res HTTP response.
 @param {SAML} strategy The node-saml instance.
 */
 function metadata(res, strategy) {
+  let metadata;
+
+  try {
+    metadata = strategy.generateServiceProviderMetadata(
+      null,
+      strategy.options.publicCert,
+    );
+  } catch (error) {
+    console.error('SAML metadata generation failed:', error.message);
+    return res.status(500).send('SAML metadata is not available.');
+  }
+
   res.setHeader('Content-Type', 'application/xml');
-  const metadata = strategy.generateServiceProviderMetadata(
-    null,
-    strategy.options.publicCert,
-  );
   res.send(metadata);
 }
 
@@ -279,11 +289,11 @@ async function login(req, res, strategy) {
   try {
     //This tells the IDP where to redirect to
     const relayState = (redirect || xyzEnv.DIR) ?? '/';
-    const url = await strategy.getAuthorizeUrlAsync(
-      relayState,
-      req.headers['x-forwarded-host'],
-      { additionalParams: {} },
-    );
+
+    // node-saml ignores the deprecated host argument. The AuthnRequest is built from the required SAML_ACS callbackUrl.
+    const url = await strategy.getAuthorizeUrlAsync(relayState, {
+      additionalParams: {},
+    });
 
     res.setHeader('location', url);
     return res.status(302).send();

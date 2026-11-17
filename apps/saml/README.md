@@ -85,7 +85,7 @@ Any request must be routed to the SAML server script. The build and routing can 
       "src": "apps/saml/server.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": "{public/**,apps/xyz/*.crt,apps/xyz/*.pem}"
+        "includeFiles": "{public/**,apps/saml/*.crt,apps/saml/*.pem}"
       }
     }
   ],

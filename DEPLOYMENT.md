@@ -182,7 +182,7 @@ pnpm build --filter=@geolytix/mapp
 vercel --prod --local-config=apps/saml/vercel.json
 ```
 
-Deploy each to its **own Vercel project** — they all claim `/(.*)`. The SAML config also ships `apps/xyz/*.crt` and `apps/xyz/*.pem`, which are gitignored and so must be present locally at deploy time.
+Deploy each to its **own Vercel project** — they all claim `/(.*)`. The SAML config also ships `apps/saml/*.crt` and `apps/saml/*.pem`. The SAML app reads its certificates from `apps/saml`. They are gitignored and so must be present locally at deploy time.
 
 ## Build artefacts
 

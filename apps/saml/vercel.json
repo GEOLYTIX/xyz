@@ -9,8 +9,8 @@
         "includeFiles": [
           ".varlock.blob",
           "public/**",
-          "apps/xyz/*.crt",
-          "apps/xyz/*.pem"
+          "apps/saml/*.crt",
+          "apps/saml/*.pem"
         ]
       }
     }
