@@ -57,11 +57,8 @@ The methods are used in the chunkRows method to convert the field values to the 
 @property {function} varchar Replace quotes in string values.
 */
 const schemaMethods = {
-  int: (val) => {
-    const number = parseNumber(val);
-    return number === null ? null : Math.trunc(number);
-  },
-  numeric: parseNumber,
+  int: (val) => parseNumber(val, Number.parseInt),
+  numeric: (val) => parseNumber(val, Number.parseFloat),
   text: stringQuotes,
   varchar: stringQuotes,
 };
@@ -69,13 +66,14 @@ const schemaMethods = {
 /**
 @function parseNumber
 @description
-This function parses a numeric string value. Characters other than digits, dot, sign and exponent are removed, eg. a currency symbol, a thousands separator space or a percent sign. The exponent of a value in scientific notation is kept, so `1e3` is parsed as 1000.
+This function parses a numeric string value. Characters other than digits, dot and minus are removed, eg. a currency symbol, a thousands separator space or a percent sign.
 
 @param {String} val The string value to parse.
+@param {function} parse The Number.parseInt or Number.parseFloat method.
 @returns {Number|null} The number, or null if the value is not a number. Zero is a number.
 */
-function parseNumber(val) {
-  const number = Number.parseFloat(val.replace(/[^\d.eE+-]/g, ''));
+function parseNumber(val, parse) {
+  const number = parse(val.replace(/[^\d.-]/g, ''));
   return Number.isNaN(number) ? null : number;
 }
 

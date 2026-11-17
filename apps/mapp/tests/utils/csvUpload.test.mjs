@@ -184,18 +184,18 @@ describe('utils/csvUpload', () => {
         // Single quotes are doubled for the SQL string. A null string is null.
         'name::text': ["O''Brien", null, 'Paris'],
         'category::varchar': [null, "It''s", 'city'],
-        // Other characters than digits, dot, sign and exponent are removed. A value which is not a number is null.
+        // Other characters than digits, dot and minus are removed. A value which is not a number is null.
         'size::int': [1200, null, -7],
         'score::numeric': [-12.5, null, 1000],
       },
     ]);
   });
 
-  // The int and numeric schema methods returned null for 0 with `|| null`, and removed the e of a value in scientific notation, so 1e3 was 13.
-  it('converts zero and scientific notation to numbers', async () => {
+  // The int and numeric schema methods returned null for 0 with `|| null`.
+  it('converts zero to a number', async () => {
     const xhr = stubXhr();
 
-    await csvUpload(csv('0,0\n1e3,1e3\n-2.5E2,1.5e-3\n0.9,+4'), {
+    await csvUpload(csv('0,0\n0.9,0.5'), {
       query: 'insert',
       fields: { size: 'int', score: 'numeric' },
     });
@@ -203,8 +203,8 @@ describe('utils/csvUpload', () => {
     expect(bodies(xhr)).toEqual([
       {
         // An int value is truncated.
-        'size::int': [0, 1000, -250, 0],
-        'score::numeric': [0, 1000, 0.0015, 4],
+        'size::int': [0, 0],
+        'score::numeric': [0, 0.5],
       },
     ]);
   });
