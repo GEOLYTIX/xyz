@@ -216,6 +216,115 @@ describe('location update', () => {
     );
   });
 
+  // https://github.com/GEOLYTIX/xyz/issues/3068: a newValue set while the update request is pending was not sent but was still marked as saved and cleared, losing the edit.
+  it('keeps a newValue set while the update request is pending', async () => {
+    const location = await scratch();
+
+    const category = entry(location, 'category');
+    const size = entry(location, 'size');
+
+    category.newValue = 'b';
+
+    // Isolate the reconciliation from the layer reload and dependent sync.
+    vi.spyOn(location, 'syncFields').mockImplementation(async () => {});
+    vi.spyOn(location.layer, 'reload').mockImplementation(() => {});
+    vi.spyOn(
+      location.layer.mapview.interactions,
+      'highlight',
+    ).mockImplementation(() => {});
+
+    // A concurrent edit sets another newValue while the update request is pending.
+    vi.spyOn(mapp.utils, 'xhr').mockImplementation(async () => {
+      size.newValue = 99;
+      return 1;
+    });
+
+    await location.update();
+
+    // The value sent with the request is saved and its newValue cleared.
+    expect(category.value).toBe('b');
+    expect(category.newValue).toBeUndefined();
+
+    // The edit made while the request was pending was not sent, so it is kept.
+    expect(size.newValue).toBe(99);
+    expect(size.value).not.toBe(99);
+  });
+
+  // https://github.com/GEOLYTIX/xyz/pull/3069#discussion_r4536744755: an older update response must not overwrite a value saved by a newer overlapping update.
+  it('serializes overlapping updates resolved in reverse order', async () => {
+    const location = await scratch();
+
+    const category = entry(location, 'category');
+
+    // Isolate the reconciliation from the layer reload and dependent sync.
+    vi.spyOn(location, 'syncFields').mockImplementation(async () => {});
+    vi.spyOn(location.layer, 'reload').mockImplementation(() => {});
+    vi.spyOn(
+      location.layer.mapview.interactions,
+      'highlight',
+    ).mockImplementation(() => {});
+
+    // Each update request returns a promise which is resolved by the test.
+    const requests = [Promise.withResolvers(), Promise.withResolvers()];
+
+    const xhr = vi
+      .spyOn(mapp.utils, 'xhr')
+      .mockImplementation(() => requests[xhr.mock.calls.length - 1].promise);
+
+    category.newValue = 'b';
+    const first = location.update();
+
+    // The value is changed while the first update is pending.
+    await vi.waitFor(() => expect(xhr).toHaveBeenCalledTimes(1));
+    category.newValue = 'c';
+    const second = location.update();
+
+    // Resolve the update requests in reverse order.
+    requests[1].resolve(1);
+    requests[0].resolve(1);
+
+    await Promise.all([first, second]);
+
+    // The second update request is sent after the first update completed.
+    expect(xhr).toHaveBeenCalledTimes(2);
+    expect(JSON.parse(xhr.mock.calls[0][0].body)).toEqual({ category: 'b' });
+    expect(JSON.parse(xhr.mock.calls[1][0].body)).toEqual({ category: 'c' });
+
+    // The newer value is saved and not overwritten by the older update.
+    expect(category.value).toBe('c');
+    expect(category.newValue).toBeUndefined();
+  });
+
+  it('runs an update after a pending update failed', async () => {
+    const location = await scratch();
+
+    const category = entry(location, 'category');
+
+    vi.spyOn(location, 'syncFields').mockImplementation(async () => {});
+    vi.spyOn(location.layer, 'reload').mockImplementation(() => {});
+    vi.spyOn(
+      location.layer.mapview.interactions,
+      'highlight',
+    ).mockImplementation(() => {});
+
+    // The first update throws, the second update succeeds.
+    const xhr = vi
+      .spyOn(mapp.utils, 'xhr')
+      .mockRejectedValueOnce(new Error('network'))
+      .mockResolvedValueOnce(1);
+
+    category.newValue = 'b';
+    const first = location.update();
+    const second = location.update();
+
+    await expect(first).rejects.toThrow('network');
+    await second;
+
+    expect(xhr).toHaveBeenCalledTimes(2);
+    expect(category.value).toBe('b');
+    expect(category.newValue).toBeUndefined();
+  });
+
   it('syncs the dependent fields of updated entries', async () => {
     const location = await scratch();
 
