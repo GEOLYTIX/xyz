@@ -56,7 +56,9 @@ The putLocale method calls the put method to store a locale object in the userIn
 export async function putLocale(mapview, params) {
   const locale = mapp.utils.jsonParser(mapview.locale);
 
-  locale.layers = Object.values(mapview.layers).map(mapp.utils.jsonParser);
+  locale.layers = Object.values(mapview.layers).map((layer) =>
+    mapp.utils.jsonParser(layer),
+  );
 
   const response = await mapp.utils.userIndexedDB.put({
     indexedDB: locale.workspace,
