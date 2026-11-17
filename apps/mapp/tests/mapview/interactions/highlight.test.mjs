@@ -571,7 +571,9 @@ describe('mapview interactions highlight', () => {
 
     await userEvent.hover(target(view), { position });
 
-    expect(view.interaction.current.F).toBe(feature);
+    // A render may create the cluster features again, so compare the layer and id, not the feature object.
+    expect(view.interaction.current.layer).toBe(layer);
+    expect(view.interaction.current.id).toBe(feature.get('id'));
     expect(target(view).style.cursor).toBe('pointer');
 
     await userEvent.click(target(view), { position });
