@@ -6,12 +6,14 @@ globalThis.xyzEnv = {
 
 const mockPgConnectFn = vi.fn();
 const mockPgQueryFn = vi.fn();
+const mockPgOnFn = vi.fn();
 
 vi.mock('pg', () => ({
   default: {
     Pool: class Pool {
       constructor() {
         this.connect = mockPgConnectFn;
+        this.on = mockPgOnFn;
       }
     },
   },
@@ -42,5 +44,9 @@ describe('acl:', () => {
     const result = await acl(q, arr);
 
     expect(result).toEqual(['user1', 'user2', 'user3']);
+  });
+
+  it('listens for errors of idle pool clients', () => {
+    expect(mockPgOnFn).toHaveBeenCalledWith('error', expect.any(Function));
   });
 });

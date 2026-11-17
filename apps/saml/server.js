@@ -13,10 +13,13 @@ const workspaceRoot = fileURLToPath(new URL('../..', import.meta.url));
 // The xyz app resolves built-in file references from XYZ_CWD when provided.
 process.env.XYZ_CWD ??= workspaceRoot;
 
-const [{ default: app }, { default: saml }] = await Promise.all([
+const [{ default: app }, { default: saml, getSamlStrat }] = await Promise.all([
   import('@geolytix/xyz-app/server'),
   import('./saml.js'),
 ]);
+
+// The SAML configuration is created on startup. A missing environment variable or certificate file, or a missing ACL connection, fails the server start instead of the first login.
+getSamlStrat();
 
 app.get(`${xyzEnv.DIR}/saml/metadata`, saml);
 app.get(`${xyzEnv.DIR}/saml/logout`, saml);

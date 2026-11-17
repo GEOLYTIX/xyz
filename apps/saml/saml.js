@@ -19,12 +19,14 @@ Certificate files are resolved relative to the `apps/saml` package root.
 @module saml-app
 */
 import '../xyz/mod/utils/processEnv.js';
+import { createPrivateKey, X509Certificate } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
 import { SAML } from '@node-saml/node-saml';
 import jwt from 'jsonwebtoken';
+import { createAclCacheProvider } from './cacheProvider.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -69,31 +71,107 @@ export function parseClockSkew(value) {
 }
 
 /**
+The environment variables without which the SAML app cannot log a user in.
+*/
+const REQUIRED_ENV = ['SAML_ACS', 'SAML_ENTITY_ID', 'SAML_IDP_CRT', 'SAML_SSO'];
+
+/**
+@function checkSpCertificate
+
+@description
+node-saml publishes the SP certificate in the metadata and signs requests with the SP private key. The metadata fails if the certificate file does not hold exactly one X.509 certificate, eg. a bare public key or a certificate chain. The IdP rejects signed requests if the private key does not match the certificate.
+
+@param {string} file The certificate file name.
+@param {string} publicCert The certificate file content.
+@param {string} privateKey The private key file content.
+@throws {Error} The certificate is not a single X.509 certificate or does not match the private key.
+*/
+function checkSpCertificate(file, publicCert, privateKey) {
+  const certificates = publicCert.match(/-----BEGIN CERTIFICATE-----/g);
+
+  if (certificates?.length !== 1) {
+    throw new Error(`SAML: ${file} must hold exactly one X.509 certificate.`);
+  }
+
+  let certificate;
+
+  try {
+    certificate = new X509Certificate(publicCert);
+  } catch (error) {
+    throw new Error(`SAML: ${file} is not a valid X.509 certificate.`, {
+      cause: error,
+    });
+  }
+
+  if (!certificate.checkPrivateKey(createPrivateKey(privateKey))) {
+    throw new Error(
+      `SAML: ${file} does not match the private key in the .pem file.`,
+    );
+  }
+}
+
+/**
 @function createSamlConfig
 
 @description
 Creates the node-saml configuration from the environment. The certificate files are read from the certDir.
 
+The configuration is checked when it is created, so that a SAML app with a missing environment variable or certificate file fails when the server starts instead of on the first login.
+
+Every assertion ID received is recorded in the cache provider for as long as the assertion is valid. node-saml rejects an assertion with an ID it has received before as a replay. InResponseTo is not validated, so IdP-initiated logins are still accepted.
+
 @param {Object} [env=xyzEnv] The environment.
 @param {string} [certDir] The directory with the IdP certificate and SP key pair.
+@param {Object} [cacheProvider] The node-saml cache provider for the assertion IDs. Defaults to the saml_cache table in the ACL database.
 @returns {Object} The node-saml configuration.
+@throws {Error} A required environment variable or certificate file is missing or invalid.
 */
-export function createSamlConfig(env = xyzEnv, certDir = __dirname) {
-  const readCert = (file) => String(readFileSync(join(certDir, file)));
+export function createSamlConfig(
+  env = xyzEnv,
+  certDir = __dirname,
+  cacheProvider = createAclCacheProvider(),
+) {
+  const missing = REQUIRED_ENV.filter((key) => !env[key]);
+
+  if (missing.length) {
+    throw new Error(
+      `SAML: The ${missing.join(', ')} environment variable(s) must be set.`,
+    );
+  }
+
+  const readCert = (file) => {
+    try {
+      return String(readFileSync(join(certDir, file)));
+    } catch (error) {
+      throw new Error(`SAML: ${file} cannot be read from ${certDir}.`, {
+        cause: error,
+      });
+    }
+  };
+
+  const privateKey = env.SAML_SP_CRT && readCert(`${env.SAML_SP_CRT}.pem`);
+  const publicCert = env.SAML_SP_CRT && readCert(`${env.SAML_SP_CRT}.crt`);
+
+  if (env.SAML_SP_CRT) {
+    checkSpCertificate(`${env.SAML_SP_CRT}.crt`, publicCert, privateKey);
+  }
 
   return {
     acceptedClockSkewMs: parseClockSkew(env.SAML_ACCEPTED_CLOCK_SKEW),
+    cacheProvider,
     callbackUrl: env.SAML_ACS,
     entryPoint: env.SAML_SSO,
     identifierFormat: env.SAML_IDENTIFIER_FORMAT,
-    idpCert: env.SAML_IDP_CRT && readCert(`${env.SAML_IDP_CRT}.crt`),
+    idpCert: readCert(`${env.SAML_IDP_CRT}.crt`),
     issuer: env.SAML_ENTITY_ID,
     logoutCallbackUrl: env.SLO_CALLBACK,
     logoutUrl: env.SAML_SLO,
-    privateKey: env.SAML_SP_CRT && readCert(`${env.SAML_SP_CRT}.pem`),
+    privateKey,
     providerName: env.SAML_PROVIDER_NAME,
-    publicCert: env.SAML_SP_CRT && readCert(`${env.SAML_SP_CRT}.crt`),
+    publicCert,
+    rejectReplayedAssertions: true,
     signatureAlgorithm: env.SAML_SIGNATURE_ALGORITHM,
+    validateInResponseTo: 'never',
     wantAssertionsSigned: parseBoolean(env.SAML_WANT_ASSERTIONS_SIGNED),
     wantAuthnResponseSigned: parseBoolean(
       env.SAML_AUTHN_RESPONSE_SIGNED,
@@ -116,17 +194,21 @@ export function createSamlHandler(strategy, redirectUser = redirect) {
   return (req, res) => samlHandler(req, res, strategy, redirectUser);
 }
 
-function getSamlStrat() {
+/**
+@function getSamlStrat
+
+@description
+Returns the node-saml instance and creates it from the environment on the first call. The SAML server calls the method on startup, so that an invalid configuration fails the server start.
+
+@returns {SAML} The node-saml instance.
+@throws {Error} The SAML configuration is invalid.
+*/
+export function getSamlStrat() {
   samlStrat ??= new SAML(createSamlConfig());
   return samlStrat;
 }
 
 function samlHandler(req, res, strategy, redirectUser) {
-  if (!strategy) {
-    console.warn('SAML is not available in XYZ instance.');
-    return;
-  }
-
   // Dispatch the mounted SAML endpoints from a single handler.
   switch (true) {
     case /\/saml\/metadata/.test(req.url):

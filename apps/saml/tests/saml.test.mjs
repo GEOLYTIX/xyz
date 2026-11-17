@@ -16,6 +16,7 @@ const strategy = {
   generateServiceProviderMetadata: vi.fn(() => '<xml />'),
   getAuthorizeUrlAsync,
   getLogoutUrlAsync,
+  options: { publicCert: 'sp-certificate' },
   validatePostResponseAsync,
 };
 
@@ -332,6 +333,10 @@ describe('saml:', async () => {
 
     await saml(req, res);
 
+    expect(strategy.generateServiceProviderMetadata).toHaveBeenCalledWith(
+      null,
+      'sp-certificate',
+    );
     expect(res.statusCode).toBe(500);
     expect(res.getHeader('Content-Type')).toBeUndefined();
     expect(res._isEndCalled()).toBe(true);

@@ -3,8 +3,11 @@ The SAML flow tests run the handler with a real node-saml instance created from 
 
 The test IdP signs responses and logout requests with keys generated for the test run. Only the ACL is mocked.
 */
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { inflateRawSync } from 'node:zlib';
-import { SAML } from '@node-saml/node-saml';
+import { InMemoryCacheProvider, SAML } from '@node-saml/node-saml';
 import jwt from 'jsonwebtoken';
 import { createMocks } from 'node-mocks-http';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -62,7 +65,11 @@ describe('saml flow:', async () => {
   const { createSamlConfig, createSamlHandler } = await import('../saml.js');
 
   const keys = createKeys();
-  const config = createSamlConfig(samlEnv, keys.certDir);
+  const config = createSamlConfig(
+    samlEnv,
+    keys.certDir,
+    new InMemoryCacheProvider(),
+  );
   const strategy = new SAML(config);
   const saml = createSamlHandler(strategy);
 
@@ -213,6 +220,47 @@ describe('saml flow:', async () => {
       vi.useFakeTimers({ now: Date.now() + 60 * 60 * 1000, toFake: ['Date'] });
 
       expect((await postACS({ SAMLResponse })).statusCode).toBe(401);
+    });
+
+    it('rejects a replayed assertion while it is still valid', async () => {
+      aclFn.mockResolvedValue([aclUser]);
+
+      const SAMLResponse = samlResponse({
+        acs: ACS,
+        audience: ENTITY_ID,
+        privateKey: keys.idp.privateKey,
+      });
+
+      expect((await postACS({ SAMLResponse })).statusCode).toBe(200);
+
+      const replay = await postACS({ SAMLResponse });
+
+      expect(replay.statusCode).toBe(401);
+      expect(replay.getHeader('Set-Cookie')).toBeUndefined();
+      expect(aclFn).toHaveBeenCalledTimes(1);
+      expect(console.error).toHaveBeenCalledWith(
+        'SAML response validation failed:',
+        expect.stringContaining('has already been received'),
+      );
+    });
+
+    it('rejects a replayed assertion in a new response', async () => {
+      aclFn.mockResolvedValue([aclUser]);
+
+      const response = () =>
+        samlResponse({
+          acs: ACS,
+          assertionID: '_same_assertion',
+          audience: ENTITY_ID,
+          privateKey: keys.idp.privateKey,
+        });
+
+      expect((await postACS({ SAMLResponse: response() })).statusCode).toBe(
+        200,
+      );
+      expect((await postACS({ SAMLResponse: response() })).statusCode).toBe(
+        401,
+      );
     });
 
     it('rejects a response signed by another key', async () => {
@@ -499,5 +547,72 @@ describe('createSamlConfig:', async () => {
     expect(parseClockSkew('-1')).toBe(60000);
     expect(parseClockSkew('five')).toBe(60000);
     expect(console.warn).toHaveBeenCalledTimes(2);
+  });
+
+  it('rejects replayed assertions without requiring InResponseTo', () => {
+    const config = createSamlConfig(samlEnv, keys.certDir);
+
+    expect(config.rejectReplayedAssertions).toBe(true);
+    expect(config.validateInResponseTo).toBe('never');
+    expect(config.cacheProvider.saveIfAbsentAsync).toBeTypeOf('function');
+  });
+
+  it('names the missing environment variables', () => {
+    const { SAML_ACS, SAML_SSO, ...env } = samlEnv;
+
+    expect(() => createSamlConfig(env, keys.certDir)).toThrow(
+      'SAML: The SAML_ACS, SAML_SSO environment variable(s) must be set.',
+    );
+  });
+
+  it('names a certificate file which cannot be read', () => {
+    expect(() =>
+      createSamlConfig({ ...samlEnv, SAML_IDP_CRT: 'missing' }, keys.certDir),
+    ).toThrow(`SAML: missing.crt cannot be read from ${keys.certDir}.`);
+  });
+
+  function certDir(files) {
+    const dir = mkdtempSync(join(tmpdir(), 'xyz-saml-config-'));
+    writeFileSync(join(dir, 'idp.crt'), keys.idp.certificate);
+
+    for (const [file, content] of Object.entries(files)) {
+      writeFileSync(join(dir, file), content);
+    }
+
+    return dir;
+  }
+
+  it('rejects an SP certificate chain', () => {
+    const dir = certDir({
+      'sp.crt': `${keys.sp.certificate}
+${keys.idp.certificate}`,
+      'sp.pem': keys.sp.privateKey,
+    });
+
+    expect(() => createSamlConfig(samlEnv, dir)).toThrow(
+      'SAML: sp.crt must hold exactly one X.509 certificate.',
+    );
+  });
+
+  it('rejects a bare public key as the SP certificate', () => {
+    const dir = certDir({
+      'sp.crt': keys.sp.publicKey,
+      'sp.pem': keys.sp.privateKey,
+    });
+
+    expect(() => createSamlConfig(samlEnv, dir)).toThrow(
+      'SAML: sp.crt must hold exactly one X.509 certificate.',
+    );
+  });
+
+  it('rejects an SP certificate which does not match the private key', () => {
+    const dir = certDir({
+      'sp.crt': keys.idp.certificate,
+      'sp.pem': keys.sp.privateKey,
+    });
+
+    expect(() => createSamlConfig(samlEnv, dir)).toThrow(
+      'SAML: sp.crt does not match the private key in the .pem file.',
+    );
   });
 });
