@@ -215,6 +215,14 @@ describe('utils/userIndexedDB', () => {
 
     await userIndexedDB.put({ ...params, obj });
 
-    expect(await userIndexedDB.get({ ...params })).toEqual(obj);
+    // The put method may delete properties from the obj, so the stored record is compared with a literal.
+    expect(await userIndexedDB.get({ ...params })).toEqual({
+      admin: true,
+      roles: ['a'],
+      blocked: false,
+    });
+
+    // The properties are not deleted from the object.
+    expect(obj).toEqual({ admin: true, roles: ['a'], blocked: false });
   });
 });
