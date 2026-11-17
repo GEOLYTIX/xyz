@@ -11,6 +11,7 @@
     },
     "test": {
       "dependsOn": ["transit"],
+      "env": ["MAPBOX_ACCESS_TOKEN", "MAPBOX_STYLE_URL"],
       "outputs": []
     },
     "transit": {
