@@ -13,12 +13,13 @@ const MaplibreGL = await mapp.utils.esmImport(MAPLIBRE);
 /**
 The Mapbox tests request styles and tiles from the Mapbox API with an access token. The token is provided by the vitest config from the MAPBOX_ACCESS_TOKEN environment variable or a gitignored .env.local file. The tests are skipped without a token.
 
-The MAPBOX_STYLE_URL can be set to test a Mapbox style of our account. The default is a public Mapbox style.
+The MAPBOX_STYLE_URL can be set to test another Mapbox style. The default is a Mapbox Studio style of our account.
 */
 const token = inject('MAPBOX_ACCESS_TOKEN');
 
 const styleURL =
-  inject('MAPBOX_STYLE_URL') || 'mapbox://styles/mapbox/light-v11';
+  inject('MAPBOX_STYLE_URL') ||
+  'mapbox://styles/dbauszus/cl9795mb900gk14nr88zfoitd';
 
 /**
 Removes the access token from a string, eg. a request url in an assertion message.
@@ -222,41 +223,54 @@ describe('maplibre', () => {
   });
 
   describe.skipIf(!token)('Mapbox API', () => {
-    it('loads the Mapbox style and tiles with the accessToken', async () => {
-      const xhr = vi.spyOn(mapp.utils, 'xhr');
-      const error = vi.spyOn(console, 'error');
+    // The Mapbox style, sprite, glyphs and tiles are requested from the Mapbox API.
+    it(
+      'loads the Mapbox style and tiles with the accessToken',
+      {
+        timeout: 30000,
+      },
+      async () => {
+        const xhr = vi.spyOn(mapp.utils, 'xhr');
+        const error = vi.spyOn(console, 'error');
 
-      const { layer, map } = await maplibreLayer({
-        accessToken: token,
-        style: { URL: styleURL },
-      });
+        // Maplibre logs style validation and request errors to the console. The errors are reported if the map doesn't load.
+        const errors = () =>
+          error.mock.calls.map((args) => redact(args.join(' ')));
 
-      const [url] = mapboxRequests(xhr);
+        const { layer, map } = await maplibreLayer({
+          accessToken: token,
+          style: { URL: styleURL },
+        });
 
-      expect(redact(url)).toMatch(
-        /^https:\/\/api\.mapbox\.com\/styles\/v1\/.+\?access_token=<token>$/,
-      );
+        const [url] = mapboxRequests(xhr);
 
-      // The style object is requested by the format, not by maplibre.
-      expect(layer.style.object.version).toBe(8);
-      expect(layer.L).toBeInstanceOf(ol.layer.Layer);
+        expect(redact(url)).toMatch(
+          /^https:\/\/api\.mapbox\.com\/styles\/v1\/.+\?access_token=<token>$/,
+        );
 
-      await loaded(map);
+        // The style object is requested by the format, not by maplibre.
+        expect(layer.style.object.version).toBe(8);
+        expect(layer.L).toBeInstanceOf(ol.layer.Layer);
 
-      // The style sources, sprites and glyphs are mapbox:// urls which the transformRequest method resolves to the Mapbox API with the accessToken.
-      const sources = Object.values(map.getStyle().sources).filter((source) =>
-        source.url?.startsWith('mapbox://'),
-      );
+        await loaded(map).catch(() => {
+          throw new Error(
+            `The Mapbox style did not load: ${errors().join('; ')}`,
+          );
+        });
 
-      expect(sources.length).toBeGreaterThan(0);
+        // The style sources, sprites and glyphs are mapbox:// urls which the transformRequest method resolves to the Mapbox API with the accessToken.
+        const sources = Object.values(map.getStyle().sources).filter((source) =>
+          source.url?.startsWith('mapbox://'),
+        );
 
-      // Features are only rendered if the tiles have been loaded from the Mapbox API.
-      expect(map.queryRenderedFeatures().length).toBeGreaterThan(0);
+        expect(sources.length).toBeGreaterThan(0);
 
-      // Maplibre logs failed style, sprite, glyph, and tile requests as errors.
-      expect(error.mock.calls.map((args) => redact(args.join(' ')))).toEqual(
-        [],
-      );
-    });
+        // Features are only rendered if the tiles have been loaded from the Mapbox API.
+        expect(map.queryRenderedFeatures().length).toBeGreaterThan(0);
+
+        // Maplibre logs failed style, sprite, glyph, and tile requests as errors.
+        expect(errors()).toEqual([]);
+      },
+    );
   });
 });
