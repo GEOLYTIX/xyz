@@ -132,54 +132,46 @@ export default async function csvUpload(file, params = {}) {
     }
   }
 
-  return new Promise((resolve) => {
-    const reader = new FileReader();
+  const text = await file.text();
 
-    reader.readAsText(file);
+  // Split text file into rows on carriage return / new line.
+  const rows = text.trim().split(/\r?\n/);
 
-    reader.onload = async (e) => {
-      // Split text file into rows on carriage return / new line.
-      const rows = e.target.result.trim().split(/\r?\n/);
+  // The file has a header row.
+  if (params.header) rows.shift();
 
-      // The file has a header row.
-      if (params.header) rows.shift();
+  let matrix;
+  try {
+    matrix = rows.map((row) => splitRowIntoFields(row, params));
+  } catch (error) {
+    return [error];
+  }
 
-      let matrix;
-      try {
-        matrix = rows.map((row) => splitRowIntoFields(row, params));
-      } catch (error) {
-        resolve([error]);
-        return;
-      }
+  let chunks;
+  try {
+    chunks = chunkRows(matrix, params);
+  } catch (error) {
+    return [error];
+  }
 
-      let chunks;
-      try {
-        chunks = chunkRows(matrix, params);
-      } catch (error) {
-        resolve([error]);
-        return;
-      }
+  let responses = [];
 
-      let responses = [];
+  // If async = true, then we need to wait for all promises to resolve before returning the outcome object.
+  if (params.async) {
+    responses = await Promise.all(
+      chunks.map((chunk) => postRequestData(chunk, params)),
+    );
+  }
 
-      // If async = true, then we need to wait for all promises to resolve before returning the outcome object.
-      if (params.async) {
-        responses = await Promise.all(
-          chunks.map((chunk) => postRequestData(chunk, params)),
-        );
-      }
+  // If async = false, run them synchhronously.
+  else {
+    for (const chunk of chunks) {
+      const response = await postRequestData(chunk, params);
+      responses.push(response);
+    }
+  }
 
-      // If async = false, run them synchhronously.
-      else {
-        for (const chunk of chunks) {
-          const response = await postRequestData(chunk, params);
-          responses.push(response);
-        }
-      }
-
-      resolve(responses);
-    };
-  });
+  return responses;
 }
 
 /**
