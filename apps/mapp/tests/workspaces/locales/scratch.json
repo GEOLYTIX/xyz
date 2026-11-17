@@ -63,6 +63,38 @@
           "fieldfx": "ARRAY[ST_X(geom),ST_Y(geom)]"
         }
       ]
+    },
+    "scratch_polygon": {
+      "display": false,
+      "format": "mvt",
+      "table": "example.scratch_polygon",
+      "qID": "id",
+      "geom": "geom_3857",
+      "srid": "3857",
+      "wkt_properties": true,
+      "style": {
+        "default": {
+          "strokeColor": "#333",
+          "fillColor": "#9996"
+        },
+        "theme": {
+          "title": "Name",
+          "type": "distributed",
+          "field": "name",
+          "categories": [
+            { "style": { "fillColor": "#e6194b" } },
+            { "style": { "fillColor": "#3cb44b" } },
+            { "style": { "fillColor": "#4363d8" } },
+            { "style": { "fillColor": "#f58231" } },
+            { "style": { "fillColor": "#911eb4" } },
+            { "style": { "fillColor": "#46f0f0" } }
+          ]
+        }
+      },
+      "infoj": [
+        { "type": "key" },
+        { "title": "Name", "field": "name", "edit": true }
+      ]
     }
   }
 }
