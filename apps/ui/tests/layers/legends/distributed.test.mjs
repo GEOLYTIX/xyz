@@ -189,15 +189,13 @@ describe.sequential('ui/layers/legends/distributed', () => {
   }, 20000);
 });
 
-// The extent of the polygon which is drawn and deleted by the compare_areas tests.
-const DRAWN_EXTENT = [15000, 6705000, 25000, 6715000];
+// The extent of the polygon which is drawn and deleted by the compare_areas tests. The polygon overlaps the seeded East polygon.
+const DRAWN_EXTENT = [5000, 6700000, 25000, 6712000];
 
 /**
 Review of #3079: Simon's layer config, the compare_areas layer of the scratch locale. A distributed theme on the id field, which is also the qID.
 
-The tests fail, see the compare_areas tests in apps/mapp/tests/layer/format/mvt.test.mjs. The id property of the features is undefined in the layer.featuresObject. The ids of the seeded polygons are assigned to the theme categories from the render before the first properties response, but the id of a drawn polygon is never assigned.
-
-The table is reset to the rows before the tests once in the afterAll hook, also if a test fails.
+The tests run in order and depend on each other. The add test draws a polygon with the mapview draw interaction, and the delete test deletes the same polygon with the location.trash() method. The table is reset to the rows before the tests once in the afterAll hook, also if a test fails.
 */
 describe.sequential('ui/layers/legends/distributed on the qID field', () => {
   let dispose;
@@ -223,15 +221,52 @@ describe.sequential('ui/layers/legends/distributed on the qID field', () => {
     }
   });
 
-  it.fails(
-    'draws the id of a polygon drawn with the draw interaction in the legend',
-    async () => {
-      location = await drawPolygon(layer, DRAWN_EXTENT);
+  it('draws the ids of the seeded polygons in the legend', async () => {
+    await expect
+      .poll(() => legendValues(layer).sort(), { timeout: 5000 })
+      .toEqual(seeded.map(([id]) => String(id)).sort());
 
-      await expect
-        .poll(() => legendValues(layer), { timeout: 10000 })
-        .toContain(String(location.id));
-    },
-    20000,
-  );
+    // The properties of the seeded polygons are loaded.
+    await expect
+      .poll(() => Object.keys(layer.featuresObject ?? {}).length, {
+        timeout: 5000,
+      })
+      .toBe(seeded.length);
+
+    await render(layer);
+    await render(layer);
+
+    expect(legendValues(layer).sort()).toEqual(
+      seeded.map(([id]) => String(id)).sort(),
+    );
+  });
+
+  it('draws the id of a polygon drawn with the draw interaction in the legend', async () => {
+    location = await drawPolygon(layer, DRAWN_EXTENT);
+
+    await expect
+      .poll(() => legendValues(layer), { timeout: 10000 })
+      .toContain(String(location.id));
+  }, 20000);
+
+  it('removes the id of the polygon deleted with the location trash method from the legend', async () => {
+    expect(location).toBeDefined();
+
+    const id = String(location.id);
+
+    await trashLocation(location);
+
+    // The trash method removes the location, which reloads the layer.
+    await expect
+      .poll(() => layer.featuresObject?.[id], { timeout: 5000 })
+      .toBeUndefined();
+
+    // The legend is redrawn after the render if the category values have changed.
+    await render(layer);
+    await render(layer);
+
+    expect(legendValues(layer).sort()).toEqual(
+      seeded.map(([id]) => String(id)).sort(),
+    );
+  }, 20000);
 });
