@@ -12,6 +12,8 @@ describe('ui/locations/entries/date', () => {
       type: 'date',
       value: EPOCH,
       locale: 'en-GB',
+      // Pin the timezone so the formatted date does not depend on the browser.
+      options: { timeZone: 'UTC' },
       css_val: 'color: red;',
     });
 
