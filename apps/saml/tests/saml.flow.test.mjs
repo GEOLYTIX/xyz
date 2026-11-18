@@ -3,6 +3,7 @@ The SAML flow tests run the handler with a real node-saml instance created from 
 
 The test IdP signs responses and logout requests with keys generated for the test run. Only the ACL is mocked.
 */
+import { generateKeyPairSync } from 'node:crypto';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -13,6 +14,7 @@ import { createMocks } from 'node-mocks-http';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   createKeys,
+  IDP_ISSUER,
   logoutRequestUrl,
   pemBody,
   postLogoutRequest,
@@ -309,6 +311,75 @@ describe('saml flow:', async () => {
       expect(logoutRequest).toContain('session-index');
     });
 
+    it('keeps the NameID format and qualifiers in the LogoutRequest after the cookie is refreshed (#3091)', async () => {
+      const { default: cookie } = await import(
+        '@geolytix/xyz-app/mod/user/cookie.js'
+      );
+
+      aclFn.mockResolvedValue([aclUser]);
+
+      const PERSISTENT = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
+
+      const acsRes = await postACS({
+        SAMLResponse: samlResponse({
+          acs: ACS,
+          audience: ENTITY_ID,
+          nameIDFormat: PERSISTENT,
+          nameQualifier: IDP_ISSUER,
+          privateKey: keys.idp.privateKey,
+          spNameQualifier: ENTITY_ID,
+        }),
+      });
+
+      expect(acsRes.statusCode).toBe(200);
+
+      const loginToken = acsRes
+        .getHeader('Set-Cookie')[0]
+        .match(/^TEST_APP=([^;]+)/)[1];
+
+      // The cookie is refreshed through the /api/user/cookie route of the XYZ app.
+      const refresh = createMocks({
+        cookies: { TEST_APP: loginToken },
+        params: {},
+      });
+
+      await cookie(refresh.req, refresh.res);
+
+      await vi.waitFor(() => expect(refresh.res._isEndCalled()).toBe(true));
+
+      const refreshedToken = refresh.res
+        .getHeader('Set-Cookie')
+        .match(/^TEST_APP=([^;]+)/)[1];
+
+      const { req, res } = createMocks({
+        cookies: { TEST_APP: refreshedToken },
+        url: '/app/saml/logout',
+      });
+
+      await saml(req, res);
+
+      const location = new URL(res.getHeader('location'));
+      expect(location.origin + location.pathname).toBe(
+        'https://idp.example.com/slo',
+      );
+
+      const logoutRequest = String(
+        inflateRawSync(
+          Buffer.from(location.searchParams.get('SAMLRequest'), 'base64'),
+        ),
+      );
+
+      const nameID = logoutRequest.match(
+        /<saml:NameID[^>]*>[^<]*<\/saml:NameID>/,
+      )?.[0];
+
+      expect(nameID).toContain(`Format="${PERSISTENT}"`);
+      expect(nameID).toContain(`NameQualifier="${IDP_ISSUER}"`);
+      expect(nameID).toContain(`SPNameQualifier="${ENTITY_ID}"`);
+      expect(nameID).toContain('>name-id<');
+      expect(logoutRequest).toContain('session-index');
+    });
+
     it('does not send a LogoutRequest for a cookie with an invalid signature', async () => {
       const forged = jwt.sign(
         { nameID: 'victim@example.com', sessionIndex: 'victim-session' },
@@ -565,7 +636,51 @@ ${keys.idp.certificate}`,
     });
 
     expect(() => createSamlConfig(samlEnv, dir)).toThrow(
-      'SAML: sp.crt does not match the private key in the .pem file.',
+      'SAML: sp.crt does not match the private key in sp.pem.',
     );
+  });
+
+  function keyError(privateKey) {
+    const dir = certDir({
+      'sp.crt': keys.sp.certificate,
+      'sp.pem': privateKey,
+    });
+
+    try {
+      createSamlConfig(samlEnv, dir);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  it('names the private key file which cannot be parsed', () => {
+    const error = keyError(
+      '-----BEGIN PRIVATE KEY-----\nnot a key\n-----END PRIVATE KEY-----\n',
+    );
+
+    expect(error.message).toBe(
+      'SAML: sp.pem is not a valid unencrypted PEM private key.',
+    );
+    expect(error.cause).toBeInstanceOf(Error);
+  });
+
+  it('names an encrypted private key file', () => {
+    const { privateKey } = generateKeyPairSync('rsa', {
+      modulusLength: 2048,
+      privateKeyEncoding: {
+        cipher: 'aes-256-cbc',
+        format: 'pem',
+        passphrase: 'passphrase',
+        type: 'pkcs8',
+      },
+      publicKeyEncoding: { format: 'pem', type: 'spki' },
+    });
+
+    const error = keyError(privateKey);
+
+    expect(error.message).toBe(
+      'SAML: sp.pem is not a valid unencrypted PEM private key.',
+    );
+    expect(error.cause).toBeInstanceOf(Error);
   });
 });

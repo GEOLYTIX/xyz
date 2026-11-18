@@ -152,6 +152,9 @@ Returns a base64 encoded SAML response with a signed assertion.
 @param {string} options.audience The SP entity ID.
 @param {number} [options.issuedAt] Issue time in ms.
 @param {number} [options.validForMs] Assertion validity in ms.
+@param {string} [options.nameIDFormat] The NameID Format attribute.
+@param {string} [options.nameQualifier] The NameID NameQualifier attribute.
+@param {string} [options.spNameQualifier] The NameID SPNameQualifier attribute.
 */
 export function samlResponse({
   acs,
@@ -159,14 +162,26 @@ export function samlResponse({
   email = 'test@example.com',
   issuedAt = Date.now(),
   nameID = 'name-id',
+  nameIDFormat = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
+  nameQualifier,
   privateKey,
   sessionIndex = 'session-index',
+  spNameQualifier,
   validForMs = 5 * 60 * 1000,
 }) {
   const now = new Date(issuedAt).toISOString();
   const notOnOrAfter = new Date(issuedAt + validForMs).toISOString();
 
-  const xml = `<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="_response" Version="2.0" IssueInstant="${now}" Destination="${acs}"><saml:Issuer>${IDP_ISSUER}</saml:Issuer><samlp:Status><samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/></samlp:Status><saml:Assertion ID="_assertion" Version="2.0" IssueInstant="${now}"><saml:Issuer>${IDP_ISSUER}</saml:Issuer><saml:Subject><saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress">${nameID}</saml:NameID><saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer"><saml:SubjectConfirmationData NotOnOrAfter="${notOnOrAfter}" Recipient="${acs}"/></saml:SubjectConfirmation></saml:Subject><saml:Conditions NotBefore="${now}" NotOnOrAfter="${notOnOrAfter}"><saml:AudienceRestriction><saml:Audience>${audience}</saml:Audience></saml:AudienceRestriction></saml:Conditions><saml:AuthnStatement AuthnInstant="${now}" SessionIndex="${sessionIndex}"><saml:AuthnContext><saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef></saml:AuthnContext></saml:AuthnStatement><saml:AttributeStatement><saml:Attribute Name="email"><saml:AttributeValue>${email}</saml:AttributeValue></saml:Attribute></saml:AttributeStatement></saml:Assertion></samlp:Response>`;
+  const nameIDAttributes = [
+    ['Format', nameIDFormat],
+    ['NameQualifier', nameQualifier],
+    ['SPNameQualifier', spNameQualifier],
+  ]
+    .filter(([, value]) => value)
+    .map(([key, value]) => ` ${key}="${value}"`)
+    .join('');
+
+  const xml = `<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="_response" Version="2.0" IssueInstant="${now}" Destination="${acs}"><saml:Issuer>${IDP_ISSUER}</saml:Issuer><samlp:Status><samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/></samlp:Status><saml:Assertion ID="_assertion" Version="2.0" IssueInstant="${now}"><saml:Issuer>${IDP_ISSUER}</saml:Issuer><saml:Subject><saml:NameID${nameIDAttributes}>${nameID}</saml:NameID><saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer"><saml:SubjectConfirmationData NotOnOrAfter="${notOnOrAfter}" Recipient="${acs}"/></saml:SubjectConfirmation></saml:Subject><saml:Conditions NotBefore="${now}" NotOnOrAfter="${notOnOrAfter}"><saml:AudienceRestriction><saml:Audience>${audience}</saml:Audience></saml:AudienceRestriction></saml:Conditions><saml:AuthnStatement AuthnInstant="${now}" SessionIndex="${sessionIndex}"><saml:AuthnContext><saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef></saml:AuthnContext></saml:AuthnStatement><saml:AttributeStatement><saml:Attribute Name="email"><saml:AttributeValue>${email}</saml:AttributeValue></saml:Attribute></saml:AttributeStatement></saml:Assertion></samlp:Response>`;
 
   if (!privateKey) return Buffer.from(xml).toString('base64');
 

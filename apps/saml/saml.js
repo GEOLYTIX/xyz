@@ -81,11 +81,12 @@ const REQUIRED_ENV = ['SAML_ACS', 'SAML_ENTITY_ID', 'SAML_IDP_CRT', 'SAML_SSO'];
 node-saml publishes the SP certificate in the metadata and signs requests with the SP private key. The metadata fails if the certificate file does not hold exactly one X.509 certificate, eg. a bare public key or a certificate chain. The IdP rejects signed requests if the private key does not match the certificate.
 
 @param {string} file The certificate file name.
+@param {string} keyFile The private key file name.
 @param {string} publicCert The certificate file content.
 @param {string} privateKey The private key file content.
-@throws {Error} The certificate is not a single X.509 certificate or does not match the private key.
+@throws {Error} The certificate is not a single X.509 certificate, the private key cannot be parsed, or the certificate does not match the private key.
 */
-function checkSpCertificate(file, publicCert, privateKey) {
+function checkSpCertificate(file, keyFile, publicCert, privateKey) {
   const certificates = publicCert.match(/-----BEGIN CERTIFICATE-----/g);
 
   if (certificates?.length !== 1) {
@@ -102,9 +103,21 @@ function checkSpCertificate(file, publicCert, privateKey) {
     });
   }
 
-  if (!certificate.checkPrivateKey(createPrivateKey(privateKey))) {
+  let key;
+
+  // A malformed or encrypted key throws an OpenSSL error which does not name the file.
+  try {
+    key = createPrivateKey(privateKey);
+  } catch (error) {
     throw new Error(
-      `SAML: ${file} does not match the private key in the .pem file.`,
+      `SAML: ${keyFile} is not a valid unencrypted PEM private key.`,
+      { cause: error },
+    );
+  }
+
+  if (!certificate.checkPrivateKey(key)) {
+    throw new Error(
+      `SAML: ${file} does not match the private key in ${keyFile}.`,
     );
   }
 }
@@ -147,7 +160,12 @@ export function createSamlConfig(env = xyzEnv, certDir = __dirname) {
   const publicCert = env.SAML_SP_CRT && readCert(`${env.SAML_SP_CRT}.crt`);
 
   if (env.SAML_SP_CRT) {
-    checkSpCertificate(`${env.SAML_SP_CRT}.crt`, publicCert, privateKey);
+    checkSpCertificate(
+      `${env.SAML_SP_CRT}.crt`,
+      `${env.SAML_SP_CRT}.pem`,
+      publicCert,
+      privateKey,
+    );
   }
 
   return {

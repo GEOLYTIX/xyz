@@ -36,6 +36,7 @@ The SAML configuration is created when the server starts. The server does not st
 
 - `SAML_ACS`, `SAML_ENTITY_ID`, `SAML_IDP_CRT` or `SAML_SSO` is not set.
 - A certificate or key file cannot be read from `apps/saml`.
+- The `${SAML_SP_CRT}.pem` file does not hold an unencrypted PEM private key.
 - The `${SAML_SP_CRT}.crt` file does not hold exactly one X.509 certificate, or the certificate does not match the private key in `${SAML_SP_CRT}.pem`.
 
 The error names the missing variable or file.
