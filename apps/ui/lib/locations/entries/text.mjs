@@ -65,7 +65,7 @@ function textedit(entry) {
     // Create container with loading text.
     entry.container = mapp.utils.html.node`<div>${mapp.dictionary.loading}`;
 
-    textoptions(entry);
+    void textoptions(entry);
 
     // Return container.
     return entry.container;
