@@ -37,7 +37,7 @@ export function dark_mode(plugin, mapview) {
 
       if (mapp.user) {
         mapp.user.dark_mode = darkMode;
-        updateUser();
+        void updateUser();
       }
 
       // Update the dark mode theme depending on the user setting
