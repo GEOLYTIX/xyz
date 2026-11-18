@@ -140,7 +140,7 @@ const defaults = {
   TITLE: 'GEOLYTIX | XYZ',
   TRANSPORT_PORT: 587,
   TRANSPORT_TLS: false,
-  WORKSPACE_AGE: 3600000, // 1 min
+  WORKSPACE_AGE: 3600000, // 1 hour
   FILE_RESOURCES: 'resources',
 };
 
