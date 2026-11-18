@@ -32,7 +32,7 @@ export function userIDB(plugin, mapview) {
     title=${plugin.title}
     onclick=${() => {
       if (plugin.button.classList.toggle('active')) {
-        userDialog(plugin);
+        void userDialog(plugin);
       } else {
         plugin.dialog?.close();
       }

@@ -478,7 +478,7 @@ function entryQuery(entry) {
       entry.location.view?.classList.add('loading');
     }
 
-    mapp.utils
+    void mapp.utils
       .xhr(entry)
       .then((response) => entry.queryCallback(response, entry));
 

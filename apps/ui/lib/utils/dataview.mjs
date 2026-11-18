@@ -131,7 +131,7 @@ function update(dataview) {
     onclick=${() => {
       const toogle = dataview.toolbar.update.button.classList.toggle('active');
       if (toogle) {
-        updateDialog(dataview);
+        void updateDialog(dataview);
       } else {
         dataview.toolbar.update.dialog.close();
       }
