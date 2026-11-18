@@ -2,6 +2,8 @@
 
 ## 2026-11-18
 
+- Added Server and Databases environment concepts; environment concepts are
+  grouped by feature rather than one per variable.
 - Recorded the Wiki publishing decision: generated on release, and manually
   between releases to publish corrections.
 
