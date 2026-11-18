@@ -3,7 +3,11 @@
 
 Adds Cross-Origin Resource Sharing (CORS) headers to responses for the origins listed in the comma separated CORS_ORIGINS xyzEnv. The middleware does nothing if CORS_ORIGINS is not configured.
 
-A `*` entry allows any origin. Credentials are never allowed. A cross-origin request is not sent with the XYZ user cookie, so it is served with the access rights of an anonymous user. CORS is only useful for PUBLIC instances or public resources such as the MAPP library bundle.
+A `*` entry allows any origin. Credentials are never allowed: the Access-Control-Allow-Credentials header is not set, and the XYZ user cookie is SameSite=Strict by default so it is not sent with cross-site requests. Without a token a cross-origin request is served with the access rights of an anonymous user, so CORS is mainly useful for PUBLIC instances or public resources such as the MAPP library bundle.
+
+Token authentication is intentionally allowed cross-origin. A request which explicitly provides a token, as an Authorization header or a `token` param, is authenticated as the owner of the token. This grants nothing beyond what the holder of the token already has outside a browser.
+
+Every response gets `Vary: Origin` while CORS_ORIGINS is configured, so that a shared cache does not serve a response without the CORS headers to an allowed origin.
 
 Preflight OPTIONS requests from an allowed origin are answered with 204 No Content.
 
@@ -29,15 +33,20 @@ export default function cors(req, res, next) {
     .map((origin) => origin.trim())
     .filter(Boolean);
 
+  if (!origins?.length) return next();
+
+  // The response depends on the Origin header whenever CORS is configured.
+  // res.vary appends to an existing Vary header.
+  res.vary('Origin');
+
   const origin = req.headers.origin;
 
-  if (!origins?.length || !origin) return next();
+  if (!origin) return next();
 
   if (origins.includes('*')) {
     res.setHeader('Access-Control-Allow-Origin', '*');
   } else if (origins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
-    res.vary('Origin');
   } else {
     return next();
   }

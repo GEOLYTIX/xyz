@@ -14,8 +14,13 @@ describe('middleware: cors', () => {
 
   beforeAll(async () => {
     const app = express();
+    app.use((req, res, next) => {
+      if (req.path === '/api/vary') res.setHeader('Vary', 'Accept-Encoding');
+      next();
+    });
     app.use(cors);
     app.get('/api/workspace', (req, res) => res.send('workspace'));
+    app.get('/api/vary', (req, res) => res.send('vary'));
     app.post('/api/query', (req, res) => res.send('query'));
 
     server = http.createServer(app);
@@ -38,6 +43,7 @@ describe('middleware: cors', () => {
 
     expect(res.status).toBe(200);
     expect(res.headers.get('access-control-allow-origin')).toBeNull();
+    expect(res.headers.get('vary')).toBeNull();
   });
 
   it('echoes a listed origin and varies on Origin', async () => {
@@ -66,6 +72,37 @@ describe('middleware: cors', () => {
 
     expect(res.status).toBe(200);
     expect(res.headers.get('access-control-allow-origin')).toBeNull();
+    expect(res.headers.get('vary')).toMatch(/Origin/);
+  });
+
+  it('varies on Origin for a request without Origin', async () => {
+    globalThis.xyzEnv = { CORS_ORIGINS: 'https://cdpn.io' };
+
+    const res = await fetch(`${baseUrl}/api/workspace`);
+
+    expect(res.status).toBe(200);
+    expect(res.headers.get('access-control-allow-origin')).toBeNull();
+    expect(res.headers.get('vary')).toMatch(/Origin/);
+  });
+
+  it('varies on Origin with * for a request without Origin', async () => {
+    globalThis.xyzEnv = { CORS_ORIGINS: '*' };
+
+    const res = await fetch(`${baseUrl}/api/workspace`);
+
+    expect(res.status).toBe(200);
+    expect(res.headers.get('access-control-allow-origin')).toBeNull();
+    expect(res.headers.get('vary')).toMatch(/Origin/);
+  });
+
+  it('appends Origin to an existing Vary header', async () => {
+    globalThis.xyzEnv = { CORS_ORIGINS: 'https://cdpn.io' };
+
+    const res = await fetch(`${baseUrl}/api/vary`, {
+      headers: { Origin: 'https://cdpn.io' },
+    });
+
+    expect(res.headers.get('vary')).toBe('Accept-Encoding, Origin');
   });
 
   it('allows any origin with *', async () => {
@@ -76,6 +113,7 @@ describe('middleware: cors', () => {
     });
 
     expect(res.headers.get('access-control-allow-origin')).toBe('*');
+    expect(res.headers.get('vary')).toMatch(/Origin/);
   });
 
   it('answers a preflight request from a listed origin with 204', async () => {
