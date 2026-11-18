@@ -39,5 +39,7 @@ remaining sections before retiring either page. The knowledge check lists the
 environment variables still without a concept. Further work includes structured
 workspace validation and source-change freshness warnings.
 
-Keep the existing Wiki available during the rollout. Decide on mirroring and
-release publishing in a later PR; this change does not publish or delete Wiki pages.
+Keep the existing Wiki available during the rollout. The Wiki will be generated
+from the bundle on release and on demand, as recorded in
+[Wiki publishing](../decisions/wiki-publishing.md). This change does not publish
+or delete Wiki pages.

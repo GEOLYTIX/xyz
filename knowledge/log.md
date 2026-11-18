@@ -1,5 +1,10 @@
 # Knowledge changes
 
+## 2026-11-18
+
+- Recorded the Wiki publishing decision: generated on release, and manually
+  between releases to publish corrections.
+
 ## 2026-11-17
 
 - Added TRUSTED_RETURN_HOSTS, session token claim and telemetry environment concepts.

@@ -20,7 +20,8 @@ The first PR includes three representative Wiki adaptations, the environment
 variables issue #3007 names as drift, source and link checks, environment
 coverage warnings, and agent navigation. Portal generation, JSDoc JSON exports, Wiki
 publishing, complete environment coverage and workspace schema validation remain
-follow-up work on issue #3007. The Wiki is not yet a generated mirror.
+follow-up work on issue #3007. The Wiki is not yet generated; see
+[Wiki publishing](wiki-publishing.md).
 
 ## Paths and types
 
