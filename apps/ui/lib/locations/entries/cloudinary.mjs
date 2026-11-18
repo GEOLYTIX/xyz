@@ -55,13 +55,13 @@ function image(entry) {
       ondrop=${(e) => {
         // the input element onchange trigger must be prevented.
         e.preventDefault();
-        upload(e, entry);
+        void upload(e, entry);
       }}>
       <p><span class="notranslate material-symbols-outlined add">add_a_photo</span>${mapp.dictionary.drag_and_drop_image}</p>
       <input
         type="file"
         accept="image/*;capture=camera" onchange=${(e) => {
-          upload(e, entry);
+          void upload(e, entry);
         }}>`;
   }
 }
@@ -103,13 +103,13 @@ function images(entry) {
       ondrop=${(e) => {
         // the input element onchange trigger must be prevented.
         e.preventDefault();
-        upload(e, entry);
+        void upload(e, entry);
       }}>
       <p><span class="notranslate material-symbols-outlined add">add_a_photo</span>${mapp.dictionary.drag_and_drop_image}</p>
       <input
         type="file"
         accept="image/*;capture=camera" onchange=${(e) => {
-          upload(e, entry);
+          void upload(e, entry);
         }}>`;
 
     images.push(drap_and_drop_zone);
@@ -154,7 +154,7 @@ function documents(entry) {
       ondrop=${(e) => {
         // the input element onchange trigger must be prevented.
         e.preventDefault();
-        upload(e, entry);
+        void upload(e, entry);
       }}>
       <p><span class="notranslate material-symbols-outlined add-doc">add_notes</span>${mapp.dictionary.drag_and_drop_doc}</p>
       <input type="file"
@@ -288,7 +288,7 @@ async function imgOnload(entry, img, file) {
       : [responseJson.secure_url];
   }
 
-  updateLocation(entry);
+  void updateLocation(entry);
 }
 
 /**
@@ -333,7 +333,7 @@ async function docLoad(e, entry, file) {
     ? entry.value.concat([responseJson.secure_url])
     : [responseJson.secure_url];
 
-  updateLocation(entry);
+  void updateLocation(entry);
 }
 
 /**
@@ -373,7 +373,7 @@ async function trash(e, entry, confirm_message) {
     entry.value = valueSet.size ? Array.from(valueSet) : null;
   }
 
-  updateLocation(entry);
+  void updateLocation(entry);
 }
 
 /**

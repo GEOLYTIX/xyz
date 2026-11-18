@@ -19,6 +19,10 @@
     "includes": [
       "**",
       "!**/lib/utils/uhtml.mjs",
+      "!dist",
+      "!.pack",
+      "!tests-package/node_modules",
+      "!tests-package/verdaccio",
       "!package.json",
       "!**/.vscode"
     ]
