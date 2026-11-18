@@ -60,7 +60,7 @@ export default async function nnearest(params) {
     (li) => mapp.utils.html.node`<li 
     onclick=${(e) => {
       params.mapview.popup(null);
-      mapp.location.get({
+      void mapp.location.get({
         id: li.id,
         layer: params.layer,
         marker: ol.proj.transform(
