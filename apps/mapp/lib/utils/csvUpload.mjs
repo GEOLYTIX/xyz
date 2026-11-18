@@ -107,7 +107,7 @@ This function uploads a CSV file to a database store.
 @property {Boolean} [params.async] If set to true, the data is uploaded asynchronously. Default is false.
 @property {Boolean} [params.header] If set to true, the first row is treated as a header row and not uploaded.
 
-@returns {Promise<Object|Error>} The outcome object and any messages returned by the database.
+@returns {Promise<Object|Error>} The outcome object and any messages returned by the database. An array with the error is returned if the file cannot be read, parsed or chunked.
 */
 export default async function csvUpload(file, params = {}) {
   if (!params.query) {
@@ -132,7 +132,12 @@ export default async function csvUpload(file, params = {}) {
     }
   }
 
-  const text = await readText(file);
+  let text;
+  try {
+    text = await readText(file);
+  } catch (error) {
+    return [error];
+  }
 
   // Split text file into rows on carriage return / new line.
   const rows = text.trim().split(/\r?\n/);

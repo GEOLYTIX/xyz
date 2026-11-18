@@ -263,6 +263,26 @@ describe('utils/csvUpload', () => {
     expect(xhr).not.toHaveBeenCalled();
   });
 
+  it('resolves with an error if the file cannot be read', async () => {
+    const xhr = stubXhr();
+
+    const error = new DOMException(
+      'The file could not be read.',
+      'NotReadableError',
+    );
+
+    const file = csv('Paris,12');
+    vi.spyOn(file, 'arrayBuffer').mockRejectedValue(error);
+
+    const responses = await csvUpload(file, {
+      query: 'insert',
+      fields: { name: 'text', size: 'int' },
+    });
+
+    expect(responses).toEqual([error]);
+    expect(xhr).not.toHaveBeenCalled();
+  });
+
   it('resolves with an error for a field type without a schema method', async () => {
     const xhr = stubXhr();
 
