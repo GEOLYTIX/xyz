@@ -70,13 +70,21 @@ function mockIndexedDB() {
 
 /**
 Adds a #Map element as dialog target to the document, like the default view. The element is removed when the test finishes.
+
+The close event is dispatched on each dialog in the target first. The close method of the dialog disconnects the ResizeObserver of a non-modal dialog from its target. The event is dispatched, because the close() method of a dialog element which is not open doesn't dispatch the event.
 */
 function mapTarget() {
   const target = document.createElement('div');
   target.id = 'Map';
   document.body.append(target);
 
-  onTestFinished(() => target.remove());
+  onTestFinished(() => {
+    for (const node of target.querySelectorAll('dialog')) {
+      node.dispatchEvent(new Event('close'));
+    }
+
+    target.remove();
+  });
 
   return target;
 }
