@@ -5,7 +5,7 @@ description: PORT, DIR, ALIAS, XYZ_CWD, APP_ENV and the rate limit configure how
 resource: ../../apps/xyz/router.js
 tags: [xyz, environment, server, deployment]
 status: draft
-variables: [PORT, DIR, ALIAS, XYZ_CWD, APP_ENV, RATE_LIMIT, RATE_LIMIT_WINDOW]
+x-xyz-variables: [PORT, DIR, ALIAS, XYZ_CWD, APP_ENV, RATE_LIMIT, RATE_LIMIT_WINDOW]
 sources:
   - resource: ../../apps/xyz/router.js
   - resource: ../../apps/xyz/server.js

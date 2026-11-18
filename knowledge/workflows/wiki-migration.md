@@ -7,7 +7,7 @@ status: draft
 sources:
   - resource: https://github.com/GEOLYTIX/xyz/issues/3007
   - resource: https://github.com/GEOLYTIX/xyz/wiki
-    revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
+    x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
 ---
 # Wiki migration inventory
 

@@ -17,6 +17,13 @@ const mapping = (value) =>
   value !== null && typeof value === 'object' && !Array.isArray(value);
 const reserved = (name) => name === 'index.md' || name === 'log.md';
 
+/** The OKF specification version this checker implements. */
+export const OKF_VERSION = '0.3';
+
+/** RFC 3339 date-time with an offset, or a full date (OKF v0.3 §5). */
+const TIMESTAMP =
+  /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2}))?$/i;
+
 /** Directories scanned for environment variables read by the XYZ API. */
 const ENV_SOURCES = ['apps/xyz/mod', 'apps/xyz/router.js', 'apps/saml'];
 
@@ -88,21 +95,11 @@ function checkTarget(target, file, context) {
   if (!existsSync(resolved)) throw new Error(`Missing local target: ${target}`);
 }
 
-function checkReserved(name, file, doc, context) {
+function checkReserved(name, file, doc, context, warn) {
   const rootIndex = file === resolve(context.bundle, 'index.md');
-  if (rootIndex && !doc.metadata) {
-    throw new Error("Root index must declare okf_version: '0.2'");
-  }
+  if (rootIndex) return checkBundleMetadata(doc.metadata, file, context, warn);
   if (doc.metadata) {
-    if (
-      !rootIndex ||
-      Object.keys(doc.metadata).some((key) => key !== 'okf_version')
-    ) {
-      throw new Error(`${name} must not contain concept frontmatter`);
-    }
-    if (String(doc.metadata.okf_version) !== '0.2') {
-      throw new Error('This checker supports okf_version 0.2');
-    }
+    throw new Error(`${name} must not contain frontmatter`);
   }
   if (name !== 'log.md') return;
   let previous = '9999-12-31';
@@ -121,6 +118,24 @@ function checkReserved(name, file, doc, context) {
     }
     previous = date;
   }
+}
+
+/** The bundle-root index carries bundle metadata (OKF v0.3 §8.1). */
+function checkBundleMetadata(metadata, file, context, warn) {
+  if (metadata?.okf_version === undefined) {
+    throw new Error(`Root index must declare okf_version: "${OKF_VERSION}"`);
+  }
+  if (String(metadata.okf_version) !== OKF_VERSION) {
+    throw new Error(`This checker supports okf_version ${OKF_VERSION}`);
+  }
+  for (const key of ['title', 'description']) {
+    if (!textValue(metadata[key]))
+      warn(`Recommended bundle ${key} is missing or empty`);
+  }
+  if (metadata.license !== undefined && !textValue(metadata.license))
+    warn('Optional license should be an SPDX expression or a path');
+  else if (/^(\.\.?\/|\/)/.test(metadata.license ?? ''))
+    checkTarget(metadata.license, file, context);
 }
 
 function checkMetadata(metadata, file, context, warn) {
@@ -149,8 +164,11 @@ function checkQuality(metadata, context, warn) {
     warn('Optional status should be draft, stable or deprecated');
   }
   if (metadata.stale_after !== undefined) {
-    const date = Date.parse(metadata.stale_after);
-    if (Number.isNaN(date)) warn('Invalid optional stale_after date');
+    const date = TIMESTAMP.test(String(metadata.stale_after))
+      ? Date.parse(metadata.stale_after)
+      : Number.NaN;
+    if (Number.isNaN(date))
+      warn('Invalid optional stale_after; use an RFC 3339 date or date-time');
     else if (date <= context.now)
       warn('Concept is past stale_after; review its sources');
   }
@@ -163,8 +181,17 @@ const pathLike = (value) =>
   !/^[a-z][a-z\d+.-]*:/i.test(value) &&
   (value.includes('/') || /\.[a-z\d]+$/i.test(value));
 
+/** Path fields other than sources[].resource (OKF v0.3 §6.2). */
+const pathFields = (metadata) => [
+  metadata.resource,
+  metadata.superseded_by,
+  metadata.computation,
+  metadata.executor?.resource,
+  metadata.attester?.resource,
+];
+
 function checkResources(metadata, file, context, warn) {
-  const resources = [metadata.resource];
+  const resources = pathFields(metadata);
   if (metadata.sources !== undefined && !Array.isArray(metadata.sources)) {
     warn('Optional sources should be an array');
   } else {
@@ -177,7 +204,7 @@ function checkResources(metadata, file, context, warn) {
   for (const resource of resources) {
     if (resource === undefined) continue;
     if (!textValue(resource))
-      warn('Optional resource should be a nonempty string');
+      warn('Optional path field should be a nonempty string');
     // Explicit local prefixes distinguish paths from OKF scope descriptions.
     else if (/^(\.\.?\/|\/)/.test(resource))
       checkTarget(resource, file, context);
@@ -188,15 +215,19 @@ function checkResources(metadata, file, context, warn) {
   }
 }
 
+/** XYZ extension key listing the variables an Environment Variable concept documents. */
+const VARIABLES = 'x-xyz-variables';
+
 function checkVariables(metadata, warn) {
-  if (metadata.variables === undefined) return;
+  const variables = metadata[VARIABLES];
+  if (variables === undefined) return;
   if (
-    !Array.isArray(metadata.variables) ||
-    !metadata.variables.every(
+    !Array.isArray(variables) ||
+    !variables.every(
       (name) => typeof name === 'string' && /^[A-Z][A-Z0-9_]*\*?$/.test(name),
     )
   ) {
-    warn('variables should be an array of NAME or PREFIX_* strings');
+    warn(`${VARIABLES} should be an array of NAME or PREFIX_* strings`);
   }
 }
 
@@ -301,11 +332,11 @@ export function validateBundle(root, now = Date.now()) {
     try {
       const doc = splitDocument(readFileSync(file, 'utf8'));
       const name = basename(file);
-      if (reserved(name)) checkReserved(name, file, doc, context);
+      if (reserved(name)) checkReserved(name, file, doc, context, warn);
       else {
         checkMetadata(doc.metadata, file, context, warn);
-        if (Array.isArray(doc.metadata.variables))
-          variables.push(...doc.metadata.variables.filter(textValue));
+        if (Array.isArray(doc.metadata[VARIABLES]))
+          variables.push(...doc.metadata[VARIABLES].filter(textValue));
       }
       for (const target of linkTargets(markdown.parse(doc.body, {}))) {
         checkTarget(target, file, context);

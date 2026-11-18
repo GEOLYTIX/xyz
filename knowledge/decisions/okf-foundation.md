@@ -6,12 +6,12 @@ tags: [documentation, okf]
 status: draft
 sources:
   - resource: https://github.com/GEOLYTIX/xyz/issues/3007
-  - resource: https://github.com/GoogleCloudPlatform/open-knowledge-format/blob/main/SPEC.md
+  - resource: https://github.com/open-knowledge-format/open-knowledge-format/blob/527e81aff55992be21507e97004286789126f88c/SPEC.md
   - resource: ../../DOCUMENTATION.md
 ---
 # OKF foundation
 
-Use `knowledge/` for OKF v0.2 concepts and directory indexes. Keep `docs/` as
+Use `knowledge/` for OKF v0.3 concepts and directory indexes. Keep `docs/` as
 generated JSDoc output. Keep root setup and development guides in place during
 this migration. Link to source JSDoc rather than copying API signatures into
 knowledge pages.
@@ -22,6 +22,18 @@ coverage warnings, and agent navigation. Portal generation, JSDoc JSON exports, 
 publishing, complete environment coverage and workspace schema validation remain
 follow-up work on issue #3007. The Wiki is not yet generated; see
 [Wiki publishing](wiki-publishing.md).
+
+## Spec version
+
+The bundle pins one OKF version in the root index and the checker rejects
+others (open question 5 on #3007). It pins v0.3, released on 2026-11-18 and
+recorded in `sources` at the spec revision checked. v0.3 moved the spec to the
+`open-knowledge-format` organisation. Its breaking changes do not affect this
+bundle: paths already resolved from the concept's directory, and no concept
+records `verified`. The bundle adopts the v0.3 additions which apply: a root
+`title` and `description`, and `x-xyz-` names for the XYZ extension keys
+`x-xyz-variables` and `x-xyz-revision`. Moving to a later version is a
+deliberate change to the pin, the checker and this record.
 
 ## Paths and types
 

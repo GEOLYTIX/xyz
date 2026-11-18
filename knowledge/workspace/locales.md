@@ -7,7 +7,7 @@ tags: [workspace, locale, mapp]
 status: draft
 sources:
   - resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration
-    revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
+    x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - resource: ../../apps/xyz/mod/workspace/cache.js
   - resource: ../../apps/xyz/mod/workspace/getLocale.js
   - resource: ../../apps/xyz/mod/workspace/composeObj.js

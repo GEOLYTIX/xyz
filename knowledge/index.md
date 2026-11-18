@@ -1,5 +1,7 @@
 ---
-okf_version: '0.2'
+okf_version: "0.3"
+title: XYZ/MAPP knowledge
+description: Architecture, environment, workspace configuration and documentation workflows for the XYZ API and MAPP library. Use it before changing or deploying XYZ/MAPP.
 ---
 # XYZ/MAPP knowledge
 

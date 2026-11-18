@@ -11,7 +11,8 @@ afterEach(() => {
     rmSync(root, { recursive: true, force: true });
 });
 
-const INDEX = "---\nokf_version: '0.2'\n---\n# Index";
+const INDEX =
+  '---\nokf_version: "0.3"\ntitle: Bundle\ndescription: Test bundle.\n---\n# Index';
 
 function fixture(files) {
   const root = mkdtempSync(join(tmpdir(), 'xyz-knowledge-'));
@@ -155,15 +156,73 @@ describe('knowledge validator:', () => {
     }
   });
 
-  it('requires okf_version 0.2 on the root index', () => {
+  it('requires okf_version 0.3 on the root index', () => {
     for (const [index, message] of [
       ['# Index', /must declare okf_version/],
-      ["---\nokf_version: '0.3'\n---\n# Index", /supports okf_version 0.2/],
+      ['---\ntitle: Bundle\n---\n# Index', /must declare okf_version/],
+      ["---\nokf_version: '0.2'\n---\n# Index", /supports okf_version 0.3/],
     ]) {
       const root = fixture({ 'knowledge/index.md': index });
       const { errors } = validateBundle(root);
       expect(errors).toHaveLength(1);
       expect(errors[0]).toMatch(message);
+    }
+  });
+
+  it('accepts v0.3 bundle metadata and checks a license path', () => {
+    const accepted = fixture({
+      LICENSE: 'MIT',
+      'knowledge/index.md':
+        '---\nokf_version: "0.3"\ntitle: B\ndescription: B.\nlicense: ../LICENSE\nx-xyz-owner: docs\n---\n# Index',
+    });
+    expect(validateBundle(accepted)).toMatchObject({
+      errors: [],
+      warnings: [],
+    });
+    const missing = fixture({
+      'knowledge/index.md':
+        '---\nokf_version: "0.3"\nlicense: ./LICENSE.md\n---\n# Index',
+    });
+    const result = validateBundle(missing);
+    expect(result.errors[0]).toMatch(/Missing local target/);
+    expect(result.warnings).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/bundle title is missing/),
+        expect.stringMatching(/bundle description is missing/),
+      ]),
+    );
+  });
+
+  it('checks the v0.3 path fields', () => {
+    for (const metadata of [
+      'superseded_by: ./missing.md',
+      'computation: /missing.sql',
+      'executor: {resource: ./missing.md, receipt: [id]}',
+      'attester: {resource: ../missing.py}',
+    ]) {
+      const root = fixture({
+        'knowledge/a.md': `---\ntype: Guide\n${metadata}\n---`,
+      });
+      const { errors } = validateBundle(root);
+      expect(errors, metadata).toHaveLength(1);
+      expect(errors[0]).toMatch(/Missing local target/);
+    }
+  });
+
+  it('accepts RFC 3339 stale_after forms and warns on others', () => {
+    const now = Date.parse('2026-01-01');
+    const concept = (value) =>
+      fixture({
+        'knowledge/index.md': `${INDEX}\n\n- [A](a.md)`,
+        'knowledge/a.md': `---\ntype: Guide\ntitle: A\ndescription: A\nstale_after: ${value}\n---`,
+      });
+    for (const value of ['"2027-01-01"', '2027-01-01T00:00:00+01:00']) {
+      expect(validateBundle(concept(value), now).warnings, value).toEqual([]);
+    }
+    for (const value of ['2027-01-01T00:00:00', 'next year', '2027/01/01']) {
+      expect(validateBundle(concept(value), now).warnings[0], value).toMatch(
+        /Invalid optional stale_after/,
+      );
     }
   });
 
@@ -237,7 +296,7 @@ describe('environment coverage:', () => {
       'apps/xyz/mod/a.js': code,
       'knowledge/index.md': `${INDEX}\n\n- [Env](env.md)`,
       'knowledge/env.md':
-        '---\ntype: Environment Variable\ntitle: E\ndescription: E\nvariables: [DOCUMENTED, FAMILY_*]\n---',
+        '---\ntype: Environment Variable\ntitle: E\ndescription: E\nx-xyz-variables: [DOCUMENTED, FAMILY_*]\n---',
     });
     const { errors, warnings, undocumented } = validateBundle(root);
     expect(errors).toEqual([]);
@@ -251,10 +310,10 @@ describe('environment coverage:', () => {
     const root = fixture({
       'knowledge/index.md': `${INDEX}\n\n- [Env](env.md)`,
       'knowledge/env.md':
-        '---\ntype: Environment Variable\ntitle: E\ndescription: E\nvariables: lowercase\n---',
+        '---\ntype: Environment Variable\ntitle: E\ndescription: E\nx-xyz-variables: lowercase\n---',
     });
     expect(validateBundle(root).warnings).toEqual([
-      'knowledge/env.md: variables should be an array of NAME or PREFIX_* strings',
+      'knowledge/env.md: x-xyz-variables should be an array of NAME or PREFIX_* strings',
     ]);
   });
 });

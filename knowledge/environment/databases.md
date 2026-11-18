@@ -5,7 +5,7 @@ description: DBS_* variables define PostgreSQL connections; STATEMENT_TIMEOUT an
 resource: ../../apps/xyz/mod/utils/dbs.js
 tags: [xyz, environment, database, performance]
 status: draft
-variables: [DBS_*, STATEMENT_TIMEOUT, RETRY_LIMIT]
+x-xyz-variables: [DBS_*, STATEMENT_TIMEOUT, RETRY_LIMIT]
 sources:
   - resource: ../../apps/xyz/mod/utils/dbs.js
   - resource: ../../apps/xyz/mod/query.js

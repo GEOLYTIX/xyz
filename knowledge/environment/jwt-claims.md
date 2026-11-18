@@ -5,7 +5,7 @@ description: JWT_TYPE, JWT_ISSUER and JWT_AUDIENCE set the typ, iss and aud clai
 resource: ../../apps/xyz/mod/user/jwtClaims.js
 tags: [xyz, environment, security, auth, jwt]
 status: draft
-variables: [JWT_TYPE, JWT_ISSUER, JWT_AUDIENCE]
+x-xyz-variables: [JWT_TYPE, JWT_ISSUER, JWT_AUDIENCE]
 sources:
   - resource: ../../apps/xyz/mod/user/jwtClaims.js
   - resource: ../../apps/xyz/mod/utils/processEnv.js

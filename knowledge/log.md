@@ -2,6 +2,10 @@
 
 ## 2026-11-18
 
+- Moved the bundle to OKF v0.3: root `title` and `description`, extension keys
+  renamed to `x-xyz-variables` and `x-xyz-revision`, and the checker accepts
+  only `okf_version: "0.3"`. It also checks the v0.3 path fields and warns on
+  `stale_after` values which are not RFC 3339.
 - Added Server and Databases environment concepts; environment concepts are
   grouped by feature rather than one per variable.
 - Recorded the Wiki publishing decision: generated on release, and manually

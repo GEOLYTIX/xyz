@@ -5,10 +5,10 @@ description: WORKSPACE selects the JSON workspace and WORKSPACE_AGE controls cac
 resource: ../../apps/xyz/mod/workspace/cache.js
 tags: [xyz, environment, workspace]
 status: draft
-variables: [WORKSPACE, WORKSPACE_AGE]
+x-xyz-variables: [WORKSPACE, WORKSPACE_AGE]
 sources:
   - resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment
-    revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
+    x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - resource: ../../apps/xyz/mod/utils/processEnv.js
   - resource: ../../apps/xyz/mod/provider/getSrc.js
   - resource: ../../apps/xyz/mod/provider/file.js

@@ -7,7 +7,7 @@ tags: [mapp, ui, architecture]
 status: draft
 sources:
   - resource: https://github.com/GEOLYTIX/xyz/wiki/MAPP
-    revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
+    x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - resource: ../../apps/mapp/lib/mapp.mjs
   - resource: ../../apps/mapp/vite.config.mjs
   - resource: ../../apps/ui/vite.config.mjs

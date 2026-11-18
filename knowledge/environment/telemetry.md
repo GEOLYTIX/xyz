@@ -5,7 +5,7 @@ description: OTEL_* variables enable OpenTelemetry tracing of XYZ API requests a
 resource: ../../apps/xyz/mod/utils/telemetry.js
 tags: [xyz, environment, telemetry, performance]
 status: draft
-variables: [OTEL_*]
+x-xyz-variables: [OTEL_*]
 sources:
   - resource: ../../apps/xyz/mod/utils/telemetry.js
   - resource: ../../apps/xyz/mod/utils/telemetryConsole.js

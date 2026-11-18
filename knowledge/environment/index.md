@@ -9,4 +9,4 @@
 
 Concepts group the variables which are configured together, one concept per
 feature. The knowledge check warns about every variable read by the XYZ API
-which no concept lists in its `variables` metadata.
+which no concept lists in its `x-xyz-variables` metadata.

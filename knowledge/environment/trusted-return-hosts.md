@@ -5,7 +5,7 @@ description: Comma-separated origin allowlist for absolute redirect targets afte
 resource: ../../apps/xyz/mod/user/redirect.js
 tags: [xyz, environment, security, auth, redirect]
 status: draft
-variables: [TRUSTED_RETURN_HOSTS]
+x-xyz-variables: [TRUSTED_RETURN_HOSTS]
 sources:
   - resource: ../../apps/xyz/mod/user/redirect.js
   - resource: ../../apps/xyz/mod/user/login.js
