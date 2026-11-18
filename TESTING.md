@@ -34,7 +34,7 @@ Tests don't depend on the network for data. Openlayers is loaded from the `ol` p
 There are two exceptions:
 
 - **CDN imports**: libraries which MAPP loads from a CDN at runtime are tested with the CDN import, eg. the [maplibre format tests](apps/mapp/tests/layer/format/maplibre.test.mjs) import the pinned `maplibre-gl` version with `mapp.utils.esmImport` from esm.sh, as MAPP does in production. A broken CDN build of a pinned version fails the tests. Modules which only call a CDN library as a dependency of the module under test may still stub the import.
-- **Mapbox API**: the maplibre format tests request Mapbox styles and tiles with an [access token](#mapbox-access-token). The tests are skipped without a token.
+- **Mapbox API**: the maplibre format tests request Mapbox styles and tiles with an [access token](#mapbox-access-token), and are skipped without one. The invalid-token test always requests the Mapbox API, so it needs network access to `api.mapbox.com` with or without a token, eg. for pull requests from forks.
 
 The [osm template](packages/testhost/workspaces/templates/osm.json) is the base map of all test workspaces. Each workspace adds the template as the `osm` layer of its default locale, so every locale has the `osm` layer. The layer has `display: false`, and the testview workspace overrides it with `display: true`. The [tiles format tests](apps/mapp/tests/layer/format/tiles.test.mjs) use the layer, including its `style.contextFilter`.
 
@@ -84,9 +84,9 @@ MAPBOX_ACCESS_TOKEN=pk.xxx
 MAPBOX_STYLE_URL=mapbox://styles/{account}/{style}
 ```
 
-The tests which require a token are skipped without a token. The tests with an invalid or without a token always run.
+The tests which require a token are skipped without a token. The tests with an invalid or without a token always run. The invalid-token test requests the Mapbox API and expects an `HTTP 401` or `HTTP 403`.
 
-The [Unit Tests](.github/workflows/unit_tests.yml) workflow provides the token from the `MAPBOX_ACCESS_TOKEN` repository secret. Pull requests from forks don't receive the secret and skip the tests.
+The [Unit Tests](.github/workflows/unit_tests.yml) workflow, the coverage step of the [Build](.github/workflows/build.yml) workflow and the test step of the [Release](.github/workflows/release.yml) workflow provide the token from the `MAPBOX_ACCESS_TOKEN` repository secret. Pull requests from forks don't receive the secret and skip the tests.
 
 ### Coverage
 

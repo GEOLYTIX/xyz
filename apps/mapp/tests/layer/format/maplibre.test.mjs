@@ -11,7 +11,7 @@ const MAPLIBRE = 'maplibre-gl@5.23.0';
 const MaplibreGL = await mapp.utils.esmImport(MAPLIBRE);
 
 /**
-The Mapbox tests request styles and tiles from the Mapbox API with an access token. The token is provided by the vitest config from the MAPBOX_ACCESS_TOKEN environment variable or a gitignored .env.local file. The tests are skipped without a token.
+The Mapbox tests request styles and tiles from the Mapbox API with an access token. The token is provided by the vitest config from the MAPBOX_ACCESS_TOKEN environment variable or a gitignored .env.local file. The tests which require a token are skipped without a token. The invalid-token test always runs and requests the Mapbox API.
 
 The MAPBOX_STYLE_URL can be set to test another Mapbox style. The default is a Mapbox Studio style of our account.
 */
@@ -22,7 +22,7 @@ const styleURL =
   'mapbox://styles/dbauszus/cl9795mb900gk14nr88zfoitd';
 
 /**
-Removes the access token from a string, eg. a request url in an assertion message.
+Returns the urls of the `mapp.utils.xhr` requests to the Mapbox API.
 */
 function mapboxRequests(xhr) {
   return xhr.mock.calls
@@ -30,6 +30,9 @@ function mapboxRequests(xhr) {
     .filter((url) => url.startsWith('https://api.mapbox.com'));
 }
 
+/**
+Removes the access token from a string, eg. a request url in an assertion message.
+*/
 function redact(str) {
   return token ? String(str).replaceAll(token, '<token>') : String(str);
 }
