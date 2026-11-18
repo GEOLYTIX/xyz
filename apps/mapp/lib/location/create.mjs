@@ -104,5 +104,5 @@ export default async function createLocation(feature, interaction, layer) {
   );
 
   // Get the newly created location.
-  mapp.location.get(location);
+  void mapp.location.get(location);
 }

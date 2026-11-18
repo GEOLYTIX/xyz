@@ -91,7 +91,7 @@ function lock() {
   const params = { url: `${idle.host}/api/user/cookie?destroy=true` };
 
   // Reload location once cookie has been removed.
-  mapp.utils.xhr(params).then((response) => {
+  void mapp.utils.xhr(params).then((response) => {
     if (response instanceof Error) {
       // Unlock and re-arm the timer so the lock is retried without user activity.
       idle.locked = false;
@@ -122,7 +122,7 @@ Timeout function for renewing the access token used in {@link module:/ui/utils/i
 function cookie() {
   const params = { url: `${idle.host}/api/user/cookie` };
 
-  mapp.utils.xhr(params).then((response) => {
+  void mapp.utils.xhr(params).then((response) => {
     // Lock interface if cookie renewal fails.
     if (response instanceof Error) return lock();
 
