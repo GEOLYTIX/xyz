@@ -100,7 +100,7 @@ export function catToggle(e, layer, cat) {
   if (toggle) {
     cat.disabled = true;
 
-    filterAdd(layer, cat);
+    void filterAdd(layer, cat);
 
     // Store style to toggle on.
     cat._style = cat.style;
@@ -110,7 +110,7 @@ export function catToggle(e, layer, cat) {
   } else {
     delete cat.disabled;
 
-    filterRemove(layer, cat);
+    void filterRemove(layer, cat);
 
     // If the filter is defined in the config for initial display of just a subset of catergories, _style may not yet exist.
     cat._style ??= cat.style;

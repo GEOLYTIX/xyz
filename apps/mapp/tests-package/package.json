@@ -1,0 +1,6 @@
+{
+  "name": "geolytix-mapp-package-test",
+  "description": "The package test installs the packed @geolytix/mapp package here with scripts/installPackage.mjs. Not a workspace package.",
+  "private": true,
+  "type": "module"
+}
