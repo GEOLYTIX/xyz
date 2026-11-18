@@ -22,9 +22,21 @@ export {
   addLayers,
   changeEnd,
   createMapview,
+  createPolygon,
+  drawPolygon,
   getLocale,
   getRecord,
   newLocation,
+  panTo,
+  renameLocation,
+  render,
+  resetTable,
+  scratchPolygonLayer,
+  tableRows,
+  themeColours,
+  themeStyles,
+  themeValues,
+  trashLocation,
 } from '../../mapp/tests/helpers.mjs';
 
 // Lidl Walworth Road in the grocery locale view.
