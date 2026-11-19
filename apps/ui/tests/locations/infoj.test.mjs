@@ -231,4 +231,186 @@ describe('ui/locations/infoj', () => {
 
     expect(infoj(location).children.length).toBe(0);
   });
+  describe('entry query', () => {
+    /**
+    Creates an entry for the field_max query of the store_name field in the location layer table, with the max as entry field.
+    */
+    function maxEntry(params) {
+      return {
+        key: 'max',
+        field: 'max',
+        title: 'Max',
+        query: 'field_max',
+        queryparams: { field: 'store_name', table: true },
+        ...params,
+      };
+    }
+
+    it('runs the query with the run flag and renders the response field', async () => {
+      const { location } = await lidlLocation();
+
+      const entries = [maxEntry({ run: true })];
+
+      infoj(location, entries);
+
+      expect(entries[0].queryCheck).toBe(true);
+      expect(entries[0].host).toBe(location.layer.mapview.host);
+
+      const url = new URL(entries[0].url);
+
+      expect(url.searchParams.get('template')).toBe('field_max');
+      expect(url.searchParams.get('table')).toBe(location.layer.table);
+
+      await vi.waitFor(() =>
+        expect(entries[0].node.querySelector('.val')).not.toBeNull(),
+      );
+
+      const response = await mapp.utils.xhr(entries[0].url);
+
+      expect(response.max).toBeTypeOf('string');
+      expect(entries[0].value).toBe(response.max);
+      expect(val(entries[0])).toBe(response.max);
+    });
+
+    it('runs the query of a runOnce entry once', async () => {
+      const { location } = await lidlLocation();
+
+      const xhr = vi.spyOn(mapp.utils, 'xhr').mockResolvedValue({ max: 'a' });
+
+      const entries = [maxEntry({ runOnce: true })];
+
+      infoj(location, entries);
+
+      expect(entries[0].runOnce).toBeUndefined();
+
+      await vi.waitFor(() => expect(entries[0].value).toBe('a'));
+
+      infoj(location, entries);
+
+      expect(xhr).toHaveBeenCalledTimes(1);
+    });
+
+    it('assigns the response without a field as value', async () => {
+      const { location } = await lidlLocation();
+
+      vi.spyOn(mapp.utils, 'xhr').mockResolvedValue('a');
+
+      const entries = [maxEntry({ key: 'q', field: undefined, run: true })];
+
+      infoj(location, entries);
+
+      await vi.waitFor(() => expect(entries[0].value).toBe('a'));
+
+      expect(val(entries[0])).toBe('a');
+    });
+
+    it('adds the loading class to the view of a blocking query', async () => {
+      const { location } = await lidlLocation();
+
+      let resolve;
+
+      vi.spyOn(mapp.utils, 'xhr').mockReturnValue(
+        new Promise((r) => {
+          resolve = r;
+        }),
+      );
+
+      const entries = [maxEntry({ run: true, blocking: true })];
+
+      infoj(location, entries);
+
+      expect(location.view.classList).toContain('loading');
+
+      resolve({ max: 'a' });
+
+      await vi.waitFor(() => expect(entries[0].value).toBe('a'));
+
+      expect(location.view.classList).not.toContain('loading');
+    });
+
+    it('assigns the nullValue for an empty response', async () => {
+      const { location } = await lidlLocation();
+
+      vi.spyOn(mapp.utils, 'xhr').mockResolvedValue(null);
+
+      const entries = [
+        maxEntry({ run: true, nullValue: 'n/a' }),
+        maxEntry({ key: 'null', run: true }),
+      ];
+
+      infoj(location, entries);
+
+      await vi.waitFor(() => expect(entries[0].value).toBe('n/a'));
+
+      expect(val(entries[0])).toBe('n/a');
+      expect(entries[1].value).toBeNull();
+    });
+
+    it('removes the node of an entry which is skipped for the response', async () => {
+      const { location } = await lidlLocation();
+
+      vi.spyOn(mapp.utils, 'xhr').mockResolvedValue(null);
+
+      const entries = [maxEntry({ run: true, skipNullValue: true })];
+
+      const grid = infoj(location, entries);
+
+      expect(entries[0].node.parentElement).toBe(grid);
+
+      await vi.waitFor(() => expect(entries[0].node.parentElement).toBeNull());
+    });
+
+    it('calls the queryCallback of the entry with the response', async () => {
+      const { location } = await lidlLocation();
+
+      vi.spyOn(mapp.utils, 'xhr').mockResolvedValue({ max: 'a' });
+
+      const queryCallback = vi.fn();
+
+      const entries = [maxEntry({ run: true, queryCallback })];
+
+      infoj(location, entries);
+
+      await vi.waitFor(() =>
+        expect(queryCallback).toHaveBeenCalledWith({ max: 'a' }, entries[0]),
+      );
+    });
+
+    it('warns for a field entry with a query which is not set to run', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      const { location } = await lidlLocation();
+
+      const xhr = vi.spyOn(mapp.utils, 'xhr');
+
+      const entries = [maxEntry({ value: 'a' })];
+
+      infoj(location, entries);
+
+      expect(warn).toHaveBeenCalledWith(
+        'field:"max" has a query:"field_max" which is not set to run, please add the run or runOnce flag to the entry.',
+      );
+      expect(xhr).not.toHaveBeenCalled();
+
+      // The entry is rendered with its value.
+      expect(val(entries[0])).toBe('a');
+    });
+
+    // Known bug https://github.com/GEOLYTIX/xyz/issues/3135: the queryCallback checks the response for a falsy value. The xhr utility resolves a failed request with an Error, which is assigned as entry value.
+    it.fails('assigns the nullValue for a failed query', async () => {
+      const { location } = await lidlLocation();
+
+      vi.spyOn(mapp.utils, 'xhr').mockResolvedValue(new Error('HTTP 400'));
+
+      const entries = [
+        maxEntry({ key: 'q', field: undefined, run: true, nullValue: 'n/a' }),
+      ];
+
+      infoj(location, entries);
+
+      await vi.waitFor(() => expect(entries[0].value).toBeDefined());
+
+      expect(entries[0].value).toBe('n/a');
+    });
+  });
 });

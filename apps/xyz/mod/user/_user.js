@@ -92,7 +92,7 @@ export default async function user(req, res) {
 
   if (method instanceof Error) {
     req.params.msg = method.message;
-    methods.login(req, res);
+    return methods.login(req, res);
   }
 }
 

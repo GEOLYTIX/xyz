@@ -367,7 +367,7 @@ async function templatesArray(key, val, obj, user, templateScope) {
   if (!Array.isArray(val)) {
     obj.warn ??= [];
     obj.warn.push(
-      `'templates' property has value [${val}] which is not an array.`,
+      `'templates' property has value ${JSON.stringify(val)} which is not an array.`,
     );
     return false;
   }

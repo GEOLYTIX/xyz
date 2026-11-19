@@ -72,11 +72,11 @@ export default async function cloudinary(req, res) {
 
   const signature = createHash('sha256').update(toSign).digest('hex');
 
-  params.push(`signature=${signature}`);
-
-  params.push(`timestamp=${timestamp}`);
-
-  params.push(`api_key=${cloudinary[1]}`);
+  params.push(
+    `signature=${signature}`,
+    `timestamp=${timestamp}`,
+    `api_key=${cloudinary[1]}`,
+  );
 
   const method = req.params.destroy ? 'image/destroy' : 'upload';
 
