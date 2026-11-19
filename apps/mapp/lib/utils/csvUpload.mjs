@@ -107,7 +107,7 @@ This function uploads a CSV file to a database store.
 @property {Boolean} [params.async] If set to true, the data is uploaded asynchronously. Default is false.
 @property {Boolean} [params.header] If set to true, the first row is treated as a header row and not uploaded.
 
-@returns {Promise<Object|Error>} The outcome object and any messages returned by the database.
+@returns {Promise<Object|Error>} The outcome object and any messages returned by the database. An array with the error is returned if the file cannot be read, parsed or chunked.
 */
 export default async function csvUpload(file, params = {}) {
   if (!params.query) {
@@ -132,54 +132,75 @@ export default async function csvUpload(file, params = {}) {
     }
   }
 
-  return new Promise((resolve) => {
-    const reader = new FileReader();
+  let text;
+  try {
+    text = await readText(file);
+  } catch (error) {
+    return [error];
+  }
 
-    reader.readAsText(file);
+  // Split text file into rows on carriage return / new line.
+  const rows = text.trim().split(/\r?\n/);
 
-    reader.onload = async (e) => {
-      // Split text file into rows on carriage return / new line.
-      const rows = e.target.result.trim().split(/\r?\n/);
+  // The file has a header row.
+  if (params.header) rows.shift();
 
-      // The file has a header row.
-      if (params.header) rows.shift();
+  let matrix;
+  try {
+    matrix = rows.map((row) => splitRowIntoFields(row, params));
+  } catch (error) {
+    return [error];
+  }
 
-      let matrix;
-      try {
-        matrix = rows.map((row) => splitRowIntoFields(row, params));
-      } catch (error) {
-        resolve([error]);
-        return;
-      }
+  let chunks;
+  try {
+    chunks = chunkRows(matrix, params);
+  } catch (error) {
+    return [error];
+  }
 
-      let chunks;
-      try {
-        chunks = chunkRows(matrix, params);
-      } catch (error) {
-        resolve([error]);
-        return;
-      }
+  let responses = [];
 
-      let responses = [];
+  // If async = true, then we need to wait for all promises to resolve before returning the outcome object.
+  if (params.async) {
+    responses = await Promise.all(
+      chunks.map((chunk) => postRequestData(chunk, params)),
+    );
+  }
 
-      // If async = true, then we need to wait for all promises to resolve before returning the outcome object.
-      if (params.async) {
-        responses = await Promise.all(
-          chunks.map((chunk) => postRequestData(chunk, params)),
-        );
-      }
+  // If async = false, run them synchhronously.
+  else {
+    for (const chunk of chunks) {
+      const response = await postRequestData(chunk, params);
+      responses.push(response);
+    }
+  }
 
-      // If async = false, run them synchhronously.
-      else {
-        for (const chunk of chunks) {
-          const response = await postRequestData(chunk, params);
-          responses.push(response);
-        }
-      }
+  return responses;
+}
 
-      resolve(responses);
-    };
-  });
+/**
+@function readText
+@description
+Reads the text content of a file.
+
+A UTF-16 byte order mark selects the UTF-16LE or UTF-16BE encoding, like FileReader.readAsText(). Files without a UTF-16 byte order mark are decoded as UTF-8. The byte order mark is removed from the text.
+
+@param {File} file The file to read.
+@returns {Promise<String>} The decoded text of the file.
+*/
+async function readText(file) {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+
+  let encoding = 'utf-8';
+
+  if (bytes[0] === 0xff && bytes[1] === 0xfe) {
+    encoding = 'utf-16le';
+  } else if (bytes[0] === 0xfe && bytes[1] === 0xff) {
+    encoding = 'utf-16be';
+  }
+
+  return new TextDecoder(encoding).decode(bytes);
 }
 
 /**

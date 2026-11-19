@@ -64,7 +64,7 @@ export default async function register(req, res) {
     : 'register_view';
 
   // Get request for registration form view.
-  view(req, res);
+  return view(req, res);
 }
 
 /**

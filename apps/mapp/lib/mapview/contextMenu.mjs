@@ -27,17 +27,19 @@ function modify(e) {
 
   const menu = [];
 
-  // Show save option in contextmenu
-  menu.push(mapp.utils.html`
+  menu.push(
+    // Show save option in contextmenu
+    mapp.utils.html`
     <li
       onclick=${() => this.interaction.finish(this.interaction.getFeature())}>
-      ${mapp.dictionary.save}`);
+      ${mapp.dictionary.save}`,
 
-  // Add cancel option to contextmenu.
-  menu.push(mapp.utils.html`
+    // Add cancel option to contextmenu.
+    mapp.utils.html`
     <li
       onclick=${() => this.interaction.finish()}>
-      ${mapp.dictionary.cancel}`);
+      ${mapp.dictionary.cancel}`,
+  );
 
   // Set context menu popup on last vertex.
   this.popup({
@@ -59,15 +61,16 @@ function draw(e) {
 
   const menu = [];
 
-  menu.push(mapp.utils.html`
+  menu.push(
+    mapp.utils.html`
   <li
     onclick=${() => this.interaction.finish(this.interaction.getFeature())}>
-      ${mapp.dictionary.save}`);
-
-  menu.push(mapp.utils.html`
+      ${mapp.dictionary.save}`,
+    mapp.utils.html`
     <li
       onclick=${() => this.interaction.finish()}>
-      ${mapp.dictionary.cancel}`);
+      ${mapp.dictionary.cancel}`,
+  );
 
   // Set timeout to for the drawend popup to appear after async onchange event popup.
   setTimeout(
