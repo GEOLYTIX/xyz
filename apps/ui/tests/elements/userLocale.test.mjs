@@ -69,9 +69,16 @@ describe('ui/elements/userLocale', () => {
 
     userLocale(params, mapview());
 
+    // A placeholder the empty-list render must replace.
+    params.ulLocales.append(document.createElement('ul'));
+
     await vi.waitFor(() => expect(list).toHaveResolved());
 
-    expect(params.ulLocales.querySelector('ul')).toBeNull();
+    await vi.waitFor(() =>
+      expect(params.ulLocales.querySelector('ul')).toBeNull(),
+    );
+    expect(params.ulLocales.children).toHaveLength(1);
+    expect(params.ulLocales.firstElementChild.tagName).toBe('DIV');
     expect(params.ulLocales.textContent.trim()).toBe('');
   });
 

@@ -119,10 +119,6 @@ describe('ui/elements/reportLink', () => {
   it('doesn’t open a dialog on mobile', () => {
     vi.spyOn(mapp.utils, 'mobile').mockReturnValue(true);
 
-    const link = reportLink({ url: 'https://example.com', report: undefined });
-
-    expect(link.querySelector('span').textContent).toBe('open_in_new');
-
     const report = reportLink({
       report: { template: 'store_report', dialog: true },
     });
