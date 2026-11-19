@@ -23,13 +23,30 @@ async function layers(locale) {
     : Object.values(result.layers ?? {});
 }
 
+/** A layer with zoom ranges is queried with its first table. */
+const firstTable = (layer) =>
+  layer.table ?? Object.values(layer.tables ?? {}).find(Boolean);
+
+/** Query params of a dataview; flags resolve in the browser, the test resolves table. */
+function dataviewParams(locale, layer, dataview) {
+  const params = new URLSearchParams({
+    template: dataview.query,
+    locale,
+    layer: layer.key,
+  });
+  for (const [param, value] of Object.entries(dataview.queryparams ?? {})) {
+    if (value !== true) params.set(param, value);
+    else if (param === 'table') params.set('table', firstTable(layer));
+  }
+  return params;
+}
+
 function rows(locale, layer) {
   const params = new URLSearchParams({
     template: layer.format,
     locale,
     layer: layer.key,
-    // A layer with zoom ranges is queried with its first table.
-    table: layer.table ?? Object.values(layer.tables ?? {}).find(Boolean),
+    table: firstTable(layer),
     geom: layer.geom,
     srid: layer.srid,
   });
@@ -64,7 +81,7 @@ describe.each(collectExamples(root))('$path example $id', ({ id }) => {
         template: 'location_get',
         locale: id,
         layer: layer.key,
-        table: layer.table ?? Object.values(layer.tables ?? {}).find(Boolean),
+        table: firstTable(layer),
         id: locationId,
       });
       const location = await get(`/api/query?${params}`);
@@ -74,24 +91,11 @@ describe.each(collectExamples(root))('$path example $id', ({ id }) => {
 
   it('runs the query of each layer dataview', async () => {
     for (const layer of await layers(id)) {
-      for (const [key, dataview] of Object.entries(layer.dataviews ?? {})) {
-        if (!dataview?.query) continue;
-        const params = new URLSearchParams({
-          template: dataview.query,
-          locale: id,
-          layer: layer.key,
-        });
-        // Flags resolve in the browser; the test resolves those it can.
-        for (const [param, value] of Object.entries(
-          dataview.queryparams ?? {},
-        )) {
-          if (value === true && param === 'table')
-            params.set(
-              'table',
-              layer.table ?? Object.values(layer.tables ?? {}).find(Boolean),
-            );
-          else if (value !== true) params.set(param, value);
-        }
+      const dataviews = Object.entries(layer.dataviews ?? {}).filter(
+        ([, dataview]) => dataview?.query,
+      );
+      for (const [key, dataview] of dataviews) {
+        const params = dataviewParams(id, layer, dataview);
         const response = await get(`/api/query?${params}`);
         expect(response, `${layer.key} dataview ${key}`).toBeTruthy();
       }
