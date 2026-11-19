@@ -12,15 +12,18 @@ sources:
 # OKF foundation
 
 Use `knowledge/` for OKF v0.3 concepts and directory indexes. Keep `docs/` as
-generated JSDoc output. Keep root setup and development guides in place during
-this migration. Link to source JSDoc rather than copying API signatures into
-knowledge pages.
+generated JSDoc output. `SETUP.md` and `DEPLOYMENT.md` move into the bundle
+with pointers at the root; development guides stay at the root. Link to source
+JSDoc rather than copying API signatures into knowledge pages.
 
-The first PR includes three representative Wiki adaptations, the environment
-variables issue #3007 names as drift, source and link checks, environment
-coverage warnings, and agent navigation. Portal generation, JSDoc JSON exports, Wiki
-publishing, complete environment coverage and workspace schema validation remain
-follow-up work on issue #3007. The Wiki is not yet generated; see
+## Release scope
+
+The whole migration ships in one PR with the v5.1 minor release, following the
+phased outline on issue #3007. The format ships with the release: bundle
+structure, metadata schemas, the checker and workflows, and every Wiki page in
+the bundle. Content accuracy is patched in v5.1 patch releases, and concepts
+stay `draft` until reviewed. Because the Wiki is generated from the bundle on
+release, every Wiki page must be in the bundle before the release; see
 [Wiki publishing](wiki-publishing.md).
 
 ## Spec version

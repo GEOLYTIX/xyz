@@ -1,5 +1,10 @@
 # Knowledge changes
 
+## 2026-11-19
+
+- Recorded the release scope: the whole migration ships in one PR with v5.1;
+  content details are patched after the release.
+
 ## 2026-11-18
 
 - Moved the bundle to OKF v0.3: root `title` and `description`, extension keys
