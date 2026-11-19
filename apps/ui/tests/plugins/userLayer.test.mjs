@@ -1,42 +1,20 @@
 import { describe, expect, it, onTestFinished, vi } from 'vitest';
 import plugins from '../../lib/plugins/_plugins.mjs';
 import { userLayer } from '../../lib/plugins/userLayer.mjs';
-import { addLayers, createMapview, getLocale } from '../helpers.mjs';
+import {
+  addLayers,
+  createMapview,
+  getLocale,
+  mockJSONEditor,
+} from '../helpers.mjs';
 
-/**
-Stubs the esmImport of the vanilla-jsoneditor module from esm.sh with a fake createJSONEditor method. The fake editor renders the menu with the onRenderMenu prop, and get() and set() the content.
-
-Returns the array of the fake editors.
-*/
-function mockJSONEditor() {
-  const editors = [];
-
-  const createJSONEditor = vi.fn((params) => {
-    let content = params.props.content;
-
-    const editor = {
-      menu: params.props.onRenderMenu([
-        { text: 'text' },
-        { text: 'tree' },
-        { type: 'separator' },
-        { className: 'jse-format' },
-      ]),
-      get: () => content,
-      set: (c) => {
-        content = c;
-      },
-      target: params.target,
-    };
-
-    editors.push(editor);
-
-    return editor;
-  });
-
-  vi.spyOn(mapp.utils, 'esmImport').mockResolvedValue({ createJSONEditor });
-
-  return editors;
-}
+// The default menu items of the jsoneditor which are filtered by the plugin.
+const defaultMenu = [
+  { text: 'text' },
+  { text: 'tree' },
+  { type: 'separator' },
+  { className: 'jse-format' },
+];
 
 /**
 Adds a #layers element to the document, like the default view. The element and the modal dialogs are removed when the test finishes.
@@ -62,7 +40,7 @@ Creates a scratch mapview with the locale layers and the userLayer plugin in a #
 Returns the plugin, the mapview, the #layers node and the fake jsoneditor.
 */
 async function setup() {
-  const editors = mockJSONEditor();
+  const editors = mockJSONEditor(defaultMenu);
   const node = layersNode();
 
   // The mapview.zIndex for the user layer is assigned when the locale layers are added.

@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, onTestFinished, vi } from 'vitest';
 import plugins from '../../lib/plugins/_plugins.mjs';
 import { userIDB } from '../../lib/plugins/userIDB.mjs';
+import { mapTarget, mockJSONEditor } from '../helpers.mjs';
 
 afterEach(() => {
   delete mapp.user;
@@ -22,36 +23,6 @@ const defaultMenu = [
 ];
 
 /**
-Stubs the esmImport of the vanilla-jsoneditor module from esm.sh with a fake createJSONEditor method. The fake editor renders the menu with the onRenderMenu prop, and get() and set() the content.
-
-Returns the array of the fake editors.
-*/
-function mockJSONEditor() {
-  const editors = [];
-
-  const createJSONEditor = vi.fn((params) => {
-    let content = params.props.content;
-
-    const editor = {
-      menu: params.props.onRenderMenu([...defaultMenu]),
-      get: () => content,
-      set: vi.fn((c) => {
-        content = c;
-      }),
-      target: params.target,
-    };
-
-    editors.push(editor);
-
-    return editor;
-  });
-
-  vi.spyOn(mapp.utils, 'esmImport').mockResolvedValue({ createJSONEditor });
-
-  return editors;
-}
-
-/**
 Replaces the mapp.utils.userIndexedDB namespace with put and remove mocks, because the methods of the ESM namespace can't be spied on. The namespace is restored when the test finishes.
 */
 function mockIndexedDB() {
@@ -69,27 +40,6 @@ function mockIndexedDB() {
 }
 
 /**
-Adds a #Map element as dialog target to the document, like the default view. The element is removed when the test finishes.
-
-The close event is dispatched on each dialog in the target first. The close method of the dialog disconnects the ResizeObserver of a non-modal dialog from its target. The event is dispatched, because the close() method of a dialog element which is not open doesn't dispatch the event.
-*/
-function mapTarget() {
-  const target = document.createElement('div');
-  target.id = 'Map';
-  document.body.append(target);
-
-  onTestFinished(() => {
-    for (const node of target.querySelectorAll('dialog')) {
-      node.dispatchEvent(new Event('close'));
-    }
-
-    target.remove();
-  });
-
-  return target;
-}
-
-/**
 Returns a mapview stub with a mapButton element.
 */
 function mapview() {
@@ -102,7 +52,7 @@ Creates the plugin button, clicks the button and waits for the dialog with the f
 Returns the plugin config, the dialog target and the fake editors.
 */
 async function openDialog(plugin = {}) {
-  const editors = mockJSONEditor();
+  const editors = mockJSONEditor(defaultMenu);
   const target = mapTarget();
 
   userIDB(plugin, mapview());
@@ -269,7 +219,7 @@ describe('plugins/userIDB', () => {
   it.fails(
     'does not open the dialog when the button is toggled off before the editor loads',
     async () => {
-      mockJSONEditor();
+      mockJSONEditor(defaultMenu);
       const target = mapTarget();
 
       const plugin = {};
