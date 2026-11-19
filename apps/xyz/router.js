@@ -14,6 +14,7 @@ Creates an express router object with base xyz endpoints.
 import { resolve } from 'node:path';
 import cookieParser from 'cookie-parser';
 import express from 'express';
+import cors from './mod/middleware/cors.js';
 import './mod/utils/processEnv.js';
 import rateLimit from 'express-rate-limit';
 import provider from './mod/provider/_provider.js';
@@ -56,6 +57,9 @@ function createRouter(middleWare = []) {
     windowMs: xyzEnv.RATE_LIMIT_WINDOW,
     validate: { xForwardedForHeader: false },
   });
+
+  // CORS headers are set before the rate limit so that limited responses are readable cross-origin.
+  router.use(cors);
 
   router.use(limiter);
 

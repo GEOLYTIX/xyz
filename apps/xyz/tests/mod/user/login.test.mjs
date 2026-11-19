@@ -11,6 +11,24 @@ vi.mock('@geolytix/xyz-app/mod/view.js', () => ({
   default: vi.fn(),
 }));
 
+// The redirect mock calls the actual redirect method unless a test overrides the implementation.
+const redirectFn = vi.fn();
+vi.mock('@geolytix/xyz-app/mod/user/redirect.js', () => ({
+  default: (...args) => redirectFn(...args),
+}));
+
+/**
+Returns whether the promise is still pending after the queued microtasks and timers have run.
+*/
+async function isPending(promise) {
+  const pending = Symbol('pending');
+  const result = await Promise.race([
+    promise,
+    new Promise((resolve) => setTimeout(() => resolve(pending))),
+  ]);
+  return result === pending;
+}
+
 // Set environment variables
 globalThis.xyzEnv = {
   DIR: '/app',
@@ -28,9 +46,14 @@ describe('login', async () => {
     '@geolytix/xyz-app/mod/user/login.js'
   );
   const view = (await import('@geolytix/xyz-app/mod/view.js')).default;
+  const { default: actualRedirect } = await vi.importActual(
+    '@geolytix/xyz-app/mod/user/redirect.js',
+  );
 
   beforeEach(() => {
     vi.clearAllMocks();
+    redirectFn.mockReset();
+    redirectFn.mockImplementation(actualRedirect);
   });
 
   it('redirects an already authenticated user', () => {
@@ -180,5 +203,87 @@ describe('login', async () => {
 
     expect(res.statusCode).toEqual(302);
     expect(res.getHeader('location')).toEqual('/app/');
+  });
+
+  describe('returns the promise of the view or redirect method', () => {
+    const user = { email: 'test@email.com' };
+
+    // Each branch returns the deferred promise from its dependency.
+    const branches = {
+      'the GET login view': {
+        setup: (promise) => {
+          view.mockReturnValueOnce(promise);
+          const { req, res } = createMocks({ params: {} });
+          delete req.body;
+          return { req, res };
+        },
+        dependency: () => view,
+        args: (req, res) => [req, res],
+      },
+      'the failed credentials view': {
+        setup: (promise) => {
+          fromACLFn.mockResolvedValueOnce(new Error('Invalid credentials'));
+          view.mockReturnValueOnce(promise);
+          return createMocks({
+            method: 'POST',
+            body: { email: 'test@email.com', password: 'wrong' },
+            params: {},
+            cookies: { TEST_APP_redirect: encodeURIComponent('/dashboard') },
+          });
+        },
+        dependency: () => view,
+        args: (req, res) => [req, res],
+      },
+      'the successful login redirect': {
+        setup: (promise) => {
+          fromACLFn.mockResolvedValueOnce(user);
+          redirectFn.mockReturnValueOnce(promise);
+          return createMocks({
+            method: 'POST',
+            body: { email: 'test@email.com', password: 'correct' },
+            params: {},
+          });
+        },
+        dependency: () => redirectFn,
+        args: (req, res) => [req, res, user],
+      },
+    };
+
+    it.each(Object.keys(branches))(
+      'stays pending until %s resolves',
+      async (branch) => {
+        const { setup, dependency, args } = branches[branch];
+        const deferred = Promise.withResolvers();
+        const { req, res } = setup(deferred.promise);
+
+        const result = login(req, res);
+
+        expect(result).toBeInstanceOf(Promise);
+        expect(await isPending(result)).toBe(true);
+        expect(dependency()).toHaveBeenCalledWith(...args(req, res));
+
+        deferred.resolve('settled');
+
+        await expect(result).resolves.toBe('settled');
+      },
+    );
+
+    it.each(Object.keys(branches))(
+      'propagates the rejection of %s',
+      async (branch) => {
+        const { setup } = branches[branch];
+        const deferred = Promise.withResolvers();
+        const { req, res } = setup(deferred.promise);
+
+        const result = login(req, res);
+
+        expect(await isPending(result)).toBe(true);
+
+        const error = new Error('dependency failed');
+        deferred.reject(error);
+
+        await expect(result).rejects.toBe(error);
+      },
+    );
   });
 });
