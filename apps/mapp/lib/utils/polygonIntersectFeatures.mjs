@@ -15,10 +15,6 @@
 export function polygonIntersectFeatures(params) {
   if (!params.mapview) return;
 
-  function getArrayDepth(arr) {
-    return Array.isArray(arr) ? 1 + Math.max(0, ...arr.map(getArrayDepth)) : 0;
-  }
-
   // Config for mapview draw interaction.
   const interaction = {
     // Draw polygon.
@@ -53,4 +49,14 @@ export function polygonIntersectFeatures(params) {
 
   // Initiate drawing on mapview with config as interaction argument.
   params.mapview.interactions.draw(interaction);
+}
+
+/**
+ * Returns the nesting depth of an array, 0 for a non-array value.
+ * @function getArrayDepth
+ * @param {*} arr The value to measure.
+ * @returns {number} The array depth.
+ */
+function getArrayDepth(arr) {
+  return Array.isArray(arr) ? 1 + Math.max(0, ...arr.map(getArrayDepth)) : 0;
 }

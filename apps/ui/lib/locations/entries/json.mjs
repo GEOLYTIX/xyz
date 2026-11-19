@@ -35,21 +35,6 @@ export default function json(entry) {
 
   entry.data = entry.newValue || entry.value;
 
-  // Limit the menu for the jsoneditor control.
-  function renderMenu(items) {
-    return items
-      .filter((item) => item.text !== 'tree')
-      .filter((item) => item.text !== 'text')
-      .filter((item) => item.text !== 'table')
-      .filter((item) => item.type !== 'separator')
-      .filter((item) => item.className !== 'jse-undo')
-      .filter((item) => item.className !== 'jse-redo')
-      .filter((item) => item.className !== 'jse-search')
-      .filter((item) => item.className !== 'jse-contextmenu')
-      .filter((item) => item.className !== 'jse-sort')
-      .filter((item) => item.className !== 'jse-transform');
-  }
-
   // Create a jsoneditor control with default props.
   // The control is readonly if the entry is not editable.
   entry.jsoneditor = mapp.ui.elements.jsoneditor({
@@ -77,4 +62,28 @@ export default function json(entry) {
   }
 
   return node;
+}
+
+/**
+@function renderMenu
+
+@description
+Limits the menu for the jsoneditor control.
+
+@param {Array} items The jsoneditor menu items.
+
+@return {Array} The menu items to render.
+*/
+function renderMenu(items) {
+  return items
+    .filter((item) => item.text !== 'tree')
+    .filter((item) => item.text !== 'text')
+    .filter((item) => item.text !== 'table')
+    .filter((item) => item.type !== 'separator')
+    .filter((item) => item.className !== 'jse-undo')
+    .filter((item) => item.className !== 'jse-redo')
+    .filter((item) => item.className !== 'jse-search')
+    .filter((item) => item.className !== 'jse-contextmenu')
+    .filter((item) => item.className !== 'jse-sort')
+    .filter((item) => item.className !== 'jse-transform');
 }
