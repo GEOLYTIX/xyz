@@ -2,6 +2,9 @@
 
 ## 2026-11-19
 
+- Added the location key groups: infoj, entry display, entry types and
+  editing. The example test also opens a location of each layer with infoj,
+  which runs its fields and fieldfx against the devdb.
 - Added the layer style key groups: feature styles and icons, themes, and
   labels and hovers. Format-specific style keys moved to the formats concept.
   Corrected the data source concept: `params.fields` is generated, extra

@@ -52,6 +52,26 @@ describe.each(collectExamples(root))('$path example $id', ({ id }) => {
     }
   });
 
+  it('opens a location of each layer with infoj', async () => {
+    const located = (await layers(id)).filter(
+      (layer) => QUERIED.has(layer.format) && Array.isArray(layer.infoj),
+    );
+    for (const layer of located) {
+      const [first] = await rows(id, layer);
+      // The wkt and geojson templates return the id first.
+      const locationId = Array.isArray(first) ? first[0] : first.id;
+      const params = new URLSearchParams({
+        template: 'location_get',
+        locale: id,
+        layer: layer.key,
+        table: layer.table ?? Object.values(layer.tables ?? {}).find(Boolean),
+        id: locationId,
+      });
+      const location = await get(`/api/query?${params}`);
+      expect(location, `${layer.key} location ${locationId}`).toBeTruthy();
+    }
+  });
+
   it('removes rows with each default filter', async () => {
     const filtered = (await layers(id)).filter(
       (layer) => QUERIED.has(layer.format) && layer.filter?.default,
