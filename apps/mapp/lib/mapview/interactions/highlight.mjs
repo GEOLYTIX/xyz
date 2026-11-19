@@ -416,7 +416,7 @@ export default function highlight(params, mapview = this) {
           (li) => mapp.utils.html.node`<li
           onpointerup=${(e) => {
             mapview.popup(null);
-            mapp.location.get({
+            void mapp.location.get({
               id: li.id,
               layer: feature.layer,
               table: feature.layer.table || feature.layer.tableCurrent(),
@@ -447,7 +447,7 @@ export default function highlight(params, mapview = this) {
     }
 
     // Get feature location.
-    mapp.location.get({
+    void mapp.location.get({
       id: feature.id,
       layer: feature.layer,
       table: feature.layer.table || feature.layer.tableCurrent(),
