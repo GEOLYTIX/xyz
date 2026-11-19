@@ -49,48 +49,58 @@ const variableMatch = (term, variable) =>
     ? term.startsWith(variable.slice(0, -1))
     : term === variable;
 
+/** A key matches itself, its parents and its children. */
+const keyMatch = (query, key) =>
+  typeof key === 'string' &&
+  (key === query || key.startsWith(`${query}.`) || query.startsWith(`${key}.`));
+
+/** The reasons why a concept's metadata matches the query. */
+function metadataMatches(metadata, file, root, query) {
+  const keys = Array.isArray(metadata[KEYS]) ? metadata[KEYS] : [];
+  const variables = Array.isArray(metadata[VARIABLES])
+    ? metadata[VARIABLES]
+    : [];
+  return [
+    ...keys
+      .filter((entry) => keyMatch(query, entry?.key))
+      .map((entry) => `key ${JSON.stringify(entry)}`),
+    ...variables
+      .filter((variable) => variableMatch(query, variable))
+      .map((variable) => `variable ${variable}`),
+    ...modules(metadata, file, root)
+      .filter((module) => module === query || module.endsWith(`/${query}`))
+      .map((module) => `module ${module}`),
+  ];
+}
+
+/** Whether the title, description or tags contain the query. */
+function textMatch(metadata, query) {
+  const lower = query.toLowerCase();
+  if (lower.length < 3) return false;
+  return [metadata.title, metadata.description, ...(metadata.tags ?? [])]
+    .filter((value) => typeof value === 'string')
+    .join(' ')
+    .toLowerCase()
+    .includes(lower);
+}
+
+function readMetadata(file) {
+  try {
+    return splitDocument(readFileSync(file, 'utf8')).metadata ?? {};
+  } catch {
+    return {}; // knowledge:check reports parse errors.
+  }
+}
+
 /** Find concepts matching a term; returns matches with the reason. */
 export function findConcepts(root, term) {
-  const bundle = resolve(root, 'knowledge');
   const query = term.trim();
-  const lower = query.toLowerCase();
   const results = [];
-  for (const file of conceptFiles(bundle)) {
-    let doc;
-    try {
-      doc = splitDocument(readFileSync(file, 'utf8'));
-    } catch {
-      continue; // knowledge:check reports parse errors.
-    }
-    const metadata = doc.metadata ?? {};
+  for (const file of conceptFiles(resolve(root, 'knowledge'))) {
+    const metadata = readMetadata(file);
     if (!metadata.type) continue;
-    const matches = [];
-    for (const entry of Array.isArray(metadata[KEYS]) ? metadata[KEYS] : []) {
-      // A key matches itself, its parents and its children.
-      if (
-        entry?.key === query ||
-        entry?.key?.startsWith(`${query}.`) ||
-        query.startsWith(`${entry?.key}.`)
-      )
-        matches.push(`key ${JSON.stringify(entry)}`);
-    }
-    for (const variable of metadata[VARIABLES] ?? []) {
-      if (variableMatch(query, variable)) matches.push(`variable ${variable}`);
-    }
-    for (const module of modules(metadata, file, root)) {
-      if (module === query || module.endsWith(`/${query}`))
-        matches.push(`module ${module}`);
-    }
-    const words = [
-      metadata.title,
-      metadata.description,
-      ...(metadata.tags ?? []),
-    ]
-      .filter((value) => typeof value === 'string')
-      .join(' ')
-      .toLowerCase();
-    if (!matches.length && lower.length > 2 && words.includes(lower))
-      matches.push('text');
+    const matches = metadataMatches(metadata, file, root, query);
+    if (!matches.length && textMatch(metadata, query)) matches.push('text');
     if (matches.length)
       results.push({
         path: posix(relative(root, file)),
