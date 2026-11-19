@@ -37,6 +37,7 @@ catalog:
   node-mocks-http: ^1.17.2
   ol: 10.8.0
   pg: ~8.15.1
+  publint: 0.3.25
   playwright: 1.64.1
   resend: ^6.4.2
   turbo: ^2.9.6

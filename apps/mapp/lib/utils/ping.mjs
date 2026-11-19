@@ -107,6 +107,6 @@ function pingQuery(params) {
       setTimeout(pingPromise, params.interval);
     };
 
-    pingPromise();
+    void pingPromise();
   });
 }
