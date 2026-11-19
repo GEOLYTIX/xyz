@@ -75,19 +75,33 @@ export function exampleLocales(example) {
   ]);
 }
 
+/** Throw unless the example uses only the supported workspace keys. */
+function checkExample(example) {
+  const extra = Object.keys(example.workspace).filter(
+    (key) => !WORKSPACE_KEYS.has(key),
+  );
+  if (extra.length)
+    throw new Error(
+      `${example.path}: examples may only use ${[...WORKSPACE_KEYS].join(', ')}, not ${extra.join(', ')}`,
+    );
+  if (!example.workspace.locale && !example.workspace.locales)
+    throw new Error(`${example.path}: the example has no locale`);
+}
+
+/** A twin without default filters shows whether each filter removes rows. */
+function unfiltered(locale) {
+  const twin = structuredClone(locale);
+  for (const layer of Object.values(twin.layers ?? {})) {
+    if (layer?.filter) delete layer.filter.default;
+  }
+  return twin;
+}
+
 /** Combine the examples into one workspace with a locale for each. */
 export function combineExamples(list) {
   const workspace = { dbs: 'DEVDB', locales: {}, templates: {} };
   for (const example of list) {
-    const extra = Object.keys(example.workspace).filter(
-      (key) => !WORKSPACE_KEYS.has(key),
-    );
-    if (extra.length)
-      throw new Error(
-        `${example.path}: examples may only use ${[...WORKSPACE_KEYS].join(', ')}, not ${extra.join(', ')}`,
-      );
-    if (!example.workspace.locale && !example.workspace.locales)
-      throw new Error(`${example.path}: the example has no locale`);
+    checkExample(example);
     for (const [key, template] of Object.entries(
       example.workspace.templates ?? {},
     )) {
@@ -97,12 +111,9 @@ export function combineExamples(list) {
     }
     for (const [key, locale] of exampleLocales(example)) {
       workspace.locales[key] = { dbs: example.workspace.dbs, ...locale };
-      // A twin without default filters shows whether each filter removes rows.
-      const twin = structuredClone(workspace.locales[key]);
-      for (const layer of Object.values(twin.layers ?? {})) {
-        if (layer?.filter) delete layer.filter.default;
-      }
-      workspace.locales[`${key}${UNFILTERED}`] = twin;
+      workspace.locales[`${key}${UNFILTERED}`] = unfiltered(
+        workspace.locales[key],
+      );
     }
   }
   return workspace;
