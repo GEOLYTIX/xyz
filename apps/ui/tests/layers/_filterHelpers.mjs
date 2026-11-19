@@ -31,7 +31,6 @@ export async function countriesLayer(configure) {
 
 /**
 @function listview
-@async
 
 @description
 Creates a layers listview for the layers of a mapview, like the default view. The listview creates the layer.view with the filter panel of each layer.
