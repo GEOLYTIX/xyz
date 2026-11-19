@@ -9,6 +9,7 @@ import { basename, dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import MarkdownIt from 'markdown-it';
 import { parse } from 'yaml';
+import { checkBody, checkKeys } from './concepts.mjs';
 
 const markdown = new MarkdownIt();
 const textValue = (value) =>
@@ -33,6 +34,14 @@ test runner, and xyzEnv properties derived by processEnv (WALLET from SIGN_*).
 */
 const ENV_IGNORED =
   /^(VERCEL(_[A-Z0-9_]+)?|NODE_ENV|VITEST|_?_VARLOCK_[A-Z_]+|WALLET)$/;
+
+/**
+OKF footnote definitions (`[^id]: text`) attribute claims to sources. Without
+a footnote plugin CommonMark reads them as link definitions, so they are
+blanked before links are collected; line numbers are kept.
+*/
+export const stripFootnotes = (body) =>
+  body.replace(/^ {0,3}\[\^[^\]\s]+\]:.*$/gm, '');
 
 /** Parse metadata without interpreting custom YAML tags or executing content. */
 export function splitDocument(text) {
@@ -326,19 +335,29 @@ export function validateBundle(root, now = Date.now()) {
   const files = markdownFiles(directories);
   if (!files.length) errors.push('Knowledge bundle contains no Markdown files');
   const variables = [];
+  // Each workspace key is owned by exactly one concept.
+  const owners = new Map();
   for (const file of files) {
     const label = relative(context.root, file).split(sep).join('/');
     const warn = (message) => warnings.push(`${label}: ${message}`);
     try {
-      const doc = splitDocument(readFileSync(file, 'utf8'));
+      const text = readFileSync(file, 'utf8');
+      const doc = splitDocument(text);
+      const tokens = markdown.parse(stripFootnotes(doc.body), {});
       const name = basename(file);
       if (reserved(name)) checkReserved(name, file, doc, context, warn);
       else {
         checkMetadata(doc.metadata, file, context, warn);
         if (Array.isArray(doc.metadata[VARIABLES]))
           variables.push(...doc.metadata[VARIABLES].filter(textValue));
+        for (const key of checkKeys(doc.metadata)) {
+          if (owners.has(key))
+            throw new Error(`${key} is already owned by ${owners.get(key)}`);
+          owners.set(key, label);
+        }
+        checkBody(doc.metadata, tokens, text.split('\n').length, warn);
       }
-      for (const target of linkTargets(markdown.parse(doc.body, {}))) {
+      for (const target of linkTargets(tokens)) {
         checkTarget(target, file, context);
       }
     } catch (error) {
@@ -354,7 +373,7 @@ export function validateBundle(root, now = Date.now()) {
       `knowledge/environment: ${undocumented.length} variables read in code have no concept: ${undocumented.join(', ')}`,
     );
   }
-  return { errors, warnings, files: files.length, undocumented };
+  return { errors, warnings, files: files.length, undocumented, owners };
 }
 
 const main = process.argv[1] && realpathSync(resolve(process.argv[1]));

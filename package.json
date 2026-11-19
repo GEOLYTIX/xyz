@@ -28,6 +28,7 @@
     "build": "turbo run build",
     "generate-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose && jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
     "knowledge:check": "node utils/knowledge/validate.mjs",
+    "knowledge:find": "node utils/knowledge/find.mjs",
     "knowledge:test": "vitest run --dir utils/knowledge",
     "login-public-key": "varlock run -- node ./utils/printLoginPublicKey.js",
     "mapp-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose",

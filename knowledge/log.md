@@ -2,6 +2,15 @@
 
 ## 2026-11-19
 
+- Added the bundle overview: OKF, the bundle layout, and developing and
+  creating workspaces through agents.
+- Workspace concepts own their keys in `x-xyz-keys` and end with an executable
+  JSON example. Added the layer filter and filter expression concepts as the
+  first key groups.
+- The checker validates `x-xyz-keys`, fails on a key owned twice and on
+  examples which are not JSON, and warns on oversized concepts, Workspace Key
+  concepts without an example and Feature concepts missing their headings.
+  `pnpm knowledge:find` looks concepts up by key, variable, module or word.
 - Recorded the release scope: the whole migration ships in one PR with v5.1;
   content details are patched after the release.
 - Recorded the first Wiki generation: archive the hand-written Wiki, generate

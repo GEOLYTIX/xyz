@@ -24,9 +24,49 @@ sources:
 4. Update the directory index and root log when adding or changing a topic.
    Only the root index may have frontmatter: the bundle metadata `okf_version`,
    `title` and `description`. Subdirectory indexes and logs have no frontmatter. Log date headings use `YYYY-MM-DD`, newest first.
-5. Run `pnpm knowledge:check`. When changing validation, also run
-   `pnpm knowledge:test`. These commands do not start the application or load
+5. Run `pnpm knowledge:check`. `pnpm knowledge:find <term>` looks up the
+   concepts for a workspace key, environment variable, module path or word.
+   When changing validation, also run `pnpm knowledge:test`. These commands do not start the application or load
    deployment configuration.
+
+Write for agents that look facts up and for people that review: record what
+code cannot tell (intent, rules, cross-app flow, constraints, pitfalls), not
+what the source already says. Keep a concept under 150 lines; split it by
+topic when it grows. Index descriptions say when to use a concept. Footnotes
+whose label is a `sources[].id` attribute individual claims.
+
+## Workspace Key concepts
+
+A concept owns a group of keys which are configured together, and lists them
+in `x-xyz-keys`:
+
+```yaml
+x-xyz-keys:
+  - { key: layer.filter.current, type: object, default: {} }
+  - key: layer.filter.include
+    type: array
+    requires: [layer.infoj]
+    formats: [wkt, mvt]   # only when the key is limited to some layer formats
+```
+
+- `key` (required) is a path from one of `workspace`, `locale`, `layer`,
+  `style`, `entry`, `dataview` or `filter`. `*` is a named map entry and `[]`
+  an array item, eg. `locale.layers.*`, `layer.infoj[]`. Quote a path with
+  `[]` or `*` inside `{ … }` flow mappings: `{ key: "layer.infoj[]", … }`.
+- `type` (required) is one or a list of `string`, `number`, `integer`,
+  `boolean`, `object` and `array`.
+- `default`, `formats` and `requires` are filled in when known.
+- Each key has exactly one owner; the checker fails on a second.
+
+End the concept with `# Examples` and a complete, minimal JSON workspace in a
+`json` code block. Use the devdb tables (`packages/devdb/seed`) and the
+`DEVDB` connection, so tests and demos can run the example.
+
+## Feature concepts
+
+Use the headings Behaviour, Flow, Where to change, Tests and Pitfalls. Cite the
+test proving each rule in Behaviour. List the modules in Flow in call order
+across the ui, mapp and XYZ apps.
 
 ## Environment Variable concepts
 
@@ -63,6 +103,8 @@ The checker fails on:
   `superseded_by`, `computation`, `executor.resource`, `attester.resource`,
   a bundle `license` path), and paths escaping the repository
 - path-like path field values without a `./`, `../` or `/` prefix
+- malformed `x-xyz-keys` entries, and a workspace key owned by two concepts
+- a `json` code block under `Examples` which does not parse
 
 It warns on:
 
@@ -70,11 +112,13 @@ It warns on:
 - `stale_after` values which are not an RFC 3339 date or date-time with offset,
   and expired `stale_after` dates
 - a directory without an index, and a concept or subdirectory its index omits
+- a concept over 150 lines, a Workspace Key concept without a JSON example,
+  and a Feature concept missing one of its headings
 - environment variables read by the XYZ API (`apps/xyz/mod`, `router.js`,
   `apps/saml`) which no concept lists in `x-xyz-variables`. Platform variables such as
   `VERCEL_*` and `NODE_ENV` are ignored.
 
-Unknown types and metadata are accepted. External URLs, heading anchors, raw
-HTML links and workspace schemas are not checked. Source
+Unknown types and metadata are accepted. External URLs, heading anchors and raw
+HTML links are not checked, and examples are not yet run against the devdb. Source
 paths existing on disk does not mean their behavior still matches the prose.
 Review both when code changes. See [migration inventory](wiki-migration.md).
