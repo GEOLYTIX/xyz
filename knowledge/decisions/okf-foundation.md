@@ -58,10 +58,9 @@ checks. Passing validation does not establish content accuracy.
 
 ## Environment coverage
 
-A variable read in code without a concept warns rather than fails (open
-question 4 on #3007). Most variables are still undocumented; the check switches
-to failing once `knowledge/environment/` covers all of them, so new variables
-cannot land without a concept.
+A variable read in code without a concept fails the check (open question 4 on
+#3007). It warned until `knowledge/environment/` covered every variable; now a
+new variable cannot land without a concept.
 
 ## Tests
 

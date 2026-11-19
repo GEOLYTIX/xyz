@@ -1,7 +1,7 @@
 ---
 type: Guide
 title: Wiki migration inventory
-description: Track the first three adaptations and the remaining migration scope.
+description: Where each page of the hand-written Wiki and each folded root document went in the bundle; use to find the replacement of an old page or to review the migration.
 tags: [documentation, migration]
 status: draft
 sources:
@@ -11,35 +11,54 @@ sources:
 ---
 # Wiki migration inventory
 
-Initial source snapshot: `xyz.wiki.git` at
-`3fc379b7ada42dff57f19e9f28694868e5a17cac`. Implementation comparison:
-`GEOLYTIX/xyz:minor` at `d2494dfff39285aeefca264cc206c5a886cb58f7`.
-These are adaptations with corrections, not a verbatim archive. All require
-maintainer content review.
+Source snapshot: `xyz.wiki.git` at `3fc379b7ada42dff57f19e9f28694868e5a17cac`,
+compared with the `minor` branch while the migration PR was open. The
+concepts are adaptations with corrections, not a verbatim archive: claims
+were checked against the code, and each concept notes what it corrected. All
+concepts are `draft` until a maintainer has reviewed them.
 
-| Wiki source | Destination | Coverage and corrections |
-| --- | --- | --- |
-| Process-Environment | [Workspace environment](../environment/workspace.md) | WORKSPACE and WORKSPACE_AGE only; current provider registry and cache behavior. |
-| Workspace-Configuration | [Locales](../workspace/locales.md) | Default and named locales only; fallbacks, naming and authorization constraints. |
-| MAPP | [MAPP architecture](../architecture/mapp.md) | Library overview; separate UI app, non-clearing builds, existing tests and explicit OpenLayers loading. |
+| Wiki page | Destination |
+| --- | --- |
+| Home | [Bundle index](../index.md), [about this bundle](../about.md); the generated Wiki gets its own Home page |
+| Workspace-Configuration | [Workspace keys](../workspace/index.md): workspace and locales, locale keys, layer keys, style, location, dataviews, filter expressions |
+| Templates-[Workspace] | [Templates](../workspace/templates.md) |
+| Roles-[Workspace] | [Roles](../workspace/roles.md), [workspace authorization](../security/authorization.md) |
+| Workspace-Authorization | [Workspace authorization](../security/authorization.md) |
+| Security | [Security](../security/index.md): practices, user accounts, authentication |
+| Custom-Authentication | [Authentication](../security/authentication.md), [access control variables](../environment/access-control.md) |
+| Process-Environment | [Environment](../environment/index.md): every variable read by the XYZ API |
+| Application-Views | [Views](../views/index.md) |
+| Plugins | [Plugins](../plugins.md), [locale plugins](../workspace/locale/plugins.md) |
+| Terminology | [Terminology](../terminology.md) |
+| XYZ | [XYZ API architecture](../architecture/xyz-api.md) |
+| MAPP | [MAPP architecture](../architecture/mapp.md) |
+| MAPP.UI | [MAPP.UI architecture](../architecture/mapp-ui.md) |
+| Monorepo | [Monorepo](../architecture/monorepo.md) |
+| Clean-code-guidelines | [Clean code](../development/clean-code.md) |
+| Getting-started | [Local development](../deployment/local-development.md), [running locally](../deployment/running-locally.md) |
+| Getting-Started-with-Codespaces | [GitHub Codespaces](../deployment/codespaces.md) |
+| VERCEL | [Deploy to Vercel](../deployment/vercel.md), [Vercel environment](../deployment/vercel-environment.md) |
+| Neon-Serverless-Postgres | [Neon serverless Postgres](../deployment/neon.md) |
 
-The source snapshot has 20 pages. The other 17 remain unmigrated:
-Application-Views, Clean-code-guidelines, Custom-Authentication,
-Getting-Started-with-Codespaces, Getting-started, Home, MAPP.UI, Monorepo,
-Neon-Serverless-Postgres, Plugins, Roles-[Workspace], Security,
-Templates-[Workspace], Terminology, VERCEL, Workspace-Authorization and XYZ.
+## Root documents
 
-The [TRUSTED_RETURN_HOSTS](../environment/trusted-return-hosts.md),
-[session token claims](../environment/jwt-claims.md) and
-[telemetry](../environment/telemetry.md) concepts are not migrations. They cover
-variables which the Wiki never documented, written from the current source.
+| Document | Destination |
+| --- | --- |
+| SETUP.md | [Deployment](../deployment/index.md); the file is a pointer |
+| DEPLOYMENT.md | [Deployment](../deployment/index.md); the file is a pointer |
+| RELEASING.md, npm publishing | [Publishing the MAPP package](../deployment/mapp-publishing.md); the procedure stays in RELEASING.md |
+| apps/mapp/README.md, usage | [The MAPP npm package](../architecture/mapp-package.md); the README stays the npm page |
 
-The two large environment/workspace pages are only partially covered. Track
-remaining sections before retiring either page. The knowledge check lists the
-environment variables still without a concept. Further work includes structured
-workspace validation and source-change freshness warnings.
+DEVELOPING.md, TESTING.md, RELEASING.md, CONTRIBUTING.md and DOCUMENTATION.md
+stay at the root and are linked from the bundle.
 
-Keep the existing Wiki available during the rollout. The Wiki will be generated
-from the bundle on release and on demand, as recorded in
-[Wiki publishing](../decisions/wiki-publishing.md). This change does not publish
-or delete Wiki pages.
+## Left out
+
+Deliberately not migrated: screenshots, steps for removed features (the
+mongodb provider, the v4 SAML flags, the MVT cache), and the production CSP
+headers of one deployment. Security weaknesses found while checking the code
+are reported privately, not in the bundle; see
+[security practices](../security/practices.md).
+
+The Wiki stays as it is until it is generated from the bundle; see
+[Wiki publishing](../decisions/wiki-publishing.md).

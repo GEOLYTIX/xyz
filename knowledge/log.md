@@ -2,6 +2,13 @@
 
 ## 2026-11-19
 
+- Migrated the remaining Wiki pages and root documents: security (practices,
+  accounts, authentication, authorization), every remaining environment
+  variable, deployment (local development, Codespaces, Vercel, Neon, Node
+  hosts, release builds, npm publishing), architecture (XYZ API, MAPP.UI,
+  monorepo, the npm package), development guides, views, plugins and
+  terminology. SETUP.md and DEPLOYMENT.md are pointers to the bundle.
+- Environment variables read in code without a concept now fail the check.
 - Generated a JSON Schema of workspaces from `x-xyz-keys`, linked by the new
   `ref` field and a `theme` root. The check fails on an outdated schema and on
   examples with wrong types or undocumented keys, and warns on undocumented

@@ -15,9 +15,15 @@ Look up a workspace key, environment variable or module with
 `pnpm knowledge:find <term>`.
 
 - [About this bundle](about.md) - The Open Knowledge Format, how the bundle is organised, and working through agents; read first.
-- [Architecture](architecture/index.md) - MAPP's role and library boundaries.
-- [Environment](environment/index.md) - Environment variables grouped by feature: server, databases, workspace, redirects, token claims, telemetry.
-- [Workspace](workspace/index.md) - Workspace keys with executable examples: layer filter, filter expressions, locales.
+- [Terminology](terminology.md) - The terms used across XYZ and MAPP, each linked to its concept.
+- [Architecture](architecture/index.md) - The XYZ API, the MAPP and MAPP.UI libraries, the monorepo and the npm package; use before changing code.
+- [Workspace](workspace/index.md) - Every workspace key with executable examples and a generated JSON Schema; use to write or review workspaces.
+- [Views](views/index.md) - Application views and how to build custom views.
+- [Plugins](plugins.md) - What MAPP plugins are and how to write one.
+- [Security](security/index.md) - Security practices, user accounts, authentication and authorization.
+- [Environment](environment/index.md) - Every environment variable of the XYZ API, grouped by feature.
+- [Deployment](deployment/index.md) - Local setup, Codespaces, Vercel, Neon, Node hosts, release builds and npm publishing.
+- [Development](development/index.md) - Changing code across the apps, code style and fork migration.
 - [Workflows](workflows/index.md) - Authoring, validation and migration inventory.
 - [Decisions](decisions/index.md) - Foundation scope and documentation ownership.
 - [Change history](log.md) - Bundle updates.

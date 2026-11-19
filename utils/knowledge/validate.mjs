@@ -409,7 +409,7 @@ export function validateBundle(root, now = Date.now()) {
     .filter((name) => !covered(name, variables))
     .sort();
   if (undocumented.length) {
-    warnings.push(
+    errors.push(
       `knowledge/environment: ${undocumented.length} variables read in code have no concept: ${undocumented.join(', ')}`,
     );
   }

@@ -114,6 +114,9 @@ The checker fails on:
 - a `json` code block under `Examples` which does not parse, an example
   value of the wrong type, or an example key no concept owns
 - a workspace schema which is out of date with the concepts
+- environment variables read by the XYZ API (`apps/xyz/mod`, `router.js`,
+  `apps/saml`) which no concept lists in `x-xyz-variables`. Platform
+  variables such as `VERCEL_*` and `NODE_ENV` are ignored.
 
 It warns on:
 
@@ -123,9 +126,6 @@ It warns on:
 - a directory without an index, and a concept or subdirectory its index omits
 - a concept over 150 lines, a Workspace Key concept without a JSON example,
   and a Feature concept missing one of its headings
-- environment variables read by the XYZ API (`apps/xyz/mod`, `router.js`,
-  `apps/saml`) which no concept lists in `x-xyz-variables`. Platform variables such as
-  `VERCEL_*` and `NODE_ENV` are ignored.
 - keys used in the repository test workspaces (`apps/mapp/tests/workspaces`,
   `apps/ui/tests/workspaces`, `packages/testhost/workspaces`,
   `public/workspace.json`) which no concept owns, and values of the wrong

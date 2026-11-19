@@ -93,9 +93,9 @@ give agents a working starting point.
 
 `pnpm knowledge:check` runs in CI. It fails on malformed concepts, missing
 linked files, malformed `x-xyz-keys`, a key owned twice, an outdated schema,
-and examples which are not valid against the schema. It warns on missing
-descriptions, oversized concepts (over 150 lines), environment variables
-without a concept and test workspace keys without a concept. `pnpm knowledge:examples`
+examples which are not valid against the schema, and environment variables
+read in code without a concept. It warns on missing descriptions, oversized
+concepts (over 150 lines) and test workspace keys without a concept. `pnpm knowledge:examples`
 runs every example against the devdb. A passing check means the
 bundle is well formed, not that its content is correct; see the
 [authoring workflow](workflows/authoring.md).

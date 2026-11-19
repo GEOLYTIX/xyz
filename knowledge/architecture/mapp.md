@@ -26,8 +26,13 @@ OpenLayers version and warns when OpenLayers is absent or older than expected.
 Load the required OpenLayers distribution before using MAPP; the entry module
 does not install it automatically.
 
-MAPP.UI lives separately under [apps/ui](../../apps/ui). It depends on MAPP;
-MAPP can be used without MAPP.UI. Both Vite builds write into `public/js/lib`
+MAPP is the browser side of the [XYZ API](xyz-api.md): it requests locales,
+layers and query templates from XYZ, which keeps SQL, connections and roles
+on the server. Sites outside XYZ use it as the
+[@geolytix/mapp package](mapp-package.md).
+
+MAPP.UI lives separately under [apps/ui](../../apps/ui); see [MAPP.UI](mapp-ui.md).
+It depends on MAPP; MAPP can be used without MAPP.UI. Both Vite builds write into `public/js/lib`
 without emptying the directory, preserving the other app's output. Use the
 app build scripts for JavaScript and CSS; see [DEVELOPING.md](../../DEVELOPING.md).
 

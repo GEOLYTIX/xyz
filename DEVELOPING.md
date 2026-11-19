@@ -20,7 +20,7 @@ Install workspace dependencies from the repository root:
 pnpm install
 ```
 
-For a current clone-to-first-run walkthrough, see [SETUP.md](./SETUP.md).
+For a current clone-to-first-run walkthrough, see [local development](./knowledge/deployment/local-development.md).
 
 ## App Development
 

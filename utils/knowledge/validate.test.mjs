@@ -291,7 +291,7 @@ describe('environment coverage:', () => {
     ]);
   });
 
-  it('warns once for variables without a concept, honouring PREFIX_* entries', () => {
+  it('fails once for variables without a concept, honouring PREFIX_* entries', () => {
     const root = fixture({
       'apps/xyz/mod/a.js': code,
       'knowledge/index.md': `${INDEX}\n\n- [Env](env.md)`,
@@ -299,9 +299,9 @@ describe('environment coverage:', () => {
         '---\ntype: Environment Variable\ntitle: E\ndescription: E\nx-xyz-variables: [DOCUMENTED, FAMILY_*]\n---',
     });
     const { errors, warnings, undocumented } = validateBundle(root);
-    expect(errors).toEqual([]);
+    expect(warnings).toEqual([]);
     expect(undocumented).toEqual(['BRACKET_NAME']);
-    expect(warnings).toEqual([
+    expect(errors).toEqual([
       'knowledge/environment: 1 variables read in code have no concept: BRACKET_NAME',
     ]);
   });

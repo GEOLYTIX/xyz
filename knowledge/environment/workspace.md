@@ -20,7 +20,7 @@ sources:
 `WORKSPACE` identifies the JSON document loaded by the XYZ workspace cache.
 `processEnv.js` copies environment values into `xyzEnv`; it does not supply a
 default WORKSPACE source. Configure it using the environment setup described in
-[SETUP.md](../../SETUP.md).
+[local development](../deployment/local-development.md).
 
 The source prefix selects a provider. The current provider registry includes
 `file:`, `https:` and `cloudfront:`, plus signer providers derived from `SIGN_*`
@@ -33,7 +33,7 @@ WORKSPACE_AGE=3600000
 ```
 
 `public/workspace.json` is the minimal workspace in the repository, used by
-[SETUP.md](../../SETUP.md). Local file paths are resolved relative to
+[local development](../deployment/local-development.md). Local file paths are resolved relative to
 `xyzEnv.XYZ_CWD`, which `processEnv.js` sets to the `XYZ_CWD` variable or the
 repository root. A workspace describes
 [default and named locales](../workspace/locales.md).
