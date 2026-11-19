@@ -16,6 +16,9 @@
     },
     "scratch": {
       "src": "file:apps/mapp/tests/workspaces/locales/scratch.json"
+    },
+    "countries": {
+      "src": "file:apps/mapp/tests/workspaces/locales/countries.json"
     }
   }
 }
