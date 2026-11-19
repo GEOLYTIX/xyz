@@ -56,6 +56,7 @@ Run a suite:
 | `pnpm test:mapp` | MAPP library |
 | `pnpm test:ui` | MAPP.UI library |
 | `pnpm knowledge:test` | Knowledge bundle checker, not part of `pnpm test` |
+| `pnpm knowledge:examples` | The JSON workspace examples of the knowledge concepts, served by the testhost with the devdb |
 
 Run a single file or the tests matching a name from the package directory:
 

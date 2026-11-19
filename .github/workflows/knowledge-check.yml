@@ -24,3 +24,5 @@ jobs:
         run: pnpm knowledge:test
       - name: Validate knowledge and source links
         run: pnpm knowledge:check
+      - name: Run the workspace examples against the devdb
+        run: pnpm knowledge:examples

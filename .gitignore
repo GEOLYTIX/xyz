@@ -46,3 +46,6 @@ docs/*
 .traces/
 
 .claude/settings.local.json
+
+# The combined workspace of the knowledge examples
+utils/knowledge/examples/workspace.generated.json

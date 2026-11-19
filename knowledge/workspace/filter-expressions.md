@@ -37,7 +37,7 @@ values select a filter type. The XYZ API converts it to a SQL condition and
 passes every value as a query parameter, never as SQL text.[^sqlfilter]
 
 ```json
-{ "retailer": { "in": ["Tesco", "Aldi"] }, "pqi": { "gte": 50 } }
+{ "retailer": { "in": ["Tesco", "Aldi"] }, "open_date": { "null": false } }
 ```
 
 | Type | Value | SQL |
@@ -58,6 +58,9 @@ passes every value as a query parameter, never as SQL text.[^sqlfilter]
 - A column name must match `^[a-zA-Z_]\w*$`. Otherwise the whole object is
   dropped with a warning.
 - An unknown type is ignored silently, so a misspelt type filters nothing.
+- The numeric types only check that the value is numeric. On a text column
+  PostgreSQL compares text, so `{"col": {"gte": 50}}` matches `'Rooftop'`.
+  Use numeric types on numeric columns only.
 
 ## Where expressions are used
 
@@ -86,7 +89,7 @@ stop a location being read or edited by its ID.
 # Examples
 
 A complete workspace with a default filter on the devdb retail points. It
-shows only Tesco and Aldi stores with a PQI of at least 50.
+shows only Tesco and Aldi stores with a known open date.
 
 ```json
 {
@@ -103,7 +106,7 @@ shows only Tesco and Aldi stores with a PQI of at least 50.
         "filter": {
           "default": {
             "retailer": { "in": ["Tesco", "Aldi"] },
-            "pqi": { "gte": 50 }
+            "open_date": { "null": false }
           }
         }
       }

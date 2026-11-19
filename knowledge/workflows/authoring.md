@@ -119,6 +119,11 @@ It warns on:
   `VERCEL_*` and `NODE_ENV` are ignored.
 
 Unknown types and metadata are accepted. External URLs, heading anchors and raw
-HTML links are not checked, and examples are not yet run against the devdb. Source
+HTML links are not checked.
+
+`pnpm knowledge:examples` runs every example in the testhost with the devdb:
+each example must load as a locale, its `wkt` and `geojson` layers must return
+rows, and each `filter.default` must return fewer rows than the same layer
+without it. CI runs it in the knowledge workflow. Source
 paths existing on disk does not mean their behavior still matches the prose.
 Review both when code changes. See [migration inventory](wiki-migration.md).
