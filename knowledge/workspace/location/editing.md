@@ -51,9 +51,8 @@ same as `edit: {}`. Changed values are saved together: the location sends
 them to the `location_update` query, then shows them as saved.[^decorate]
 Updates of one location run one after another, in order.
 
-`edit` controls the location view only. Which users may read, update or
-delete a layer's locations is decided by layer `roles` and instance access;
-restrict editable layers with roles. See the security concepts.
+Restrict layers with editable entries to the users who edit them with layer
+[roles](../roles.md).
 
 ## Inputs
 

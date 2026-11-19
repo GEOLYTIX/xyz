@@ -15,6 +15,7 @@ import {
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import MarkdownIt from 'markdown-it';
+import merge from '../../apps/xyz/mod/utils/merge.js';
 import { examples } from './concepts.mjs';
 import { splitDocument } from './validate.mjs';
 
@@ -27,7 +28,7 @@ export const GENERATED = 'utils/knowledge/examples/workspace.generated.json';
 export const UNFILTERED = '__unfiltered';
 
 /** Top-level workspace keys an example may use. */
-const WORKSPACE_KEYS = new Set(['dbs', 'locale', 'templates']);
+const WORKSPACE_KEYS = new Set(['dbs', 'locale', 'locales', 'templates']);
 
 function markdownFiles(directory, files = []) {
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
@@ -61,6 +62,19 @@ export function collectExamples(root) {
   return result;
 }
 
+/**
+The locales of an example: its locale, or each of its named locales merged
+into a clone of its locale, as the XYZ API merges workspace.locale defaults.
+*/
+export function exampleLocales(example) {
+  const { locale, locales } = example.workspace;
+  if (!locales) return [[example.id, locale]];
+  return Object.entries(locales).map(([key, named]) => [
+    `${example.id}__${key}`,
+    merge(structuredClone(locale ?? {}), named),
+  ]);
+}
+
 /** Combine the examples into one workspace with a locale for each. */
 export function combineExamples(list) {
   const workspace = { dbs: 'DEVDB', locales: {}, templates: {} };
@@ -72,7 +86,7 @@ export function combineExamples(list) {
       throw new Error(
         `${example.path}: examples may only use ${[...WORKSPACE_KEYS].join(', ')}, not ${extra.join(', ')}`,
       );
-    if (!example.workspace.locale)
+    if (!example.workspace.locale && !example.workspace.locales)
       throw new Error(`${example.path}: the example has no locale`);
     for (const [key, template] of Object.entries(
       example.workspace.templates ?? {},
@@ -81,16 +95,15 @@ export function combineExamples(list) {
         throw new Error(`${example.path}: template ${key} is already defined`);
       workspace.templates[key] = template;
     }
-    workspace.locales[example.id] = {
-      dbs: example.workspace.dbs,
-      ...example.workspace.locale,
-    };
-    // A twin without default filters shows whether each filter removes rows.
-    const twin = structuredClone(workspace.locales[example.id]);
-    for (const layer of Object.values(twin.layers ?? {})) {
-      if (layer?.filter) delete layer.filter.default;
+    for (const [key, locale] of exampleLocales(example)) {
+      workspace.locales[key] = { dbs: example.workspace.dbs, ...locale };
+      // A twin without default filters shows whether each filter removes rows.
+      const twin = structuredClone(workspace.locales[key]);
+      for (const layer of Object.values(twin.layers ?? {})) {
+        if (layer?.filter) delete layer.filter.default;
+      }
+      workspace.locales[`${key}${UNFILTERED}`] = twin;
     }
-    workspace.locales[`${example.id}${UNFILTERED}`] = twin;
   }
   return workspace;
 }

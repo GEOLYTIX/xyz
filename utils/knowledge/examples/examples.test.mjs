@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { describe, expect, inject, it } from 'vitest';
-import { collectExamples, UNFILTERED } from '../examples.mjs';
+import { collectExamples, exampleLocales, UNFILTERED } from '../examples.mjs';
 
 const root = fileURLToPath(new URL('../../..', import.meta.url));
 
@@ -53,7 +53,12 @@ function rows(locale, layer) {
   return get(`/api/query?${params}`);
 }
 
-describe.each(collectExamples(root))('$path example $id', ({ id }) => {
+/** One test group per locale; an example with named locales has several. */
+const locales = collectExamples(root).flatMap((example) =>
+  exampleLocales(example).map(([id]) => ({ path: example.path, id })),
+);
+
+describe.each(locales)('$path example $id', ({ id }) => {
   it('loads as a locale with layers', async () => {
     expect((await layers(id)).length).toBeGreaterThan(0);
   });
@@ -100,6 +105,28 @@ describe.each(collectExamples(root))('$path example $id', ({ id }) => {
         expect(response, `${layer.key} dataview ${key}`).toBeTruthy();
       }
     }
+  });
+
+  it('searches with its gazetteer', async () => {
+    const locale = await get(`/api/workspace/locale?locale=${id}`);
+    const gazetteer = locale.gazetteer;
+    if (!gazetteer?.qterm) return;
+    const layer = (await layers(id)).find((l) => l.key === gazetteer.layer);
+    expect(layer, `gazetteer layer ${gazetteer.layer}`).toBeTruthy();
+    const params = new URLSearchParams({
+      template: gazetteer.query || 'gaz_query',
+      locale: id,
+      layer: layer.key,
+      table: gazetteer.table || firstTable(layer),
+      qID: layer.qID,
+      qterm: gazetteer.qterm,
+      label: gazetteer.label || gazetteer.qterm,
+      limit: gazetteer.limit || 10,
+      term: 'T*',
+      wildcard: '*',
+    });
+    const results = await get(`/api/query?${params}`);
+    expect([results].flat().length, 'gazetteer results').toBeGreaterThan(0);
   });
 
   it('removes rows with each default filter', async () => {

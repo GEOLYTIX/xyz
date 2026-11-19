@@ -2,6 +2,13 @@
 
 ## 2026-11-19
 
+- Added the workspace frame and locale key groups: workspace and locales
+  (rewritten from the locales sample), templates, roles, locale view,
+  gazetteer and locale plugins. Corrected Wiki claims: role objects merge on
+  the server and a role filter must set `filter.default`, negated roles are
+  not evaluated, and array merging replaces or appends whole arrays.
+- Examples may define named `locales`, merged into their `locale` as the XYZ
+  API does; the example test also runs gazetteer searches.
 - Added the dataviews concept: layer and location dataviews, the core Json
   renderer, the tabulator and chartjs plugins, query params flags, map change
   reloads and toolbars. The example test runs each layer dataview query.

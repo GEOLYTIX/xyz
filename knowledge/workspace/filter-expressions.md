@@ -70,12 +70,9 @@ passes every value as a query parameter, never as SQL text.[^sqlfilter]
   param of layer queries.[^query]
 - The `sqlFilter` request param of query templates without a layer.
 
-Only query templates containing `${filter}` apply a filter. Of the core
-templates in `apps/xyz/mod/workspace/templates/`, the location templates
-(`location_get`, `location_update`, `location_delete`, `location_new`,
-`location_field_value`), `mvt_geom`, the `st_*` templates, `sql_table_insert`
-and `table_schema` contain no `${filter}`. A default filter therefore does not
-stop a location being read or edited by its ID.
+Only query templates containing `${filter}` apply a filter. A custom query
+template must include `${filter}` for the default and current filters of its
+layer to apply.
 
 ## Review notes
 

@@ -1,0 +1,87 @@
+---
+type: Workspace Key
+title: Locale plugins
+description: locale.plugins loads plugin modules, locale keys which match a plugin run it with their configuration, and syncPlugins orders them; use to add tools and buttons to a mapview.
+resource: ../../../apps/mapp/lib/mapview/_mapview.mjs
+tags: [workspace, locale, plugins, mapp, ui]
+status: draft
+x-xyz-keys:
+  - { key: locale.plugins, type: array }
+  - { key: locale.syncPlugins, type: array, default: [zoomBtn, admin, login] }
+  - { key: locale.*, type: [object, boolean, string, array] }
+  - { key: layer.plugins, type: array }
+sources:
+  - id: wiki
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration
+    x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
+  - id: mapview
+    resource: ../../../apps/mapp/lib/mapview/_mapview.mjs
+  - id: envreplace
+    resource: ../../../apps/xyz/mod/utils/envReplace.js
+  - id: ui
+    resource: ../../../apps/ui/lib/plugins/_plugins.mjs
+  - resource: ../../../apps/mapp/lib/utils/loadPlugins.mjs
+  - resource: ../../../public/views/_default.html
+  - id: repo
+    resource: https://github.com/GEOLYTIX/xyz_plugins
+---
+# Locale plugins
+
+A plugin is a method in `mapp.plugins`. A locale key with the name of a plugin
+runs that plugin with the key's value as configuration and the mapview, after
+the mapview is created and before its layers are added.[^mapview] Errors are
+logged and do not stop the mapview.
+
+The ui library provides `admin`, `custom_theme`, `dark_mode`, `feature_info`, `fullscreen`,
+`link_button`, `locator`, `login`, `userIDB`, `userLayer`, `userLocale`,
+`zoomBtn` and `zoomToArea`, eg. `"fullscreen": true`.[^ui]
+
+## Loading plugins
+
+`plugins` lists URLs of plugin modules to import first, eg. the tabulator and
+chartjs dataview plugins from the
+[xyz_plugins repository](https://github.com/GEOLYTIX/xyz_plugins). The XYZ API
+replaces `${NAME}` in each URL with the `SRC_NAME` environment
+variable.[^envreplace] `layer.plugins` are added to the locale's list.
+
+`syncPlugins` lists plugin keys which run first, one after another, in order;
+the rest run in parallel. The default view sets it to `zoomBtn`, `admin`,
+`login`, which orders the buttons. Layer keys matching a plugin run it for
+that layer; see [layer display](../layer/display.md).
+
+## Pitfalls
+
+- A plugin URL is loaded into every user's browser. Only list sources the
+  deployment controls.
+- A locale key which is not a plugin is ignored, so a misspelt plugin key
+  does nothing.
+
+# Examples
+
+The fullscreen and locator buttons, with the zoom button first.
+
+```json
+{
+  "dbs": "DEVDB",
+  "locale": {
+    "syncPlugins": ["zoomBtn"],
+    "zoomBtn": true,
+    "fullscreen": true,
+    "locator": true,
+    "layers": {
+      "countries": {
+        "display": true,
+        "format": "geojson",
+        "table": "naturalearth.countries",
+        "geom": "geom_4326",
+        "srid": "4326",
+        "qID": "id"
+      }
+    }
+  }
+}
+```
+
+[^mapview]: mapp mapview/_mapview.mjs mapviewPromise and executePlugin
+[^ui]: ui plugins/_plugins.mjs
+[^envreplace]: utils/envReplace.js
