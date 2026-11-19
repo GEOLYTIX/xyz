@@ -2,6 +2,10 @@
 
 ## 2026-11-19
 
+- Added the layer core key groups: display and view (including `viewConfig`),
+  data source (tables, zoom ranges, params), formats and cluster. Corrected
+  Wiki claims: `mvt_cache` is disabled, `panelOrder` moved to `viewConfig`,
+  and `tiles` always needs `URI`.
 - Added the bundle overview: OKF, the bundle layout, and developing and
   creating workspaces through agents.
 - Workspace concepts own their keys in `x-xyz-keys` and end with an executable

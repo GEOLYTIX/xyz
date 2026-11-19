@@ -28,7 +28,8 @@ function rows(locale, layer) {
     template: layer.format,
     locale,
     layer: layer.key,
-    table: layer.table,
+    // A layer with zoom ranges is queried with its first table.
+    table: layer.table ?? Object.values(layer.tables ?? {}).find(Boolean),
     geom: layer.geom,
     srid: layer.srid,
   });
