@@ -69,15 +69,7 @@ export function triangle(style) {
 
   style.layers &&
     Object.entries(style.layers).forEach((layer) => {
-      function x(val, scale) {
-        return 12 + (val - 12) * scale;
-      }
-
-      function y(val, scale) {
-        return 16 + (val - 16) * scale;
-      }
-
-      const points = `${x(12, layer[0])},${y(4.68, layer[0])} ${x(2, layer[0])}, ${y(22, layer[0])} ${x(22, layer[0])}, ${y(22, layer[0])}`;
+      const points = `${triangleX(12, layer[0])},${triangleY(4.68, layer[0])} ${triangleX(2, layer[0])}, ${triangleY(22, layer[0])} ${triangleX(22, layer[0])}, ${triangleY(22, layer[0])}`;
 
       icon.appendChild(svg.node`
       <polygon
@@ -89,6 +81,14 @@ export function triangle(style) {
     });
 
   return `data:image/svg+xml,${encodeURIComponent(xmlSerializer.serializeToString(icon))}`;
+}
+
+function triangleX(val, scale) {
+  return 12 + (val - 12) * scale;
+}
+
+function triangleY(val, scale) {
+  return 16 + (val - 16) * scale;
 }
 
 export function square(style) {
@@ -121,13 +121,9 @@ export function diamond(style) {
         fill=${style.fillColor || '#FFF'}
         points="12 0, 24 12, 12 24, 0 12"></polygon>`;
 
-  function s(val, scale) {
-    return 12 + (val - 12) * scale;
-  }
-
   style.layers &&
     Object.entries(style.layers).forEach((layer) => {
-      const points = `${s(12, layer[0])} ${s(0, layer[0])},${s(24, layer[0])} ${s(12, layer[0])},${s(12, layer[0])} ${s(24, layer[0])}, ${s(0, layer[0])} ${s(12, layer[0])}`;
+      const points = `${diamondScale(12, layer[0])} ${diamondScale(0, layer[0])},${diamondScale(24, layer[0])} ${diamondScale(12, layer[0])},${diamondScale(12, layer[0])} ${diamondScale(24, layer[0])}, ${diamondScale(0, layer[0])} ${diamondScale(12, layer[0])}`;
 
       icon.appendChild(svg.node`
       <polygon
@@ -136,6 +132,10 @@ export function diamond(style) {
     });
 
   return `data:image/svg+xml,${encodeURIComponent(xmlSerializer.serializeToString(icon))}`;
+}
+
+function diamondScale(val, scale) {
+  return 12 + (val - 12) * scale;
 }
 
 export function semiCircle(style) {
