@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, onTestFinished, vi } from 'vitest';
 import { stubEntry } from './_helpers.mjs';
 
 const { html, textarea } = mapp.ui.locations.entries;
@@ -79,6 +79,7 @@ describe('ui/locations/entries/textarea', () => {
 
   it('resizes the textarea on focus, focusout and keydown', () => {
     vi.useFakeTimers();
+    onTestFinished(() => vi.useRealTimers());
 
     const { entry } = stubEntry({ value: 'a', edit: {} });
 
@@ -99,7 +100,5 @@ describe('ui/locations/entries/textarea', () => {
     vi.advanceTimersByTime(100);
 
     expect(el.style.height).toBe(`${el.scrollHeight}px`);
-
-    vi.useRealTimers();
   });
 });

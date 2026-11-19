@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, onTestFinished, vi } from 'vitest';
 import { stubEntry } from './_helpers.mjs';
 
 const { ping } = mapp.ui.locations.entries;
@@ -61,6 +61,7 @@ describe('ui/locations/entries/ping', () => {
 
   it('stops the ping when the location is removed', async () => {
     vi.useFakeTimers();
+    onTestFinished(() => vi.useRealTimers());
 
     const xhr = vi.spyOn(mapp.utils, 'xhr').mockResolvedValue('pending');
 
@@ -85,9 +86,7 @@ describe('ui/locations/entries/ping', () => {
 
     await vi.advanceTimersByTimeAsync(5000);
 
-    // The pending request resolves the ping without another request.
+    // The ping scheduled before the remove makes one more request and then resolves without scheduling another.
     expect(xhr).toHaveBeenCalledTimes(3);
-
-    vi.useRealTimers();
   });
 });
