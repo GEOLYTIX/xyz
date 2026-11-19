@@ -5,4 +5,5 @@
 - [Layer formats](formats.md) - Choosing `format` and the keys each format requires.
 - [Layer cluster](cluster.md) - Browser or database clustering of dense point layers.
 - [Layer style](style/index.md) - Feature styles, icons, themes, labels and hovers.
+- [Layer drawing](draw.md) - Buttons which draw a geometry and create a new location.
 - [Layer filter](filter.md) - Fixed default filter and the filter panel built from infoj entries; use when a layer needs filtering.

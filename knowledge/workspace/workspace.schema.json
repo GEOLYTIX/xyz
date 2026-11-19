@@ -1,0 +1,2213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/GEOLYTIX/xyz/blob/main/knowledge/workspace/workspace.schema.json",
+  "title": "XYZ workspace",
+  "description": "Generated from the x-xyz-keys of the knowledge concepts by pnpm knowledge:schema. Unknown keys are allowed but undocumented.",
+  "type": "object",
+  "properties": {
+    "dbs": {
+      "type": "string",
+      "x-xyz-concept": "knowledge/workspace/locales.md"
+    },
+    "locale": {
+      "$ref": "#/$defs/locale",
+      "x-xyz-concept": "knowledge/workspace/locales.md",
+      "default": {
+        "layers": {}
+      }
+    },
+    "locales": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/locale",
+        "x-xyz-concept": "knowledge/workspace/locales.md"
+      },
+      "x-xyz-concept": "knowledge/workspace/locales.md"
+    },
+    "templates": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "admin": {
+            "type": "boolean",
+            "x-xyz-concept": "knowledge/workspace/templates.md"
+          },
+          "dbs": {
+            "type": "string",
+            "x-xyz-concept": "knowledge/workspace/templates.md"
+          },
+          "exclude_props": {
+            "type": "array",
+            "x-xyz-concept": "knowledge/workspace/templates.md"
+          },
+          "include_props": {
+            "type": "array",
+            "x-xyz-concept": "knowledge/workspace/templates.md"
+          },
+          "layer": {
+            "type": "boolean",
+            "x-xyz-concept": "knowledge/workspace/templates.md"
+          },
+          "module": {
+            "type": "boolean",
+            "x-xyz-concept": "knowledge/workspace/templates.md",
+            "x-xyz-requires": [
+              "workspace.templates.*.src"
+            ]
+          },
+          "role": {
+            "type": "string",
+            "x-xyz-concept": "knowledge/workspace/templates.md"
+          },
+          "src": {
+            "type": "string",
+            "x-xyz-concept": "knowledge/workspace/templates.md"
+          },
+          "statement_timeout": {
+            "type": "integer",
+            "x-xyz-concept": "knowledge/workspace/templates.md"
+          },
+          "template": {
+            "type": "string",
+            "x-xyz-concept": "knowledge/workspace/templates.md"
+          }
+        },
+        "x-xyz-concept": "knowledge/workspace/templates.md"
+      },
+      "x-xyz-concept": "knowledge/workspace/templates.md"
+    }
+  },
+  "x-xyz-concept": "knowledge/workspace/locales.md",
+  "$defs": {
+    "locale": {
+      "type": "object",
+      "properties": {
+        "ScaleLine": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/locale/view.md"
+        },
+        "admin": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "custom_theme": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "dark_mode": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "dbs": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/locales.md"
+        },
+        "extent": {
+          "type": "object",
+          "properties": {
+            "east": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "default": 180
+            },
+            "mask": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/locale/view.md"
+            },
+            "north": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "default": 90
+            },
+            "south": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "default": -90
+            },
+            "west": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "default": -180
+            }
+          },
+          "x-xyz-concept": "knowledge/workspace/locale/view.md"
+        },
+        "feature_info": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "fullscreen": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "gazetteer": {
+          "type": "object",
+          "properties": {
+            "datasets": {
+              "type": "array",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
+            },
+            "label": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
+            },
+            "layer": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md",
+              "x-xyz-requires": [
+                "locale.layers.*"
+              ]
+            },
+            "leading_wildcard": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
+            },
+            "limit": {
+              "type": "integer",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md",
+              "default": 10
+            },
+            "maxZoom": {
+              "type": "integer",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
+            },
+            "no_result": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
+            },
+            "placeholder": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
+            },
+            "provider": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
+            },
+            "qterm": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
+            },
+            "query": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md",
+              "default": "gaz_query"
+            },
+            "table": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
+            },
+            "title": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
+            }
+          },
+          "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
+        },
+        "layer": {
+          "$ref": "#/$defs/layer",
+          "x-xyz-concept": "knowledge/workspace/locales.md"
+        },
+        "layers": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/layer",
+            "x-xyz-concept": "knowledge/workspace/locales.md"
+          },
+          "x-xyz-concept": "knowledge/workspace/locales.md"
+        },
+        "link_button": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "listview_records": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/locale/view.md"
+        },
+        "locales": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/locales.md"
+        },
+        "locator": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "login": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "mapviewControls": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/locale/view.md"
+        },
+        "maxZoom": {
+          "type": "integer",
+          "x-xyz-concept": "knowledge/workspace/locale/view.md"
+        },
+        "minZoom": {
+          "type": "integer",
+          "x-xyz-concept": "knowledge/workspace/locale/view.md",
+          "default": 0
+        },
+        "name": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/locales.md"
+        },
+        "plugins": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "queryparams": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/locales.md"
+        },
+        "role": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/roles.md"
+        },
+        "roles": {
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/$defs/locale"
+              }
+            ],
+            "x-xyz-concept": "knowledge/workspace/roles.md"
+          },
+          "x-xyz-concept": "knowledge/workspace/roles.md"
+        },
+        "srid": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/locale/view.md",
+          "default": "3857"
+        },
+        "svgTemplates": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/locale/view.md"
+        },
+        "svg_templates": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/locale/view.md"
+        },
+        "syncPlugins": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
+          "default": [
+            "zoomBtn",
+            "admin",
+            "login"
+          ]
+        },
+        "template": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/templates.md"
+        },
+        "templates": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/templates.md"
+        },
+        "userIDB": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "userLayer": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "userLocale": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "view": {
+          "type": "object",
+          "properties": {
+            "lat": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "default": 0
+            },
+            "lng": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "default": 0
+            },
+            "z": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/locale/view.md"
+            }
+          },
+          "x-xyz-concept": "knowledge/workspace/locale/view.md"
+        },
+        "zoomBtn": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "zoomToArea": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        }
+      },
+      "x-xyz-concept": "knowledge/workspace/locales.md"
+    },
+    "layer": {
+      "type": "object",
+      "properties": {
+        "URI": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-formats": [
+            "tiles"
+          ]
+        },
+        "accessToken": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-formats": [
+            "maplibre",
+            "mapboxStyle"
+          ]
+        },
+        "apiKey": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-formats": [
+            "googleMapTiles"
+          ]
+        },
+        "attribution": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "x-xyz-concept": "knowledge/workspace/layer/display.md"
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/display.md"
+        },
+        "cacheSize": {
+          "type": "integer",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-formats": [
+            "mvt"
+          ]
+        },
+        "cluster": {
+          "type": "object",
+          "properties": {
+            "distance": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/layer/cluster.md",
+              "x-xyz-formats": [
+                "wkt",
+                "geojson"
+              ]
+            },
+            "hexgrid": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/cluster.md",
+              "x-xyz-formats": [
+                "cluster"
+              ]
+            },
+            "label": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/cluster.md"
+            },
+            "resolution": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/layer/cluster.md",
+              "x-xyz-formats": [
+                "cluster"
+              ],
+              "x-xyz-requires": [
+                "layer.geom",
+                "layer.srid"
+              ]
+            }
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/cluster.md",
+          "x-xyz-formats": [
+            "wkt",
+            "geojson",
+            "cluster"
+          ]
+        },
+        "dataviews": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/dataview",
+            "x-xyz-concept": "knowledge/workspace/dataviews.md"
+          },
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "dbs": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+        },
+        "deleteLocation": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/editing.md"
+        },
+        "display": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/layer/display.md"
+        },
+        "draw": {
+          "type": "object",
+          "properties": {
+            "circle": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+            },
+            "circle_2pt": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+            },
+            "classList": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+            },
+            "dialog": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+            },
+            "drawer": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+            },
+            "hidden": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+            },
+            "line": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+            },
+            "locator": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+            },
+            "point": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+            },
+            "polygon": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+            },
+            "popout": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+            },
+            "rectangle": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+            }
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/draw.md",
+          "x-xyz-requires": [
+            "layer.geom"
+          ]
+        },
+        "fade": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-formats": [
+            "wkt",
+            "geojson",
+            "cluster",
+            "vector"
+          ]
+        },
+        "featureFormat": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-formats": [
+            "wkt",
+            "geojson",
+            "cluster",
+            "vector"
+          ]
+        },
+        "filter": {
+          "type": "object",
+          "properties": {
+            "classList": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+            },
+            "count_meta": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+            },
+            "current": {
+              "$ref": "#/$defs/filter",
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md",
+              "default": {}
+            },
+            "default": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/filter"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/filter"
+                  }
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md",
+              "x-xyz-requires": [
+                "layer.table"
+              ]
+            },
+            "dialog": {
+              "anyOf": [
+                {
+                  "type": "object"
+                },
+                {
+                  "type": "boolean"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+            },
+            "drawer": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "boolean"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md",
+              "default": "disableOnHide"
+            },
+            "exclude": {
+              "type": "array",
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md",
+              "x-xyz-requires": [
+                "layer.infoj"
+              ]
+            },
+            "hidden": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+            },
+            "include": {
+              "type": "array",
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md",
+              "x-xyz-requires": [
+                "layer.infoj"
+              ]
+            },
+            "includeAll": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md",
+              "x-xyz-requires": [
+                "layer.infoj"
+              ]
+            },
+            "popout": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+            },
+            "viewport": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+            },
+            "viewport_description": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+            }
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/filter.md",
+          "default": {
+            "current": {}
+          }
+        },
+        "format": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md"
+        },
+        "geom": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+        },
+        "geoms": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+        },
+        "group": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/display.md"
+        },
+        "groupmeta": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/display.md"
+        },
+        "hidden": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/layer/display.md"
+        },
+        "infoj": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/entry"
+          },
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "infoj_order": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "infoj_skip": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "meta": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/display.md"
+        },
+        "multi_filter": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+        },
+        "mvt_cache": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-formats": [
+            "mvt"
+          ]
+        },
+        "name": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/display.md"
+        },
+        "panelOrder": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/layer/display.md"
+        },
+        "params": {
+          "type": "object",
+          "properties": {
+            "default_fields": {
+              "type": "array",
+              "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
+              "x-xyz-formats": [
+                "wkt",
+                "geojson",
+                "cluster",
+                "vector",
+                "mvt"
+              ]
+            },
+            "template": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+            },
+            "viewport": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+            }
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
+          "default": {}
+        },
+        "plugins": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "preserveDrawingBuffer": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-formats": [
+            "maplibre"
+          ]
+        },
+        "projection": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "default": "EPSG:3857",
+          "x-xyz-formats": [
+            "tiles"
+          ]
+        },
+        "promoteDisplay": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/layer/display.md"
+        },
+        "qID": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+        },
+        "queryparams": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+        },
+        "roles": {
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/$defs/layer"
+              }
+            ],
+            "x-xyz-concept": "knowledge/workspace/roles.md"
+          },
+          "x-xyz-concept": "knowledge/workspace/roles.md"
+        },
+        "source": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "default": "OSM",
+          "x-xyz-formats": [
+            "tiles"
+          ]
+        },
+        "srid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+        },
+        "style": {
+          "type": "object",
+          "properties": {
+            "URL": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+              "x-xyz-formats": [
+                "maplibre",
+                "mapboxStyle"
+              ]
+            },
+            "cluster": {
+              "$ref": "#/$defs/style",
+              "properties": {
+                "clusterScale": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+                  "default": 1
+                }
+              },
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+              "x-xyz-requires": [
+                "layer.cluster"
+              ]
+            },
+            "contextFilter": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+              "x-xyz-formats": [
+                "tiles"
+              ]
+            },
+            "default": {
+              "$ref": "#/$defs/style",
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+            },
+            "highlight": {
+              "$ref": "#/$defs/style",
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+            },
+            "hover": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "display": {
+                      "type": "boolean",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "dynamic": {
+                      "type": "boolean",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "field": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "query": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
+                      "default": "infotip"
+                    },
+                    "title": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    }
+                  }
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+            },
+            "hovers": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+              },
+              "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+            },
+            "icon_scaling": {
+              "type": "object",
+              "properties": {
+                "cluster": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                },
+                "field": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                },
+                "max": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                },
+                "scaleFactor": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                }
+              },
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+            },
+            "label": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "boolean",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
+                      "x-xyz-requires": [
+                        "layer.cluster"
+                      ]
+                    },
+                    "display": {
+                      "type": "boolean",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "field": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "fillColor": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
+                      "default": "#000"
+                    },
+                    "font": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
+                      "default": "12px sans-serif"
+                    },
+                    "maxZoom": {
+                      "type": "number",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "minZoom": {
+                      "type": "number",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "offsetX": {
+                      "type": "number",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "offsetY": {
+                      "type": "number",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "overflow": {
+                      "type": "boolean",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "strokeColor": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "strokeWidth": {
+                      "type": "number",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "title": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    }
+                  }
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+            },
+            "labels": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+              },
+              "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+            },
+            "layerTypes": {
+              "type": "array",
+              "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+              "x-xyz-formats": [
+                "googleMapTiles"
+              ]
+            },
+            "mapType": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+              "default": "roadmap",
+              "x-xyz-formats": [
+                "googleMapTiles"
+              ]
+            },
+            "opacity": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+              "default": 1
+            },
+            "selected": {
+              "$ref": "#/$defs/style",
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+            },
+            "theme": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/theme"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+            },
+            "themes": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/theme",
+                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+              },
+              "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+            },
+            "zoomInScale": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+            },
+            "zoomOutScale": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+            }
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+          "default": {}
+        },
+        "table": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+        },
+        "tables": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+        },
+        "template": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/templates.md"
+        },
+        "templates": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/templates.md"
+        },
+        "toggleLocationViewEdits": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/editing.md"
+        },
+        "transition": {
+          "type": "integer",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-formats": [
+            "mvt"
+          ]
+        },
+        "vectorImage": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-formats": [
+            "wkt",
+            "geojson",
+            "cluster",
+            "vector"
+          ]
+        },
+        "viewConfig": {
+          "type": "object",
+          "properties": {
+            "classList": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/display.md"
+            },
+            "displayToggle": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/display.md",
+              "default": true
+            },
+            "headerOrder": {
+              "type": "array",
+              "x-xyz-concept": "knowledge/workspace/layer/display.md",
+              "default": [
+                "zoomToFilteredExtentBtn",
+                "zoomBtn",
+                "popoutBtn",
+                "displayToggle"
+              ]
+            },
+            "hideDisabled": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/display.md",
+              "default": false,
+              "x-xyz-requires": [
+                "layer.tables"
+              ]
+            },
+            "keyOrder": {
+              "type": "array",
+              "x-xyz-concept": "knowledge/workspace/layer/display.md"
+            },
+            "panelOrder": {
+              "type": "array",
+              "x-xyz-concept": "knowledge/workspace/layer/display.md"
+            },
+            "popoutBtn": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/display.md"
+            },
+            "zoomBtn": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/display.md",
+              "default": true,
+              "x-xyz-requires": [
+                "layer.tables"
+              ]
+            },
+            "zoomToFilteredExtentBtn": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/display.md",
+              "default": true
+            }
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/display.md"
+        },
+        "wkt_properties": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-formats": [
+            "mvt"
+          ]
+        },
+        "zIndex": {
+          "type": "integer",
+          "x-xyz-concept": "knowledge/workspace/layer/display.md"
+        },
+        "z_field": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
+          "x-xyz-formats": [
+            "mvt"
+          ]
+        }
+      },
+      "x-xyz-concept": "knowledge/workspace/layer/display.md"
+    },
+    "style": {
+      "type": "object",
+      "properties": {
+        "fillColor": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+        },
+        "fillOpacity": {
+          "type": "number",
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+        },
+        "highlightScale": {
+          "type": "number",
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+        },
+        "icon": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "anchor": {
+                  "type": "array",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                },
+                "fillColor": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                },
+                "layers": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string",
+                    "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                  },
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                },
+                "scale": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                },
+                "type": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                },
+                "url": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                }
+              }
+            },
+            {
+              "type": "array"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+        },
+        "scale": {
+          "type": "number",
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+        },
+        "strokeColor": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+        },
+        "strokeOpacity": {
+          "type": "number",
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+        },
+        "strokeWidth": {
+          "type": "number",
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "properties": {
+        "cat": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/style",
+            "properties": {
+              "label": {
+                "type": "string",
+                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+              }
+            },
+            "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "cat_arr": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/style",
+            "properties": {
+              "field": {
+                "type": "string",
+                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+              },
+              "label": {
+                "type": "string",
+                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+              },
+              "style": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/style"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/$defs/style"
+                    }
+                  }
+                ],
+                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+              },
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+              }
+            },
+            "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "distribution": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "field": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "fields": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "graduated_breaks": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
+          "default": "less_than"
+        },
+        "legend": {
+          "type": "object",
+          "properties": {
+            "classList": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+            },
+            "layout": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+            },
+            "nowrap": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+            }
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "meta": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "setHover": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "setLabel": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "skip": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "style": {
+          "$ref": "#/$defs/style",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "title": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        },
+        "type": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+        }
+      },
+      "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+    },
+    "entry": {
+      "type": "object",
+      "properties": {
+        "alert": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "class": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "cloudinary_folder": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "css_title": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "css_val": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "data": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "default": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "dependents": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/location/editing.md"
+        },
+        "dependents_layers": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/location/editing.md"
+        },
+        "display": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "draw": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+        },
+        "edit": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "arraySeparator": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                },
+                "delete": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                },
+                "delete_label": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                },
+                "draw": {
+                  "type": "object",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                },
+                "dynamic": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                },
+                "max": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md",
+                  "default": 2147483647
+                },
+                "maxlength": {
+                  "type": "integer",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                },
+                "min": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md",
+                  "default": -2147483648
+                },
+                "modify_btn": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                },
+                "modify_label": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                },
+                "options": {
+                  "type": "array",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                },
+                "placeholder": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                },
+                "query": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md",
+                  "default": "distinct_values"
+                },
+                "radio": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md",
+                  "x-xyz-requires": [
+                    "entry.edit.options"
+                  ]
+                },
+                "range": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                },
+                "snap": {
+                  "anyOf": [
+                    {
+                      "type": "object"
+                    },
+                    {
+                      "type": "boolean"
+                    }
+                  ],
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                },
+                "step": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                }
+              }
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/location/editing.md"
+        },
+        "field": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "fieldfx": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "filter": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "distinct": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+                },
+                "field": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+                },
+                "title": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+                },
+                "type": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+                }
+              }
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+        },
+        "formatterParams": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "group": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "groupClassList": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md",
+          "x-xyz-requires": [
+            "entry.group"
+          ]
+        },
+        "hideLayer": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "host": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "icon_name": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "inline": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "json_field": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "json_key": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md",
+          "x-xyz-requires": [
+            "entry.json_field"
+          ]
+        },
+        "jsonb_field": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "jsonb_key": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md",
+          "x-xyz-requires": [
+            "entry.jsonb_field"
+          ]
+        },
+        "key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "label": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "layer": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "max_size": {
+          "type": "integer",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "nullValue": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "objectAssignFromField": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "objectMergeFromField": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "pills": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "prefix": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "query": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "queryCheck": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "queryparams": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "reload": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "report": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "roles": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/roles.md"
+        },
+        "run": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "runOnce": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "skipEntry": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "skipFalsyValue": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "skipNullValue": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "skipUndefinedValue": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "srid": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "style": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "suffix": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "tab_style": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "template": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+        },
+        "title": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "tooltip": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
+        },
+        "type": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md",
+          "default": "text"
+        },
+        "url": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "zIndex": {
+          "type": "integer",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        }
+      },
+      "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+    },
+    "dataview": {
+      "type": "object",
+      "properties": {
+        "chart": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "data": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "array"
+            }
+          ],
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "dataview": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "display": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "dynamic": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "label": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "mapChange": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "props": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "query": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "queryparams": {
+          "type": "object",
+          "properties": {
+            "center": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/dataviews.md"
+            },
+            "filter": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/dataviews.md"
+            },
+            "geom": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/dataviews.md"
+            },
+            "id": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/dataviews.md"
+            },
+            "qID": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/dataviews.md"
+            },
+            "table": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/dataviews.md"
+            },
+            "viewport": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/dataviews.md"
+            },
+            "z": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/dataviews.md"
+            }
+          },
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "object"
+              },
+              {
+                "type": "array"
+              }
+            ],
+            "x-xyz-concept": "knowledge/workspace/dataviews.md"
+          },
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "reload": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "table": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "target": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "title": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "toolbar": {
+          "type": "object",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        },
+        "viewport": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+        }
+      }
+    },
+    "filter": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "boolean": {
+                "type": "boolean",
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+              },
+              "email": {
+                "type": "boolean",
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+              },
+              "eq": {
+                "type": "number",
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+              },
+              "gt": {
+                "type": "number",
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+              },
+              "gte": {
+                "type": "number",
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+              },
+              "in": {
+                "type": "array",
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+              },
+              "like": {
+                "type": "string",
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+              },
+              "lt": {
+                "type": "number",
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+              },
+              "lte": {
+                "type": "number",
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+              },
+              "match": {
+                "type": "string",
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+              },
+              "ni": {
+                "type": "array",
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+              },
+              "null": {
+                "type": "boolean",
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+              }
+            }
+          },
+          {
+            "type": "array"
+          }
+        ],
+        "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+      }
+    }
+  }
+}

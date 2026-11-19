@@ -6,7 +6,7 @@ resource: ../../../apps/ui/lib/locations/infoj.mjs
 tags: [workspace, location, infoj, ui, xyz]
 status: draft
 x-xyz-keys:
-  - { key: layer.infoj, type: array }
+  - { key: layer.infoj, type: array, ref: entry }
   - { key: layer.infoj_order, type: array }
   - { key: layer.infoj_skip, type: array }
   - { key: entry, type: object }

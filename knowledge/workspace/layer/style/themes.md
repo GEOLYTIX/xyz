@@ -6,31 +6,36 @@ resource: ../../../../apps/mapp/lib/layer/styleParser.mjs
 tags: [workspace, layer, style, theme, legend, mapp]
 status: draft
 x-xyz-keys:
-  - { key: layer.style.theme, type: [object, string] }
+  - { key: layer.style.theme, type: [object, string], ref: theme }
   - { key: layer.style.themes, type: object }
-  - { key: layer.style.themes.*, type: object }
-  - { key: layer.style.themes.*.skip, type: boolean }
-  - { key: layer.style.theme.type, type: string }
-  - { key: layer.style.theme.title, type: string }
-  - { key: layer.style.theme.meta, type: string }
-  - { key: layer.style.theme.field, type: string }
-  - { key: layer.style.theme.fields, type: array }
-  - { key: layer.style.theme.style, type: object }
-  - { key: layer.style.theme.categories, type: array }
-  - { key: "layer.style.theme.categories[].value", type: [string, number] }
-  - { key: "layer.style.theme.categories[].label", type: string }
-  - { key: "layer.style.theme.categories[].field", type: string }
-  - { key: "layer.style.theme.categories[].style", type: [object, array] }
-  - { key: layer.style.theme.cat, type: object }
-  - { key: layer.style.theme.cat_arr, type: array }
-  - { key: layer.style.theme.graduated_breaks, type: string, default: less_than }
-  - { key: layer.style.theme.distribution, type: string }
-  - { key: layer.style.theme.setLabel, type: string }
-  - { key: layer.style.theme.setHover, type: string }
-  - { key: layer.style.theme.legend, type: object }
-  - { key: layer.style.theme.legend.layout, type: string }
-  - { key: layer.style.theme.legend.nowrap, type: boolean }
-  - { key: layer.style.theme.legend.classList, type: string }
+  - { key: layer.style.themes.*, type: object, ref: theme }
+  - { key: theme, type: object }
+  - { key: theme.skip, type: boolean }
+  - { key: theme.type, type: string }
+  - { key: theme.title, type: string }
+  - { key: theme.meta, type: string }
+  - { key: theme.field, type: string }
+  - { key: theme.fields, type: array }
+  - { key: theme.style, type: object, ref: style }
+  - { key: theme.categories, type: array }
+  - { key: "theme.categories[]", type: object, ref: style }
+  - { key: "theme.categories[].value", type: [string, number] }
+  - { key: "theme.categories[].label", type: string }
+  - { key: "theme.categories[].field", type: string }
+  - { key: "theme.categories[].style", type: [object, array], ref: style }
+  - { key: theme.cat, type: object }
+  - { key: theme.cat.*, type: object, ref: style }
+  - { key: theme.cat.*.label, type: string }
+  - { key: theme.cat.*.value, type: [string, number] }
+  - { key: theme.cat_arr, type: array }
+  - { key: theme.graduated_breaks, type: string, default: less_than }
+  - { key: theme.distribution, type: string }
+  - { key: theme.setLabel, type: string }
+  - { key: theme.setHover, type: string }
+  - { key: theme.legend, type: object }
+  - { key: theme.legend.layout, type: string }
+  - { key: theme.legend.nowrap, type: boolean }
+  - { key: theme.legend.classList, type: string }
 sources:
   - id: wiki
     resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration
@@ -50,16 +55,14 @@ sources:
 ---
 # Themes
 
-A theme styles each feature by the value of its `field` property.
-`style.themes` maps named themes; `style.theme` names the current one, or the
-first is used, and the ui offers the others in a dropdown. A theme with `skip`
-is removed. The key is the default `title`; `meta` is HTML under the
-legend.[^parser] `setLabel` and `setHover` switch the
+A theme styles each feature by its `field` value. `style.themes` maps named
+themes, offered in a dropdown; `style.theme` names the current one, or the
+first is used. `skip` removes a theme; the key is the default `title`; `meta`
+is HTML under the legend.[^parser] `setLabel` and `setHover` switch the
 [label and hover](labels-hovers.md) with the theme.
 
-Theme styles merge over `style.default`, so a category only states what
-differs. A category whose style is set to `null`, eg. by toggling it in the
-legend, hides its features.
+Theme styles merge over `style.default`; a category style set to `null`,
+eg. by toggling it in the legend, hides its features.
 
 | `type` | Style comes from |
 | --- | --- |
@@ -68,14 +71,14 @@ legend, hides its features.
 | `graduated` | The numeric category range the value falls into |
 | `distributed` | Categories handed out so that neighbouring features differ |
 
-An unknown `type` is ignored with a warning. `legend.layout`, `legend.nowrap`
-and `legend.classList` change the legend layout in the ui.
+An unknown `type` is ignored with a warning. `legend.layout`, `nowrap` and
+`classList` change the legend layout in the ui.
 
 ## Categories
 
 `categories` is an ordered array of `{ value, label, style }`; `label`
-defaults to `value`. The legacy forms `cat`, an object keyed by value, and
-`cat_arr` are converted to `categories`.[^parser]
+defaults to `value`. Style keys directly on a category move into its `style`.
+The legacy `cat`, keyed by value, and `cat_arr` become `categories`.[^parser]
 
 - **categorized**: values match as text. With `fields` instead of `field`,
   each category names its `field`, and a feature shows the icons of every

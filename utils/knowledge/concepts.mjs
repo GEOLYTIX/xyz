@@ -13,6 +13,7 @@ export const KEY_ROOTS = [
   'locale',
   'layer',
   'style',
+  'theme',
   'entry',
   'dataview',
   'filter',
@@ -55,31 +56,32 @@ export function checkKeys(metadata) {
   const entries = metadata[KEYS];
   if (entries === undefined) return [];
   if (!Array.isArray(entries)) throw new Error(`${KEYS} must be an array`);
-  return entries.map((entry) => {
-    if (entry === null || typeof entry !== 'object' || Array.isArray(entry))
-      throw new Error(`${KEYS} entries must be mappings with key and type`);
-    if (typeof entry.key !== 'string' || !KEY_PATH.test(entry.key))
-      throw new Error(`${KEYS}: invalid key path ${JSON.stringify(entry.key)}`);
-    const types = list(entry.type);
-    if (!types.length || !types.every((type) => KEY_TYPES.includes(type)))
-      throw new Error(
-        `${KEYS}: ${entry.key} type must be one or more of ${KEY_TYPES.join(', ')}`,
-      );
-    for (const field of ['formats', 'requires']) {
-      if (
-        entry[field] !== undefined &&
-        !list(entry[field]).every((value) => typeof value === 'string')
-      )
-        throw new Error(`${KEYS}: ${entry.key} ${field} must be strings`);
-    }
-    for (const required of list(entry.requires)) {
-      if (!KEY_PATH.test(required))
-        throw new Error(
-          `${KEYS}: ${entry.key} requires invalid key ${required}`,
-        );
-    }
-    return entry.key;
-  });
+  return entries.map(checkEntry);
+}
+
+/** Throw on a malformed x-xyz-keys entry; return its key path. */
+function checkEntry(entry) {
+  if (entry === null || typeof entry !== 'object' || Array.isArray(entry))
+    throw new Error(`${KEYS} entries must be mappings with key and type`);
+  if (typeof entry.key !== 'string' || !KEY_PATH.test(entry.key))
+    throw new Error(`${KEYS}: invalid key path ${JSON.stringify(entry.key)}`);
+  const types = list(entry.type);
+  if (!types.length || !types.every((type) => KEY_TYPES.includes(type)))
+    throw new Error(
+      `${KEYS}: ${entry.key} type must be one or more of ${KEY_TYPES.join(', ')}`,
+    );
+  for (const field of ['formats', 'requires']) {
+    if (!list(entry[field]).every((value) => typeof value === 'string'))
+      throw new Error(`${KEYS}: ${entry.key} ${field} must be strings`);
+  }
+  if (entry.ref !== undefined && !KEY_ROOTS.includes(entry.ref))
+    throw new Error(
+      `${KEYS}: ${entry.key} ref must be one of ${KEY_ROOTS.join(', ')}`,
+    );
+  const invalid = list(entry.requires).find((key) => !KEY_PATH.test(key));
+  if (invalid)
+    throw new Error(`${KEYS}: ${entry.key} requires invalid key ${invalid}`);
+  return entry.key;
 }
 
 /** Text of the inline children of a heading token. */

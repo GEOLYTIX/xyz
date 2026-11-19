@@ -7,7 +7,7 @@ tags: [workspace, dataview, table, chart, ui]
 status: draft
 x-xyz-keys:
   - { key: layer.dataviews, type: object }
-  - { key: layer.dataviews.*, type: object }
+  - { key: layer.dataviews.*, type: object, ref: dataview }
   - { key: dataview.dataview, type: string }
   - { key: dataview.title, type: string }
   - { key: dataview.label, type: string }
@@ -15,6 +15,15 @@ x-xyz-keys:
   - { key: dataview.display, type: boolean }
   - { key: dataview.query, type: string }
   - { key: dataview.queryparams, type: object }
+  - { key: dataview.queryparams.*, type: [string, number, boolean, object, array] }
+  - { key: dataview.queryparams.table, type: [boolean, string] }
+  - { key: dataview.queryparams.filter, type: [boolean, object] }
+  - { key: dataview.queryparams.viewport, type: [boolean, string] }
+  - { key: dataview.queryparams.z, type: [boolean, number] }
+  - { key: dataview.queryparams.id, type: [boolean, string, integer] }
+  - { key: dataview.queryparams.qID, type: [boolean, string] }
+  - { key: dataview.queryparams.center, type: [boolean, string] }
+  - { key: dataview.queryparams.geom, type: [boolean, string] }
   - { key: dataview.viewport, type: boolean }
   - { key: dataview.mapChange, type: boolean }
   - { key: dataview.dynamic, type: boolean }

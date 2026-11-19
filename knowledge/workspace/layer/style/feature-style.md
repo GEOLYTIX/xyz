@@ -7,10 +7,10 @@ tags: [workspace, layer, style, mapp]
 status: draft
 x-xyz-keys:
   - { key: layer.style, type: object, default: {} }
-  - { key: layer.style.default, type: object }
-  - { key: layer.style.highlight, type: object }
-  - { key: layer.style.selected, type: object }
-  - { key: layer.style.cluster, type: object, requires: [layer.cluster] }
+  - { key: layer.style.default, type: object, ref: style }
+  - { key: layer.style.highlight, type: object, ref: style }
+  - { key: layer.style.selected, type: object, ref: style }
+  - { key: layer.style.cluster, type: object, ref: style, requires: [layer.cluster] }
   - { key: layer.style.cluster.clusterScale, type: number, default: 1 }
   - { key: layer.style.zoomInScale, type: number }
   - { key: layer.style.zoomOutScale, type: number }
@@ -18,6 +18,7 @@ x-xyz-keys:
   - { key: layer.style.icon_scaling, type: object }
   - { key: layer.style.icon_scaling.field, type: string }
   - { key: layer.style.icon_scaling.scaleFactor, type: number }
+  - { key: layer.style.icon_scaling.max, type: number }
   - { key: layer.style.icon_scaling.cluster, type: [boolean, string] }
   - { key: style.fillColor, type: string }
   - { key: style.fillOpacity, type: number }
@@ -25,12 +26,15 @@ x-xyz-keys:
   - { key: style.strokeWidth, type: number }
   - { key: style.strokeOpacity, type: number }
   - { key: style.highlightScale, type: number }
+  - { key: style.scale, type: number }
   - { key: style.icon, type: [object, array] }
   - { key: style.icon.type, type: string }
   - { key: style.icon.url, type: string }
   - { key: style.icon.scale, type: number }
   - { key: style.icon.anchor, type: array }
   - { key: style.icon.fillColor, type: string }
+  - { key: style.icon.layers, type: object }
+  - { key: style.icon.layers.*, type: string }
 sources:
   - id: wiki
     resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration
@@ -70,7 +74,8 @@ icons drawn on top of each other.
 
 - `icon.type` draws a built-in SVG symbol: `dot`, `target`, `triangle`,
   `square`, `diamond`, `semiCircle`, `markerLetter`, `markerColor` or
-  `circle`, coloured with `icon.fillColor`.[^symbols]
+  `circle`, coloured with `icon.fillColor`. A `target` draws rings from
+  `icon.layers`, a map of radius fractions to colours.[^symbols]
 - `icon.url` draws an image or SVG from a URL. The legacy `icon.svg` is
   copied to `url`.
 - `icon.scale` scales the icon; `icon.anchor` positions it.

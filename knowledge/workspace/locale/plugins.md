@@ -8,7 +8,19 @@ status: draft
 x-xyz-keys:
   - { key: locale.plugins, type: array }
   - { key: locale.syncPlugins, type: array, default: [zoomBtn, admin, login] }
-  - { key: locale.*, type: [object, boolean, string, array] }
+  - { key: locale.admin, type: [boolean, object] }
+  - { key: locale.custom_theme, type: [boolean, object] }
+  - { key: locale.dark_mode, type: [boolean, object] }
+  - { key: locale.feature_info, type: [boolean, object] }
+  - { key: locale.fullscreen, type: [boolean, object] }
+  - { key: locale.link_button, type: [boolean, object] }
+  - { key: locale.locator, type: [boolean, object] }
+  - { key: locale.login, type: [boolean, object] }
+  - { key: locale.userIDB, type: [boolean, object] }
+  - { key: locale.userLayer, type: [boolean, object] }
+  - { key: locale.userLocale, type: [boolean, object] }
+  - { key: locale.zoomBtn, type: [boolean, object] }
+  - { key: locale.zoomToArea, type: [boolean, object] }
   - { key: layer.plugins, type: array }
 sources:
   - id: wiki

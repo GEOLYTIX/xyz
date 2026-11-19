@@ -64,9 +64,13 @@ Workspace concepts own the configuration keys. Each lists its keys in
 `x-xyz-keys` with the key path, value type and, where known, the default, the
 layer formats it applies to and the keys it requires. Each key is owned by
 exactly one concept. A key path starts at the object it belongs to:
-`workspace`, `locale`, `layer`, `style`, `entry`, `dataview` or `filter`;
+`workspace`, `locale`, `layer`, `style`, `theme`, `entry`, `dataview` or `filter`;
 `*` stands for a named entry, eg. `locale.layers.*`, and `[]` for an array
 item.
+
+A JSON Schema generated from all keys,
+[workspace.schema.json](workspace/workspace.schema.json), checks a workspace
+for wrong value types and reports keys no concept documents.
 
 Every workspace concept ends with a minimal JSON workspace under `# Examples`.
 The examples use the devdb test database, so they run in tests and demos and
@@ -88,9 +92,10 @@ give agents a working starting point.
 ## Checks
 
 `pnpm knowledge:check` runs in CI. It fails on malformed concepts, missing
-linked files, malformed `x-xyz-keys`, a key owned twice and examples which are
-not JSON. It warns on missing descriptions, oversized concepts (over 150
-lines) and environment variables without a concept. `pnpm knowledge:examples`
+linked files, malformed `x-xyz-keys`, a key owned twice, an outdated schema,
+and examples which are not valid against the schema. It warns on missing
+descriptions, oversized concepts (over 150 lines), environment variables
+without a concept and test workspace keys without a concept. `pnpm knowledge:examples`
 runs every example against the devdb. A passing check means the
 bundle is well formed, not that its content is correct; see the
 [authoring workflow](workflows/authoring.md).

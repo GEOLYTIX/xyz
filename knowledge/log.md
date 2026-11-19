@@ -2,6 +2,11 @@
 
 ## 2026-11-19
 
+- Generated a JSON Schema of workspaces from `x-xyz-keys`, linked by the new
+  `ref` field and a `theme` root. The check fails on an outdated schema and on
+  examples with wrong types or undocumented keys, and warns on undocumented
+  keys in the test workspaces. Added the layer drawing concept and the keys
+  the test workspaces showed missing.
 - Added the workspace frame and locale key groups: workspace and locales
   (rewritten from the locales sample), templates, roles, locale view,
   gazetteer and locale plugins. Corrected Wiki claims: role objects merge on

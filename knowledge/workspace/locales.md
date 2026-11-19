@@ -8,15 +8,15 @@ status: draft
 x-xyz-keys:
   - { key: workspace, type: object }
   - { key: workspace.dbs, type: string }
-  - { key: workspace.locale, type: object, default: { layers: {} } }
+  - { key: workspace.locale, type: object, ref: locale, default: { layers: {} } }
   - { key: workspace.locales, type: object }
-  - { key: workspace.locales.*, type: object }
+  - { key: workspace.locales.*, type: object, ref: locale }
   - { key: locale, type: object }
   - { key: locale.name, type: string }
   - { key: locale.dbs, type: string }
   - { key: locale.layers, type: object }
-  - { key: locale.layers.*, type: object }
-  - { key: locale.layer, type: object }
+  - { key: locale.layers.*, type: object, ref: layer }
+  - { key: locale.layer, type: object, ref: layer }
   - { key: locale.locales, type: array }
   - { key: locale.queryparams, type: object }
 sources:

@@ -15,6 +15,8 @@ x-xyz-keys:
   - { key: layer.groupmeta, type: string }
   - { key: layer.zIndex, type: integer }
   - { key: layer.promoteDisplay, type: boolean }
+  - { key: layer.attribution, type: object }
+  - { key: layer.attribution.*, type: string }
   - { key: layer.viewConfig, type: object }
   - { key: layer.viewConfig.displayToggle, type: boolean, default: true }
   - { key: layer.viewConfig.zoomBtn, type: boolean, default: true, requires: [layer.tables] }
@@ -49,6 +51,8 @@ MAPP library decorates the layer when it is added to a mapview.[^decorate]
 - `name` is the header of the layer view. `meta` is HTML shown in the view.
 - `group` puts layer views with the same value into one group drawer;
   `groupmeta` is HTML shown in the group.
+- `attribution` maps source names to URLs, shown in the map attribution
+  while the layer is displayed.
 - `zIndex` orders the layer canvas. Without one, layers get increasing values
   in locale order, so later layers draw on top. `promoteDisplay` draws the
   layer above all displayed layers whenever it is shown.

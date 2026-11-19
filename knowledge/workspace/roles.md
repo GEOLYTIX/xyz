@@ -7,10 +7,10 @@ tags: [workspace, roles, security, xyz]
 status: draft
 x-xyz-keys:
   - { key: locale.roles, type: object }
-  - { key: locale.roles.*, type: [boolean, object] }
+  - { key: locale.roles.*, type: [boolean, object], ref: locale }
   - { key: locale.role, type: string }
   - { key: layer.roles, type: object }
-  - { key: layer.roles.*, type: [boolean, object] }
+  - { key: layer.roles.*, type: [boolean, object], ref: layer }
   - { key: entry.roles, type: object }
 sources:
   - id: wiki

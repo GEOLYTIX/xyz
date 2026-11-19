@@ -11,14 +11,14 @@ x-xyz-keys:
     default: { current: {} }
   - key: layer.filter.default
     type: [object, array, string]
+    ref: filter
     requires: [layer.table]
   - key: layer.filter.current
     type: object
+    ref: filter
     default: {}
-  - key: layer.filter.viewport
-    type: boolean
-  - key: layer.filter.hidden
-    type: boolean
+  - { key: layer.filter.viewport, type: boolean }
+  - { key: layer.filter.hidden, type: boolean }
   - key: layer.filter.include
     type: array
     requires: [layer.infoj]
@@ -31,16 +31,17 @@ x-xyz-keys:
   - key: layer.filter.drawer
     type: [string, boolean]
     default: disableOnHide
-  - key: layer.filter.popout
-    type: boolean
-  - key: layer.filter.dialog
-    type: [object, boolean]
-  - key: layer.filter.classList
-    type: string
-  - key: layer.filter.count_meta
-    type: string
-  - key: layer.filter.viewport_description
-    type: string
+  - { key: layer.filter.popout, type: boolean }
+  - { key: layer.filter.dialog, type: [object, boolean] }
+  - { key: layer.filter.classList, type: string }
+  - { key: layer.filter.count_meta, type: string }
+  - { key: layer.filter.viewport_description, type: string }
+  - { key: layer.multi_filter, type: [boolean, object] }
+  - { key: entry.filter, type: [boolean, string, object] }
+  - { key: entry.filter.type, type: string }
+  - { key: entry.filter.title, type: string }
+  - { key: entry.filter.field, type: string }
+  - { key: entry.filter.distinct, type: boolean }
 sources:
   - id: wiki
     resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration
@@ -98,8 +99,8 @@ Entry filter types are `like`, `match`, `numeric`, `integer`, `in`, `ni`,
 ## Pitfalls
 
 - An entry filter with an unknown type is skipped with a console warning.
-- The `multi_filter` legacy plugin rewrites the filter configuration before
-  the panel is built.
+- The legacy `layer.multi_filter` plugin key rewrites the filter
+  configuration before the panel is built.
 
 # Examples
 

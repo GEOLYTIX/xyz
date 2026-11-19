@@ -10,6 +10,14 @@ import { fileURLToPath } from 'node:url';
 import MarkdownIt from 'markdown-it';
 import { parse } from 'yaml';
 import { checkBody, checkKeys } from './concepts.mjs';
+import { collectExamples } from './examples.mjs';
+import {
+  buildSchema,
+  checkExample,
+  checkTestWorkspaces,
+  SCHEMA_PATH,
+  schemaCurrent,
+} from './schema.mjs';
 
 const markdown = new MarkdownIt();
 const textValue = (value) =>
@@ -319,6 +327,56 @@ function covered(name, variables) {
   );
 }
 
+/**
+Check the generated workspace schema, the concept examples against it, and
+the repository test workspaces for undocumented keys. Bundles without a
+workspace directory, eg. test fixtures, have no schema.
+*/
+function checkWorkspaceSchema(context, errors, warnings) {
+  if (!existsSync(resolve(context.bundle, 'workspace'))) return;
+  if (!schemaCurrent(context.root))
+    errors.push(`${SCHEMA_PATH}: out of date; run pnpm knowledge:schema`);
+  const schema = buildSchema(context.root);
+  for (const example of collectExamples(context.root)) {
+    const result = checkExample(schema, example.workspace);
+    for (const error of result.errors)
+      errors.push(`${example.path}: example ${error}`);
+    for (const path of result.undocumented)
+      errors.push(`${example.path}: example uses undocumented key ${path}`);
+  }
+  const tests = checkTestWorkspaces(context.root, schema);
+  warnings.push(...tests.errors);
+  if (tests.undocumented.size) {
+    warnings.push(
+      `knowledge/workspace: ${tests.undocumented.size} keys used in test workspaces have no concept: ${[...tests.undocumented.keys()].sort().join(', ')}`,
+    );
+  }
+}
+
+/** Check one Markdown file of the bundle; throws on errors. */
+function checkFile(file, label, context, { owners, variables, warn }) {
+  const text = readFileSync(file, 'utf8');
+  const doc = splitDocument(text);
+  const tokens = markdown.parse(stripFootnotes(doc.body), {});
+  const name = basename(file);
+  if (reserved(name)) checkReserved(name, file, doc, context, warn);
+  else {
+    checkMetadata(doc.metadata, file, context, warn);
+    if (Array.isArray(doc.metadata[VARIABLES]))
+      variables.push(...doc.metadata[VARIABLES].filter(textValue));
+    // Each workspace key is owned by exactly one concept.
+    for (const key of checkKeys(doc.metadata)) {
+      if (owners.has(key))
+        throw new Error(`${key} is already owned by ${owners.get(key)}`);
+      owners.set(key, label);
+    }
+    checkBody(doc.metadata, tokens, text.split('\n').length, warn);
+  }
+  for (const target of linkTargets(tokens)) {
+    checkTarget(target, file, context);
+  }
+}
+
 /** Validate OKF structure plus XYZ's stricter local-link authoring policy. */
 export function validateBundle(root, now = Date.now()) {
   const context = {
@@ -335,36 +393,18 @@ export function validateBundle(root, now = Date.now()) {
   const files = markdownFiles(directories);
   if (!files.length) errors.push('Knowledge bundle contains no Markdown files');
   const variables = [];
-  // Each workspace key is owned by exactly one concept.
   const owners = new Map();
   for (const file of files) {
     const label = relative(context.root, file).split(sep).join('/');
     const warn = (message) => warnings.push(`${label}: ${message}`);
     try {
-      const text = readFileSync(file, 'utf8');
-      const doc = splitDocument(text);
-      const tokens = markdown.parse(stripFootnotes(doc.body), {});
-      const name = basename(file);
-      if (reserved(name)) checkReserved(name, file, doc, context, warn);
-      else {
-        checkMetadata(doc.metadata, file, context, warn);
-        if (Array.isArray(doc.metadata[VARIABLES]))
-          variables.push(...doc.metadata[VARIABLES].filter(textValue));
-        for (const key of checkKeys(doc.metadata)) {
-          if (owners.has(key))
-            throw new Error(`${key} is already owned by ${owners.get(key)}`);
-          owners.set(key, label);
-        }
-        checkBody(doc.metadata, tokens, text.split('\n').length, warn);
-      }
-      for (const target of linkTargets(tokens)) {
-        checkTarget(target, file, context);
-      }
+      checkFile(file, label, context, { owners, variables, warn });
     } catch (error) {
       errors.push(`${label}: ${error.message}`);
     }
   }
   checkIndexes(directories, context, warnings);
+  if (!errors.length) checkWorkspaceSchema(context, errors, warnings);
   const undocumented = [...readEnvironment(context.root)]
     .filter((name) => !covered(name, variables))
     .sort();

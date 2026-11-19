@@ -50,13 +50,20 @@ x-xyz-keys:
 ```
 
 - `key` (required) is a path from one of `workspace`, `locale`, `layer`,
-  `style`, `entry`, `dataview` or `filter`. `*` is a named map entry and `[]`
+  `style`, `theme`, `entry`, `dataview` or `filter`. `*` is a named map entry and `[]`
   an array item, eg. `locale.layers.*`, `layer.infoj[]`. Quote a path with
   `[]` or `*` inside `{ … }` flow mappings: `{ key: "layer.infoj[]", … }`.
 - `type` (required) is one or a list of `string`, `number`, `integer`,
   `boolean`, `object` and `array`.
 - `default`, `formats` and `requires` are filled in when known.
+- `ref` names the root whose keys the value has, eg.
+  `{ key: locale.layers.*, type: object, ref: layer }`. For an array the
+  items have them; a style category is `ref: style`.
 - Each key has exactly one owner; the checker fails on a second.
+
+`pnpm knowledge:schema` generates `knowledge/workspace/workspace.schema.json`
+from all `x-xyz-keys`; commit it with the concepts. Agents and editors can
+validate workspaces with it.
 
 End the concept with `# Examples` and a complete, minimal JSON workspace in a
 `json` code block. Use the devdb tables (`packages/devdb/seed`) and the
@@ -104,7 +111,9 @@ The checker fails on:
   a bundle `license` path), and paths escaping the repository
 - path-like path field values without a `./`, `../` or `/` prefix
 - malformed `x-xyz-keys` entries, and a workspace key owned by two concepts
-- a `json` code block under `Examples` which does not parse
+- a `json` code block under `Examples` which does not parse, an example
+  value of the wrong type, or an example key no concept owns
+- a workspace schema which is out of date with the concepts
 
 It warns on:
 
@@ -117,6 +126,10 @@ It warns on:
 - environment variables read by the XYZ API (`apps/xyz/mod`, `router.js`,
   `apps/saml`) which no concept lists in `x-xyz-variables`. Platform variables such as
   `VERCEL_*` and `NODE_ENV` are ignored.
+- keys used in the repository test workspaces (`apps/mapp/tests/workspaces`,
+  `apps/ui/tests/workspaces`, `packages/testhost/workspaces`,
+  `public/workspace.json`) which no concept owns, and values of the wrong
+  type in them. Template contents are not checked.
 
 Unknown types and metadata are accepted. External URLs, heading anchors and raw
 HTML links are not checked.
