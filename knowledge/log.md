@@ -2,6 +2,10 @@
 
 ## 2026-11-19
 
+- Added the layer style key groups: feature styles and icons, themes, and
+  labels and hovers. Format-specific style keys moved to the formats concept.
+  Corrected the data source concept: `params.fields` is generated, extra
+  columns go in `params.default_fields`.
 - Added the layer core key groups: display and view (including `viewConfig`),
   data source (tables, zoom ranges, params), formats and cluster. Corrected
   Wiki claims: `mvt_cache` is disabled, `panelOrder` moved to `viewConfig`,

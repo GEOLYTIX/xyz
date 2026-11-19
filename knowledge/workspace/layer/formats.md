@@ -21,6 +21,10 @@ x-xyz-keys:
   - { key: layer.accessToken, type: string, formats: [maplibre, mapboxStyle] }
   - { key: layer.preserveDrawingBuffer, type: boolean, formats: [maplibre] }
   - { key: layer.apiKey, type: string, formats: [googleMapTiles] }
+  - { key: layer.style.URL, type: string, formats: [maplibre, mapboxStyle] }
+  - { key: layer.style.mapType, type: string, default: roadmap, formats: [googleMapTiles] }
+  - { key: layer.style.layerTypes, type: array, formats: [googleMapTiles] }
+  - { key: layer.style.contextFilter, type: string, formats: [tiles] }
 sources:
   - id: wiki
     resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration
@@ -75,7 +79,8 @@ geometries, so filters and themes update without reloading tiles.
 
 `tiles` creates a raster tile layer from an Openlayers source, `OSM` by
 default, with `URI` as the tile URL template and `params` appended as query
-string. `URI` is required for every source, including `OSM`. `projection` defaults to `EPSG:3857`.[^tiles]
+string. `URI` is required for every source, including `OSM`. `style.contextFilter`
+applies a CSS filter such as `grayscale(100%)` to the tile canvas. `projection` defaults to `EPSG:3857`.[^tiles]
 
 ## Pitfalls
 

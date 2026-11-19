@@ -18,7 +18,7 @@ x-xyz-keys:
   - { key: layer.params, type: object, default: {} }
   - { key: layer.params.template, type: string }
   - { key: layer.params.viewport, type: boolean }
-  - { key: layer.params.fields, type: array }
+  - { key: layer.params.default_fields, type: array, formats: [wkt, geojson, cluster, vector, mvt] }
   - { key: layer.queryparams, type: object }
   - { key: layer.z_field, type: string, formats: [mvt] }
 sources:
@@ -47,7 +47,10 @@ workspace layer and fills the matching query params with them.[^query]
   ID column; locations are requested by it.
 - `params` are sent with every layer data request: `template` replaces the
   format's default query template, `viewport` restricts queries to the map
-  extent, and `fields` adds columns to the features.
+  extent, and `default_fields` adds columns to the features. `params.fields`
+  is generated before every request from `default_fields` and the theme,
+  label, hover, icon scaling and cluster label fields, so a configured value
+  is overwritten.
 - `queryparams` are assigned to layer queries and location entry queries. The
   locale's `queryparams` are merged in; layer values win.[^getlayer]
 
@@ -91,7 +94,7 @@ zoom 6.
         "geom": "geom_p_4326",
         "srid": "4326",
         "qID": "id",
-        "params": { "fields": ["retailer"] }
+        "params": { "default_fields": ["retailer"] }
       }
     }
   }
