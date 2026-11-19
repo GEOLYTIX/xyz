@@ -4,6 +4,8 @@
 
 - Recorded the release scope: the whole migration ships in one PR with v5.1;
   content details are patched after the release.
+- Recorded the first Wiki generation: archive the hand-written Wiki, generate
+  from the PR branch for review, and remove the archive before merge.
 
 ## 2026-11-18
 

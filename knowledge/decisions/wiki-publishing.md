@@ -33,8 +33,24 @@ Generate from the release line which the fix is merged into, eg. the `patch`
 branch, rather than from a branch with unreleased features. Otherwise the Wiki
 describes behaviour which no released version has.
 
+## First generation
+
+The switch happens during review of the migration PR, before it is merged:
+
+1. Archive the hand-written Wiki pages in the Wiki, so reviewers can compare
+   them with the generated pages.
+2. Generate the Wiki from the PR branch, and review the generated pages with
+   the PR.
+3. Remove the archive before the PR is merged into `minor`. The Wiki's own Git
+   history keeps the hand-written pages.
+
+GitHub only lists a `workflow_dispatch` workflow once it is on the default
+branch, so the review generation cannot use the workflow. The generator is
+therefore a script which a maintainer can also run locally against a Wiki
+checkout; the workflows call the same script.
+
 ## Not yet implemented
 
-The generator and its workflow are phase 4 of the
-[#3007 outline](https://github.com/GEOLYTIX/xyz/issues/3007). Until then the
-existing Wiki stays as it is.
+The generator and its workflows are phase 4 of the
+[#3007 outline](https://github.com/GEOLYTIX/xyz/issues/3007). Until the first
+generation the existing Wiki stays as it is.
