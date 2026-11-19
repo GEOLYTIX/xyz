@@ -72,6 +72,32 @@ describe.each(collectExamples(root))('$path example $id', ({ id }) => {
     }
   });
 
+  it('runs the query of each layer dataview', async () => {
+    for (const layer of await layers(id)) {
+      for (const [key, dataview] of Object.entries(layer.dataviews ?? {})) {
+        if (!dataview?.query) continue;
+        const params = new URLSearchParams({
+          template: dataview.query,
+          locale: id,
+          layer: layer.key,
+        });
+        // Flags resolve in the browser; the test resolves those it can.
+        for (const [param, value] of Object.entries(
+          dataview.queryparams ?? {},
+        )) {
+          if (value === true && param === 'table')
+            params.set(
+              'table',
+              layer.table ?? Object.values(layer.tables ?? {}).find(Boolean),
+            );
+          else if (value !== true) params.set(param, value);
+        }
+        const response = await get(`/api/query?${params}`);
+        expect(response, `${layer.key} dataview ${key}`).toBeTruthy();
+      }
+    }
+  });
+
   it('removes rows with each default filter', async () => {
     const filtered = (await layers(id)).filter(
       (layer) => QUERIED.has(layer.format) && layer.filter?.default,

@@ -2,6 +2,9 @@
 
 ## 2026-11-19
 
+- Added the dataviews concept: layer and location dataviews, the core Json
+  renderer, the tabulator and chartjs plugins, query params flags, map change
+  reloads and toolbars. The example test runs each layer dataview query.
 - Added the location key groups: infoj, entry display, entry types and
   editing. The example test also opens a location of each layer with infoj,
   which runs its fields and fieldfx against the devdb.
