@@ -26,6 +26,7 @@
       "!jsdoc_mapp.json",
       "!jsdoc_xyz.json",
       "!jsdoc_test.json",
+      "!knowledge/workspace/workspace.schema.json",
       "!coverage",
       "!.zed",
       "!**/.vscode",

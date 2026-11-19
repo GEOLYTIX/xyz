@@ -1,0 +1,18 @@
+# Workspace configuration
+
+Concepts own the workspace keys listed in their `x-xyz-keys` metadata. Look a
+key up with `pnpm knowledge:find <key>`, eg. `pnpm knowledge:find layer.filter.default`.
+
+[workspace.schema.json](workspace.schema.json) is a JSON Schema of workspaces
+generated from those keys with `pnpm knowledge:schema`. Validate a generated
+workspace against it before deploying; unknown keys are allowed but
+undocumented.
+
+- [Workspace and locales](locales.md) - Root keys, default and named locales, nested locales and layer defaults; the frame of every workspace.
+- [Locale keys](locale/index.md) - View, extent, gazetteer and plugins of a locale.
+- [Templates](templates.md) - Reusable layers and locales, SQL query templates and views.
+- [Roles](roles.md) - Restricting locales, layers and entries to user roles, and role-specific configuration.
+- [Layer keys](layer/index.md) - Keys of a layer object.
+- [Dataviews](dataviews.md) - JSON, table and chart views of query results for a layer or location.
+- [Location](location/index.md) - Location views: infoj entries, their types, display and editing.
+- [Filter expressions](filter-expressions.md) - JSON filters turned into SQL conditions; use when writing a default or role filter.

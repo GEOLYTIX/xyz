@@ -38,7 +38,7 @@ A bundled MAPP library is provided in the public directory. It is not required t
 
 Please refer to the [wiki pages](https://github.com/GEOLYTIX/xyz/wiki) for detailed interface references.
 
-For repository setup and local development, see [SETUP.md](./SETUP.md).
+For repository setup and local development, see [local development](./knowledge/deployment/local-development.md) in the knowledge bundle.
 
 For creating a versioned GitHub release, see [RELEASING.md](./RELEASING.md).
 

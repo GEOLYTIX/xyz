@@ -93,6 +93,14 @@ Check touched functions and modules against DOCUMENTATION.md:
 
 Flag a new exported function with no JSDoc, and a changed signature whose `@param` list no longer matches. A missing `@description` on an otherwise documented function is worth a note rather than a blocking finding.
 
+## Check Knowledge
+
+The `knowledge/` bundle documents behaviour, configuration and constraints that JSDoc does not. Search it for the touched modules, eg. `grep -rl "mod/user/redirect.js" knowledge`, since concepts link their implementation and tests in `resource` and `sources`.
+
+- A change to behaviour a concept describes, without an update to that concept, is a `[Consider]` finding. Name the concept and the statement that no longer holds.
+- A new environment variable read in `apps/xyz` needs a concept which lists it in `variables`. Run `pnpm knowledge:check`: it warns about variables without a concept and fails on broken source links, eg. after a file was moved or renamed.
+- A change to `knowledge/` itself follows [the authoring workflow](../../../knowledge/workflows/authoring.md). Check its claims against the code it links, and that nothing claims a verification which did not happen.
+
 ## Report Format
 
 Write to the terminal in Markdown, using this shape:
@@ -125,6 +133,7 @@ What is wrong, why it matters, and what would resolve it.
 | Scope | <modules justified against the issue, or "no readable issue — judged against the description"> |
 | Tests and coverage | <suite result, whether it ran or replayed from cache, coverage on touched files> |
 | Documentation | <conformance summary> |
+| Knowledge | <concepts touched or affected, `pnpm knowledge:check` result, or "no concept covers the touched modules"> |
 ```
 
 Keep every row even when a check did not apply, and say which of the three it was: examined and clean, not applicable to this change, or not completed and why. A reader scanning the table needs to tell those apart, and a missing row reads as an oversight.
