@@ -96,20 +96,20 @@ export function drawer(params) {
   popout(params);
 
   return params.drawer;
+}
 
-  /**
-  @function onClick
+/**
+@function onClick
 
-  @description
-  The [drawer] onClick event method will shortcircuit if the parentElement has the `empty` class.
+@description
+The [drawer] onClick event method will shortcircuit if the parentElement has the `empty` class.
 
-  @param {Object} e The click event.
-  */
-  function onClick(e) {
-    if (e.target.parentElement.classList.contains('empty')) return;
+@param {Object} e The click event.
+*/
+function onClick(e) {
+  if (e.target.parentElement.classList.contains('empty')) return;
 
-    e.target.parentElement.classList.toggle('expanded');
-  }
+  e.target.parentElement.classList.toggle('expanded');
 }
 
 /**
