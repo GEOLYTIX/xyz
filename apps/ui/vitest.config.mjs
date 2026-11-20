@@ -11,7 +11,11 @@ process.env.TESTHOST_WORKSPACE = fileURLToPath(
 
 // The module tests are *.test.mjs files. The default view tests are Playwright *.spec.mjs files, see playwright.config.mjs.
 export default defineConfig({
-  root: fileURLToPath(new URL('.', import.meta.url)),
+  // The drive letter is uppercased on Windows. The VS Code extension starts Vitest with a lowercase drive letter cwd, eg. c:\. Vite would then serve the lib modules from two urls and the test files would import another module instance than the mapp global.
+  root: fileURLToPath(new URL('.', import.meta.url)).replace(
+    /^[a-z]:/,
+    (drive) => drive.toUpperCase(),
+  ),
   // The MAPP library is imported from the mapp app in the setup.
   server: {
     fs: { allow: [repoRoot] },

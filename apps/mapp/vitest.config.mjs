@@ -10,7 +10,11 @@ process.env.TESTHOST_WORKSPACE = fileURLToPath(
 );
 
 export default defineConfig({
-  root: fileURLToPath(new URL('.', import.meta.url)),
+  // The drive letter is uppercased on Windows. The VS Code extension starts Vitest with a lowercase drive letter cwd, eg. c:\. Vite would then serve the lib modules from two urls and the test files would import another module instance than the mapp global.
+  root: fileURLToPath(new URL('.', import.meta.url)).replace(
+    /^[a-z]:/,
+    (drive) => drive.toUpperCase(),
+  ),
   test: {
     include: ['tests/**/*.test.mjs'],
     setupFiles: ['tests/setup.mjs'],
