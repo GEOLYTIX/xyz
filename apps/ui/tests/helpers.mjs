@@ -286,3 +286,157 @@ export function mockJSONEditor(defaultMenu) {
 
   return editors;
 }
+
+// The real timer methods. A test may fake the setTimeout method, eg. to advance a debounce.
+const realSetTimeout = globalThis.setTimeout.bind(globalThis);
+const realClearTimeout = globalThis.clearTimeout.bind(globalThis);
+
+/**
+@function nextTask
+@description
+Resolves in a new task with a real timeout. The promise reactions of a settled promise run before the next task, eg. the continuation of an async lib method which awaits the same promise.
+
+@returns {Promise} Resolves after the pending microtasks.
+*/
+function nextTask() {
+  return new Promise((resolve) => realSetTimeout(resolve));
+}
+
+/**
+@function capturePromises
+
+@description
+Spies on an object method which returns a promise and records each call. The spy calls the original method, so the method is not mocked. The method must be called as an object property by the lib code, eg. `mapp.utils.xhr()`. A named import inside a lib module can not be spied on.
+
+The next() method takes the first recorded call which matches and has not been taken by an earlier next() call, or waits for the next matching call. The next() method resolves with the settled value of the call once a new task has started, so the lib code which awaits the same promise has continued until its next await of a pending promise.
+
+The next() method rejects if no matching call is recorded within the timeout. The timeout is the bound for the call to be made, not for the call to settle. A call which does not settle fails the test with the test timeout.
+
+The spy is restored by the vi.restoreAllMocks() of the setup afterEach hook, or with the restore() method.
+
+@param {Object} object The object with the method, eg. mapp.utils.
+@param {string} key The method key.
+@returns {Object} The recorded calls, and the next() and restore() methods.
+*/
+export function capturePromises(object, key) {
+  // The spy would call itself as the original method.
+  if (vi.isMockFunction(object[key])) {
+    throw new Error(`The ${key} method is already a mock.`);
+  }
+
+  const method = object[key];
+
+  const calls = [];
+
+  const waiters = [];
+
+  const spy = vi.spyOn(object, key).mockImplementation(function (...args) {
+    const result = method.apply(this, args);
+
+    const call = { args, promise: Promise.resolve(result) };
+
+    calls.push(call);
+
+    const waiter = waiters.find((waiter) => waiter.match(...args));
+
+    if (waiter) {
+      call.taken = true;
+      waiter.resolve(call);
+    }
+
+    return result;
+  });
+
+  /**
+  Returns the first call which matches and has not been taken, or waits for the next matching call.
+  */
+  function take(match, timeout) {
+    const call = calls.find((call) => !call.taken && match(...call.args));
+
+    if (call) {
+      call.taken = true;
+      return Promise.resolve(call);
+    }
+
+    return new Promise((resolve, reject) => {
+      const waiter = { match, resolve };
+
+      waiter.timeout = realSetTimeout(() => {
+        waiters.splice(waiters.indexOf(waiter), 1);
+        reject(new Error(`No matching ${key} call within ${timeout}ms.`));
+      }, timeout);
+
+      waiter.resolve = (call) => {
+        realClearTimeout(waiter.timeout);
+        waiters.splice(waiters.indexOf(waiter), 1);
+        resolve(call);
+      };
+
+      waiters.push(waiter);
+    });
+  }
+
+  async function next(match = () => true, { timeout = 15000 } = {}) {
+    const call = await take(match, timeout);
+
+    const value = await call.promise;
+
+    await nextTask();
+
+    return value;
+  }
+
+  return { calls, next, restore: () => spy.mockRestore() };
+}
+
+/**
+@function requestTemplate
+@description
+Returns the query template param of a mapp.utils.xhr request.
+
+@param {Object|string} params The xhr params or the request url.
+@returns {string|null} The template param of the request url.
+*/
+function requestTemplate(params) {
+  const url = typeof params === 'string' ? params : params?.url;
+
+  if (!url) return null;
+
+  return new URL(url, location.href).searchParams.get('template');
+}
+
+/**
+@function captureRequests
+
+@description
+Records the mapp.utils.xhr requests of the lib code until the test finishes. The requests are sent to the testhost, they are not mocked.
+
+The response() method resolves with the response of the first request for a query template which has not been taken by an earlier response() call, or of the next request for the template. The match can also be a method which is called with the xhr params. The lib code which awaits the request has continued until its next await of a pending promise, eg. a DOM update which follows the response is done.
+
+A debounced request is not sent, its promise resolves with a debounce object. The response() method skips a debounced request and resolves with the response of the request which superseded it.
+
+The capture must start before the request is made. Requests which bypass the xhr utility are not recorded, eg. the tile requests of an Openlayers source.
+
+The response() method takes the match and an options object with the timeout of the capturePromises next() method.
+
+@returns {Object} The recorded xhr calls and the response() method.
+*/
+export function captureRequests() {
+  const xhr = capturePromises(mapp.utils, 'xhr');
+
+  async function response(match, options) {
+    const matches =
+      typeof match === 'function'
+        ? match
+        : (params) => requestTemplate(params) === match;
+
+    for (;;) {
+      const response = await xhr.next(matches, options);
+
+      // The request which superseded the debounced request is taken with the next call.
+      if (!response?.debounce) return response;
+    }
+  }
+
+  return { calls: xhr.calls, response };
+}

@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { capturePromises } from '../../helpers.mjs';
 import {
   addFilterCard,
   catchRejections,
@@ -360,6 +361,8 @@ describe('ui/layers/panels/filter', () => {
 
       const filter = await addFilterCard(layer, 'retailer');
 
+      const counts = capturePromises(mapp.ui.utils, 'locationCount');
+
       const chkbox = [...filter.card.querySelectorAll('label.checkbox')].find(
         (label) => label.textContent.trim() === 'Lidl',
       );
@@ -371,9 +374,10 @@ describe('ui/layers/panels/filter', () => {
       // applyFilter reloads the layer and the changeEnd updates the panel.
       await expect.poll(() => layer.Features.length).toBe(9);
 
-      await expect
-        .poll(() => layer.filter.count.textContent, { timeout: 5000 })
-        .toBe('9');
+      // The updatePanel method counts the locations after its debounce. The layer.Features of a wkt layer are counted without a location_count query.
+      expect(await counts.next()).toBe(9);
+
+      expect(layer.filter.count.textContent).toBe('9');
 
       expect(layer.filter.feature_count.style.display).toBe('block');
     });
@@ -566,11 +570,14 @@ describe('ui/layers/panels/filter', () => {
 
       vi.spyOn(mapp.ui.utils, 'locationCount').mockResolvedValue(150);
 
+      fakeTimers();
+
       updatePanel(layer)(layer);
 
-      await expect
-        .poll(() => layer.filter.count.textContent, { timeout: 5000 })
-        .toBe('150');
+      // The mocked location count resolves within the debounce.
+      await vi.advanceTimersByTimeAsync(1000);
+
+      expect(layer.filter.count.textContent).toBe('150');
 
       expect(generateMinMax).not.toHaveBeenCalled();
     });
