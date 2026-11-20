@@ -371,11 +371,15 @@ describe('ui/layers/panels/filter', () => {
 
       expect(layer.filter.current.retailer).toEqual({ in: ['Lidl'] });
 
-      // applyFilter reloads the layer and the changeEnd updates the panel.
-      await expect.poll(() => layer.Features.length).toBe(9);
+      // applyFilter reloads the layer and the changeEnd updates the panel. The updatePanel method counts the locations after its debounce. The layer.Features of a wkt layer are counted without a location_count query.
+      // An updatePanel call from before the checkbox click can count the unfiltered locations. The counts are taken until the filtered count is shown in the panel.
+      for (;;) {
+        const count = await counts.next();
 
-      // The updatePanel method counts the locations after its debounce. The layer.Features of a wkt layer are counted without a location_count query.
-      expect(await counts.next()).toBe(9);
+        if (count === 9 && layer.filter.count.textContent === '9') break;
+      }
+
+      expect(layer.Features).toHaveLength(9);
 
       expect(layer.filter.count.textContent).toBe('9');
 

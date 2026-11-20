@@ -264,11 +264,12 @@ describe.sequential('ui/layers/legends/distributed on the qID field', () => {
 
     await trashLocation(location);
 
-    // The trash method removes the location, which reloads the layer. The featuresObject is assigned from the response of the wkt query.
-    await requests.response('wkt');
+    // The trash method removes the location, which reloads the layer. The featuresObject is assigned from the response of the wkt query. A wkt request of the delayed feature check after the draw can be sent before the trash reload, its response still has the deleted id. The wkt responses are taken until the featuresObject no longer has the deleted id.
+    do {
+      await requests.response('wkt');
+    } while (layer.featuresObject?.[id] !== undefined);
 
     expect(layer.featuresObject).toBeDefined();
-    expect(layer.featuresObject[id]).toBeUndefined();
 
     // The legend is redrawn after the render if the category values have changed.
     await render(layer);
