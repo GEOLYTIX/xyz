@@ -70,6 +70,8 @@ pnpm test -t "graduated"
 pnpm exec vitest run --reporter=verbose    # list every test with its result
 ```
 
+On Windows, run the MAPP tests from a directory path with an uppercase drive letter, eg. `C:\Users\...`. Vite serves a module from two urls if the working directory has a lowercase drive letter, eg. in a terminal which was opened in `c:\Users\...`. Each test file then imports another instance of a `lib` module than the `mapp` global has, and every `is assigned to mapp` test fails with values which have no visual difference.
+
 The XYZ API `test` scripts run Vitest with the environment in [varlock/vanilla.env](varlock/vanilla.env). The tests assign the `xyzEnv` properties they need, so they also pass when Vitest runs without varlock, eg. in VS Code.
 
 ### Mapbox access token
@@ -359,6 +361,10 @@ The MAPP library tests depend on the XYZ service running locally with a devdb da
 | `sourceFeatures(layer)` | Returns the features of a vector layer sorted by id. |
 | `newLocation(layer, values)` | Inserts a record with the location_new template and returns its id. |
 | `getRecord(layer, id)` | Requests a record with the location_get template, or null without a record. |
+| `pointerEvent(mapview, type, pixel, init)` | Passes an Openlayers map browser event for a map pixel to the `mapview.Map`. See [Map interactions](#map-interactions). |
+| `pointerClick(mapview, pixel, init)` | Passes the events of a click on a map pixel to the `mapview.Map`. |
+| `pointerDrag(mapview, from, to)` | Passes the events of a drag between two map pixels to the `mapview.Map`. |
+| `pixelPosition(pixel)` | Returns the position of a map pixel for the `userEvent` methods. |
 
 A test suite which requests the XYZ API has its own locale file in [tests/workspaces/locales](apps/mapp/tests/workspaces/locales/). Add the locale file as a template to the [_workspace.json](apps/mapp/tests/workspaces/_workspace.json) and request the locale by its template key:
 
@@ -397,3 +403,59 @@ describe('Smoke', () => {
 ```
 
 Modules which don't request the API are tested without a locale, with layer, feature and style objects created in the test. Stub external libraries which `mapp.utils` loads from a CDN, eg. with `vi.spyOn(mapp.utils, 'esmImport')`.
+
+#### Map interactions
+
+The mapview interactions in [lib/mapview/interactions](apps/mapp/lib/mapview/interactions/) respond to pointer events on the map: the highlight interaction highlights and selects features, and the draw, modify and zoom interactions wrap an Openlayers interaction. The [interaction tests](apps/mapp/tests/mapview/interactions/) have two means to create these events.
+
+**Map browser events** are the default. The `pointerEvent()` helper creates an Openlayers `MapBrowserEvent` for a map pixel and passes it to `mapview.Map.handleMapBrowserEvent()`. The Map dispatches the event to its listeners and to its interactions. This is how Openlayers tests its own interactions.
+
+```js
+import { pointerClick, pointerEvent } from '../../helpers.mjs';
+
+const pixel = mapview.Map.getPixelFromCoordinate(
+  feature.getGeometry().getCoordinates(),
+);
+
+// The highlight interaction highlights the feature at the pixel.
+pointerEvent(mapview, 'pointermove', pixel);
+
+expect(mapview.interaction.current.F).toBe(feature);
+
+// A touch click, or a right click to remove the last vertex of a drawing.
+pointerEvent(mapview, 'click', pixel, { pointerType: 'touch' });
+pointerEvent(mapview, 'pointerdown', pixel, { button: 2, buttons: 2 });
+
+// Each click adds a vertex to the drawing.
+pointerClick(mapview, [100, 100]);
+```
+
+The events are handled synchronously, so a test asserts right after the event without waiting. The test controls the pointer type and the buttons of the event. Keep these in mind:
+
+- The Map only handles events once it has rendered a frame. The helper renders the Map if required. Call `mapview.Map.renderSync()` before reading a coordinate from a pixel in a test which has not awaited `addLayers()`.
+- Openlayers checks the first `pointermove` after a click for a drag and does not update the drawing. Pass two `pointermove` events to move the sketch of a draw interaction.
+- The `mousedown`, `mouseup`, `mouseleave` and `touchstart` listeners of the highlight interaction are on the map target, not on the Map. Dispatch these events on the `mapview.Map.getTargetElement()`.
+- The draw and modify interactions have a `keyup` listener on the document. Finish an interaction before the test finishes, or a later Escape key finishes the interaction of a disposed map.
+- A popup with `autoPan` moves the map view. Read the coordinates of pixels before the popup is shown.
+
+**Real input** from the `userEvent` methods of the `vitest/browser` module checks the path which the map browser events skip: the browser dispatches trusted pointer events on the map, and Openlayers creates the map browser events from them. Each interaction has one test with real input.
+
+```js
+import { userEvent } from 'vitest/browser';
+import { pixelPosition } from '../../helpers.mjs';
+
+const target = mapview.Map.getTargetElement();
+
+await userEvent.hover(target, { position: pixelPosition(pixel) });
+await userEvent.click(target, { position: pixelPosition(pixel) });
+
+// Drag a vertex of the modified geometry.
+await userEvent.dragAndDrop(target, target, {
+  sourcePosition: pixelPosition([300, 100]),
+  targetPosition: pixelPosition([350, 50]),
+});
+```
+
+Real input is async and slower, and the position is only exact to a pixel. A render between two inputs may create the features of a cluster layer again. Assert with a tolerance, and don't assert the identity of cluster features after an await.
+
+Methods which don't depend on the pointer are called directly, eg. `mapview.interaction.getFeature()`, `mapview.interaction.finish()` and the `deleteCondition()` of the modify interaction.
