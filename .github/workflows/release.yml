@@ -70,9 +70,6 @@ jobs:
       - name: Test
         if: steps.version.outputs.build == 'true'
         run: pnpm test
-        env:
-          # The MAPP Mapbox API tests are skipped without a token.
-          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
 
       - name: Build MAPP and MAPP.UI bundles
         if: steps.version.outputs.build == 'true'

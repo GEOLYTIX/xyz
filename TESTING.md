@@ -88,7 +88,7 @@ MAPBOX_STYLE_URL=mapbox://styles/{account}/{style}
 
 The tests which require a token are skipped without a token. The tests with an invalid or without a token always run. The invalid-token test requests the Mapbox API and expects an `HTTP 401` or `HTTP 403`.
 
-The [Unit Tests](.github/workflows/unit_tests.yml) workflow, the coverage step of the [Build](.github/workflows/build.yml) workflow and the test step of the [Release](.github/workflows/release.yml) workflow provide the token from the `MAPBOX_ACCESS_TOKEN` repository secret. Pull requests from forks don't receive the secret and skip the tests.
+The [Unit Tests](.github/workflows/unit_tests.yml) workflow provides the token from the `MAPBOX_ACCESS_TOKEN` repository secret. Pull requests from forks don't receive the secret and skip the tests. The [Build](.github/workflows/build.yml) and [Release](.github/workflows/release.yml) workflows don't provide the token, so a Mapbox outage or a rotated token can't block a build or a release. The Mapbox code paths are not included in the coverage report.
 
 ### Coverage
 

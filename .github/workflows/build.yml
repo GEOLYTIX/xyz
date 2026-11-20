@@ -48,9 +48,6 @@ jobs:
       - name: Test & Coverage
         if: env.SKIP_SONAR != 'true'
         run: pnpm test:xyz:coverage && pnpm test:mapp:coverage && pnpm test:ui:coverage
-        env:
-          # The MAPP Mapbox API tests are skipped without a token, and their code paths are not covered.
-          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
       - name: Verify coverage report
         if: env.SKIP_SONAR != 'true'
         run: test -s coverage/lcov.info && test -s apps/mapp/coverage/lcov.info && test -s apps/ui/coverage/lcov.info
