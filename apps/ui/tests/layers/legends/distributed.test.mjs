@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
+  captureRequests,
   createPolygon,
   drawPolygon,
   getRecord,
@@ -133,12 +134,14 @@ describe.sequential('ui/layers/legends/distributed', () => {
 
     const id = Number(location.id);
 
+    const requests = captureRequests();
+
     await renameLocation(location, RENAMED);
 
-    // The update method reloads the layer.
-    await expect
-      .poll(() => layer.featuresObject?.[id]?.name, { timeout: 5000 })
-      .toBe(RENAMED);
+    // The update method reloads the layer. The featuresObject is assigned from the response of the wkt query.
+    await requests.response('wkt');
+
+    expect(layer.featuresObject?.[id]?.name).toBe(RENAMED);
 
     // The legend is redrawn after the render if the category values have changed.
     await render(layer);
@@ -160,14 +163,17 @@ describe.sequential('ui/layers/legends/distributed', () => {
 
     const id = Number(location.id);
 
+    const requests = captureRequests();
+
     await trashLocation(location);
 
     expect(await getRecord(layer, id)).toBeNull();
 
-    // The trash method removes the location, which reloads the layer.
-    await expect
-      .poll(() => layer.featuresObject?.[id], { timeout: 5000 })
-      .toBeUndefined();
+    // The trash method removes the location, which reloads the layer. The featuresObject is assigned from the response of the wkt query.
+    await requests.response('wkt');
+
+    expect(layer.featuresObject).toBeDefined();
+    expect(layer.featuresObject[id]).toBeUndefined();
 
     // The legend is redrawn after the render if the category values have changed.
     await render(layer);
@@ -254,12 +260,16 @@ describe.sequential('ui/layers/legends/distributed on the qID field', () => {
 
     const id = String(location.id);
 
+    const requests = captureRequests();
+
     await trashLocation(location);
 
-    // The trash method removes the location, which reloads the layer.
-    await expect
-      .poll(() => layer.featuresObject?.[id], { timeout: 5000 })
-      .toBeUndefined();
+    // The trash method removes the location, which reloads the layer. The featuresObject is assigned from the response of the wkt query. A wkt request of the delayed feature check after the draw can be sent before the trash reload, its response still has the deleted id. The wkt responses are taken until the featuresObject no longer has the deleted id.
+    do {
+      await requests.response('wkt');
+    } while (layer.featuresObject?.[id] !== undefined);
+
+    expect(layer.featuresObject).toBeDefined();
 
     // The legend is redrawn after the render if the category values have changed.
     await render(layer);
