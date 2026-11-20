@@ -1,5 +1,12 @@
 # Knowledge changes
 
+## 2026-11-20
+
+- Added a VitePress portal prototype which renders the bundle, for comparison
+  with the generated Wiki: `pnpm knowledge:site:dev` and
+  `pnpm knowledge:site:build`. Its configuration lives in
+  `utils/knowledge/site/`, outside the bundle.
+
 ## 2026-11-19
 
 - Migrated the remaining Wiki pages and root documents: security (practices,

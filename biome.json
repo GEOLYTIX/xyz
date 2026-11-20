@@ -30,7 +30,9 @@
       "!coverage",
       "!.zed",
       "!**/.vscode",
-      "!.turbo"
+      "!.turbo",
+      "!**/.vitepress/cache",
+      "!**/.vitepress/dist"
     ]
   },
   "formatter": {

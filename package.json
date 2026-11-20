@@ -32,6 +32,9 @@
     "knowledge:schema": "node utils/knowledge/schema.mjs",
     "knowledge:examples": "vitest run --config utils/knowledge/examples/vitest.config.mjs",
     "knowledge:test": "vitest run --dir utils/knowledge --exclude \"**/examples/**\"",
+    "knowledge:site:dev": "vitepress dev utils/knowledge/site",
+    "knowledge:site:build": "vitepress build utils/knowledge/site",
+    "knowledge:site:preview": "vitepress preview utils/knowledge/site",
     "login-public-key": "varlock run -- node ./utils/printLoginPublicKey.js",
     "mapp-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose",
     "xyz-docs": "jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
@@ -53,9 +56,11 @@
     "@vitest/coverage-v8": "catalog:",
     "clean-jsdoc-theme": "catalog:",
     "markdown-it": "catalog:",
+    "markdown-it-footnote": "catalog:",
     "node-mocks-http": "catalog:",
     "turbo": "catalog:",
     "undici": "catalog:",
+    "vitepress": "catalog:",
     "vitest": "catalog:",
     "yaml": "catalog:"
   }
