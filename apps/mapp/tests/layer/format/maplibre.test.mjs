@@ -11,7 +11,7 @@ const MAPLIBRE = 'maplibre-gl@5.23.0';
 const MaplibreGL = await mapp.utils.esmImport(MAPLIBRE);
 
 /**
-The Mapbox tests request styles and tiles from the Mapbox API with an access token. The token is provided by the vitest config from the MAPBOX_ACCESS_TOKEN environment variable or a gitignored .env.local file. The tests which require a token are skipped without a token. The invalid-token test always runs and requests the Mapbox API.
+The Mapbox tests request styles and tiles from the Mapbox API with an access token. The token is provided by the vitest config from the MAPBOX_ACCESS_TOKEN environment variable or one of Vite's .env files for the test mode in the repository root. The tests which require a token are skipped without a token. The invalid-token test always runs and requests the Mapbox API.
 
 The MAPBOX_STYLE_URL can be set to test another Mapbox style. The default is a Mapbox Studio style of our account.
 */
@@ -28,6 +28,19 @@ function mapboxRequests(xhr) {
   return xhr.mock.calls
     .map(([params]) => (typeof params === 'string' ? params : params.url))
     .filter((url) => url.startsWith('https://api.mapbox.com'));
+}
+
+/**
+Returns the response of the first `mapp.utils.xhr` request to the Mapbox API.
+*/
+async function mapboxResponse(xhr) {
+  const index = xhr.mock.calls.findIndex(([params]) =>
+    (typeof params === 'string' ? params : params.url).startsWith(
+      'https://api.mapbox.com',
+    ),
+  );
+
+  return xhr.mock.results[index]?.value;
 }
 
 /**
@@ -143,14 +156,12 @@ describe('maplibre', () => {
       timeout: 30000,
     },
     async () => {
-      const esmImport = vi.spyOn(mapp.utils, 'esmImport');
-
       const { mapview, layer, map } = await maplibreLayer({
         style: { object: devdbStyle() },
       });
 
-      // The format imports maplibre-gl from esm.sh for the first layer.
-      expect(esmImport).toHaveBeenCalledWith(MAPLIBRE);
+      // The format caches the maplibre-gl module after the first layer, so a spy on esmImport would depend on the test order. The cached esmImport promise returns the same module for the same version, so the map is only an instance of the imported Map class if the format imports the pinned version from esm.sh.
+      expect(map).toBeInstanceOf(MaplibreGL.Map);
 
       expect(layer.L).toBeInstanceOf(ol.layer.Layer);
       expect(layer.container.classList).toContain('maplibre');
@@ -260,6 +271,14 @@ describe('maplibre', () => {
         expect(redact(url)).toMatch(
           /^https:\/\/api\.mapbox\.com\/styles\/v1\/.+\?access_token=<token>$/,
         );
+
+        // The format returns without a layer if the style request fails, eg. with a revoked token, a deleted style or an HTTP 429.
+        const response = await mapboxResponse(xhr);
+
+        expect(
+          layer,
+          `The Mapbox style request failed: ${redact(response?.message)}`,
+        ).toBeDefined();
 
         // The style object is requested by the format, not by maplibre.
         expect(layer.style.object.version).toBe(8);

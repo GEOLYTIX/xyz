@@ -76,7 +76,7 @@ The XYZ API `test` scripts run Vitest with the environment in [varlock/vanilla.e
 
 ### Mapbox access token
 
-The Mapbox API tests need a Mapbox access token. The [MAPP vitest config](apps/mapp/vitest.config.mjs) reads the `MAPBOX_ACCESS_TOKEN` from the environment, or from a `.env.local` or `.env.test.local` file in the repository root. The `.env.*` files are gitignored, so the token is not committed.
+The Mapbox API tests need a Mapbox access token. The [MAPP vitest config](apps/mapp/vitest.config.mjs) reads the `MAPBOX_ACCESS_TOKEN` from the environment, or from one of Vite's `.env` files for the `test` mode in the repository root: `.env`, `.env.local`, `.env.test` and `.env.test.local`. A value in the environment takes precedence over the files. The `.env` files are gitignored, so the token is not committed.
 
 ```bash
 # .env.local
