@@ -709,14 +709,31 @@ describe('ui/layers/filters', () => {
     it('returns early when query response is null or minmax is not an array', async () => {
       const layer = await countriesLayer();
 
-      vi.spyOn(mapp.utils, 'xhr').mockResolvedValue(null);
+      for (const response of [null, {}, { minmax: 'x' }]) {
+        vi.spyOn(mapp.utils, 'xhr').mockResolvedValue(response);
 
-      const filter = { field: 'pop_est', type: 'numeric' };
+        const filter = { field: 'pop_est', type: 'numeric' };
+
+        await filters.generateMinMax(layer, filter);
+
+        expect(filter.min).toBeUndefined();
+        expect(filter.max).toBeUndefined();
+      }
+    });
+
+    it('sets min and max to NaN for an integer filter when minmax values are null', async () => {
+      const layer = await countriesLayer();
+
+      vi.spyOn(mapp.utils, 'xhr').mockResolvedValue({
+        minmax: [null, null],
+      });
+
+      const filter = { field: 'pop_est', type: 'integer' };
 
       await filters.generateMinMax(layer, filter);
 
-      expect(filter.min).toBeUndefined();
-      expect(filter.max).toBeUndefined();
+      expect(filter.min).toBeNaN();
+      expect(filter.max).toBeNaN();
     });
 
     it('queries the fallback table when current zoom level table is null', async () => {
@@ -883,6 +900,22 @@ describe('ui/layers/filters', () => {
       });
 
       expect(node.textContent).toBe(mapp.dictionary.no_data_filter);
+    });
+
+    it('returns a no data message for an integer filter on an all-null field', async () => {
+      const layer = await countriesLayer();
+
+      vi.spyOn(mapp.utils, 'xhr').mockResolvedValue({
+        minmax: [null, null],
+      });
+
+      const node = await filters.integer(layer, {
+        field: 'pop_est',
+        type: 'integer',
+      });
+
+      expect(node.textContent).toBe(mapp.dictionary.no_data_filter);
+      expect(layer.filter.current.pop_est).toBeUndefined();
     });
 
     // The filter_numeric method assigns the min, max, slider and histogram to a copy of the filter.
