@@ -755,6 +755,46 @@ describe('ui/layers/filters', () => {
       );
       expect(filter).toMatchObject({ max: 20, min: 10 });
     });
+
+    it('queries the field_minmax template by default', async () => {
+      const layer = await countriesLayer();
+
+      const xhr = vi
+        .spyOn(mapp.utils, 'xhr')
+        .mockResolvedValue({ minmax: [10, 20] });
+
+      const filter = { field: 'pop_est', type: 'integer' };
+
+      await filters.generateMinMax(layer, filter);
+
+      expect(xhr).toHaveBeenCalledWith(
+        expect.stringContaining('template=field_minmax'),
+      );
+    });
+
+    it('queries the minmax_query template when configured', async () => {
+      const layer = await countriesLayer();
+
+      const xhr = vi
+        .spyOn(mapp.utils, 'xhr')
+        .mockResolvedValue({ minmax: [10, 20] });
+
+      const filter = {
+        field: 'pop_est',
+        minmax_query: 'custom_minmax',
+        type: 'integer',
+      };
+
+      await filters.generateMinMax(layer, filter);
+
+      expect(xhr).toHaveBeenCalledWith(
+        expect.stringContaining('template=custom_minmax'),
+      );
+      expect(xhr).not.toHaveBeenCalledWith(
+        expect.stringContaining('template=field_minmax'),
+      );
+      expect(filter).toMatchObject({ max: 20, min: 10 });
+    });
   });
 
   describe('numeric and integer', () => {
