@@ -88,8 +88,6 @@ see [Vercel environment](vercel-environment.md).
 - `/` shows the default view with the OSM layer of `public/workspace.json`.
 - `/api/workspace/locale` returns the resolved locale.
 - `/public/js/lib/mapp.js` returns the built bundle.
-- `/docs` serves the API documentation once `pnpm generate-docs` has written
-  it to `docs/`.[^router] See [DOCUMENTATION.md](../../DOCUMENTATION.md).
 
 Prefix each path with `DIR` when it is set. Without a `WORKSPACE` the server
 starts, but the view has no locale or layer to show.
@@ -110,5 +108,4 @@ starts, but the view has no locale or layer to show.
 [^setup]: SETUP.md, start, launch.json and troubleshooting sections.
 [^wiki]: Wiki Getting-started page; `dotenv` is not imported since v5.
 [^package]: Root package.json `dev`, `dev:auth` and `dev:saml` scripts.
-[^router]: apps/xyz/router.js serves `${DIR}/docs` from `XYZ_CWD/docs`.
 [^server]: apps/xyz/server.js.

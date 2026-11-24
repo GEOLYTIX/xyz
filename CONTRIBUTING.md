@@ -18,7 +18,7 @@ The project maintainer remain the right to delete issues which are no longer rel
 
 ## Getting Familiar with the Code in the Repository
 
-Please check the [GitHub XYZ WIKI](https://github.com/GEOLYTIX/xyz/wiki). We attempt to reference each module script in the WIKI.
+Please check the [knowledge portal](https://geolytix.github.io/xyz/), built from the [knowledge bundle](knowledge/index.md). Its concepts link the module scripts and tests they describe.
 
 ## Contributing Code
 

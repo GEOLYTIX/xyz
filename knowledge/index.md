@@ -9,7 +9,8 @@ The reference for how XYZ and MAPP work and are configured, for the agents
 which write code and workspaces and the people who review them. The migration
 from the Wiki is tracked in
 [issue #3007](https://github.com/GEOLYTIX/xyz/issues/3007). Concepts are draft
-until reviewed. Source code and tests resolve disagreements with prose.
+until reviewed. Source code and tests resolve disagreements with prose. The
+bundle is published as the [knowledge portal](https://geolytix.github.io/xyz/).
 
 Look up a workspace key, environment variable or module with
 `pnpm knowledge:find <term>`.

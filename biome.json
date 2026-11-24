@@ -17,15 +17,11 @@
   "files": {
     "includes": [
       "**",
-      "!**/docs/**/*",
       "!**/public/js/**/*",
       "!**/public/css/mapp.css",
       "!**/public/css/mapp.css",
       "!**/public/css/ui.css",
       "!package.json",
-      "!jsdoc_mapp.json",
-      "!jsdoc_xyz.json",
-      "!jsdoc_test.json",
       "!knowledge/workspace/workspace.schema.json",
       "!coverage",
       "!.zed",

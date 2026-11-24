@@ -11,8 +11,7 @@ sources:
 ---
 # OKF foundation
 
-Use `knowledge/` for OKF v0.3 concepts and directory indexes. Keep `docs/` as
-generated JSDoc output. `SETUP.md` and `DEPLOYMENT.md` move into the bundle
+Use `knowledge/` for OKF v0.3 concepts and directory indexes. `SETUP.md` and `DEPLOYMENT.md` move into the bundle
 with pointers at the root; development guides stay at the root. Link to source
 JSDoc rather than copying API signatures into knowledge pages.
 
@@ -22,9 +21,9 @@ The whole migration ships in one PR with the v5.1 minor release, following the
 phased outline on issue #3007. The format ships with the release: bundle
 structure, metadata schemas, the checker and workflows, and every Wiki page in
 the bundle. Content accuracy is patched in v5.1 patch releases, and concepts
-stay `draft` until reviewed. Because the Wiki is generated from the bundle on
-release, every Wiki page must be in the bundle before the release; see
-[Wiki publishing](wiki-publishing.md).
+stay `draft` until reviewed. Every Wiki page must be in the bundle before the
+release, because the Wiki is reduced to stubs which point to the knowledge
+portal; see [documentation publishing](documentation-publishing.md).
 
 ## Spec version
 

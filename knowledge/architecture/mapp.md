@@ -11,7 +11,6 @@ sources:
   - resource: ../../apps/mapp/lib/mapp.mjs
   - resource: ../../apps/mapp/vite.config.mjs
   - resource: ../../apps/ui/vite.config.mjs
-  - resource: ../../apps/mapp/lib/README.md
   - resource: ../../apps/mapp/tests/mapview/removeLayer.test.mjs
 ---
 # MAPP and MAPP.UI
@@ -38,9 +37,9 @@ app build scripts for JavaScript and CSS; see [DEVELOPING.md](../../DEVELOPING.m
 
 ## API and tests
 
-Use source JSDoc for individual methods and types. The existing
-[documentation workflow](../../DOCUMENTATION.md) generates the
-[MAPP API reference](https://geolytix.github.io/xyz/mapp/).
+Use source JSDoc for individual methods and types; see
+[DOCUMENTATION.md](../../DOCUMENTATION.md#jsdoc) for the conventions. No API
+reference site is generated from it.
 
 Tests are present in [apps/mapp/tests](../../apps/mapp/tests) and
 [apps/ui/tests](../../apps/ui/tests); follow [TESTING.md](../../TESTING.md).

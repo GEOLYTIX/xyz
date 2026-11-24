@@ -140,3 +140,10 @@ rows, and each `filter.default` must return fewer rows than the same layer
 without it. CI runs it in the knowledge workflow. Source
 paths existing on disk does not mean their behavior still matches the prose.
 Review both when code changes. See [migration inventory](wiki-migration.md).
+
+## Publishing
+
+The bundle is published as the [knowledge portal](https://geolytix.github.io/xyz/);
+see [documentation publishing](../decisions/documentation-publishing.md). The
+sidebar follows the directory indexes. Preview a change with
+`pnpm knowledge:site:dev`; `pnpm knowledge:site:build` fails on dead links.

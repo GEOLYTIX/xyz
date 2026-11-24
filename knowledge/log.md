@@ -1,5 +1,18 @@
 # Knowledge changes
 
+## 2026-11-24
+
+- The VitePress knowledge portal is the published documentation, deployed to
+  GitHub Pages by `deploy-docs.yml` on release and manually with a ref. It
+  replaces the JSDoc API reference site; `clean-jsdoc-theme`, the JSDoc
+  configurations, `pnpm generate-docs` and the `/docs` route are removed.
+  JSDoc comments stay in the source.
+- `pnpm knowledge:wiki` reduces the Wiki to stubs: Home, an Open Knowledge
+  Format page from [about this bundle](about.md), and a stub per former page
+  from the [migration inventory](workflows/wiki-migration.md).
+- Replaced the Wiki publishing decision with
+  [documentation publishing](decisions/documentation-publishing.md).
+
 ## 2026-11-20
 
 - Added a VitePress portal prototype which renders the bundle, for comparison

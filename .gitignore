@@ -35,8 +35,6 @@ coverage
 test-results
 playwright-report
 
-docs/*
-
 **/*.pem
 *.crt
 
@@ -50,6 +48,6 @@ docs/*
 # The combined workspace of the knowledge examples
 utils/knowledge/examples/workspace.generated.json
 
-# The VitePress portal prototype of the knowledge bundle
+# The VitePress build of the knowledge portal
 utils/knowledge/site/.vitepress/cache/
 utils/knowledge/site/.vitepress/dist/

@@ -1,11 +1,15 @@
 /**
- * VitePress configuration of the knowledge portal prototype. It renders
- * `knowledge/` as the source directory; nothing here is part of the bundle.
+ * VitePress configuration of the knowledge portal, the published
+ * documentation of XYZ/MAPP. It renders `knowledge/` as the source directory;
+ * nothing here is part of the bundle.
  *
- * Run `pnpm knowledge:site:dev` or `pnpm knowledge:site:build`.
+ * Run `pnpm knowledge:site:dev` or `pnpm knowledge:site:build`. The
+ * deploy-docs workflow builds it for GitHub Pages.
  * @module utils/knowledge/site/config
  */
 
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import footnote from 'markdown-it-footnote';
 import { defineConfig } from 'vitepress';
 import {
@@ -13,6 +17,7 @@ import {
   frontmatterHtml,
   githubRef,
   metadataHref,
+  repository,
   resolveHref,
   sidebar,
 } from '../bundle.mjs';
@@ -22,6 +27,9 @@ const repo =
 const ref = githubRef();
 const base = process.env.KNOWLEDGE_SITE_BASE ?? '/';
 const options = { repo, ref, base };
+const { version } = JSON.parse(
+  readFileSync(resolve(repository, 'package.json'), 'utf8'),
+);
 
 /**
  * Rewrites relative links which leave the bundle, or point to a file which is
@@ -94,7 +102,7 @@ export default defineConfig({
     },
     socialLinks: [{ icon: 'github', link: repo }],
     footer: {
-      message: `Generated from <code>knowledge/</code> at <code>${ref}</code>. Concepts marked draft are not reviewed.`,
+      message: `XYZ ${version}. Generated from <code>knowledge/</code> at <code>${ref}</code>. Concepts marked draft are not reviewed.`,
     },
   },
 });

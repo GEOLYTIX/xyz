@@ -19,7 +19,7 @@ concepts are `draft` until a maintainer has reviewed them.
 
 | Wiki page | Destination |
 | --- | --- |
-| Home | [Bundle index](../index.md), [about this bundle](../about.md); the generated Wiki gets its own Home page |
+| Home | [Bundle index](../index.md), [about this bundle](../about.md) |
 | Workspace-Configuration | [Workspace keys](../workspace/index.md): workspace and locales, locale keys, layer keys, style, location, dataviews, filter expressions |
 | Templates-[Workspace] | [Templates](../workspace/templates.md) |
 | Roles-[Workspace] | [Roles](../workspace/roles.md), [workspace authorization](../security/authorization.md) |
@@ -60,5 +60,7 @@ headers of one deployment. Security weaknesses found while checking the code
 are reported privately, not in the bundle; see
 [security practices](../security/practices.md).
 
-The Wiki stays as it is until it is generated from the bundle; see
-[Wiki publishing](../decisions/wiki-publishing.md).
+The first table generates the Wiki: `pnpm knowledge:wiki` writes a stub for
+each page which links to its destinations in the knowledge portal. Keep a row
+for every former page, and keep the first link of each row on the main
+replacement. See [documentation publishing](../decisions/documentation-publishing.md).

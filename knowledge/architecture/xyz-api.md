@@ -51,7 +51,7 @@ Router-level handlers run in this order for every request:
 1. `cors` adds CORS headers for origins in `CORS_ORIGINS`; without it, it does nothing.[^cors]
 2. The rate limiter (`RATE_LIMIT`, `RATE_LIMIT_WINDOW`), then the cookie parser.
 3. `${DIR}/api` responses get `Cache-Control: private, no-cache`.
-4. Static files: `${DIR}/docs` from `docs/`, `${DIR}/public` and `${DIR}` from `public/`.
+4. Static files: `${DIR}/public` and `${DIR}` from `public/`.
 5. `requestSpan` traces the rest; then body parser, middleware chain and endpoint.
 
 The default chain:

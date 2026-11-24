@@ -87,8 +87,7 @@ node utils/version.js
 deploy such a bundle. `utils/version.js` writes the current commit SHA as
 `hash` into `apps/mapp/lib/mapp.mjs` and runs `pnpm build`, so a deployment
 shows which framework commit it runs.[^version] It edits a tracked source
-file; do not commit that change by accident. JSDoc generation is described in
-[DOCUMENTATION.md](../../DOCUMENTATION.md).
+file; do not commit that change by accident.
 
 ## Pre-cached workspace
 
@@ -111,7 +110,7 @@ read at runtime, since their render functions cannot be serialised.
 | `knowledge-check.yml` | push, PR on those branches | `knowledge:test`, `knowledge:check`, `knowledge:examples` |
 | `mapp_package.yml` | push on those branches, PRs touching the package | packs and tests `@geolytix/mapp`, see [MAPP package](mapp-publishing.md) |
 | `publish_mapp.yml` | manual | publishes `@geolytix/mapp` to npm |
-| `deploy-docs.yml` | push to `main`, manual | JSDoc to GitHub Pages |
+| `deploy-docs.yml` | push to `main`, manual with a ref | the knowledge portal to GitHub Pages, see [documentation publishing](../decisions/documentation-publishing.md) |
 | `release.yml` | push to `main` | builds, tags and releases, see above |
 
 No workflow deploys the app. DEPLOYMENT.md listed `build.yml` PRs as limited

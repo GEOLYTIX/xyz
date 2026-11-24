@@ -36,7 +36,7 @@ A bundled MAPP library is provided in the public directory. It is not required t
 
 ## Documentation
 
-Please refer to the [wiki pages](https://github.com/GEOLYTIX/xyz/wiki) for detailed interface references.
+The [knowledge portal](https://geolytix.github.io/xyz/) documents architecture, environment variables, workspace configuration, views, security and deployment. It is built from the [knowledge bundle](./knowledge/index.md) in this repository; see [DOCUMENTATION.md](./DOCUMENTATION.md).
 
 For repository setup and local development, see [local development](./knowledge/deployment/local-development.md) in the knowledge bundle.
 

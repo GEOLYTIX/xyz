@@ -1,44 +1,51 @@
 # DOCUMENTATION
 
-This document provides an overview of the different documentation sources to support the XYZ/MAPP project.
+This document describes where the XYZ/MAPP documentation lives, how it is published, and the conventions for JSDoc comments in the source code.
 
-## README
+## Knowledge portal
 
-The [README.md](https://github.com/GEOLYTIX/xyz/blob/main/README.md) document for the xyz repository landing page is the primary entry point to provide an overview of the project.
+The [knowledge portal](https://geolytix.github.io/xyz/) is the documentation of XYZ/MAPP. It renders the [knowledge bundle](knowledge/index.md) in `knowledge/`, written in the [Open Knowledge Format](knowledge/about.md) (OKF) v0.3: architecture, environment variables, workspace configuration, views, security, deployment and development workflows.
 
-Supporting documents for the project [LICENCE](https://github.com/GEOLYTIX/xyz/blob/main/LICENSE), in regards to [CONTRIBUTING](https://github.com/GEOLYTIX/xyz/blob/main/CONTRIBUTING.md) to the project, [DEVELOPING](https://github.com/GEOLYTIX/xyz/blob/main/DEVELOPING.md), [SETUP](https://github.com/GEOLYTIX/xyz/blob/main/SETUP.md), [DEPLOYMENT](https://github.com/GEOLYTIX/xyz/blob/main/DEPLOYMENT.md), and our [CODE_OF_CONDUCT](https://github.com/GEOLYTIX/xyz/blob/main/CODE_OF_CONDUCT.md) can be found alongside this document in the XYZ repository root directory.
+The bundle is the source of truth. Concepts are changed in pull requests together with the code they describe, and `pnpm knowledge:check` validates their structure and source links in CI. Read the [authoring workflow](knowledge/workflows/authoring.md) before editing concepts, and see [agent guidance](AGENTS.md) for how agents use the bundle.
+
+The portal is built with [VitePress](https://vitepress.dev/). Its configuration lives in `utils/knowledge/site/`, outside the bundle.
+
+```bash
+pnpm knowledge:site:dev       # dev server with hot reload on http://localhost:5173
+pnpm knowledge:site:build     # static build in utils/knowledge/site/.vitepress/dist
+pnpm knowledge:site:preview   # serve the build on http://localhost:4173
+```
+
+Review a pull request which changes the bundle or the portal with a local build: `pnpm knowledge:site:build` fails on dead links, and `pnpm knowledge:site:preview` serves the pages as they are deployed. Pull requests are not deployed to GitHub Pages.
+
+The `deploy-docs.yml` workflow builds the portal and deploys it to GitHub Pages on every push to `main`, which is a release. A maintainer can run the workflow manually with a branch, tag or commit to publish a correction between releases. Run it from the release line which carries the correction, eg. `patch`, so that the portal does not describe unreleased behaviour. The portal footer names the version and the ref it was built from.
+
+See [documentation publishing](knowledge/decisions/documentation-publishing.md) for the decision.
 
 ## WIKI
 
-The [OKF knowledge bundle](knowledge/index.md) contains the first source-linked
-Wiki adaptations, authoring guidance and a migration inventory. Start there for
-covered topics; most Wiki content remains unmigrated. Concepts are reviewed in
-pull requests alongside code, with `pnpm knowledge:check` validating their
-structure and local links. See [agent guidance](AGENTS.md) for task navigation.
+The [repository Wiki](https://github.com/GEOLYTIX/xyz/wiki) is no longer documentation and is not edited by hand. It has a Home page which points to the portal, an Open Knowledge Format page generated from [knowledge/about.md](knowledge/about.md), and a stub for each former Wiki page that links to its replacement in the portal, so old links keep working.
 
-The [XYZ repository wiki](https://github.com/GEOLYTIX/xyz/wiki) is intended as a place for workshops, getting started guidelines, process environment and workspace configuration references.
+The stubs are generated from the table in the [Wiki migration inventory](knowledge/workflows/wiki-migration.md). Regenerate them after that table or `knowledge/about.md` changes:
 
-## JSDOCS
+```bash
+git clone https://github.com/GEOLYTIX/xyz.wiki.git ../xyz.wiki
+pnpm knowledge:wiki ../xyz.wiki
+```
 
-XYZ/MAPP source code is annotated via [JSDoc](https://jsdoc.app/) markup language.
+The script replaces every Markdown page in the checkout. Review the diff, then commit and push the Wiki checkout.
 
-We are using the [clean-jsdoc-theme](https://github.com/ankitskvmdam/clean-jsdoc-theme-example) which is installed as one of the devDependencies.
+## README and root documents
 
-The script to build the docs uses `utils/jsdoc_mapp.json` and `utils/jsdoc_xyz.json`.
-It can be executed with `pnpm generate-docs`. Source JSDoc remains the API
-reference; the knowledge bundle supplies context and configuration guidance.
+The [README.md](README.md) is the landing page of the repository. [CONTRIBUTING](CONTRIBUTING.md), [DEVELOPING](DEVELOPING.md), [TESTING](TESTING.md), [RELEASING](RELEASING.md), the [LICENSE](LICENSE) and the [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) stay in the repository root. [SETUP](SETUP.md) and [DEPLOYMENT](DEPLOYMENT.md) point to the deployment concepts in the bundle. App READMEs cover app-specific commands; `apps/mapp/README.md` is the npm package page of `@geolytix/mapp`.
 
-The documentation pages are generated in the local `/docs` directory. The docs directory is [git] ignored will be built in an automated action.
+## JSDOC
 
-The built documentation pages can be accessed via the repositories github pages.
-
-<https://geolytix.github.io/xyz/>
-
-MAPP library modules are accessed through <https://geolytix.github.io/xyz/mapp/>
+XYZ/MAPP source code is annotated with [JSDoc](https://jsdoc.app/) comments. Signatures, parameters and return types live in the JSDoc of the source, not in the knowledge bundle. No API reference site is built from the comments: they are read in the editor and by agents, and the `review-pr` skill checks new and changed code against the conventions below.
 
 ### Modules
 
-JSDoc comments for modules must include the module path as title and any `@requires` linking the page to other pages in the docs directory.
+JSDoc comments for modules must include the module path as title and any `@requires` for the modules it depends on.
 
 A small description should be provided to outline the module's purpose.
 
@@ -141,19 +148,10 @@ A mapp-layer object is a decorated JSON layer object which has been added to a m
 
 ### @link
 
-The link tag creates an inline link element which can be used to create a link inline the description.
+The link tag creates an inline link in the description, which editors resolve on hover.
 
 The link can reference a module and it's inline members like methods. `{@link module:/location/decorate~flyTo}`
 
 ### @example
 
 An @example does not require a code block [\`\`\`JS] definition. At examples should be reserved for codepen examples which can be run. Code blocks should be used for code syntax highlighting in the rendered markdown.
-
-### /docs express route
-
-The /docs express route can be used to preview the built pages on `http://localhost:3000/xyz/` or `http://localhost:3000/xyz/`
-
-### docs in vscode
-
-- Docs can also be previewed right in vsdocs by right clicking on any .html page in the docs directory. This will provide a live working preview of the docs in the editor.
-- You will need an extension written by microsoft called [Live Preview](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server)

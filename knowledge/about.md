@@ -14,7 +14,8 @@ sources:
 # About this knowledge bundle
 
 `knowledge/` is the reference for how XYZ and MAPP work and how they are
-configured. It replaces the hand-written Wiki, which is generated from it.
+configured. It replaces the hand-written Wiki and the JSDoc API reference
+site, and is published as the [knowledge portal](https://geolytix.github.io/xyz/).
 
 ## Who writes what
 

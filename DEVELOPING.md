@@ -65,4 +65,4 @@ Many editors have Biome extensions or plugins for on-the-fly error highlighting 
 - [RELEASING.md](./RELEASING.md): version bumps, release notes, and publishing a GitHub release
 - [DEPLOYMENT.md](./DEPLOYMENT.md): Vercel and self-hosted deployment workflows
 - [TESTING.md](./TESTING.md): test structure and commands
-- [DOCUMENTATION.md](./DOCUMENTATION.md): JSDoc and documentation notes
+- [DOCUMENTATION.md](./DOCUMENTATION.md): the knowledge portal, the Wiki stubs and JSDoc conventions

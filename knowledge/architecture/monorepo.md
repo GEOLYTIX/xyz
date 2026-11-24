@@ -47,10 +47,11 @@ Other root directories:
 
 - `public/` holds the views, icons, dictionaries, css and the built bundles
   served by XYZ.
-- `utils/` holds release, deploy, JSDoc and knowledge scripts.
+- `utils/` holds release, deploy and knowledge scripts, and the knowledge
+  portal in `utils/knowledge/site/`.
 - `varlock/` holds environment schemas, eg. the `vanilla` schema the XYZ
   tests run with.
-- `knowledge/` is this bundle; `docs/` is the generated JSDoc output.
+- `knowledge/` is this bundle.
 
 ## pnpm workspace and catalog
 
