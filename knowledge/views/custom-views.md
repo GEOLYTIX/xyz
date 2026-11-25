@@ -132,7 +132,7 @@ variables; see [templates](../workspace/templates.md). A template named
 
 ## Pitfalls
 
-- `mapp.Mapview` only loads and runs [plugins](../plugins.md) when
+- `mapp.Mapview` only loads and runs [plugins](../plugins/writing-plugins.md) when
   `locale.syncPlugins` is not empty or the locale has `svgTemplates`. The
   default view sets `syncPlugins`; a custom view must too.
 - `loadPlugins: true` imports the `locale.plugins` URLs. Ui plugin

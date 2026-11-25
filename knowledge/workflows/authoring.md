@@ -63,7 +63,7 @@ x-xyz-keys:
 - `examples` lists the known values of a key which selects a method from a
   registry plugins extend, eg. `layer.format` or `entry.type`; the schema
   accepts other values. Use `enum` only for a set plugins cannot extend. See
-  [extending MAPP](../plugin-extensions.md).
+  [extension points](../plugins/extension-points.md).
 - `pattern` (a regular expression for strings) and `minimum`/`maximum` (for
   numbers) constrain values where the code fails outside them. Constrain
   array items with an entry for the item, eg. `locale.mapviewControls[]`.

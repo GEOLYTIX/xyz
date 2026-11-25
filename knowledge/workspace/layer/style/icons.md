@@ -7,7 +7,7 @@ tags: [workspace, layer, style, icon, mapp]
 status: draft
 x-xyz-keys:
   - { key: style.icon, type: [object, array], description: An icon, or an array of icons drawn on top of each other. }
-  - { key: style.icon.type, type: string, default: dot, examples: [dot, target, triangle, square, diamond, semiCircle, markerLetter, markerColor, circle, template], description: The mapp.utils.svgSymbols method drawn when the icon has no url. Plugins add values to the registry; see plugin-extensions.md. }
+  - { key: style.icon.type, type: string, default: dot, examples: [dot, target, triangle, square, diamond, semiCircle, markerLetter, markerColor, circle, template], description: The mapp.utils.svgSymbols method drawn when the icon has no url. Plugins add values to the registry; see plugins/extension-points.md. }
   - { key: style.icon.url, type: string, description: Image or SVG URL; takes precedence over type. }
   - { key: style.icon.svg, type: string, deprecated: style.icon.url }
   - { key: style.icon.scale, type: number, default: 1 }

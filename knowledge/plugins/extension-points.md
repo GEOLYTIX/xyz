@@ -1,48 +1,48 @@
 ---
 type: Guide
-title: Extending and overriding MAPP
+title: Extension points
 description: The registries plugins extend with layer formats, theme, entry, filter and icon types, panels and dataviews, and how to replace or wrap a MAPP method; use when a plugin adds a type or changes core behaviour.
-resource: ../apps/mapp/lib/mapp.mjs
+resource: ../../apps/mapp/lib/mapp.mjs
 tags: [plugins, mapp, ui, guide]
 status: draft
 sources:
   - id: mapp
-    resource: ../apps/mapp/lib/mapp.mjs
+    resource: ../../apps/mapp/lib/mapp.mjs
   - id: ui
-    resource: ../apps/ui/lib/ui.mjs
+    resource: ../../apps/ui/lib/ui.mjs
   - id: decorate
-    resource: ../apps/mapp/lib/layer/decorate.mjs
+    resource: ../../apps/mapp/lib/layer/decorate.mjs
   - id: vector
-    resource: ../apps/mapp/lib/layer/format/vector.mjs
+    resource: ../../apps/mapp/lib/layer/format/vector.mjs
   - id: featurestyle
-    resource: ../apps/mapp/lib/layer/featureStyle.mjs
+    resource: ../../apps/mapp/lib/layer/featureStyle.mjs
   - id: fields
-    resource: ../apps/mapp/lib/layer/featureFields.mjs
+    resource: ../../apps/mapp/lib/layer/featureFields.mjs
   - id: olstyle
-    resource: ../apps/mapp/lib/utils/olStyle.mjs
+    resource: ../../apps/mapp/lib/utils/olStyle.mjs
   - id: infoj
-    resource: ../apps/ui/lib/locations/infoj.mjs
+    resource: ../../apps/ui/lib/locations/infoj.mjs
   - id: filters
-    resource: ../apps/ui/lib/layers/filters.mjs
+    resource: ../../apps/ui/lib/layers/filters.mjs
   - id: view
-    resource: ../apps/ui/lib/layers/view.mjs
+    resource: ../../apps/ui/lib/layers/view.mjs
   - id: legend
-    resource: ../apps/ui/lib/layers/drawLegend.mjs
+    resource: ../../apps/ui/lib/layers/drawLegend.mjs
   - id: dataview
-    resource: ../apps/ui/lib/Dataview.mjs
+    resource: ../../apps/ui/lib/Dataview.mjs
   - id: compose
-    resource: ../apps/mapp/lib/utils/compose.mjs
+    resource: ../../apps/mapp/lib/utils/compose.mjs
   - id: mapview
-    resource: ../apps/mapp/lib/mapview/_mapview.mjs
+    resource: ../../apps/mapp/lib/mapview/_mapview.mjs
 ---
-# Extending and overriding MAPP
+# Extension points
 
 `mapp.mjs` assigns the MAPP library to `globalThis.mapp`, and `ui.mjs` adds
 `mapp.ui`.[^mapp] Core modules call each other through this object, eg.
 `mapp.layer.formats[layer.format](layer)`, and look the method up when they
-call it. A [plugin](plugins.md) changes MAPP by assigning to it: a new key
-in a registry adds a type, a new value for an existing key replaces a
-method. `ui.mjs` does the same: it replaces `mapp.utils.alert`,
+call it. A [plugin](writing-plugins.md) changes MAPP by assigning to it: a
+new key in a registry adds a type, a new value for an existing key replaces
+a method. `ui.mjs` does the same: it replaces `mapp.utils.alert`,
 `mapp.utils.confirm` and `mapp.layer.drawLegend` with ui versions.[^ui]
 
 ## Registries
@@ -63,7 +63,7 @@ adding the method; the workspace key then accepts it.
 | `mapp.ui.layers.panels` | `(layer)`, returns a panel | a layer key[^view] |
 | `mapp.ui.utils[name].create` | `(dataview)` | `dataview.dataview`, or `chart` and `table`[^dataview] |
 | `mapp.layer`, `mapp.plugins` | `(layer)` | a layer key[^decorate] |
-| `mapp.plugins` | `(config, mapview)` | a locale key; see [plugins](plugins.md) |
+| `mapp.plugins` | `(config, mapview)` | a locale key; see [plugins](writing-plugins.md) |
 
 A theme type needs a method in `mapp.layer.themes` to style features and one
 in `mapp.ui.layers.legends` to draw its legend. A layer with an unknown
@@ -80,7 +80,7 @@ mapp.utils.svgSymbols = {
 };
 ```
 
-The [workspace schemas](workspace/index.md) list the core values of these
+The [workspace schemas](../workspace/index.md) list the core values of these
 keys as `examples`, not as an `enum`, so a workspace with a plugin's value
 passes the strict schema.
 

@@ -28,7 +28,7 @@ concepts are `draft` until a maintainer has reviewed them.
 | Custom-Authentication | [Authentication](../security/authentication.md), [access control variables](../environment/access-control.md) |
 | Process-Environment | [Environment](../environment/index.md): every variable read by the XYZ API |
 | Application-Views | [Views](../views/index.md) |
-| Plugins | [Plugins](../plugins.md), [locale plugins](../workspace/locale/plugins.md) |
+| Plugins | [Writing plugins](../plugins/writing-plugins.md), [locale plugins](../workspace/locale/plugins.md) |
 | Terminology | [Terminology](../terminology.md) |
 | XYZ | [XYZ API architecture](../architecture/xyz-api.md) |
 | MAPP | [MAPP architecture](../architecture/mapp.md) |

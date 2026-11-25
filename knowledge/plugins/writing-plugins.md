@@ -1,8 +1,8 @@
 ---
 type: Guide
-title: MAPP plugins
+title: Writing plugins
 description: What MAPP plugins are, how locale and layer keys run them, how the mapview loads plugin modules, and how to write and version one; use when adding a plugin or a tool that the core libraries do not have.
-resource: ../apps/mapp/lib/utils/loadPlugins.mjs
+resource: ../../apps/mapp/lib/utils/loadPlugins.mjs
 tags: [plugins, mapp, ui, guide]
 status: draft
 sources:
@@ -10,35 +10,35 @@ sources:
     resource: https://github.com/GEOLYTIX/xyz/wiki/Plugins/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: load
-    resource: ../apps/mapp/lib/utils/loadPlugins.mjs
+    resource: ../../apps/mapp/lib/utils/loadPlugins.mjs
   - id: mapview
-    resource: ../apps/mapp/lib/mapview/_mapview.mjs
+    resource: ../../apps/mapp/lib/mapview/_mapview.mjs
   - id: layer
-    resource: ../apps/mapp/lib/layer/decorate.mjs
+    resource: ../../apps/mapp/lib/layer/decorate.mjs
   - id: core
-    resource: ../apps/mapp/lib/plugins/_plugins.mjs
+    resource: ../../apps/mapp/lib/plugins/_plugins.mjs
   - id: ui
-    resource: ../apps/ui/lib/plugins/_plugins.mjs
+    resource: ../../apps/ui/lib/plugins/_plugins.mjs
   - id: version
-    resource: ../apps/mapp/lib/utils/versionCheck.mjs
+    resource: ../../apps/mapp/lib/utils/versionCheck.mjs
   - id: esm
-    resource: ../apps/mapp/lib/utils/esmImport.mjs
-  - resource: ../apps/ui/lib/ui.mjs
-  - resource: ../apps/ui/lib/layers/view.mjs
-  - resource: ../apps/ui/lib/locations/infoj.mjs
-  - resource: ../apps/mapp/tests/utils/loadPlugins.test.mjs
-  - resource: ../apps/mapp/tests/plugins
-  - resource: ../apps/ui/tests/plugins
+    resource: ../../apps/mapp/lib/utils/esmImport.mjs
+  - resource: ../../apps/ui/lib/ui.mjs
+  - resource: ../../apps/ui/lib/layers/view.mjs
+  - resource: ../../apps/ui/lib/locations/infoj.mjs
+  - resource: ../../apps/mapp/tests/utils/loadPlugins.test.mjs
+  - resource: ../../apps/mapp/tests/plugins
+  - resource: ../../apps/ui/tests/plugins
   - id: repo
     resource: https://github.com/GEOLYTIX/xyz_plugins
-  - resource: ../apps/ui/tests/locations/infoj.test.mjs
+  - resource: ../../apps/ui/tests/locations/infoj.test.mjs
 ---
-# MAPP plugins
+# Writing plugins
 
 A plugin is a function in `mapp.plugins`. A workspace turns it on with a
 key of the same name; the key's value is the plugin's configuration. The
 configuration keys are documented in
-[locale plugins](workspace/locale/plugins.md).
+[locale plugins](../workspace/locale/plugins.md).
 
 ## Kinds of plugin
 
@@ -51,7 +51,7 @@ configuration keys are documented in
   registry, eg. a layer format to `mapp.layer.formats` or an entry type to
   `mapp.ui.locations.entries`, or replaces a MAPP method; the tabulator and
   chartjs plugins add dataview renderers to `mapp.ui.utils`. See
-  [extending and overriding MAPP](plugin-extensions.md) for every registry.
+  [extension points](extension-points.md) for every registry.
 
 Built in are `consent`, `layer_order` and `svg_templates` from
 `apps/mapp/lib/plugins`,[^core] and the ui plugins, eg. `zoomBtn`, `login`,

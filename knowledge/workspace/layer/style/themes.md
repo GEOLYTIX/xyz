@@ -15,7 +15,7 @@ x-xyz-keys:
     type: string
     examples: [basic, categorized, distributed, graduated]
     required: true
-    description: The theme method of mapp.layer.themes; a theme with an unknown or missing type is ignored with a warning. Plugins add values to the registry; see plugin-extensions.md.
+    description: The theme method of mapp.layer.themes; a theme with an unknown or missing type is ignored with a warning. Plugins add values to the registry; see plugins/extension-points.md.
   - { key: theme.title, type: string }
   - { key: theme.meta, type: string }
   - { key: theme.label, type: string, description: The legend label beside the symbol of a basic theme. }
@@ -68,7 +68,7 @@ eg. by toggling it in the legend, hides its features.
 | `distributed` | Categories handed out so that neighbouring features differ |
 
 `type` must be a key of `mapp.layer.themes`, which
-[plugins extend](../../../plugin-extensions.md);[^registry] a theme with an
+[plugins extend](../../../plugins/extension-points.md);[^registry] a theme with an
 unknown or missing `type` is ignored with a warning and features keep the
 default style.[^featureStyle] The ui legend dispatches on the same four types.
 

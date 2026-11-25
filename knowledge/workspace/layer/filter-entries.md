@@ -13,7 +13,7 @@ x-xyz-keys:
     type: string
     examples: [like, match, numeric, integer, in, ni, date, datetime, boolean, "null"]
     required: true
-    description: The mapp.ui.layers.filters method of the panel and the filter expression type it writes. Plugins add values to the registry; see plugin-extensions.md.
+    description: The mapp.ui.layers.filters method of the panel and the filter expression type it writes. Plugins add values to the registry; see plugins/extension-points.md.
   - { key: entry.filter.title, type: string, description: Card title; defaults to entry.title. }
   - { key: entry.filter.field, type: string, description: Column to filter; defaults to entry.field. }
   - { key: entry.filter.label, type: string, description: Checkbox label of boolean and null filters. }

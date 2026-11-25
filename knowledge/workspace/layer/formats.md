@@ -9,14 +9,14 @@ x-xyz-keys:
   - key: layer.format
     type: string
     examples: [cluster, geojson, googleMapTiles, mapboxStyle, maplibre, mvt, tiles, vector, wkt]
-    description: Selects the method of mapp.layer.formats which creates the OpenLayers layer. Plugins add values to the registry; see plugin-extensions.md.
+    description: Selects the method of mapp.layer.formats which creates the OpenLayers layer. Plugins add values to the registry; see plugins/extension-points.md.
   - { key: layer.fade, type: boolean, formats: [wkt, geojson, cluster, vector] }
   - { key: layer.vectorImage, type: boolean, formats: [wkt, geojson, cluster, vector] }
   - key: layer.featureFormat
     type: string
     examples: [cluster, geojson, wkt, wkth3]
     formats: [wkt, geojson, cluster, vector]
-    description: The mapp.layer.featureFormats method which parses the response or inline features; defaults to format. Plugins add values to the registry; see plugin-extensions.md.
+    description: The mapp.layer.featureFormats method which parses the response or inline features; defaults to format. Plugins add values to the registry; see plugins/extension-points.md.
   - { key: layer.wkt_properties, type: boolean, formats: [mvt] }
   - key: layer.cacheSize
     type: integer

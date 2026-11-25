@@ -36,7 +36,7 @@ x-xyz-keys:
   - key: theme.distribution
     type: string
     examples: [count, jenks]
-    description: Compute the legend from the loaded features; count shows present values with counts, jenks sets natural breaks. A method of mapp.layer.featureFields.distribution; plugins add values to it; see plugin-extensions.md.
+    description: Compute the legend from the loaded features; count shows present values with counts, jenks sets natural breaks. A method of mapp.layer.featureFields.distribution; plugins add values to it; see plugins/extension-points.md.
 sources:
   - id: wiki
     resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration/3fc379b7ada42dff57f19e9f28694868e5a17cac

@@ -917,7 +917,7 @@
         "featureFormat": {
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
-          "description": "The mapp.layer.featureFormats method which parses the response or inline features; defaults to format. Plugins add values to the registry; see plugin-extensions.md.",
+          "description": "The mapp.layer.featureFormats method which parses the response or inline features; defaults to format. Plugins add values to the registry; see plugins/extension-points.md.",
           "examples": [
             "cluster",
             "geojson",
@@ -1080,7 +1080,7 @@
         "format": {
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
-          "description": "Selects the method of mapp.layer.formats which creates the OpenLayers layer. Plugins add values to the registry; see plugin-extensions.md.",
+          "description": "Selects the method of mapp.layer.formats which creates the OpenLayers layer. Plugins add values to the registry; see plugins/extension-points.md.",
           "examples": [
             "cluster",
             "geojson",
@@ -1980,7 +1980,7 @@
                 "type": {
                   "type": "string",
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
-                  "description": "The mapp.utils.svgSymbols method drawn when the icon has no url. Plugins add values to the registry; see plugin-extensions.md.",
+                  "description": "The mapp.utils.svgSymbols method drawn when the icon has no url. Plugins add values to the registry; see plugins/extension-points.md.",
                   "examples": [
                     "dot",
                     "target",
@@ -2157,7 +2157,7 @@
         "distribution": {
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
-          "description": "Compute the legend from the loaded features; count shows present values with counts, jenks sets natural breaks. A method of mapp.layer.featureFields.distribution; plugins add values to it; see plugin-extensions.md.",
+          "description": "Compute the legend from the loaded features; count shows present values with counts, jenks sets natural breaks. A method of mapp.layer.featureFields.distribution; plugins add values to it; see plugins/extension-points.md.",
           "examples": [
             "count",
             "jenks"
@@ -2255,7 +2255,7 @@
         "type": {
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
-          "description": "The theme method of mapp.layer.themes; a theme with an unknown or missing type is ignored with a warning. Plugins add values to the registry; see plugin-extensions.md.",
+          "description": "The theme method of mapp.layer.themes; a theme with an unknown or missing type is ignored with a warning. Plugins add values to the registry; see plugins/extension-points.md.",
           "examples": [
             "basic",
             "categorized",
@@ -2582,7 +2582,7 @@
                 "type": {
                   "type": "string",
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
-                  "description": "The mapp.ui.layers.filters method of the panel and the filter expression type it writes. Plugins add values to the registry; see plugin-extensions.md.",
+                  "description": "The mapp.ui.layers.filters method of the panel and the filter expression type it writes. Plugins add values to the registry; see plugins/extension-points.md.",
                   "examples": [
                     "like",
                     "match",
@@ -2825,7 +2825,7 @@
         "type": {
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/location/infoj.md",
-          "description": "The entry method of the ui entries registry. Aliases datetime, html, integer, image, images, documents and report; mvt_clone and vector_layer are deprecated for layer, defaults does nothing. Plugins add values to the registry; see plugin-extensions.md.",
+          "description": "The entry method of the ui entries registry. Aliases datetime, html, integer, image, images, documents and report; mvt_clone and vector_layer are deprecated for layer, defaults does nothing. Plugins add values to the registry; see plugins/extension-points.md.",
           "examples": [
             "boolean",
             "dataview",
