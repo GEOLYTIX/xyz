@@ -17,7 +17,8 @@ import { splitDocument } from './validate.mjs';
 const VARIABLES = 'x-xyz-variables';
 const posix = (path) => path.split(sep).join('/');
 
-function conceptFiles(directory, files = []) {
+/** Concept files of the bundle, without indexes and logs. */
+export function conceptFiles(directory, files = []) {
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
     const path = resolve(directory, entry.name);
     if (entry.isDirectory()) conceptFiles(path, files);

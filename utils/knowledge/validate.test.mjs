@@ -261,6 +261,42 @@ describe('knowledge validator:', () => {
     expect(warnings.join('\n')).not.toMatch(/listed\.md/);
   });
 
+  it('checks generated and verified actors and stable reviews', () => {
+    const concept = (trust) =>
+      fixture({
+        'knowledge/index.md': `${INDEX}\n\n- [A](a.md)`,
+        'knowledge/a.md': `---\ntype: Guide\ntitle: A\ndescription: A\n${trust}\n---`,
+      });
+    const errors = (trust) => validateBundle(concept(trust)).errors;
+    const human = 'verified: { by: "human:a", at: "2026-12-02T00:00:00Z" }';
+    expect(
+      errors(
+        `status: stable\ngenerated: { by: claude-code/opus, at: "2026-12-01T00:00:00Z" }\n${human}`,
+      ),
+    ).toEqual([]);
+    expect(errors('generated: { at: "2026-12-01T00:00:00Z" }')).toEqual([
+      'knowledge/a.md: generated needs an actor in by',
+    ]);
+    expect(
+      errors('verified: [{ by: claude-code/opus, at: "2026-12-01" }]'),
+    ).toEqual([
+      'knowledge/a.md: verified events need a human: or process: actor in by and an RFC 3339 at',
+    ]);
+    const unreviewed =
+      'knowledge/a.md: status stable needs a human: verified event at or after generated.at';
+    expect(errors('status: stable')).toEqual([unreviewed]);
+    expect(
+      errors(
+        'status: stable\nverified: { by: "process:ci", at: "2026-12-02T00:00:00Z" }',
+      ),
+    ).toEqual([unreviewed]);
+    expect(
+      errors(
+        `status: stable\ngenerated: { by: "human:b", at: "2026-12-03T00:00:00Z" }\n${human}`,
+      ),
+    ).toEqual([unreviewed]);
+  });
+
   it('checks the workspace schema when other checks fail', () => {
     const root = fixture({
       'knowledge/index.md': `${INDEX}\n\n- [Workspace](workspace/index.md)`,

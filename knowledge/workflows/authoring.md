@@ -94,13 +94,12 @@ bare page URL shows the generated stub) with the revision in `x-xyz-revision`,
 an XYZ extension which does not replace OKF timestamps. Record current
 implementation and relevant tests separately.
 
-If recording generation, use `generated: { by, at }` with a truthful actor and
-timestamp. Add `verified` only for an actual content check, with the actor and
-time of that check. A format/link check alone does not verify runtime claims.
-Quote timestamps and actors, eg. `{ by: "human:<github-handle>", at:
-"2026-11-18T09:00:00Z" }`. Under OKF v0.3 a verification earlier than
-`generated.at` no longer counts, so rewriting reviewed content drops it from
-human-reviewed until it is checked again.
+Record `generated` and `verified` as the
+[actor convention](../decisions/actor-convention.md) says: `verified` only
+for a maintainer's content review, as `human:<github-handle>`, with
+`status: stable` in the same change. A format or link check verifies
+nothing. Under OKF v0.3 a verification earlier than `generated.at` no longer
+counts, so rewriting reviewed content needs a new review.
 
 ## Checks
 

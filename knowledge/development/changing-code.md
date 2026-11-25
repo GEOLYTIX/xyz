@@ -102,7 +102,9 @@ target the next major.
   [Clean code guidelines](clean-code.md#jsdoc).
 - A behaviour change updates its concept and source links in the same pull
   request, following the [authoring workflow](../workflows/authoring.md).
-  Run `pnpm knowledge:check`.
+  Run `pnpm knowledge:check`, and `pnpm knowledge:changed --base origin/<base>`
+  for the concepts linking the changed modules. Label the pull request
+  `knowledge-unaffected` when a change, eg. a refactor, leaves them true.
 - `apps/mapp/README.md` is the npm page; keep its usage sections in step with
   the [package concept](../architecture/mapp-package.md).
 

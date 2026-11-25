@@ -6,7 +6,7 @@ This document describes where the XYZ/MAPP documentation lives, how it is publis
 
 The [knowledge portal](https://geolytix.github.io/xyz/) is the documentation of XYZ/MAPP. It renders the [knowledge bundle](knowledge/index.md) in `knowledge/`, written in the [Open Knowledge Format](knowledge/about.md) (OKF) v0.3: architecture, environment variables, workspace configuration, views, security, deployment and development workflows.
 
-The bundle is the source of truth. Concepts are changed in pull requests together with the code they describe, and `pnpm knowledge:check` validates their structure and source links in CI. Read the [authoring workflow](knowledge/workflows/authoring.md) before editing concepts, and see [agent guidance](AGENTS.md) for how agents use the bundle.
+The bundle is the source of truth. Concepts are changed in pull requests together with the code they describe, and `pnpm knowledge:check` validates their structure and source links in CI. `pnpm knowledge:changed` fails a pull request which changes a concept's `resource` module without the concept, unless it carries the `knowledge-unaffected` label. Read the [authoring workflow](knowledge/workflows/authoring.md) before editing concepts, and see [agent guidance](AGENTS.md) for how agents use the bundle.
 
 The portal is built with [VitePress](https://vitepress.dev/). Its configuration lives in `utils/knowledge/site/`, outside the bundle.
 

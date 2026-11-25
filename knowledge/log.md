@@ -13,6 +13,11 @@
   other checks fail. The rules moved to [knowledge checks](workflows/checks.md).
 - `x-xyz-keys` entries take `description`, `enum` and `deprecated`, generated
   into the workspace schema. `layer.format` lists the registry formats.
+- `pnpm knowledge:changed` fails a pull request which changes a concept's
+  `resource` without the concept; the `knowledge-unaffected` label turns it
+  into a warning. `review-pr` compares the concept and code diffs.
+- Added the [actor convention](decisions/actor-convention.md): `verified` is a
+  maintainer's content review, and `status: stable` requires one.
 
 ## 2026-11-24
 

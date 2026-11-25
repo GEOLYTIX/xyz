@@ -161,6 +161,53 @@ function checkMetadata(metadata, file, context, warn) {
   checkQuality(metadata, context, warn);
   checkResources(metadata, file, context, warn);
   checkVariables(metadata);
+  checkTrust(metadata);
+}
+
+/** `<tool>/<model>` for agents, `<scheme>:<id>` for people and processes (OKF §7). */
+const AGENT = /^[^\s/:]+\/\S+$/;
+const ACTOR = /^[a-z][a-z\d-]*:\S+$/;
+
+const timestamp = (value) =>
+  TIMESTAMP.test(String(value)) && !Number.isNaN(Date.parse(value));
+
+/**
+Throw on malformed generated and verified frontmatter, an agent in verified,
+and a stable concept without a current human verification. See
+knowledge/decisions/actor-convention.md.
+*/
+function checkTrust(metadata) {
+  const { generated } = metadata;
+  if (generated !== undefined) {
+    if (
+      !mapping(generated) ||
+      !(ACTOR.test(generated.by) || AGENT.test(generated.by))
+    )
+      throw new Error('generated needs an actor in by');
+    if (generated.at !== undefined && !timestamp(generated.at))
+      throw new Error('generated.at must be an RFC 3339 timestamp');
+  }
+  const events =
+    metadata.verified === undefined
+      ? []
+      : Array.isArray(metadata.verified)
+        ? metadata.verified
+        : [metadata.verified];
+  for (const event of events) {
+    if (!mapping(event) || !ACTOR.test(event.by) || !timestamp(event.at))
+      throw new Error(
+        'verified events need a human: or process: actor in by and an RFC 3339 at',
+      );
+  }
+  if (metadata.status !== 'stable') return;
+  const since = generated?.at ? Date.parse(generated.at) : -Infinity;
+  const reviewed = events.some(
+    (event) => event.by.startsWith('human:') && Date.parse(event.at) >= since,
+  );
+  if (!reviewed)
+    throw new Error(
+      'status stable needs a human: verified event at or after generated.at',
+    );
 }
 
 function checkQuality(metadata, context, warn) {

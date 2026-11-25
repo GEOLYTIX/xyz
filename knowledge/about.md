@@ -97,7 +97,9 @@ linked files, malformed `x-xyz-keys`, a key owned twice, an outdated schema,
 examples which are not valid against the schema, and environment variables
 read in code without a concept. It warns on missing descriptions, oversized
 concepts (over 150 lines) and test workspace keys without a concept. `pnpm knowledge:examples`
-runs every example against the devdb. A passing check means the
+runs every example against the devdb. `pnpm knowledge:changed` fails a
+pull request which changes a concept's `resource` module but not the
+concept. A passing check means the
 bundle is well formed, not that its content is correct; see the
 [authoring workflow](workflows/authoring.md).
 

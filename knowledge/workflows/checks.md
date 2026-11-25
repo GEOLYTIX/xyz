@@ -9,6 +9,7 @@ sources:
   - resource: ../../utils/knowledge/concepts.mjs
   - resource: ../../utils/knowledge/schema.mjs
   - resource: ../../utils/knowledge/examples.mjs
+  - resource: ../../utils/knowledge/changed.mjs
   - resource: ../../utils/knowledge/validate.test.mjs
   - resource: ../../utils/knowledge/concepts.test.mjs
 ---
@@ -32,6 +33,9 @@ The checker fails on:
   value of the wrong type, or an example key no concept owns
 - a workspace schema which is out of date with the concepts. The schema
   checks run even when other checks fail.
+- malformed `generated` or `verified` frontmatter, an agent actor in
+  `verified`, and `status: stable` without a `human:` verification at or after
+  `generated.at`; see the [actor convention](../decisions/actor-convention.md)
 - environment variables read by the XYZ API (`apps/xyz/mod`, `router.js`,
   `apps/saml`) which no concept lists in `x-xyz-variables`. Platform
   variables such as `VERCEL_*` and `NODE_ENV` are ignored.
@@ -51,6 +55,14 @@ It warns on:
 
 Unknown types and metadata are accepted. External URLs, heading anchors and raw
 HTML links are not checked.
+
+`pnpm knowledge:changed --base <ref>` compares a branch with its merge base:
+it fails when a concept's `resource` changed but the concept did not, and
+warns when a module in its `sources` changed. A directory resource covers the
+files inside it. CI runs it on pull requests which do not target `main`, with
+`--warn-only` when the pull request has the `knowledge-unaffected` label. The
+label is for changes which leave every statement of the concept true;
+`review-pr` checks that claim.
 
 `pnpm knowledge:examples` runs every example in the testhost with the devdb:
 each example must load as a locale, its `wkt` and `geojson` layers must return
