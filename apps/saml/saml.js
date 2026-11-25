@@ -151,12 +151,12 @@ The configuration is checked when it is created, so that a SAML app with a missi
 
 InResponseTo is not validated, so IdP-initiated logins are accepted.
 
-@param {Object} [env=xyzEnv] The environment.
+@param {Object} env The environment, eg. xyzEnv.
 @param {string} [certDir] A directory with the IdP certificate and SP key pair, used in place of apps/saml by the tests.
 @returns {Object} The node-saml configuration.
 @throws {Error} A required environment variable or certificate file is missing or invalid.
 */
-export function createSamlConfig(env = xyzEnv, certDir) {
+export function createSamlConfig(env, certDir) {
   const missing = REQUIRED_ENV.filter((key) => !env[key]);
 
   if (missing.length) {
@@ -242,7 +242,7 @@ Returns the node-saml instance and creates it from the environment on the first 
 @throws {Error} The SAML configuration is invalid.
 */
 export function getSamlStrat() {
-  samlStrat ??= new SAML(createSamlConfig());
+  samlStrat ??= new SAML(createSamlConfig(xyzEnv));
   return samlStrat;
 }
 
