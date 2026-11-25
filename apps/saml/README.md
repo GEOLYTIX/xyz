@@ -32,7 +32,7 @@ Replace `SAML_LOGIN=true` with `AUTH_PATH=/saml`.
 
 ### Startup checks
 
-The SAML configuration is created when the server starts. The server does not start if:
+The SAML configuration is created when the server starts. The configuration is invalid if:
 
 - `SAML_ACS`, `SAML_ENTITY_ID`, `SAML_IDP_CRT` or `SAML_SSO` is not set.
 - A certificate or key file cannot be read from `apps/saml`.
@@ -40,6 +40,10 @@ The SAML configuration is created when the server starts. The server does not st
 - The `${SAML_SP_CRT}.crt` file does not hold exactly one X.509 certificate, or the certificate does not match the private key in `${SAML_SP_CRT}.pem`.
 
 The error names the missing variable or file.
+
+On Vercel, an invalid configuration fails the whole deployment: every request, not only the SAML routes, gets a `500` with `The SAML configuration is invalid.` The error is logged in the runtime logs when the function starts and again for every failed request. Vercel does not log an error thrown while it imports `server.js`, so `server.js` catches and logs the error itself.
+
+Run as `node server.js`, an invalid configuration ends the process with the error.
 
 ### Cookies
 
