@@ -21,7 +21,7 @@ Certificate files are resolved relative to the `apps/saml` package root.
 import '../xyz/mod/utils/processEnv.js';
 import { createPrivateKey, X509Certificate } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
 import { SAML } from '@node-saml/node-saml';
@@ -123,21 +123,40 @@ function checkSpCertificate(file, keyFile, publicCert, privateKey) {
 }
 
 /**
+@function certPaths
+
+@description
+Returns the paths of the IdP certificate and SP key pair in the apps/saml directory.
+
+Vercel ships a file with the function only if its file tracer resolves the path. The tracer resolves a join of `__dirname` and a template literal ending in the file extension to a `apps/saml/*.crt` or `apps/saml/*.pem` glob. A path joined from a directory variable is not traced, and a deployment without `apps/saml/*.crt` and `apps/saml/*.pem` in its `includeFiles` would have no certificates. Keep the joins in this form.
+
+@param {Object} env The environment.
+@returns {Object} The idpCert, privateKey and publicCert file paths.
+*/
+function certPaths(env) {
+  return {
+    idpCert: join(__dirname, `./${env.SAML_IDP_CRT}.crt`),
+    privateKey: join(__dirname, `./${env.SAML_SP_CRT}.pem`),
+    publicCert: join(__dirname, `./${env.SAML_SP_CRT}.crt`),
+  };
+}
+
+/**
 @function createSamlConfig
 
 @description
-Creates the node-saml configuration from the environment. The certificate files are read from the certDir.
+Creates the node-saml configuration from the environment. The certificate files are read from the apps/saml directory, or from the certDir if one is given.
 
 The configuration is checked when it is created, so that a SAML app with a missing environment variable or certificate file fails when the server starts instead of on the first login.
 
 InResponseTo is not validated, so IdP-initiated logins are accepted.
 
 @param {Object} [env=xyzEnv] The environment.
-@param {string} [certDir] The directory with the IdP certificate and SP key pair.
+@param {string} [certDir] A directory with the IdP certificate and SP key pair, used in place of apps/saml by the tests.
 @returns {Object} The node-saml configuration.
 @throws {Error} A required environment variable or certificate file is missing or invalid.
 */
-export function createSamlConfig(env = xyzEnv, certDir = __dirname) {
+export function createSamlConfig(env = xyzEnv, certDir) {
   const missing = REQUIRED_ENV.filter((key) => !env[key]);
 
   if (missing.length) {
@@ -146,18 +165,27 @@ export function createSamlConfig(env = xyzEnv, certDir = __dirname) {
     );
   }
 
-  const readCert = (file) => {
+  const paths = certDir
+    ? {
+        idpCert: join(certDir, `${env.SAML_IDP_CRT}.crt`),
+        privateKey: join(certDir, `${env.SAML_SP_CRT}.pem`),
+        publicCert: join(certDir, `${env.SAML_SP_CRT}.crt`),
+      }
+    : certPaths(env);
+
+  const readCert = (path) => {
     try {
-      return String(readFileSync(join(certDir, file)));
+      return String(readFileSync(path));
     } catch (error) {
-      throw new Error(`SAML: ${file} cannot be read from ${certDir}.`, {
-        cause: error,
-      });
+      throw new Error(
+        `SAML: ${basename(path)} cannot be read from ${dirname(path)}.`,
+        { cause: error },
+      );
     }
   };
 
-  const privateKey = env.SAML_SP_CRT && readCert(`${env.SAML_SP_CRT}.pem`);
-  const publicCert = env.SAML_SP_CRT && readCert(`${env.SAML_SP_CRT}.crt`);
+  const privateKey = env.SAML_SP_CRT && readCert(paths.privateKey);
+  const publicCert = env.SAML_SP_CRT && readCert(paths.publicCert);
 
   if (env.SAML_SP_CRT) {
     checkSpCertificate(
@@ -173,7 +201,7 @@ export function createSamlConfig(env = xyzEnv, certDir = __dirname) {
     callbackUrl: env.SAML_ACS,
     entryPoint: env.SAML_SSO,
     identifierFormat: env.SAML_IDENTIFIER_FORMAT,
-    idpCert: readCert(`${env.SAML_IDP_CRT}.crt`),
+    idpCert: readCert(paths.idpCert),
     issuer: env.SAML_ENTITY_ID,
     logoutCallbackUrl: env.SLO_CALLBACK,
     logoutUrl: env.SAML_SLO,

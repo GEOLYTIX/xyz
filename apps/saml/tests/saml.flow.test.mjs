@@ -7,6 +7,7 @@ import { generateKeyPairSync } from 'node:crypto';
 import { mkdtempSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { inflateRawSync } from 'node:zlib';
 import { SAML } from '@node-saml/node-saml';
 import jwt from 'jsonwebtoken';
@@ -593,6 +594,14 @@ describe('createSamlConfig:', async () => {
     expect(() =>
       createSamlConfig({ ...samlEnv, SAML_IDP_CRT: 'missing' }, keys.certDir),
     ).toThrow(`SAML: missing.crt cannot be read from ${keys.certDir}.`);
+  });
+
+  it('reads the certificate files from apps/saml without a certDir', () => {
+    const samlDir = fileURLToPath(new URL('..', import.meta.url));
+
+    expect(() =>
+      createSamlConfig({ ...samlEnv, SAML_SP_CRT: 'missing' }),
+    ).toThrow(`SAML: missing.pem cannot be read from ${join(samlDir, '.')}.`);
   });
 
   function certDir(files) {
