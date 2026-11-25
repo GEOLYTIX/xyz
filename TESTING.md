@@ -127,6 +127,8 @@ The [Unit Tests](.github/workflows/unit_tests.yml) workflow runs `pnpm test`, wh
 
 The [Build](.github/workflows/build.yml) workflow runs the XYZ API, MAPP library and MAPP.UI library coverage for the SonarQube analysis. The coverage runs fail below the coverage thresholds.
 
+The [Knowledge check](.github/workflows/knowledge-check.yml) workflow runs `pnpm knowledge:test`, `pnpm knowledge:check` and `pnpm knowledge:examples`, and checks with `pnpm knowledge:changed` that a pull request updates the concepts of the modules it changes. See [knowledge checks](knowledge/workflows/checks.md).
+
 ## Writing tests
 
 These conventions apply to all suites:

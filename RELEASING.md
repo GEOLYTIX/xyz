@@ -15,13 +15,13 @@ A squash merge from a development branch removes the bundles from `main`, becaus
 
 The workflow pushes to the protected `main` and `patch` branches with the `PAT_TOKEN` repository secret. The token owner must be allowed to push to `main` and to bypass the pull request rule on both branches.
 
-The workflow **does not deploy the app or publish an npm package**. For deployment, see [DEPLOYMENT.md](./DEPLOYMENT.md). The MAPP library is published to npm manually, see [Publish the MAPP library to npm](#publish-the-mapp-library-to-npm).
+The workflow **does not deploy the app or publish an npm package**. For deployment, see [DEPLOYMENT.md](./DEPLOYMENT.md). The push to `main` also runs the [deploy-docs workflow](./.github/workflows/deploy-docs.yml), which publishes the knowledge portal; see [DOCUMENTATION.md](./DOCUMENTATION.md#knowledge-portal). The MAPP library is published to npm manually, see [Publish the MAPP library to npm](#publish-the-mapp-library-to-npm).
 
 The example below releases **v5.0.3**. Replace that version everywhere with your target version.
 
 ## 1. Start from main
 
-Run commands from the repository root with a clean working tree (`git status --short` should show nothing). You need permission to push release tags to `GEOLYTIX/xyz`, plus the tools described in [SETUP.md](./SETUP.md). Use the pnpm version in the root `package.json`.
+Run commands from the repository root with a clean working tree (`git status --short` should show nothing). You need permission to push release tags to `GEOLYTIX/xyz`, plus the tools described in [local development](./knowledge/deployment/local-development.md). Use the pnpm version in the root `package.json`.
 
 These commands assume `origin` is `GEOLYTIX/xyz`, not your fork. Check with `git remote -v` first.
 
@@ -30,7 +30,7 @@ git switch main
 git pull --ff-only origin main
 git fetch origin --tags
 git switch -c release/v5.0.3
-pnpm install --frozen-lockfile
+pnpm install
 ```
 
 ## 2. Bump the version and write the notes
@@ -73,6 +73,7 @@ Open a pull request into `main` and wait for the required checks and review. **M
 
 - Check [Actions → Release](https://github.com/GEOLYTIX/xyz/actions/workflows/release.yml) succeeds.
 - Check [Releases](https://github.com/GEOLYTIX/xyz/releases) shows the correct version and notes.
+- Check [Actions → Deploy the knowledge portal to Pages](https://github.com/GEOLYTIX/xyz/actions/workflows/deploy-docs.yml) succeeds and the [portal](https://geolytix.github.io/xyz/) footer names the new version.
 - Check `main` and the tag contain the bundles: `git fetch origin --tags && git ls-tree -r --name-only v5.0.3 public/js/lib && git ls-tree -r --name-only origin/main public/js/lib`.
 - Deploy separately if needed, following [DEPLOYMENT.md](./DEPLOYMENT.md).
 
@@ -163,7 +164,7 @@ To check a published version locally:
 The first version must be published locally by an owner of the `geolytix` npm organisation, because npm trusted publishing can only be set up for a package which exists. A local publish has no provenance and requires npm two-factor authentication.
 
 ```bash
-pnpm install --frozen-lockfile
+pnpm install
 pnpm test:mapp
 pnpm build --filter=@geolytix/mapp --force
 cd apps/mapp

@@ -114,7 +114,7 @@ Functions no longer in use but kept with a warning for legacy configurations sho
 @deprecated
 
 @description
-The deprectaed mapp.layer.Style() method will warn if use and return the featureStyle() method which supersedes the Style() method.
+The deprecated mapp.layer.Style() method will warn if used and return the featureStyle() method which supersedes the Style() method.
 
 @param {Object} layer
 
@@ -123,7 +123,7 @@ The deprectaed mapp.layer.Style() method will warn if use and return the feature
 
 function Style(layer) {
   console.warn(
-    `The mapp.layer.Style() method has been superseeded by the mapp.layer.featureStyle() method.`,
+    `The mapp.layer.Style() method has been superseded by the mapp.layer.featureStyle() method.`,
   );
   return featureStyle(layer);
 }
@@ -154,4 +154,4 @@ The link can reference a module and it's inline members like methods. `{@link mo
 
 ### @example
 
-An @example does not require a code block [\`\`\`JS] definition. At examples should be reserved for codepen examples which can be run. Code blocks should be used for code syntax highlighting in the rendered markdown.
+An @example does not require a code block [\`\`\`JS] definition. `@example` tags should be reserved for codepen examples which can be run. Code blocks should be used for code syntax highlighting in the rendered markdown.

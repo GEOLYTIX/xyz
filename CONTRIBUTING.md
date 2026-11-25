@@ -6,7 +6,7 @@ Thanks for your interest in contributing to XYZ/MAPP. Please see the project's [
 
 Please ask questions about using the host or library in the [GitHub issue tracker](https://github.com/GEOLYTIX/xyz/issues).
 
-And question or request for new features should initially be tagged with a Request for Comment (RFC)
+Any question or request for new features should initially be tagged with a Request for Comment (RFC)
 
 ## Submitting Bug Reports
 
@@ -14,7 +14,7 @@ Please use the [GitHub issue tracker](https://github.com/GEOLYTIX/xyz/issues). B
 
 ## Deleting Issues from the tracker
 
-The project maintainer remain the right to delete issues which are no longer relevant to the project. For example if a question has already been resolved previously or if a bug, or feature is no longer relevant due to a major version change.
+The project maintainers reserve the right to delete issues which are no longer relevant to the project. For example if a question has already been resolved previously or if a bug, or feature is no longer relevant due to a major version change.
 
 ## Getting Familiar with the Code in the Repository
 
@@ -22,7 +22,7 @@ Please check the [knowledge portal](https://geolytix.github.io/xyz/), built from
 
 ## Contributing Code
 
-See [`DEVELOPING.md`](https://github.com/GEOLYTIX/xyz/blob/main/DEVELOPING.md) to learn how to get started developing.
+See [`DEVELOPING.md`](https://github.com/GEOLYTIX/xyz/blob/main/DEVELOPING.md) to learn how to get started developing, and [changing code](knowledge/development/changing-code.md) for where a change belongs and which tests and concepts to update.
 
 Our preferred means of receiving contributions is through [pull requests](https://help.github.com/articles/using-pull-requests). Make sure
 that your pull request follows our pull request guidelines below before submitting it.
@@ -37,6 +37,8 @@ Your contribution will be under our [license](https://github.com/GEOLYTIX/xyz/bl
 
 Before working on a pull request, create an issue explaining what you want to contribute. This ensures that your pull request won't go unnoticed, and that you are not contributing something that is not suitable for the project. Once a core developer has set the `pull request accepted` label on the issue, you can submit a pull request. The pull request description should reference the original issue.
 
+Target the development branch for the release, `patch`, `minor` or `major`. `main` only receives releases; see [RELEASING.md](RELEASING.md).
+
 Your pull request must:
 
 - Follow XYZ/MAPP's coding style.
@@ -49,6 +51,8 @@ Your pull request must:
 - Use clear commit messages.
 
 - Be possible to merge automatically.
+
+- Update the [knowledge](knowledge/index.md) concepts which describe the changed behaviour. The Knowledge check workflow fails a pull request which changes a concept's module without the concept, unless the pull request carries the `knowledge-unaffected` label; see [DEVELOPING.md](DEVELOPING.md#knowledge).
 
 ### Address a single issue or add a single item of functionality
 
@@ -97,7 +101,8 @@ Please keep the header line short, no more than 50 characters.
 
 ### Be possible to merge automatically
 
-Occasionally other changes to `main` might mean that your pull request cannot
-be merged automatically. In this case you may need to rebase your branch on a
-more recent `main`, resolve any conflicts, and `git push --force` to update
-your branch so that it can be merged automatically.
+Occasionally other changes to the target branch might mean that your pull
+request cannot be merged automatically. In this case you may need to rebase
+your branch on the latest target branch, resolve any conflicts, and
+`git push --force` to update your branch so that it can be merged
+automatically.

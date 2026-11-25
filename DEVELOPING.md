@@ -10,7 +10,7 @@ The minimum requirements are:
 
 - Git
 - [Node.js](https://nodejs.org/) version 22 and above
-- [pnpm](https://pnpm.io/) version 10
+- [pnpm](https://pnpm.io/) version 11, as pinned by `packageManager` in the root `package.json`
 
 The executables `git`, `node`, and `pnpm` should be in your `PATH`.
 
@@ -33,7 +33,7 @@ App-specific build and development notes live with each app:
 
 ## Test Debugging [VSCode]
 
-We recommend to use the vitest extension for VSCode to debug XYZ modules through the test scripts.
+We recommend to use the vitest extension for VSCode to debug XYZ modules through the test scripts. See [VS Code](./TESTING.md#vs-code) in TESTING.md.
 
 ## Biome
 
@@ -58,6 +58,17 @@ pnpm exec biome format --write .
 ```
 
 Many editors have Biome extensions or plugins for on-the-fly error highlighting and formatting. See the [Biome editor integration guide](https://biomejs.dev/docs/integrations/editors/) for setup instructions.
+
+## Knowledge
+
+A change to behaviour described in the [knowledge bundle](./knowledge/index.md) updates the concept in the same pull request. Read the [authoring workflow](./knowledge/workflows/authoring.md) before editing concepts, then check the bundle:
+
+```bash
+pnpm knowledge:check                          # structure, source links and examples
+pnpm knowledge:changed --base origin/<base>   # concepts linking the modules the branch changed
+```
+
+`<base>` is the target branch, eg. `patch`. Label the pull request `knowledge-unaffected` when a change leaves the concepts true. The [Knowledge check](./.github/workflows/knowledge-check.yml) workflow runs these checks on pull requests. See [knowledge checks](./knowledge/workflows/checks.md) and [DOCUMENTATION.md](./DOCUMENTATION.md).
 
 ## Related Docs
 

@@ -13,7 +13,8 @@ documentation for uncovered topics.
 - When changing behavior covered by a concept, update that concept and its source
   links in the same PR. Keep directory indexes current. `pnpm knowledge:changed`
   lists the concepts linking the modules a branch changed; CI fails when a
-  concept's `resource` changes without the concept.
+  concept's `resource` changes without the concept, unless the pull request
+  carries the `knowledge-unaffected` label.
 - Read [the authoring workflow](knowledge/workflows/authoring.md) before editing
   knowledge. Run `pnpm knowledge:check` after changes to the bundle, and
   `pnpm knowledge:test` after changes to the validator.
