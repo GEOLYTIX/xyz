@@ -26,6 +26,9 @@ sources:
 ---
 # Roles
 
+[Fine-grained authorization](../security/fine-grained-authorization.md)
+explains how roles and scopes control access across the workspace.
+
 A user's roles are strings in `user.roles`. The XYZ API composes every locale
 and layer for the requesting user, so a user only receives what their roles
 allow. All role handling happens on the server.[^compose]

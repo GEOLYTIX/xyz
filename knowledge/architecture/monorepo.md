@@ -15,6 +15,8 @@ sources:
     resource: ../../turbo.json
   - id: root
     resource: ../../package.json
+  - id: optional
+    resource: ../../apps/xyz/package.json
   - id: gitignore
     resource: ../../.gitignore
   - id: vercelignore
@@ -65,6 +67,33 @@ refers to it as `"catalog:"`. Local packages refer to each other as
 - `allowBuilds` lists the packages allowed to run install scripts.
 - Use the pnpm version in the root `packageManager` field.[^root]
 
+## Dependencies
+
+Each package declares the dependencies it uses; check its `package.json`
+rather than a list here.
+
+- XYZ (`apps/xyz`) needs Node.js 22 or later. Its runtime dependencies are
+  express, `pg`, `bcrypt`, `jsonwebtoken` and varlock. The AWS SDK, `resend`
+  and the OpenTelemetry exporters are `optionalDependencies`, imported
+  dynamically only when the feature is configured.[^optional]
+- `@node-saml/node-saml` is a dependency of `apps/saml` only, so a deployment
+  without SAML does not install it.
+- MAPP and MAPP.UI have no runtime dependencies. `ol` is a peer dependency of
+  the [npm package](mapp-package.md), loaded as a global. µhtml is vendored as
+  source in `apps/mapp/lib/utils/uhtml.mjs`, not installed.
+- The devdb uses PGlite with PostGIS; the testhost adds express and `vt-pbf`.
+
+Development dependencies are declared at the root or in the app that uses them:
+
+| Tool | Declared in | Purpose |
+| --- | --- | --- |
+| turbo | root | Runs tasks across the packages. |
+| Biome | root | Lint and format (`pnpm lint`). |
+| Vite | mapp, ui | Builds the library bundles and css. |
+| Vitest, Playwright | root, apps | Unit and browser tests; see [TESTING.md](../../TESTING.md). |
+| publint | mapp | Checks the npm package. |
+| VitePress, markdown-it, yaml | root | Knowledge portal and checks. |
+
 ## Turborepo
 
 Run tasks from the root; [turbo.json](../../turbo.json) defines `build`,
@@ -113,6 +142,7 @@ manifests have no version. Change it with `pnpm bump:patch|minor|major`;
 
 [^workspace]: pnpm-workspace.yaml
 [^root]: package.json
+[^optional]: apps/xyz/package.json
 [^turbo]: turbo.json
 [^gitignore]: .gitignore
 [^vercelignore]: .vercelignore

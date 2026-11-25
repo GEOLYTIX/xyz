@@ -10,7 +10,15 @@
 [![OSGeo Community Project](https://www.osgeo.org/wp-content/themes/roots/assets/img/badge-community-project.png)](https://www.osgeo.org/projects/xyz-mapp/)
 
 ## Turbo Monorepo
-With the release of v5 this repository will be structured as monorepo which provides shared dependencies for several apps. Server apps can be provided to expand the XYZ API routes. Apps may also provide custom authentication layers.
+Since v5 this repository is structured as a Turbo monorepo which provides shared dependencies for several apps. Server apps can be provided to expand the XYZ API routes. Apps may also provide custom authentication layers.
+
+## Workspace
+
+The workspace is the core of XYZ. It is a JSON document that declares the locales, layers, query templates, location entries, themes and editing features of an instance. Locales and layers are built from templates, and their data may be held in different databases or systems.
+
+The workspace is also where access is controlled. The XYZ API composes the workspace separately for each user. Roles and template scopes decide which locales, layers and templates are merged for that user. Role filters restrict rows. Roles on location entries restrict fields. Role-specific configuration adds themes, entries or editing for some users only. Anything a user's roles do not allow is removed on the server before the response is sent. Clients never send SQL; they can only run the query templates of objects the user can access.
+
+Fine-grained authorization is therefore defined once, in the workspace, for all connected data sources. See [fine-grained authorization](./knowledge/security/fine-grained-authorization.md) in the knowledge bundle.
 
 ## XYZ
 
@@ -36,6 +44,8 @@ A bundled MAPP library is provided in the public directory. It is not required t
 
 ## Documentation
 
+The apps and their dependencies are described in the [monorepo](./knowledge/architecture/monorepo.md) concept.
+
 The [knowledge portal](https://geolytix.github.io/xyz/) documents architecture, environment variables, workspace configuration, views, security and deployment. It is built from the [knowledge bundle](./knowledge/index.md) in this repository; see [DOCUMENTATION.md](./DOCUMENTATION.md).
 
 For repository setup and local development, see [local development](./knowledge/deployment/local-development.md) in the knowledge bundle.
@@ -45,58 +55,6 @@ For creating a versioned GitHub release, see [RELEASING.md](./RELEASING.md).
 For Vercel and self-hosted deployment workflows, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 
 For environment validation, vanilla Varlock examples, and frozen Vercel deployments, see [varlock/README.md](./varlock/README.md).
-
-## Version History
-
-**v1** was build with [Leaflet](https://github.com/Leaflet/Leaflet) as the map render for the client library.
-
-The Mapp library changed the map render to [Openlayers](https://github.com/openlayers/openlayers) in **v2**.
-
-The XYZ API was rebuild to run as serverless functions in **v3**.
-
-**v4** is a complete rewrite of the client libraries. All user interface utilities have been taken out of the mapp library and have been compiled as mapp.ui library.
-
-The mapp library is now able to instantiate multiple mapviews.
-
-Polymorphism is applied to extend or modify object types and methods through plugins without the need to fork the repository.
-
-Dynamic module imports reduce the need to bundle 3rd party libraries such as [Tabulator](https://github.com/olifolkerd/tabulator) and [Chart.js](https://github.com/chartjs/Chart.js).
-
-**v5** is a restructure as a Turbo monorepo with individual apps. Vite is now used for testing and to build the mapp library and associated style sheets.
-
-## XYZ Dependencies
-
-**Node.js v22+** is required for importing ESM modules.
-
-[brcypt](https://github.com/kelektiv/node.bcrypt.js) - A library to help you hash passwords.
-
-[jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) - A Node implementation of JSON Web Token.
-
-[Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
-
-[Varlock](https://varlock.dev) - Schema-validated environment configuration. Vanilla examples live in `examples/varlock`; see `VARLOCK.md`.
-
-### Optional dependencies
-
-[aws-sdk](https://github.com/aws/aws-sdk-js-v3) - Several modules are required in order to access resources on cloudfront or S3.
-
-[node-saml](https://github.com/node-saml/node-saml) - A SAML 2.0 authentication provider for Node.js.
-
-[resend](https://github.com/resend/resend-node) - Node.js library for the Resend API.
-
-### Development dependencies
-
-Following development dependencies are required to build the library and run a local instance of the XYZ host.
-
-[Vite](https://vite.dev) - The build tool which bundles the MAPP client libraries and CSS assets.
-
-[µhtml](https://github.com/WebReflection/uhtml) - A micro HTML/SVG render which is bundled as utils into the MAPP library.
-
-[biomejs](https://biomejs.dev/) - A tool for identifying, formatting and reporting on patterns found in ECMAScript/JavaScript code.
-
-## Mapp Dependencies
-
-[Openlayers](https://github.com/openlayers/openlayers) - High-performance web mapping engine.
 
 ## License
 

@@ -45,7 +45,8 @@ sources:
 - **Language template** - A template with one value per language code; see
   [language](views/language.md).
 - **Role** - A name in a user's roles which unlocks locales, layers,
-  templates and entries; see [roles](workspace/roles.md).
+  templates and entries; see [roles](workspace/roles.md) and
+  [fine-grained authorization](security/fine-grained-authorization.md).
 - **Plugin** - A function in `mapp.plugins` run by a locale or layer key of
   its name; see [plugins](plugins/authoring.md).
 

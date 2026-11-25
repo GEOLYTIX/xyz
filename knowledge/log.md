@@ -2,6 +2,12 @@
 
 ## 2026-11-25
 
+- Added [fine-grained authorization](security/fine-grained-authorization.md):
+  the workspace as the single place which decides, through roles and template
+  scopes, what each user may see and do across all data sources.
+- [Monorepo](architecture/monorepo.md) describes which package owns which
+  runtime, optional and development dependencies; the root README no longer
+  lists them.
 - Recorded the [agent baseline](workflows/agent-baseline.md): seven tasks run
   on `minor` without the bundle, with their prompts and outputs.
 - Wiki `sources` link the snapshot revision of each page, since the page URLs
