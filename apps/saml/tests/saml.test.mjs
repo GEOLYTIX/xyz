@@ -16,6 +16,7 @@ const strategy = {
   generateServiceProviderMetadata: vi.fn(() => '<xml />'),
   getAuthorizeUrlAsync,
   getLogoutUrlAsync,
+  options: { publicCert: 'sp-certificate' },
   validatePostResponseAsync,
 };
 
@@ -321,6 +322,41 @@ describe('saml:', async () => {
 
     expect(res.statusCode).toBe(401);
     expect(res._getData()).toBe('User not found.');
+  });
+
+  it('sends a 500 when the SP certificate cannot be published in the metadata', async () => {
+    strategy.generateServiceProviderMetadata.mockImplementationOnce(() => {
+      throw new Error('publicCert must be a single X.509 certificate');
+    });
+
+    const { req, res } = createMocks({ url: '/app/saml/metadata' });
+
+    await saml(req, res);
+
+    expect(strategy.generateServiceProviderMetadata).toHaveBeenCalledWith(
+      null,
+      'sp-certificate',
+    );
+    expect(res.statusCode).toBe(500);
+    expect(res.getHeader('Content-Type')).toBeUndefined();
+    expect(res._isEndCalled()).toBe(true);
+  });
+
+  it('requests the authorize URL without the forwarded host', async () => {
+    getAuthorizeUrlAsync.mockResolvedValueOnce('https://idp.example.com/sso');
+
+    const { req, res } = createMocks({
+      cookies: {},
+      headers: { 'x-forwarded-host': 'evil.example.com' },
+      url: '/app/saml/login',
+    });
+
+    await saml(req, res);
+
+    expect(getAuthorizeUrlAsync).toHaveBeenCalledWith('/app', {
+      additionalParams: {},
+    });
+    expect(res.getHeader('location')).toBe('https://idp.example.com/sso');
   });
 });
 

@@ -19,8 +19,9 @@ Certificate files are resolved relative to the `apps/saml` package root.
 @module saml-app
 */
 import '../xyz/mod/utils/processEnv.js';
+import { createPrivateKey, X509Certificate } from 'node:crypto';
 import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
 import { SAML } from '@node-saml/node-saml';
@@ -69,31 +70,146 @@ export function parseClockSkew(value) {
 }
 
 /**
+The environment variables without which the SAML app cannot log a user in.
+*/
+const REQUIRED_ENV = ['SAML_ACS', 'SAML_ENTITY_ID', 'SAML_IDP_CRT', 'SAML_SSO'];
+
+/**
+@function checkSpCertificate
+
+@description
+node-saml publishes the SP certificate in the metadata and signs requests with the SP private key. The metadata fails if the certificate file does not hold exactly one X.509 certificate, eg. a bare public key or a certificate chain. The IdP rejects signed requests if the private key does not match the certificate.
+
+@param {string} file The certificate file name.
+@param {string} keyFile The private key file name.
+@param {string} publicCert The certificate file content.
+@param {string} privateKey The private key file content.
+@throws {Error} The certificate is not a single X.509 certificate, the private key cannot be parsed, or the certificate does not match the private key.
+*/
+function checkSpCertificate(file, keyFile, publicCert, privateKey) {
+  const certificates = publicCert.match(/-----BEGIN CERTIFICATE-----/g);
+
+  if (certificates?.length !== 1) {
+    throw new Error(`SAML: ${file} must hold exactly one X.509 certificate.`);
+  }
+
+  let certificate;
+
+  try {
+    certificate = new X509Certificate(publicCert);
+  } catch (error) {
+    throw new Error(`SAML: ${file} is not a valid X.509 certificate.`, {
+      cause: error,
+    });
+  }
+
+  let key;
+
+  // A malformed or encrypted key throws an OpenSSL error which does not name the file.
+  try {
+    key = createPrivateKey(privateKey);
+  } catch (error) {
+    throw new Error(
+      `SAML: ${keyFile} is not a valid unencrypted PEM private key.`,
+      { cause: error },
+    );
+  }
+
+  if (!certificate.checkPrivateKey(key)) {
+    throw new Error(
+      `SAML: ${file} does not match the private key in ${keyFile}.`,
+    );
+  }
+}
+
+/**
+@function certPaths
+
+@description
+Returns the paths of the IdP certificate and SP key pair in the apps/saml directory.
+
+Vercel ships a file with the function only if its file tracer resolves the path. The tracer resolves a join of `__dirname` and a template literal ending in the file extension to a `apps/saml/*.crt` or `apps/saml/*.pem` glob. A path joined from a directory variable is not traced, and a deployment without `apps/saml/*.crt` and `apps/saml/*.pem` in its `includeFiles` would have no certificates. Keep the joins in this form.
+
+@param {Object} env The environment.
+@returns {Object} The idpCert, privateKey and publicCert file paths.
+*/
+function certPaths(env) {
+  return {
+    idpCert: join(__dirname, `./${env.SAML_IDP_CRT}.crt`),
+    privateKey: join(__dirname, `./${env.SAML_SP_CRT}.pem`),
+    publicCert: join(__dirname, `./${env.SAML_SP_CRT}.crt`),
+  };
+}
+
+/**
 @function createSamlConfig
 
 @description
-Creates the node-saml configuration from the environment. The certificate files are read from the certDir.
+Creates the node-saml configuration from the environment. The certificate files are read from the apps/saml directory, or from the certDir if one is given.
 
-@param {Object} [env=xyzEnv] The environment.
-@param {string} [certDir] The directory with the IdP certificate and SP key pair.
+The configuration is checked when it is created, so that a SAML app with a missing environment variable or certificate file fails when the server starts instead of on the first login.
+
+InResponseTo is not validated, so IdP-initiated logins are accepted.
+
+@param {Object} env The environment, eg. xyzEnv.
+@param {string} [certDir] A directory with the IdP certificate and SP key pair, used in place of apps/saml by the tests.
 @returns {Object} The node-saml configuration.
+@throws {Error} A required environment variable or certificate file is missing or invalid.
 */
-export function createSamlConfig(env = xyzEnv, certDir = __dirname) {
-  const readCert = (file) => String(readFileSync(join(certDir, file)));
+export function createSamlConfig(env, certDir) {
+  const missing = REQUIRED_ENV.filter((key) => !env[key]);
+
+  if (missing.length) {
+    throw new Error(
+      `SAML: The ${missing.join(', ')} environment variable(s) must be set.`,
+    );
+  }
+
+  const paths = certDir
+    ? {
+        idpCert: join(certDir, `${env.SAML_IDP_CRT}.crt`),
+        privateKey: join(certDir, `${env.SAML_SP_CRT}.pem`),
+        publicCert: join(certDir, `${env.SAML_SP_CRT}.crt`),
+      }
+    : certPaths(env);
+
+  const readCert = (path) => {
+    try {
+      return String(readFileSync(path));
+    } catch (error) {
+      throw new Error(
+        `SAML: ${basename(path)} cannot be read from ${dirname(path)}.`,
+        { cause: error },
+      );
+    }
+  };
+
+  const privateKey = env.SAML_SP_CRT && readCert(paths.privateKey);
+  const publicCert = env.SAML_SP_CRT && readCert(paths.publicCert);
+
+  if (env.SAML_SP_CRT) {
+    checkSpCertificate(
+      `${env.SAML_SP_CRT}.crt`,
+      `${env.SAML_SP_CRT}.pem`,
+      publicCert,
+      privateKey,
+    );
+  }
 
   return {
     acceptedClockSkewMs: parseClockSkew(env.SAML_ACCEPTED_CLOCK_SKEW),
     callbackUrl: env.SAML_ACS,
     entryPoint: env.SAML_SSO,
     identifierFormat: env.SAML_IDENTIFIER_FORMAT,
-    idpCert: env.SAML_IDP_CRT && readCert(`${env.SAML_IDP_CRT}.crt`),
+    idpCert: readCert(paths.idpCert),
     issuer: env.SAML_ENTITY_ID,
     logoutCallbackUrl: env.SLO_CALLBACK,
     logoutUrl: env.SAML_SLO,
-    privateKey: env.SAML_SP_CRT && readCert(`${env.SAML_SP_CRT}.pem`),
+    privateKey,
     providerName: env.SAML_PROVIDER_NAME,
-    publicCert: env.SAML_SP_CRT && readCert(`${env.SAML_SP_CRT}.crt`),
+    publicCert,
     signatureAlgorithm: env.SAML_SIGNATURE_ALGORITHM,
+    validateInResponseTo: 'never',
     wantAssertionsSigned: parseBoolean(env.SAML_WANT_ASSERTIONS_SIGNED),
     wantAuthnResponseSigned: parseBoolean(
       env.SAML_AUTHN_RESPONSE_SIGNED,
@@ -116,17 +232,21 @@ export function createSamlHandler(strategy, redirectUser = redirect) {
   return (req, res) => samlHandler(req, res, strategy, redirectUser);
 }
 
-function getSamlStrat() {
-  samlStrat ??= new SAML(createSamlConfig());
+/**
+@function getSamlStrat
+
+@description
+Returns the node-saml instance and creates it from the environment on the first call. The SAML server calls the method on startup, so that an invalid configuration fails the server start.
+
+@returns {SAML} The node-saml instance.
+@throws {Error} The SAML configuration is invalid.
+*/
+export function getSamlStrat() {
+  samlStrat ??= new SAML(createSamlConfig(xyzEnv));
   return samlStrat;
 }
 
 function samlHandler(req, res, strategy, redirectUser) {
-  if (!strategy) {
-    console.warn('SAML is not available in XYZ instance.');
-    return;
-  }
-
   // Dispatch the mounted SAML endpoints from a single handler.
   switch (true) {
     case /\/saml\/metadata/.test(req.url):
@@ -152,15 +272,25 @@ function samlHandler(req, res, strategy, redirectUser) {
 @description
 Sends the service provider metadata. The SP certificate is published as the signing certificate for requests signed with the SP private key.
 
+node-saml throws if the SP certificate file does not hold exactly one X.509 certificate, eg. a bare public key or a certificate chain. The error is logged and sent as a 500 status. The request must not be left without a response.
+
 @param {res} res HTTP response.
 @param {SAML} strategy The node-saml instance.
 */
 function metadata(res, strategy) {
+  let metadata;
+
+  try {
+    metadata = strategy.generateServiceProviderMetadata(
+      null,
+      strategy.options.publicCert,
+    );
+  } catch (error) {
+    console.error('SAML metadata generation failed:', error.message);
+    return res.status(500).send('SAML metadata is not available.');
+  }
+
   res.setHeader('Content-Type', 'application/xml');
-  const metadata = strategy.generateServiceProviderMetadata(
-    null,
-    strategy.options.publicCert,
-  );
   res.send(metadata);
 }
 
@@ -279,11 +409,11 @@ async function login(req, res, strategy) {
   try {
     //This tells the IDP where to redirect to
     const relayState = (redirect || xyzEnv.DIR) ?? '/';
-    const url = await strategy.getAuthorizeUrlAsync(
-      relayState,
-      req.headers['x-forwarded-host'],
-      { additionalParams: {} },
-    );
+
+    // node-saml ignores the deprecated host argument. The AuthnRequest is built from the required SAML_ACS callbackUrl.
+    const url = await strategy.getAuthorizeUrlAsync(relayState, {
+      additionalParams: {},
+    });
 
     res.setHeader('location', url);
     return res.status(302).send();
