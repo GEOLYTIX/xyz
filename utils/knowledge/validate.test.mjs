@@ -305,6 +305,7 @@ describe('knowledge validator:', () => {
     expect(validateBundle(root).errors).toEqual([
       'knowledge/workspace/index.md: Missing local target: missing.md',
       'knowledge/workspace/workspace.schema.json: out of date; run pnpm knowledge:schema',
+      'knowledge/workspace/workspace.strict.schema.json: out of date; run pnpm knowledge:schema',
     ]);
   });
 

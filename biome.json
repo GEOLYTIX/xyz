@@ -23,6 +23,7 @@
       "!**/public/css/ui.css",
       "!package.json",
       "!knowledge/workspace/workspace.schema.json",
+      "!knowledge/workspace/workspace.strict.schema.json",
       "!coverage",
       "!.zed",
       "!**/.vscode",

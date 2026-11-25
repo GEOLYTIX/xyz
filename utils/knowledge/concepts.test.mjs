@@ -82,6 +82,31 @@ describe('workspace keys:', () => {
         '  - { key: layer.format, type: string, deprecated: 1 }',
         /deprecated must be/,
       ],
+      [
+        '  - { key: layer.z, type: number, pattern: "^a" }',
+        /needs type string/,
+      ],
+      [
+        '  - { key: layer.f, type: string, pattern: "(" }',
+        /regular expression/,
+      ],
+      ['  - { key: layer.z, type: string, minimum: 0 }', /needs type number/],
+      ['  - { key: layer.z, type: number, minimum: "0" }', /must be a number/],
+      [
+        '  - { key: layer.z, type: number, minimum: 2, maximum: 1 }',
+        /minimum exceeds maximum/,
+      ],
+      ['  - { key: layer.z, type: object, open: 1 }', /open must be true/],
+      ['  - { key: layer.z, type: string, open: true }', /open needs type/],
+      ['  - { key: layer.z, type: string, required: [a] }', /required must be/],
+      [
+        '  - { key: layer.z, type: string, required: { when: [a] } }',
+        /required.when must map/,
+      ],
+      [
+        '  - { key: layer.z, type: string, required: { or: [locale.z] } }',
+        /locale.z, which is not a sibling/,
+      ],
     ]) {
       const root = fixture({ 'knowledge/a.md': keyConcept(keys) });
       const { errors } = validateBundle(root);
@@ -98,6 +123,18 @@ describe('workspace keys:', () => {
     });
     expect(validateBundle(root).errors).toEqual([
       'knowledge/a.md: layer.filter requires layer.table, which no concept owns',
+    ]);
+  });
+
+  it('fails when a required rule names a key without an owner', () => {
+    const root = fixture({
+      'knowledge/a.md': keyConcept(
+        '  - { key: layer.table, type: string, required: { when: { layer.format: wkt }, or: [layer.tables] } }',
+      ),
+    });
+    expect(validateBundle(root).errors).toEqual([
+      'knowledge/a.md: layer.table requires layer.format, which no concept owns',
+      'knowledge/a.md: layer.table requires layer.tables, which no concept owns',
     ]);
   });
 

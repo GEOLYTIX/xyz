@@ -60,14 +60,33 @@ x-xyz-keys:
 - `description` says what the key does, `enum` lists its only valid values,
   and `deprecated` is `true` or names the replacement key. They are generated
   into the schema, which rejects a value outside the `enum`.
+- `pattern` (a regular expression for strings) and `minimum`/`maximum` (for
+  numbers) constrain values where the code fails outside them. Constrain
+  array items with an entry for the item, eg. `locale.mapviewControls[]`.
+- `required` is `true`, or names the sibling values which make the key
+  required (`when`) and the sibling keys which satisfy it instead (`or`):
+  `{ key: layer.URI, type: string, required: { when: { layer.format: tiles } } }`.
+  It describes the composed object, so objects with a `template` or
+  `templates` key are exempt.
+- `open: true` keeps a documented object open in the strict schema, eg. for
+  options passed on to a library.
 - `ref` names the root whose keys the value has, eg.
   `{ key: locale.layers.*, type: object, ref: layer }`. For an array the
   items have them; a style category is `ref: style`.
 - Each key has exactly one owner; the checker fails on a second.
 
-`pnpm knowledge:schema` generates `knowledge/workspace/workspace.schema.json`
-from all `x-xyz-keys`; commit it with the concepts. Agents and editors can
-validate workspaces with it.
+Constrain only what the code enforces or fails on, and cite it in the body.
+Deployment rules, such as hex-only colours or a read-only locale, belong in a
+schema of that deployment which extends the generated one with `allOf`.
+
+`pnpm knowledge:schema` generates two schemas from all `x-xyz-keys`; commit
+them with the concepts:
+
+- `knowledge/workspace/workspace.schema.json` accepts every workspace the XYZ
+  API accepts. Unknown keys are allowed; editors can validate with it.
+- `knowledge/workspace/workspace.strict.schema.json` is the contract for
+  generated workspaces. It rejects undocumented keys in documented objects and
+  enforces `required`. Agents validate generated workspaces with it.
 
 End the concept with `# Examples` and a complete, minimal JSON workspace in a
 `json` code block. Use the devdb tables (`packages/devdb/seed`) and the

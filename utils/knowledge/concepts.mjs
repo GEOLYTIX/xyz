@@ -96,6 +96,7 @@ function checkEntry(entry) {
   if (format)
     throw new Error(`${KEYS}: ${entry.key} has unknown layer format ${format}`);
   checkAnnotations(entry, types);
+  checkConstraints(entry, types);
   if (entry.ref !== undefined && !KEY_ROOTS.includes(entry.ref))
     throw new Error(
       `${KEYS}: ${entry.key} ref must be one of ${KEY_ROOTS.join(', ')}`,
@@ -146,11 +147,96 @@ function checkAnnotations(entry, types) {
     );
 }
 
-/** The keys each entry requires, as [key, required key] pairs. */
-export const requirements = (metadata) =>
-  (metadata[KEYS] ?? []).flatMap((entry) =>
-    list(entry.requires).map((target) => [entry.key, target]),
+/** The parent path of a key, eg. layer.style for layer.style.theme. */
+export const parentKey = (key) => key.replace(/(?:\.[^.]+|\[\])$/, '');
+
+/** The last segment of a key path. */
+export const keyName = (key) => key.slice(parentKey(key).length + 1);
+
+const isScalar = (value) => scalarTypes(value).length > 0;
+
+/**
+Normalise a required field: true, or a mapping with `when` (sibling keys and
+the values which make the key required) and `or` (sibling keys which satisfy
+the requirement instead).
+*/
+export function requiredRule(entry) {
+  if (entry.required === undefined || entry.required === false) return;
+  if (entry.required === true) return { when: {}, or: [] };
+  return { when: entry.required.when ?? {}, or: list(entry.required.or) };
+}
+
+const failure = (entry) => (message) => {
+  throw new Error(`${KEYS}: ${entry.key} ${message}`);
+};
+
+/** Throw on a malformed pattern, minimum, maximum, open or required field. */
+function checkConstraints(entry, types) {
+  const fail = failure(entry);
+  if (entry.pattern !== undefined) {
+    if (!types.includes('string')) fail('pattern needs type string');
+    try {
+      new RegExp(entry.pattern, 'u');
+    } catch {
+      fail('pattern must be a regular expression');
+    }
+  }
+  for (const field of ['minimum', 'maximum']) {
+    if (entry[field] === undefined) continue;
+    if (!Number.isFinite(entry[field])) fail(`${field} must be a number`);
+    if (!types.includes('number') && !types.includes('integer'))
+      fail(`${field} needs type number or integer`);
+  }
+  if (entry.minimum > entry.maximum) fail('minimum exceeds maximum');
+  if (entry.open !== undefined && entry.open !== true)
+    fail('open must be true');
+  if (entry.open && !types.includes('object')) fail('open needs type object');
+  checkRequired(entry);
+}
+
+/** Throw on a malformed required field or one which names no sibling key. */
+function checkRequired(entry) {
+  const fail = failure(entry);
+  const required = entry.required;
+  if (required === undefined || typeof required === 'boolean') return;
+  const keys = Object.keys(required ?? {});
+  if (
+    required === null ||
+    typeof required !== 'object' ||
+    Array.isArray(required) ||
+    !keys.length ||
+    keys.some((key) => !['when', 'or'].includes(key))
+  )
+    fail('required must be true or a mapping with when and or');
+  const rule = requiredRule(entry);
+  if (
+    typeof rule.when !== 'object' ||
+    Array.isArray(rule.when) ||
+    Object.values(rule.when).some((values) => !list(values).every(isScalar))
+  )
+    fail('required.when must map keys to values');
+  const parent = parentKey(entry.key);
+  const outside = [...Object.keys(rule.when), ...rule.or].find(
+    (key) => typeof key !== 'string' || parentKey(key) !== parent,
   );
+  if (outside !== undefined)
+    fail(`required refers to ${outside}, which is not a sibling key`);
+}
+
+/**
+The keys each entry refers to, as [key, target] pairs: the keys it requires
+and the sibling keys of its required rule. Each target must have an owner.
+*/
+export const requirements = (metadata) =>
+  (metadata[KEYS] ?? []).flatMap((entry) => {
+    const rule = requiredRule(entry);
+    const targets = [
+      ...list(entry.requires),
+      ...Object.keys(rule?.when ?? {}),
+      ...(rule?.or ?? []),
+    ];
+    return targets.map((target) => [entry.key, target]);
+  });
 
 /** Text of the inline children of a heading token. */
 const headingText = (tokens, index) => tokens[index + 1]?.content.trim() ?? '';

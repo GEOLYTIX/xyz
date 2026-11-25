@@ -69,9 +69,12 @@ exactly one concept. A key path starts at the object it belongs to:
 `*` stands for a named entry, eg. `locale.layers.*`, and `[]` for an array
 item.
 
-A JSON Schema generated from all keys,
-[workspace.schema.json](workspace/workspace.schema.json), checks a workspace
-for wrong value types and reports keys no concept documents.
+Two JSON Schemas are generated from all keys.
+[workspace.schema.json](workspace/workspace.schema.json) checks a workspace
+for wrong values and reports keys no concept documents.
+[workspace.strict.schema.json](workspace/workspace.strict.schema.json) is the
+contract for generated workspaces: it also rejects undocumented keys and
+missing required keys.
 
 Every workspace concept ends with a minimal JSON workspace under `# Examples`.
 The examples use the devdb test database, so they run in tests and demos and

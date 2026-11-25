@@ -26,11 +26,13 @@ The checker fails on:
   a bundle `license` path), and paths escaping the repository
 - path-like path field values without a `./`, `../` or `/` prefix
 - malformed `x-xyz-keys` entries, a workspace key owned by two concepts, a
-  `requires` key which no concept owns, and a `formats` value which is not a
-  key of the MAPP format registry (`apps/mapp/lib/layer/format/_format.mjs`)
+  `requires` or `required` key which no concept owns, a `required` rule naming
+  a key which is not a sibling, and a `formats` value which is not a key of
+  the MAPP format registry (`apps/mapp/lib/layer/format/_format.mjs`)
 - an `x-xyz-variables` value which is not a list of `NAME` or `PREFIX_*` strings
-- a `json` code block under `Examples` which does not parse, an example
-  value of the wrong type, or an example key no concept owns
+- a `json` code block under `Examples` which does not parse, or an example
+  which fails the strict schema: a value of the wrong type, outside its
+  `enum`, `pattern` or range, a missing required key, or a key no concept owns
 - a workspace schema which is out of date with the concepts. The schema
   checks run even when other checks fail.
 - malformed `generated` or `verified` frontmatter, an agent actor in

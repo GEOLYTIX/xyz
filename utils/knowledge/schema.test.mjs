@@ -41,15 +41,28 @@ x-xyz-keys:
 ---
 `;
 
+const STRICT_KEYS = `${LOCALE_KEYS.slice(0, LOCALE_KEYS.lastIndexOf('---'))}  - { key: layer.template, type: string }
+  - { key: layer.table, type: string, pattern: "^[a-z_.]+$", required: { when: { layer.format: [wkt, mvt] }, or: [layer.tables] } }
+  - { key: layer.tables, type: object }
+  - { key: layer.name, type: string, required: true }
+  - { key: layer.opacity, type: number, minimum: 0, maximum: 1 }
+  - { key: layer.zIndex, type: [integer, string], pattern: "^[0-9]+$", minimum: 0 }
+  - { key: layer.params, type: object, open: true }
+  - { key: layer.params.viewport, type: boolean }
+  - { key: layer.queryparams, type: object }
+---
+`;
+
 function fixture(
   example = '{ "locale": { "layers": { "a": { "display": true } } } }',
+  keys = LOCALE_KEYS,
 ) {
   const root = mkdtempSync(join(tmpdir(), 'xyz-schema-'));
   roots.push(root);
   const files = {
     'knowledge/index.md': INDEX,
     'knowledge/workspace/index.md': '# Workspace\n\n- [Locales](locales.md)',
-    'knowledge/workspace/locales.md': `${LOCALE_KEYS}# Examples\n\n\`\`\`json\n${example}\n\`\`\``,
+    'knowledge/workspace/locales.md': `${keys}# Examples\n\n\`\`\`json\n${example}\n\`\`\``,
   };
   for (const [path, content] of Object.entries(files)) {
     const target = join(root, path);
@@ -131,6 +144,93 @@ describe('workspace schema:', () => {
     ).toEqual(['layer.srid: expected string or integer, got number']);
   });
 
+  it('checks pattern, minimum and maximum in both schemas', () => {
+    const root = fixture(undefined, STRICT_KEYS);
+    const layer = { name: 'a', table: 'Bad-Table', opacity: 1.5, zIndex: 'x' };
+    for (const strict of [false, true]) {
+      const schema = buildSchema(root, { strict });
+      expect(schema.$defs.layer.properties.opacity).toMatchObject({
+        minimum: 0,
+        maximum: 1,
+      });
+      expect(validateWorkspace(schema, layer, 'layer').errors).toEqual([
+        'layer.table: "Bad-Table" does not match ^[a-z_.]+$',
+        'layer.opacity: 1.5 is greater than 1',
+        'layer.zIndex: "x" does not match ^[0-9]+$',
+      ]);
+      expect(
+        validateWorkspace(schema, { name: 'a', zIndex: -1 }, 'layer').errors,
+      ).toEqual(['layer.zIndex: -1 is less than 0']);
+    }
+  });
+
+  it('closes documented objects in the strict schema unless open', () => {
+    const schema = buildSchema(fixture(undefined, STRICT_KEYS), {
+      strict: true,
+    });
+    // Definitions are closed where they are referenced.
+    expect(schema.$defs.layer.unevaluatedProperties).toBeUndefined();
+    expect(schema.$defs.locale.properties.layers.additionalProperties).toEqual(
+      expect.objectContaining({
+        $ref: '#/$defs/layer',
+        unevaluatedProperties: false,
+      }),
+    );
+    const result = validateWorkspace(schema, {
+      locale: {
+        layers: {
+          a: {
+            name: 'a',
+            colour: 'red',
+            params: { viewport: true, custom: 1 },
+            queryparams: { anything: true },
+            infoj: [{ field: 'f', colour: 'red' }],
+            style: { cluster: { fillColor: '#000', clusterScale: 1 } },
+          },
+        },
+      },
+    });
+    expect(result.errors).toEqual([
+      'locale.layers.a.colour: not allowed; no concept documents it',
+      'locale.layers.a.infoj[0].colour: not allowed; no concept documents it',
+    ]);
+    // Open and opaque objects stay open; unknown keys of an opaque object
+    // are undocumented, those of an open object are passed on by design.
+    expect(result.undocumented).toEqual([
+      'locale.layers.a.queryparams.anything',
+    ]);
+  });
+
+  it('enforces requirements only in the strict schema', () => {
+    const root = fixture(undefined, STRICT_KEYS);
+    const open = buildSchema(root);
+    const strict = buildSchema(root, { strict: true });
+    expect(open.$defs.layer.allOf).toBeUndefined();
+    expect(open.$defs.layer.properties.table['x-xyz-required']).toEqual({
+      when: { 'layer.format': ['wkt', 'mvt'] },
+      or: ['layer.tables'],
+    });
+    expect(strict.$defs.layer.allOf).toContainEqual({
+      if: {
+        properties: { format: { enum: ['wkt', 'mvt'] }, template: false },
+        required: ['format'],
+      },
+      then: { anyOf: [{ required: ['table'] }, { required: ['tables'] }] },
+    });
+    const errors = (layer) => validateWorkspace(strict, layer, 'layer').errors;
+    expect(errors({ format: 'wkt', name: null })).toEqual([
+      'layer: missing name',
+      'layer: missing table or tables (required when format is "wkt" or "mvt")',
+    ]);
+    expect(errors({ format: 'wkt', name: 'a', tables: {} })).toEqual([]);
+    expect(errors({ name: 'a' })).toEqual([]);
+    // An object which merges a template may take the keys from it.
+    expect(errors({ format: 'wkt', template: 'base' })).toEqual([]);
+    expect(validateWorkspace(open, { format: 'wkt' }, 'layer').errors).toEqual(
+      [],
+    );
+  });
+
   it('generalises concrete paths', () => {
     expect(keyPattern('locales.uk.layers.osm.infoj[2].field')).toBe(
       'locales.*.layers.*.infoj[].field',
@@ -143,9 +243,21 @@ describe('knowledge check with a workspace schema:', () => {
     const root = fixture();
     expect(validateBundle(root).errors).toEqual([
       'knowledge/workspace/workspace.schema.json: out of date; run pnpm knowledge:schema',
+      'knowledge/workspace/workspace.strict.schema.json: out of date; run pnpm knowledge:schema',
     ]);
     writeSchema(root);
     expect(validateBundle(root).errors).toEqual([]);
+  });
+
+  it('checks examples against the strict schema', () => {
+    const root = fixture(
+      '{ "locale": { "layers": { "a": { "format": "wkt", "name": "a" } } } }',
+      STRICT_KEYS,
+    );
+    writeSchema(root);
+    expect(validateBundle(root).errors).toEqual([
+      'knowledge/workspace/locales.md: example locale.layers.a: missing table or tables (required when format is "wkt" or "mvt")',
+    ]);
   });
 
   it('fails on examples with type errors or undocumented keys', () => {
@@ -155,7 +267,7 @@ describe('knowledge check with a workspace schema:', () => {
     writeSchema(root);
     expect(validateBundle(root).errors).toEqual([
       'knowledge/workspace/locales.md: example locale.layers.a.display: expected boolean, got integer',
-      'knowledge/workspace/locales.md: example uses undocumented key locale.layers.a.colour',
+      'knowledge/workspace/locales.md: example locale.layers.a.colour: not allowed; no concept documents it',
     ]);
   });
 });

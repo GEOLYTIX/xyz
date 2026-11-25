@@ -16,7 +16,7 @@ import {
   checkExample,
   checkTestWorkspaces,
   SCHEMA_PATH,
-  schemaCurrent,
+  staleSchemas,
 } from './schema.mjs';
 
 const markdown = new MarkdownIt();
@@ -378,9 +378,9 @@ function covered(name, variables) {
 }
 
 /**
-Check the generated workspace schema, the concept examples against it, and
-the repository test workspaces for undocumented keys. Bundles without a
-workspace directory, eg. test fixtures, have no schema.
+Check the generated workspace schemas, the concept examples against the
+strict schema, and the repository test workspaces against the open schema.
+Bundles without a workspace directory, eg. test fixtures, have no schema.
 */
 function checkWorkspaceSchema(context, errors, warnings) {
   if (!existsSync(resolve(context.bundle, 'workspace'))) return;
@@ -393,11 +393,12 @@ function checkWorkspaceSchema(context, errors, warnings) {
 }
 
 function checkSchemaExamples(context, errors, warnings) {
-  if (!schemaCurrent(context.root))
-    errors.push(`${SCHEMA_PATH}: out of date; run pnpm knowledge:schema`);
+  for (const path of staleSchemas(context.root))
+    errors.push(`${path}: out of date; run pnpm knowledge:schema`);
   const schema = buildSchema(context.root);
+  const strict = buildSchema(context.root, { strict: true });
   for (const example of collectExamples(context.root)) {
-    const result = checkExample(schema, example.workspace);
+    const result = checkExample(strict, example.workspace);
     for (const error of result.errors)
       errors.push(`${example.path}: example ${error}`);
     for (const path of result.undocumented)

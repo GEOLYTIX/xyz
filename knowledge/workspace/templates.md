@@ -7,7 +7,7 @@ tags: [workspace, template, query, xyz, security]
 status: draft
 x-xyz-keys:
   - { key: workspace.templates, type: object }
-  - { key: workspace.templates.*, type: object }
+  - { key: workspace.templates.*, type: object, open: true, description: A template; its content is a partial layer, locale or query and not closed. }
   - { key: workspace.templates.*.src, type: string }
   - { key: workspace.templates.*.template, type: string }
   - { key: workspace.templates.*.module, type: boolean, requires: [workspace.templates.*.src] }
