@@ -46,8 +46,8 @@ workspace tasks cost the most, reading the devdb seeds, testhost workspaces,
 test locales and library source to find which keys exist:
 
 - t4 did not find that a `table` dataview needs the tabulator plugin from
-  `xyz_plugins`, which the [dataviews](../workspace/dataviews.md) concept
-  states. Its `table` keys are Tabulator options, which the schema does not
+  the [public plugins](https://github.com/GEOLYTIX/mapp/tree/main/plugins),
+  which the [dataviews](../workspace/dataviews.md) concept states. Its `table` keys are Tabulator options, which the schema does not
   describe.
 - t2 found the two rules the [roles](../workspace/roles.md) concept states,
   `filter.default` and `"*": true`, only by reading `composeObj.js` and

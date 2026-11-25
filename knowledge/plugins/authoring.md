@@ -29,8 +29,8 @@ sources:
   - resource: ../../apps/mapp/tests/utils/loadPlugins.test.mjs
   - resource: ../../apps/mapp/tests/plugins
   - resource: ../../apps/ui/tests/plugins
-  - id: repo
-    resource: https://github.com/GEOLYTIX/xyz_plugins
+  - id: public
+    resource: https://github.com/GEOLYTIX/mapp/tree/main/plugins
   - resource: ../../apps/ui/tests/locations/infoj.test.mjs
 ---
 # Authoring
@@ -107,15 +107,16 @@ mapp.plugins.home_button = (config = {}, mapview) => {
 - A plugin which needs another one first, eg. `posthog` after `consent`,
   is listed after it in `syncPlugins`.
 
-## The xyz_plugins repository
+## Plugin repositories
 
-[GEOLYTIX/xyz_plugins](https://github.com/GEOLYTIX/xyz_plugins) holds the
-plugins shared between deployments, eg. tabulator, chartjs, isoline and
-posthog.[^repo] Each plugin lives in a folder named for the MAPP version it
-was written for, eg. `v4.21.0/` or `v5.0.0/`, so a workspace pins the
-version its deployment runs. The `development` branch (`dev` in its README)
-serves development deployments and `main` live ones; changes go through a
-pull request to `development`.
+[GEOLYTIX/mapp/plugins](https://github.com/GEOLYTIX/mapp/tree/main/plugins)
+is the public home of shared plugins, eg. tabulator, chartjs, the isoline
+and routing plugins, and measure_distance.[^public] Many were written for
+earlier MAPP versions; check a plugin against the MAPP version of the
+deployment before using it.
+
+Serve plugins from a path which names the MAPP version they were written
+for, eg. `v5.0.0/`, so a workspace pins the version its deployment runs.
 
 ## Pitfalls
 
@@ -133,4 +134,4 @@ pull request to `development`.
 [^load]: utils/loadPlugins.mjs
 [^version]: utils/versionCheck.mjs
 [^esm]: utils/esmImport.mjs
-[^repo]: xyz_plugins README
+[^public]: GEOLYTIX/mapp plugins directory

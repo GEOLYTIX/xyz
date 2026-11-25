@@ -34,8 +34,7 @@ sources:
     resource: ../../../apps/ui/lib/plugins/_plugins.mjs
   - resource: ../../../apps/mapp/lib/utils/loadPlugins.mjs
   - resource: ../../../public/views/_default.html
-  - id: repo
-    resource: https://github.com/GEOLYTIX/xyz_plugins
+  - resource: https://github.com/GEOLYTIX/mapp/tree/main/plugins
   - resource: ../../../apps/mapp/tests/utils/loadPlugins.test.mjs
   - resource: ../../../apps/mapp/lib/plugins/_plugins.mjs
   - resource: ../../../apps/mapp/lib/plugins/layer_order.mjs
@@ -64,7 +63,7 @@ the listed layers.[^layerorder]
 
 `plugins` lists URLs of plugin modules to import first, eg. the tabulator and
 chartjs dataview plugins from the
-[xyz_plugins repository](https://github.com/GEOLYTIX/xyz_plugins). The XYZ API
+[public plugins](https://github.com/GEOLYTIX/mapp/tree/main/plugins). The XYZ API
 replaces `${NAME}` in each URL with the `SRC_NAME` environment
 variable.[^envreplace] `layer.plugins` are added to the locale's list.
 

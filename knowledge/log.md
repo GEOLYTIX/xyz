@@ -2,6 +2,8 @@
 
 ## 2026-11-25
 
+- [Plugin authoring](plugins/authoring.md) and [dataviews](workspace/dataviews.md)
+  link the public GEOLYTIX/mapp plugins directory.
 - Added [fine-grained authorization](security/fine-grained-authorization.md):
   the workspace as the single place which decides, through roles and template
   scopes, what each user may see and do across all data sources.

@@ -49,7 +49,7 @@ sources:
   - resource: ../../apps/ui/lib/utils/jsonDataview.mjs
   - resource: ../../apps/ui/tests/Dataview.test.mjs
   - id: plugins
-    resource: https://github.com/GEOLYTIX/xyz_plugins
+    resource: https://github.com/GEOLYTIX/mapp/tree/main/plugins
   - resource: ../../apps/ui/tests/layers/panels/dataviews.test.mjs
   - resource: ../../apps/ui/tests/locations/entries/dataview.test.mjs
   - resource: ../../apps/ui/tests/utils/dataview.test.mjs
@@ -70,7 +70,7 @@ configured in two places:
 `dataview` names the renderer in `mapp.ui.utils`. The core has `Json`, a JSON
 viewer whose editor options are `props`. A `table` object selects
 `tabulator` and a `chart` object selects `chartjs`; both are provided by the
-[tabulator and chartjs plugins](https://github.com/GEOLYTIX/xyz_plugins),
+[tabulator and chartjs plugins](https://github.com/GEOLYTIX/mapp/tree/main/plugins),
 which the locale must load. `table` holds Tabulator options, eg. `columns`,
 and `chart` a Chart.js configuration. A missing renderer logs an error.[^dataview]
 
