@@ -40,8 +40,7 @@ install, see [Codespaces](codespaces.md).
 ## Prerequisites
 
 - `git` and Node.js 22 or later. CI runs Node 22; there is no `engines` field.
-- pnpm 11. The root `packageManager` pins `pnpm@11.3.0`.[^package] SETUP.md
-  and the Wiki still said pnpm 10.
+- pnpm 11. The root `packageManager` pins `pnpm@11.3.0`.[^package]
 
 ## Clone, install, build
 

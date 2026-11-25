@@ -29,7 +29,8 @@ sources:
 # Monorepo
 
 Since v5 the repository is a pnpm workspace driven by Turborepo. The v4 flat
-layout (`lib/`, `api/`, `mod/`, root `express.js`) is gone.
+layout (`lib/`, `api/`, `mod/`, root `express.js`) is gone; see
+[Migrating a v4 fork](../development/fork-migration.md).
 
 ## Layout
 
@@ -75,6 +76,7 @@ Run tasks from the root; [turbo.json](../../turbo.json) defines `build`,
   change in a dependency invalidates the test cache without running builds.
 - A cached run prints `FULL TURBO` and no test counts. Use `--force` to run
   the tests again.
+- Each app has its own `vitest.config.mjs`; there is none at the root.
 - Filter by package name, eg. `pnpm build --filter=@geolytix/mapp`.
 
 The root scripts are the entry points: `pnpm dev`, `pnpm build`, `pnpm test`,
@@ -109,19 +111,6 @@ manifests have no version. Change it with `pnpm bump:patch|minor|major`;
 `utils/check-version.js` checks that all four match.[^bump] See
 [RELEASING.md](../../RELEASING.md).
 
-## Corrections to the Wiki
-
-- The Wiki listed MAPP.UI inside `@geolytix/mapp`; it is `@geolytix/mapp-ui`
-  in `apps/ui`.[^wiki]
-- It said the bundles are committed and the build clears `public/js/lib`.
-  They are gitignored outside `main` and release tags, and the build keeps
-  the directory.
-- It said every app manifest lost its `version`; `apps/mapp/package.json` has
-  one for npm.
-- It placed `vitest.config.mjs` at the root; each app has its own.
-- Its fork migration notes are in [Migrating a v4 fork](../development/fork-migration.md).
-
-[^wiki]: Monorepo Wiki page at revision 3fc379b
 [^workspace]: pnpm-workspace.yaml
 [^root]: package.json
 [^turbo]: turbo.json

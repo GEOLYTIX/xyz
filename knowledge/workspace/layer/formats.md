@@ -90,7 +90,6 @@ geometries, so filters and themes update without reloading tiles.
 - `"srid": 3857` as a number skips an MVT layer: the check compares with the
   string `"3857"`. Vector formats accept a number, but cluster's `4326` check
   also compares strings, so write SRIDs as strings.
-- The Wiki describes `mvt_cache` tile caching; the code disables it.
 - The devdb cannot create vector tiles. The testhost replaces the `mvt`
   template, so MVT examples test the MAPP format, not the core SQL.
 

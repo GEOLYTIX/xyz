@@ -62,15 +62,14 @@ DBS_NEON="postgresql://..."
 How the variable reaches the process depends on the launch:
 
 - `pnpm dev` runs through Varlock, which reads `.env`. Declare the variable in
-  `.env.schema` as sensitive so Varlock redacts it from logs and responses:
+  `.env.schema` as sensitive so Varlock redacts it from logs and
+  responses:[^varlock]
 
   ```
   # @sensitive=true
   DBS_NEON=
   ```
 
-  The Wiki said a variable missing from `.env.schema` is unavailable to the
-  process. That was not checked against Varlock; declare it either way.[^varlock]
 - A VS Code program launch of `apps/xyz/server.js` reads no `.env` unless it
   sets `envFile`; otherwise put the connection in its `env` block. See
   [running locally](running-locally.md#vs-code-launch-configurations).
@@ -107,8 +106,8 @@ locations and edit the name of a selected location:
 }
 ```
 
-The Wiki added `notes` and `style.default` in a second step: without a
-`style.default` the browser console logs a warning for the layer.[^style] The keys
+Without a `style.default` the browser console logs a warning for the
+layer.[^style] The keys
 are documented in [layer drawing](../workspace/layer/draw.md),
 [feature styles](../workspace/layer/style/feature-style.md) and
 [location infoj](../workspace/location/infoj.md). The layer edits data, so

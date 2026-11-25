@@ -72,8 +72,8 @@ ACL queries with a mocked ACL.
 ## Pitfalls
 
 - The ACL table needs a `session` column when `USER_SESSION` is set.
-- The Wiki's 30 second registration throttle is not in the code; rate
-  limiting is instance wide (`RATE_LIMIT`).
+- Registration has no throttle of its own; rate limiting is instance wide
+  (`RATE_LIMIT`).
 - The `processEnv` JSDoc gives a 10 character password default; the
   register module requires 12.
 

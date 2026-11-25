@@ -40,9 +40,7 @@ the files: MAPP builds the npm package into `apps/mapp/dist` and copies
 
 The MAPP build ends with `scripts/copyPublic.mjs`, which copies the bundle
 from `dist` into `public`.[^copy] The UI build writes to `public/js/lib`
-without emptying it, so each build keeps the other's bundle.[^ui-vite] The
-Wiki said the build clears `public/js/lib` and emits a shared hashed chunk;
-it no longer does.[^wiki]
+without emptying it, so each build keeps the other's bundle.[^ui-vite]
 
 ```bash
 pnpm build                                                  # all packages
@@ -120,7 +118,6 @@ workflows.
 [^deployment]: DEPLOYMENT.md "Build artefacts" and "CI".
 [^copy]: apps/mapp/scripts/copyPublic.mjs.
 [^ui-vite]: apps/ui/vite.config.mjs `emptyOutDir: false`.
-[^wiki]: Wiki VERCEL page, "Rebuilding the library".
 [^release]: .github/workflows/release.yml.
 [^turbo]: apps/mapp/turbo.json and apps/ui/turbo.json; the root turbo.json lists no outputs.
 [^version]: utils/version.js.

@@ -56,6 +56,9 @@
   `process:knowledge-examples` is reserved for the example runs.
 - The databases, JWT claims and agent baseline concepts link the issues
   opened for their gaps: #3155, #3156 and the generation pilot #3157.
+- Removed the comparisons with the retired Wiki from the concepts ("the Wiki
+  said …", "Corrections to the Wiki" sections); concepts state what the code
+  does now. The Wiki revisions stay in `sources` as provenance.
 
 ## 2026-11-24
 

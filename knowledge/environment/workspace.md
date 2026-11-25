@@ -24,8 +24,7 @@ default WORKSPACE source. Configure it using the environment setup described in
 
 The source prefix selects a provider. The current provider registry includes
 `file:`, `https:` and `cloudfront:`, plus signer providers derived from `SIGN_*`
-keys. The Wiki's general claim that any HTTP URL is supported does not match
-the current registry: there is no built-in `http:` provider.
+keys. There is no built-in `http:` provider.
 
 ```dotenv
 WORKSPACE=file:/public/workspace.json

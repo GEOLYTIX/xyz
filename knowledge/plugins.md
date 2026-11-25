@@ -125,8 +125,6 @@ pull request to `development`.
 - A URL with a query string, eg. `plugin.js?v=2`, is not loaded.
 - A plugin URL runs in every user's browser; list only sources the
   deployment controls.
-- The Wiki points to sample plugins in the GEOLYTIX/mapp repository and
-  `geolytix.github.io/mapp` URLs. Shared plugins are now in xyz_plugins.
 
 [^mapview]: mapview/_mapview.mjs mapviewPromise and executePlugin
 [^layer]: layer/decorate.mjs

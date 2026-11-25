@@ -57,8 +57,7 @@ eg. `file:{RESOURCES}/layer.json`. There a missing variable gives the text
 `undefined`.
 
 Values are only substituted in src references, not elsewhere in a workspace.
-The Wiki example which puts `${DIR}` in a `plugins` URL is not substituted by
-the API.[^wiki]
+A `${DIR}` in a `plugins` URL is not substituted by the API.
 
 ## SIGN_*
 
@@ -74,8 +73,7 @@ A src `ASSETS:templates/layer.json` is then fetched from
 `https://assets.example.com/geo/api/provider/file` with the path, an expiry
 one day ahead, the key id and an HMAC-SHA256 signature made with the key. The
 other instance must hold the same key to verify the signature; that check is
-not part of `apps/xyz`. The Wiki example value with `https://` would give a
-doubled scheme.[^wiki]
+not part of `apps/xyz`. A value with `https://` gives a doubled scheme.
 
 `FILE_RESOURCES`, default `resources`, is the directory under `XYZ_CWD` from
 which files are served to signed file provider requests.
@@ -87,7 +85,7 @@ which files are served to signed file provider requests.
 provider and the `cloudfront` signer, and needs the optional
 `@aws-sdk/cloudfront-signer` dependency. Signed URLs expire at the next
 midnight, server time. `{NAME}` placeholders in the URL
-are replaced from `SRC_*`. The Wiki only describes the key file name.[^wiki]
+are replaced from `SRC_*`.
 
 ## S3
 
@@ -121,5 +119,3 @@ loads with the core templates.
 
 Keep the keys and secrets of all signers in a secret manager or the varlock
 schema.
-
-[^wiki]: Wiki Process-Environment page at revision 3fc379b.

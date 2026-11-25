@@ -111,9 +111,9 @@ location.flyTo();
 - `mapp.location.get` returns `undefined` for a layer without `infoj`.
 - Report links are built from `mapp.hooks.current`. A mapview without
   `hooks` gives no `lat`, `lng` and `z`.
-- The Wiki's `Map.interactions.highlight()` is
-  `mapview.interactions.highlight()`, and its `innerHTML = dropdown`
-  must be `append(dropdown)`: ui elements are DOM nodes.
+- Interactions belong to the mapview, eg.
+  `mapview.interactions.highlight()`. Ui elements are DOM nodes: add them
+  with `append(dropdown)`, not `innerHTML`.
 
 [^link]: elements/reportLink.mjs and locations/entries/link.mjs
 [^panel]: layers/panels/reports.mjs

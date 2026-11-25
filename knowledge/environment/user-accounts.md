@@ -78,7 +78,5 @@ with an uppercase letter, a lowercase letter and a digit:
 (?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$
 ```
 
-The Wiki and the `processEnv.js` JSDoc give `{10,}` as the default; the
-register module uses `{12,}`.[^wiki]
-
-[^wiki]: Wiki Process-Environment page at revision 3fc379b.
+The `processEnv.js` JSDoc gives `{10,}` as the default; the register module
+uses `{12,}`.

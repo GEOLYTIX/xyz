@@ -137,12 +137,6 @@ is an own member of its method map, and rejects any other key.
 - Tests: [apps/xyz/tests](../../apps/xyz/tests) mirrors `mod/`; run
   `pnpm test:xyz`, see [TESTING.md](../../TESTING.md).
 
-## Corrections to the Wiki
-
-The Wiki said endpoint modules must assign `req._params`; the default chain and the endpoints already do.[^wiki]
-Its route table lacked `verify{/:key}`, `cors` and the `templates` key; `roles` now returns 410.
-
-[^wiki]: XYZ Wiki page at revision 3fc379b
 [^router]: apps/xyz/router.js
 [^params]: apps/xyz/mod/middleware/validateRequestParams.js
 [^auth]: apps/xyz/mod/middleware/validateRequestAuth.js

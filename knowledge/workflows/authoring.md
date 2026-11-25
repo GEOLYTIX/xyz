@@ -117,6 +117,9 @@ bare page URL shows the generated stub) with the revision in `x-xyz-revision`,
 an XYZ extension which does not replace OKF timestamps. Record current
 implementation and relevant tests separately.
 
+State what the code does now. Do not compare a concept with the retired
+Wiki, eg. "the Wiki said": its readers no longer have the Wiki to compare.
+
 Record `generated` and `verified` as the
 [actor convention](../decisions/actor-convention.md) says: `verified` only
 for a maintainer's content review, as `human:<github-handle>`, with

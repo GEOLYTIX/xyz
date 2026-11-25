@@ -50,9 +50,8 @@ imports XYZ modules must change:[^wiki]
   signature checks are in [apps/auth/providerRequestSignature.js](../../apps/auth/providerRequestSignature.js),
   which no server mounts by default.[^sig] A deployment relying on signed
   provider URLs mounts it in its own chain.
-- **Library tests.** The Wiki said the v4 `tests/lib` and `tests/browser`
-  suites had no replacement. That is obsolete: MAPP and MAPP.UI have browser
-  test suites; see [TESTING.md](../../TESTING.md).
+- **Library tests.** MAPP and MAPP.UI browser test suites replace the v4
+  `tests/lib` and `tests/browser` suites; see [TESTING.md](../../TESTING.md).
 - **MongoDB.** The mongodb provider was removed.
 
 ## Keeping a fork current

@@ -98,9 +98,9 @@ browser is tested by `apps/ui/tests/default.spec.mjs`.
 - A param value with a dot, space or comma is removed, eg. `lat=51.5` or a
   nested `locale=UK,London`. Read such values in the browser from
   [URL hooks](url-hooks.md) instead.
-- The Wiki says `{{language}}` falls back to the user's language. It does
-  not: `validateRequestParams` sets `language` to `en` first, so only the
-  URL param counts. The default view applies the user's language in the
+- `{{language}}` does not fall back to the user's language:
+  `validateRequestParams` sets `language` to `en` first, so only the URL
+  param counts. The default view applies the user's language in the
   browser.
 - Views are cached with the workspace. A changed `src` file is read again
   only after `WORKSPACE_AGE` or a cache reset.

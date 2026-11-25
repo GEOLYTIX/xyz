@@ -54,7 +54,7 @@ only when the value is `true`.
 `SAML_IDP_CRT=idp` reads `idp.crt`. `SAML_SP_CRT=sp` reads both `sp.pem`, the
 private key, and `sp.crt`. The files are read when the SAML module loads,
 relative to the `apps/saml` directory, not `XYZ_CWD`; a missing file stops the
-server. The Wiki agrees, but the module header and the `includeFiles` in
+server. The module header and the `includeFiles` in
 `apps/saml/vercel.json` and the SAML README still name `apps/xyz`; check
 where a deployment puts the files.
 
@@ -88,8 +88,3 @@ SAML_SSO=https://idp.example.com/sso
 SAML_IDP_CRT=idp
 SAML_SP_CRT=sp
 ```
-
-The Wiki describes `SAML_IDP_CRT` as a certificate file name; it is a base
-name without the `.crt` extension.[^wiki]
-
-[^wiki]: Wiki Process-Environment page at revision 3fc379b.

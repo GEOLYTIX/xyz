@@ -43,9 +43,7 @@ PRIVATE=postgres://user:password@host:5432/database|acl_schema.acl_table
 ```
 
 A value without the `|table` part does not configure an ACL, so the instance
-behaves as if neither variable were set. The Wiki describes the value as a
-plain connection string; the table part is required.[^wiki] The ACL has its
-own connection pool with a 5 second connection timeout, separate from the
+behaves as if neither variable were set. The ACL has its own connection pool with a 5 second connection timeout, separate from the
 `DBS_*` connections.
 
 A user token is only signed and verified with a `SECRET`; see
@@ -83,5 +81,3 @@ It is a temporary provision for deployments migrating to the v5 scopes.
 
 Any non-empty value enables it, including `false`. Unset the variable to
 disable it.
-
-[^wiki]: Wiki Process-Environment page at revision 3fc379b.

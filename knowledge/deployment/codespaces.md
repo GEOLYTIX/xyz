@@ -41,16 +41,14 @@ pnpm install
 
 `main` carries the built MAPP and MAPP.UI bundles, so `pnpm build` is only
 needed after changing `apps/mapp` or `apps/ui`, or on a development branch,
-where the bundles are gitignored.[^gitignore] The Wiki said the bundles are
-committed to the repository as of v5; that only holds for `main` and the
-release tags, see [release builds](release-builds.md). The Wiki's
-`rm -rf node_modules` before the install is not needed in a new codespace.
+where the bundles are gitignored, see
+[release builds](release-builds.md).[^gitignore]
 
 ## 3. Workspace and environment
 
 `public/workspace.json` already exists in the repository with an OSM tile
-layer on the default locale; the Wiki step which created it can be
-skipped.[^workspace] Point the environment at it in a root `.env`:
+layer on the default locale.[^workspace] Point the environment at it in a
+root `.env`:
 
 ```dotenv
 WORKSPACE=file:/public/workspace.json
@@ -66,9 +64,7 @@ an `.env.schema` (copy both from `varlock/`, see
 [local development](local-development.md#environment)). In the Run and Debug
 panel (Ctrl+Shift+D) a launch configuration can start the server instead; use
 one which reads `.env`, see
-[running locally](running-locally.md#vs-code-launch-configurations). The
-Wiki showed a program launch with `envFile` under a heading saying to use the
-Varlock terminal launch; both work.
+[running locally](running-locally.md#vs-code-launch-configurations).
 
 The program is `apps/xyz/server.js`. The root `express.js` of v4 is gone.
 
@@ -83,7 +79,7 @@ instance.
 
 - Add a PostGIS layer from a hosted database: [Neon](neon.md).
 - Explore the [layer keys](../workspace/layer/index.md) and
-  [location views](../workspace/location/index.md). Ideas from the Wiki: name
+  [location views](../workspace/location/index.md). Things to try: name
   the layer, display it by default, let users toggle edit mode, add a `type`
   field with the options `New` and `Existing` and a theme on it, add infoj
   filters, and try the plugins in `apps/mapp/lib/plugins`.

@@ -121,6 +121,4 @@ sources:
 - **Interpolation** - Replacing `${name}` placeholders in a string, used in
   query templates and `src` URLs.
 
-The Wiki defined **MVT clone**, an MVT layer themed from a lookup; the
-`mvt_clone` entry type is now a legacy alias of `layer`. Its **MVT cache**
-and **GraphHopper** entries are not part of the core.
+The `mvt_clone` entry type is a legacy alias of `layer`.

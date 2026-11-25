@@ -108,12 +108,6 @@ global and drops the ui.
 (`*.spec.mjs`), both against the testhost. Run `pnpm test:ui`; see
 [TESTING.md](../../TESTING.md). Many ui modules have no tests yet.
 
-## Corrections to the Wiki
-
-The Wiki said the ui JSDoc is built from `apps/mapp/lib/ui`. The source is
-`apps/ui/lib`, a separate app and bundle.[^wiki]
-
-[^wiki]: MAPP.UI Wiki page at revision 3fc379b
 [^ui]: apps/ui/lib/ui.mjs
 [^readme]: apps/ui/README.md
 [^listview]: apps/ui/lib/locations/listview.mjs

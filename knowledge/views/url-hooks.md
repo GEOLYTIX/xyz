@@ -93,8 +93,7 @@ or `filter` → `history.pushState`.
 - The URL params also reach the [view API](view-api.md), but only simple
   strings are substituted into the HTML. Read numbers and lists from the
   hooks.
-- The Wiki calls the global `MAPP`. The library assigns `mapp`; there is no
-  `MAPP` alias.
+- The library assigns the global `mapp`; there is no `MAPP` alias.
 
 [^hooks]: hooks.mjs parse
 [^mapview]: mapview/_mapview.mjs viewConfig and updateView

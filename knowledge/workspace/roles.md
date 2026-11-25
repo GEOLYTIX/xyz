@@ -51,8 +51,8 @@ allow. All role handling happens on the server.[^compose]
 ```
 
 A role filter must set `filter.default`: only the default filter is applied
-to queries; see [layer filter](layer/filter.md). The Wiki's example merged
-the filter expression directly into `filter`, where it has no effect.
+to queries; see [layer filter](layer/filter.md). A filter expression merged
+directly into `filter` has no effect.
 
 ## Scopes
 

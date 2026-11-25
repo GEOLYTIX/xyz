@@ -77,10 +77,9 @@ layer to apply.
 
 ## Review notes
 
-- The Wiki described `match` as `ILIKE`; the code compares text exactly.[^wiki]
-- The Wiki documents a `filter` inside `layer.roles`. Whether a role filter is
-  merged into `filter.default` and applied by queries is not yet confirmed
-  against `getLayer.js` and `composeObj.js`.
+- Whether a `filter` inside `layer.roles` is merged into `filter.default`
+  and applied by queries is not yet confirmed against `getLayer.js` and
+  `composeObj.js`.
 - An array value nested under a column (`{"col": [ … ]}`) calls `sqlfilter`
   without the request and throws. Use a top-level array for `OR`.
 
@@ -115,4 +114,3 @@ shows only Tesco and Aldi stores with a known open date.
 
 [^sqlfilter]: sqlFilter.js
 [^query]: query.js layerQuery
-[^wiki]: Workspace-Configuration, layer filter section

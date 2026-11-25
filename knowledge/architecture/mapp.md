@@ -43,4 +43,3 @@ reference site is generated from it.
 
 Tests are present in [apps/mapp/tests](../../apps/mapp/tests) and
 [apps/ui/tests](../../apps/ui/tests); follow [TESTING.md](../../TESTING.md).
-The Wiki's statement that there are no replacement library tests is obsolete.

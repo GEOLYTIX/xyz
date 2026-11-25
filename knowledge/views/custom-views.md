@@ -115,7 +115,7 @@ variables; see [templates](../workspace/templates.md). A template named
   response is an `Error` without an ACL.
 - **Locale.** `layers=true` returns `locale.layers` as an array of composed
   layers the user may see.[^locale] Without it `locale.layers` is an object
-  of uncomposed layers by key; the Wiki's "array of layer keys" is wrong.
+  of uncomposed layers by key.
   Load single layers from `/api/workspace/layer?locale=…&layer=…`.
 - **Mapview.** `mapp.Mapview` needs `locale` and `target`. It returns a
   promise when plugins or SVG templates must load, so always `await` it.
@@ -137,7 +137,7 @@ variables; see [templates](../workspace/templates.md). A template named
   default view sets `syncPlugins`; a custom view must too.
 - `loadPlugins: true` imports the `locale.plugins` URLs. Ui plugin
   buttons need the `mapButton` element. The map target needs a height.
-- The globals are `mapp` and `ui`. The Wiki's `MAPP` does not exist.
+- The globals are `mapp` and `ui`, in lower case.
 - After creation, change the view with `mapview.fitView(extent)` or
   `mapview.Map.getView()`, in `EPSG:3857` unless `locale.srid` differs.
 

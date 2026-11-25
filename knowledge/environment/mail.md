@@ -50,8 +50,6 @@ reference; an email whose body fails to load is not sent. The `mailer` and
 ## Obsolete variables
 
 `TRANSPORT_PORT` and `TRANSPORT_TLS` still get defaults in `processEnv.js`,
-but no module reads them since mail moved from SMTP to Resend in v5. The Wiki
-says they rarely need configuration; they have no effect.[^wiki] The v4
+but no module reads them since mail moved from SMTP to Resend in v5. They
+have no effect. The v4
 `TRANSPORT` and `TRANSPORT_HOST` variables are also ignored.
-
-[^wiki]: Wiki Process-Environment page at revision 3fc379b.

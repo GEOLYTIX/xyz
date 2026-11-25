@@ -69,8 +69,8 @@ working page in `packages/testhost/views/cdn`.[^cdn]
 
 - A framed view still writes URL hooks into the frame's URL, not the
   parent page's.
-- The Wiki says a view may hardcode the host. Prefer `data-dir="{{dir}}"`;
-  a hardcoded host breaks when `DIR` changes.
+- Do not hardcode the host in a view. Use `data-dir="{{dir}}"`; a
+  hardcoded host breaks when `DIR` changes.
 
 [^link]: elements/reportLink.mjs iFrameDialog
 [^env]: utils/processEnv.js COOKIE_PROPS

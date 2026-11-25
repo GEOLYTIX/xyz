@@ -51,8 +51,7 @@ the per-endpoint rewrites are gone.
   `public/css/mapp.css` and `public/css/ui.css` upload from the local working
   tree. They are gitignored on the development branches, so build them first
   unless deploying from `main` or a release tag, see
-  [release builds](release-builds.md). The Wiki said the bundles are
-  committed and that the build clears `public/js/lib`; neither holds now.
+  [release builds](release-builds.md).
 - `server.js` skips `app.listen()` when `VERCEL` is set and exports the app
   for `@vercel/node`.[^server]
 - `DIR` prefixes every route; the catch-all route needs no change.
@@ -132,7 +131,7 @@ must be present locally.
 Response headers, eg. `Cache-Control` and a `Content-Security-Policy`, go in a
 `headers` array in `vercel.json`; the repository config has none. The browser
 console reports resources a CSP blocks. Derive a policy from the sources a
-workspace loads rather than copying the Wiki's GEOLYTIX header set.
+workspace loads.
 
 ## Continuous deployment
 

@@ -55,8 +55,6 @@ The MAPP library then sets `format` to `cluster`, `params.viewport` and
 
 - Database clustering always restricts queries to the viewport, so it needs
   `geom` and `srid` and returns nothing without a map extent.
-- The Wiki says `distance` is required for WKT layers; it is required for
-  browser clustering of any vector format.
 - The `4326` check compares the string `"4326"`; a numeric `srid` of 4326
   passes it and clusters degrees as if they were metres.
 - The grid cell is `resolution` × 40075016.68 / 2^z metres, rounded down to

@@ -16,7 +16,7 @@ sources:
 
 `CORS_ORIGINS` is a comma separated list of origins, or `*` for any origin.
 Without it no CORS headers are set, and browsers block cross-origin reads of
-XYZ responses. The Wiki has no entry for it.
+XYZ responses.
 
 ```dotenv
 CORS_ORIGINS=https://codepen.io,https://cdpn.io

@@ -132,11 +132,6 @@ Follow [DOCUMENTATION.md](../../DOCUMENTATION.md):
 - Superseded functions kept for old configurations are `@deprecated` and warn
   when called.
 
-## Corrections to the Wiki
-
-The Wiki named only `apps/mapp/biome.json` as an override; `apps/ui` has one
-too. Its examples had typos (`antry`), fixed here.
-
 [^wiki]: Clean-code-guidelines Wiki page at revision 3fc379b
 [^biome]: biome.json
 [^ci]: .github/workflows/biome.yml

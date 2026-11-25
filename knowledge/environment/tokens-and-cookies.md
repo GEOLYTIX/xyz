@@ -44,8 +44,7 @@ it logs out every user and invalidates every API key. The token claims are in
 path of a key file relative to `XYZ_CWD`. A value starting with `-----BEGIN`,
 after any leading whitespace, is used as the key itself. A key file which
 cannot be read stops the process at startup. The key replaces `SECRET`, and
-`SECRET_ALGORITHM` defaults to `RS256` unless it is set. The Wiki only
-describes the key file.[^wiki]
+`SECRET_ALGORITHM` defaults to `RS256` unless it is set.
 
 ```dotenv
 SECRET_KEY=keys/xyz_private.pem
@@ -91,5 +90,3 @@ variable is undefined. A varlock schema which declares `COOKIE_PROPS` without
 a value injects an empty string, and every cookie is set without attributes.
 Leave it out of the schema, or give it a value. An empty `TITLE`,
 `COOKIE_TTL` or `SECRET_ALGORITHM` takes the default.
-
-[^wiki]: Wiki Process-Environment page at revision 3fc379b.

@@ -39,7 +39,7 @@ LOGS=query,reqhost,workspace
 | `mailer_body` | The body of a batch email. |
 | `dbs_retry` | A retried query and its backoff, see [Databases](databases.md). |
 
-The Wiki list omits `dbs_retry`.[^wiki] The v4 keys `req`, `req-url`,
+The v4 keys `req`, `req-url`,
 `view-req-url`, `mvt`, `saml_response` and `templates` are no longer
 emitted. Logged values have carriage returns and line feeds replaced, so a
 message is one line.
@@ -81,5 +81,3 @@ CREATE TABLE public.xyz_logs (
 `process` is a random id per server process, `datetime` is in Unix seconds and
 `message` holds the first line of an error. Inserts are not awaited and are
 not retried, and the connection must be allowed to insert into the table.
-
-[^wiki]: Wiki Process-Environment page at revision 3fc379b.
