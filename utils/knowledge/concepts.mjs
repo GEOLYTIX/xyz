@@ -33,6 +33,22 @@ export const KEY_TYPES = [
   'array',
 ];
 
+/**
+Values of layer.format, the keys of the MAPP format registry
+(apps/mapp/lib/layer/format/_format.mjs). A test keeps them in sync.
+*/
+export const LAYER_FORMATS = [
+  'cluster',
+  'geojson',
+  'googleMapTiles',
+  'mapboxStyle',
+  'maplibre',
+  'mvt',
+  'tiles',
+  'vector',
+  'wkt',
+];
+
 /** Lines per concept file before the checker warns. */
 export const LINE_BUDGET = 150;
 
@@ -74,6 +90,11 @@ function checkEntry(entry) {
     if (!list(entry[field]).every((value) => typeof value === 'string'))
       throw new Error(`${KEYS}: ${entry.key} ${field} must be strings`);
   }
+  const format = list(entry.formats).find(
+    (value) => !LAYER_FORMATS.includes(value),
+  );
+  if (format)
+    throw new Error(`${KEYS}: ${entry.key} has unknown layer format ${format}`);
   if (entry.ref !== undefined && !KEY_ROOTS.includes(entry.ref))
     throw new Error(
       `${KEYS}: ${entry.key} ref must be one of ${KEY_ROOTS.join(', ')}`,
@@ -83,6 +104,12 @@ function checkEntry(entry) {
     throw new Error(`${KEYS}: ${entry.key} requires invalid key ${invalid}`);
   return entry.key;
 }
+
+/** The keys each entry requires, as [key, required key] pairs. */
+export const requirements = (metadata) =>
+  (metadata[KEYS] ?? []).flatMap((entry) =>
+    list(entry.requires).map((target) => [entry.key, target]),
+  );
 
 /** Text of the inline children of a heading token. */
 const headingText = (tokens, index) => tokens[index + 1]?.content.trim() ?? '';

@@ -9,7 +9,7 @@ import { basename, dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import MarkdownIt from 'markdown-it';
 import { parse } from 'yaml';
-import { checkBody, checkKeys } from './concepts.mjs';
+import { checkBody, checkKeys, requirements } from './concepts.mjs';
 import { collectExamples } from './examples.mjs';
 import {
   buildSchema,
@@ -160,7 +160,7 @@ function checkMetadata(metadata, file, context, warn) {
     throw new Error('Concept requires a nonempty string type');
   checkQuality(metadata, context, warn);
   checkResources(metadata, file, context, warn);
-  checkVariables(metadata, warn);
+  checkVariables(metadata);
 }
 
 function checkQuality(metadata, context, warn) {
@@ -235,7 +235,8 @@ function checkResources(metadata, file, context, warn) {
 /** XYZ extension key listing the variables an Environment Variable concept documents. */
 const VARIABLES = 'x-xyz-variables';
 
-function checkVariables(metadata, warn) {
+/** Throw on malformed variables: the environment coverage check relies on them. */
+function checkVariables(metadata) {
   const variables = metadata[VARIABLES];
   if (variables === undefined) return;
   if (
@@ -244,7 +245,9 @@ function checkVariables(metadata, warn) {
       (name) => typeof name === 'string' && /^[A-Z][A-Z0-9_]*\*?$/.test(name),
     )
   ) {
-    warn(`${VARIABLES} should be an array of NAME or PREFIX_* strings`);
+    throw new Error(
+      `${VARIABLES} must be an array of NAME or PREFIX_* strings`,
+    );
   }
 }
 
@@ -334,6 +337,15 @@ workspace directory, eg. test fixtures, have no schema.
 */
 function checkWorkspaceSchema(context, errors, warnings) {
   if (!existsSync(resolve(context.bundle, 'workspace'))) return;
+  try {
+    checkSchemaExamples(context, errors, warnings);
+  } catch (error) {
+    // A malformed concept is reported on its own; the schema cannot be built.
+    errors.push(`${SCHEMA_PATH}: not checked: ${error.message}`);
+  }
+}
+
+function checkSchemaExamples(context, errors, warnings) {
   if (!schemaCurrent(context.root))
     errors.push(`${SCHEMA_PATH}: out of date; run pnpm knowledge:schema`);
   const schema = buildSchema(context.root);
@@ -354,7 +366,12 @@ function checkWorkspaceSchema(context, errors, warnings) {
 }
 
 /** Check one Markdown file of the bundle; throws on errors. */
-function checkFile(file, label, context, { owners, variables, warn }) {
+function checkFile(
+  file,
+  label,
+  context,
+  { owners, requires, variables, warn },
+) {
   const text = readFileSync(file, 'utf8');
   const doc = splitDocument(text);
   const tokens = markdown.parse(stripFootnotes(doc.body), {});
@@ -370,6 +387,8 @@ function checkFile(file, label, context, { owners, variables, warn }) {
         throw new Error(`${key} is already owned by ${owners.get(key)}`);
       owners.set(key, label);
     }
+    for (const [key, target] of requirements(doc.metadata))
+      requires.push({ label, key, target });
     checkBody(doc.metadata, tokens, text.split('\n').length, warn);
   }
   for (const target of linkTargets(tokens)) {
@@ -394,17 +413,22 @@ export function validateBundle(root, now = Date.now()) {
   if (!files.length) errors.push('Knowledge bundle contains no Markdown files');
   const variables = [];
   const owners = new Map();
+  const requires = [];
   for (const file of files) {
     const label = relative(context.root, file).split(sep).join('/');
     const warn = (message) => warnings.push(`${label}: ${message}`);
     try {
-      checkFile(file, label, context, { owners, variables, warn });
+      checkFile(file, label, context, { owners, requires, variables, warn });
     } catch (error) {
       errors.push(`${label}: ${error.message}`);
     }
   }
+  for (const { label, key, target } of requires) {
+    if (!owners.has(target))
+      errors.push(`${label}: ${key} requires ${target}, which no concept owns`);
+  }
   checkIndexes(directories, context, warnings);
-  if (!errors.length) checkWorkspaceSchema(context, errors, warnings);
+  checkWorkspaceSchema(context, errors, warnings);
   const undocumented = [...readEnvironment(context.root)]
     .filter((name) => !covered(name, variables))
     .sort();

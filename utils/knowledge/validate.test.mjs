@@ -261,6 +261,17 @@ describe('knowledge validator:', () => {
     expect(warnings.join('\n')).not.toMatch(/listed\.md/);
   });
 
+  it('checks the workspace schema when other checks fail', () => {
+    const root = fixture({
+      'knowledge/index.md': `${INDEX}\n\n- [Workspace](workspace/index.md)`,
+      'knowledge/workspace/index.md': '# Workspace\n\n[Missing](missing.md)',
+    });
+    expect(validateBundle(root).errors).toEqual([
+      'knowledge/workspace/index.md: Missing local target: missing.md',
+      'knowledge/workspace/workspace.schema.json: out of date; run pnpm knowledge:schema',
+    ]);
+  });
+
   it('missing and empty bundles fail instead of passing without validation', () => {
     const root = fixture({ 'knowledge/index.md': null });
     expect(validateBundle(root).errors).toHaveLength(1);
@@ -306,14 +317,14 @@ describe('environment coverage:', () => {
     ]);
   });
 
-  it('warns on malformed variables metadata', () => {
+  it('fails on malformed variables metadata', () => {
     const root = fixture({
       'knowledge/index.md': `${INDEX}\n\n- [Env](env.md)`,
       'knowledge/env.md':
         '---\ntype: Environment Variable\ntitle: E\ndescription: E\nx-xyz-variables: lowercase\n---',
     });
-    expect(validateBundle(root).warnings).toEqual([
-      'knowledge/env.md: x-xyz-variables should be an array of NAME or PREFIX_* strings',
+    expect(validateBundle(root).errors).toEqual([
+      'knowledge/env.md: x-xyz-variables must be an array of NAME or PREFIX_* strings',
     ]);
   });
 });

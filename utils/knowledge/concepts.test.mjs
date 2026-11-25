@@ -1,8 +1,14 @@
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { jsonPaths } from './concepts.mjs';
+import { jsonPaths, LAYER_FORMATS } from './concepts.mjs';
 import { findConcepts } from './find.mjs';
 import { validateBundle } from './validate.mjs';
 
@@ -45,7 +51,7 @@ describe('workspace keys:', () => {
   it('accepts key paths with named maps, arrays and type lists', () => {
     const root = fixture({
       'knowledge/a.md': keyConcept(
-        '  - { key: layer.filter.default, type: [object, string], requires: [layer.table] }\n  - { key: locale.layers.*, type: object }\n  - { key: \"layer.infoj[]\", type: object, formats: [wkt] }',
+        '  - { key: layer.table, type: string }\n  - { key: layer.filter.default, type: [object, string], requires: [layer.table] }\n  - { key: locale.layers.*, type: object }\n  - { key: \"layer.infoj[]\", type: object, formats: [wkt] }',
       ),
     });
     expect(validateBundle(root)).toMatchObject({ errors: [], warnings: [] });
@@ -62,12 +68,37 @@ describe('workspace keys:', () => {
         '  - { key: layer.filter, type: object, requires: [table] }',
         /requires invalid key/,
       ],
+      [
+        '  - { key: layer.filter, type: object, formats: [wkt2] }',
+        /unknown layer format wkt2/,
+      ],
     ]) {
       const root = fixture({ 'knowledge/a.md': keyConcept(keys) });
       const { errors } = validateBundle(root);
       expect(errors, keys).toHaveLength(1);
       expect(errors[0], keys).toMatch(message);
     }
+  });
+
+  it('fails when a required key has no owner', () => {
+    const root = fixture({
+      'knowledge/a.md': keyConcept(
+        '  - { key: layer.filter, type: object, requires: [layer.table] }',
+      ),
+    });
+    expect(validateBundle(root).errors).toEqual([
+      'knowledge/a.md: layer.filter requires layer.table, which no concept owns',
+    ]);
+  });
+
+  it('lists the formats of the MAPP format registry', () => {
+    const registry = readFileSync(
+      new URL('../../apps/mapp/lib/layer/format/_format.mjs', import.meta.url),
+      'utf8',
+    );
+    const body = registry.slice(registry.indexOf('export default {'));
+    const keys = [...body.matchAll(/^\s+(\w+)[:,]/gm)].map((match) => match[1]);
+    expect(keys.sort()).toEqual([...LAYER_FORMATS].sort());
   });
 
   it('fails when two concepts own the same key', () => {

@@ -8,6 +8,9 @@
   `label`s, `icon_scaling.icon` and `clusterScale`, and `multi_filter.target`.
   `style.label.declutter` and `entry.draw.geometry` are read by no code and
   were removed from the test workspaces.
+- The checker fails on malformed `x-xyz-variables`, `requires` keys without
+  an owner and unknown layer `formats`, and checks the workspace schema when
+  other checks fail. The rules moved to [knowledge checks](workflows/checks.md).
 
 ## 2026-11-24
 
