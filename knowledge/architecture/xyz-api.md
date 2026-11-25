@@ -26,8 +26,8 @@ sources:
 
 XYZ is the Node.js API in [apps/xyz](../../apps/xyz) (`@geolytix/xyz-app`).
 It serves the workspace, runs SQL query templates, authenticates users, and
-serves the MAPP views and bundles. [MAPP and MAPP.UI](mapp.md) are its browser
-clients; this page is the server side of that boundary.
+serves the MAPP views and bundles. [MAPP](mapp.md) and [MAPP.UI](mapp-ui.md)
+are its browser clients; this page is the server side of that boundary.
 
 ## Entry points
 

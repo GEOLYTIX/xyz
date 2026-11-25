@@ -1,7 +1,7 @@
 ---
 type: Guide
-title: MAPP and MAPP.UI
-description: Browser mapping and UI libraries alongside the XYZ host API.
+title: MAPP
+description: The MAPP browser mapping library on OpenLayers, its entry module, its relation to the XYZ API and MAPP.UI, and its builds; use before changing MAPP.
 resource: ../../apps/mapp/lib/mapp.mjs
 tags: [mapp, ui, architecture]
 status: draft
@@ -13,7 +13,7 @@ sources:
   - resource: ../../apps/ui/vite.config.mjs
   - resource: ../../apps/mapp/tests/mapview/removeLayer.test.mjs
 ---
-# MAPP and MAPP.UI
+# MAPP
 
 MAPP is the browser mapping library built around OpenLayers. XYZ supplies host
 APIs and workspace configuration. A [locale](../workspace/locales.md) describes
@@ -30,8 +30,8 @@ layers and query templates from XYZ, which keeps SQL, connections and roles
 on the server. Sites outside XYZ use it as the
 [@geolytix/mapp package](mapp-package.md).
 
-MAPP.UI lives separately under [apps/ui](../../apps/ui); see [MAPP.UI](mapp-ui.md).
-It depends on MAPP; MAPP can be used without MAPP.UI. Both Vite builds write into `public/js/lib`
+[MAPP.UI](mapp-ui.md) in [apps/ui](../../apps/ui) builds on MAPP; MAPP can be
+used without MAPP.UI. Both Vite builds write into `public/js/lib`
 without emptying the directory, preserving the other app's output. Use the
 app build scripts for JavaScript and CSS; see [DEVELOPING.md](../../DEVELOPING.md).
 
@@ -41,5 +41,5 @@ Use source JSDoc for individual methods and types; see
 [DOCUMENTATION.md](../../DOCUMENTATION.md#jsdoc) for the conventions. No API
 reference site is generated from it.
 
-Tests are present in [apps/mapp/tests](../../apps/mapp/tests) and
-[apps/ui/tests](../../apps/ui/tests); follow [TESTING.md](../../TESTING.md).
+The tests are in [apps/mapp/tests](../../apps/mapp/tests); follow
+[TESTING.md](../../TESTING.md).

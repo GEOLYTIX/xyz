@@ -33,7 +33,7 @@ MAPP.UI builds the interface around a MAPP mapview: layer and location views,
 filters, legends, dataviews, tabs, the gazetteer and mapview buttons. It lives
 in [apps/ui](../../apps/ui) (`@geolytix/mapp-ui`) and is bundled as
 `public/js/lib/ui.js` with `public/css/ui.css`. For the library split see
-[MAPP and MAPP.UI](mapp.md).
+[MAPP](mapp.md).
 
 ## The mapp global
 

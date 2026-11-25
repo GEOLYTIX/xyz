@@ -48,7 +48,7 @@ Prefer the smallest layer which can do the job:
 3. **Core code**, when every deployment needs it:
    - Data access, auth, workspace composition: [XYZ API](../architecture/xyz-api.md).
    - Map, layers, locations, formats, styles: MAPP in `apps/mapp/lib`; see
-     [MAPP and MAPP.UI](../architecture/mapp.md).
+     [MAPP](../architecture/mapp.md).
    - Panels, entries, controls, buttons: [MAPP.UI](../architecture/mapp-ui.md).
 
 ## 3. Respect the boundaries

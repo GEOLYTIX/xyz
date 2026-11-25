@@ -21,7 +21,7 @@ export const bundle = resolve(repository, 'knowledge');
 
 const external = /^([a-z][a-z0-9+.-]*:|\/\/)/i;
 
-const listItem = /^\s*[-*] \[(?<text>[^\]]+)\]\((?<href>[^)\s]+)\)/;
+const listItem = /^(?<indent>\s*)[-*] \[(?<text>[^\]]+)\]\((?<href>[^)\s]+)\)/;
 
 /**
  * @function githubRef
@@ -57,7 +57,8 @@ export function pageLink(path) {
  * @function sidebar
  * @description Builds the sidebar from the list items of the directory
  * indexes, starting at the root index. A link to a subdirectory index becomes
- * a collapsible group of that index's items.
+ * a collapsible group of that index's items. An indented list item is nested
+ * under the item above it, eg. a concept which belongs to another.
  * @param {string} [root] The bundle directory.
  * @param {string} [path] The index path relative to the bundle.
  * @returns {Array<Object>} VitePress sidebar items.
@@ -65,6 +66,8 @@ export function pageLink(path) {
 export function sidebar(root = bundle, path = 'index.md') {
   const directory = posix.dirname(path);
   const items = [];
+  // The items of the current nesting, as [indent, item] from the outermost.
+  const parents = [];
   for (const line of readFileSync(resolve(root, path), 'utf8').split('\n')) {
     const match = line.match(listItem);
     if (!match || external.test(match.groups.href)) continue;
@@ -75,7 +78,15 @@ export function sidebar(root = bundle, path = 'index.md') {
       item.items = sidebar(root, target);
       item.collapsed = true;
     }
-    items.push(item);
+    const indent = match.groups.indent.length;
+    while (parents.length && parents.at(-1)[0] >= indent) parents.pop();
+    const parent = parents.at(-1)?.[1];
+    if (parent) {
+      parent.items ??= [];
+      parent.collapsed = true;
+      parent.items.push(item);
+    } else items.push(item);
+    parents.push([indent, item]);
   }
   return items;
 }

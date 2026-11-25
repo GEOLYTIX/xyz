@@ -137,5 +137,7 @@ links and source paths, and environment variables without a concept. See
 
 The bundle is published as the [knowledge portal](https://geolytix.github.io/xyz/);
 see [documentation publishing](../decisions/documentation-publishing.md). The
-sidebar follows the directory indexes. Preview a change with
+sidebar follows the directory indexes, in their order. Indent an index item
+under another to nest it, eg. the npm package under MAPP; nest a concept only
+under one in the same directory. Preview a change with
 `pnpm knowledge:site:dev`; `pnpm knowledge:site:build` fails on dead links.

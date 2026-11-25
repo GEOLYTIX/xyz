@@ -25,13 +25,19 @@ describe('knowledge site', () => {
     mkdirSync(join(root, 'sub'));
     writeFileSync(
       join(root, 'index.md'),
-      '- [A](a.md) - A.\n- [Sub](sub/index.md) - Sub.\n- [Web](https://x.org/b.md)\n- [Missing](missing.md)\n',
+      '- [A](a.md) - A.\n  - [C](c.md) - Belongs to A.\n- [Sub](sub/index.md) - Sub.\n- [Web](https://x.org/b.md)\n- [Missing](missing.md)\n',
     );
     writeFileSync(join(root, 'a.md'), '');
+    writeFileSync(join(root, 'c.md'), '');
     writeFileSync(join(root, 'sub/index.md'), '- [B](b.md) - B.\n');
     writeFileSync(join(root, 'sub/b.md'), '');
     expect(sidebar(root)).toEqual([
-      { text: 'A', link: '/a' },
+      {
+        text: 'A',
+        link: '/a',
+        collapsed: true,
+        items: [{ text: 'C', link: '/c' }],
+      },
       {
         text: 'Sub',
         link: '/sub/',

@@ -17,7 +17,7 @@ Look up a workspace key, environment variable or module with
 
 - [About this bundle](about.md) - The Open Knowledge Format, how the bundle is organised, and working through agents; read first.
 - [Terminology](terminology.md) - The terms used across XYZ and MAPP, each linked to its concept.
-- [Architecture](architecture/index.md) - The XYZ API, the MAPP and MAPP.UI libraries, the monorepo and the npm package; use before changing code.
+- [Architecture](architecture/index.md) - The monorepo, the MAPP and MAPP.UI libraries, the npm package and the XYZ API; use before changing code.
 - [Workspace](workspace/index.md) - Every workspace key with executable examples and a generated JSON Schema; use to write or review workspaces.
 - [Views](views/index.md) - Application views and how to build custom views.
 - [Plugins](plugins.md) - What MAPP plugins are and how to write one.
