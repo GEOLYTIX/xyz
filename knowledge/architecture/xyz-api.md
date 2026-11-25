@@ -123,7 +123,7 @@ is an own member of its method map, and rejects any other key.
 - The client only sends template and layer keys. SQL, `dbs` and role
   restrictions stay in the workspace on the server.
 - The bundles are build outputs; see [Monorepo](monorepo.md). For pages on
-  another origin see [The @geolytix/mapp package](mapp-package.md).
+  another origin see the [@geolytix/mapp package](mapp-package.md).
 
 ## Where to change
 

@@ -59,8 +59,8 @@
 - Removed the comparisons with the retired Wiki from the concepts ("the Wiki
   said …", "Corrections to the Wiki" sections); concepts state what the code
   does now. The Wiki revisions stay in `sources` as provenance.
-- Reordered [architecture](architecture/index.md): monorepo, MAPP with the
-  npm package nested under it, MAPP.UI, then the XYZ API. The MAPP concept
+- Reordered [architecture](architecture/index.md): monorepo, the XYZ API,
+  MAPP with the npm package nested under it, then MAPP.UI. The MAPP concept
   covers MAPP only. Indented index items nest in the portal sidebar.
 
 ## 2026-11-24

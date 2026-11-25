@@ -1,6 +1,6 @@
 ---
 type: Guide
-title: The @geolytix/mapp package
+title: "@geolytix/mapp package"
 description: Using the MAPP library from npm or a CDN in a site that is not an XYZ view - Openlayers as a global, mapp.host, CORS_ORIGINS, cookies, CSP and version matching; use when embedding MAPP elsewhere or changing what the package ships.
 resource: ../../apps/mapp/package.json
 tags: [mapp, npm, cdn, cors, architecture]
@@ -25,7 +25,7 @@ sources:
   - resource: ../../apps/mapp/scripts/pack.mjs
   - resource: ../../RELEASING.md
 ---
-# The @geolytix/mapp package
+# @geolytix/mapp package
 
 The MAPP library is published to npm as `@geolytix/mapp` so that sites which
 are not XYZ views can render XYZ layers. The [package README](../../apps/mapp/README.md)
