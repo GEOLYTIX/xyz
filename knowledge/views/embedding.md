@@ -17,6 +17,7 @@ sources:
     resource: ../../apps/mapp/lib/hooks.mjs
   - id: cdn
     resource: ../../packages/testhost/views/cdn/cdn.mjs
+  - resource: ../../apps/ui/tests/elements/reportLink.test.mjs
 ---
 # Embedding views and maps
 

@@ -21,6 +21,10 @@ sources:
     resource: ../../apps/mapp/lib/location/get.mjs
   - resource: ../../apps/ui/lib/locations/entries/link.mjs
   - resource: ../../apps/ui/lib/layers/legends/_legends.mjs
+  - resource: ../../apps/ui/tests/elements/reportLink.test.mjs
+  - resource: ../../apps/ui/tests/layers/panels/reports.test.mjs
+  - resource: ../../apps/ui/tests/locations/entries/dataview.test.mjs
+  - resource: ../../apps/ui/tests/locations/entries/link.test.mjs
 ---
 # Report views
 

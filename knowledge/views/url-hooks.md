@@ -20,6 +20,7 @@ sources:
   - resource: ../../apps/mapp/lib/layer/decorate.mjs
   - resource: ../../apps/mapp/lib/location/decorate.mjs
   - resource: ../../apps/mapp/tests/hooks.test.mjs
+  - resource: ../../apps/mapp/tests/location/decorate.test.mjs
 ---
 # URL hooks
 

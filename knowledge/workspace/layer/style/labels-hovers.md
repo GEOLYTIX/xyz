@@ -42,6 +42,7 @@ sources:
     resource: ../../../../apps/mapp/lib/layer/featureHover.mjs
   - id: parser
     resource: ../../../../apps/mapp/lib/layer/styleParser.mjs
+  - resource: ../../../../apps/mapp/tests/layer/featureStyle.test.mjs
 ---
 # Labels and hovers
 

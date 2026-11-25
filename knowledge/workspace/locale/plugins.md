@@ -21,6 +21,9 @@ x-xyz-keys:
   - { key: locale.userLocale, type: [boolean, object] }
   - { key: locale.zoomBtn, type: [boolean, object] }
   - { key: locale.zoomToArea, type: [boolean, object] }
+  - key: locale.layer_order
+    type: array
+    description: Layer keys in draw order; layers not listed are drawn on top.
   - { key: layer.plugins, type: array }
 sources:
   - id: wiki
@@ -36,6 +39,9 @@ sources:
   - resource: ../../../public/views/_default.html
   - id: repo
     resource: https://github.com/GEOLYTIX/xyz_plugins
+  - resource: ../../../apps/mapp/tests/utils/loadPlugins.test.mjs
+  - resource: ../../../apps/mapp/lib/plugins/layer_order.mjs
+  - resource: ../../../apps/mapp/tests/plugins/layer_order.test.mjs
 ---
 # Locale plugins
 
@@ -47,6 +53,11 @@ logged and do not stop the mapview.
 The ui library provides `admin`, `custom_theme`, `dark_mode`, `feature_info`, `fullscreen`,
 `link_button`, `locator`, `login`, `userIDB`, `userLayer`, `userLocale`,
 `zoomBtn` and `zoomToArea`, eg. `"fullscreen": true`.[^ui]
+
+The MAPP library's `layer_order` plugin sorts `locale.layers` by a list of
+layer keys. Layers are added with increasing zIndex, so later keys are drawn
+on top; layers not in the list keep their order and go to the end, on top of
+the listed layers.[^layerorder]
 
 ## Loading plugins
 
@@ -97,3 +108,4 @@ The fullscreen and locator buttons, with the zoom button first.
 [^mapview]: mapp mapview/_mapview.mjs mapviewPromise and executePlugin
 [^ui]: ui plugins/_plugins.mjs
 [^envreplace]: utils/envReplace.js
+[^layerorder]: mapp plugins/layer_order.mjs and its tests

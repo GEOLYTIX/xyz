@@ -243,6 +243,11 @@
           "$ref": "#/$defs/layer",
           "x-xyz-concept": "knowledge/workspace/locales.md"
         },
+        "layer_order": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
+          "description": "Layer keys in draw order; layers not listed are drawn on top."
+        },
         "layers": {
           "type": "object",
           "additionalProperties": {

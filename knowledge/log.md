@@ -18,6 +18,12 @@
   into a warning. `review-pr` compares the concept and code diffs.
 - Added the [actor convention](decisions/actor-convention.md): `verified` is a
   maintainer's content review, and `status: stable` requires one.
+- Reviewed the pull requests merged into `minor` since the bundle started
+  against their concepts. Only #3084 changed documented behaviour:
+  `locale.layer_order` sorts unlisted layers to the end, drawn on top. The
+  tests added by #3087, #3126, #3127, #3128, #3136, #3146, #3147, #3079,
+  #3082, #3069 and #3129, and the mapview draw, modify and snap interactions,
+  are linked from the concepts they cover.
 
 ## 2026-11-24
 

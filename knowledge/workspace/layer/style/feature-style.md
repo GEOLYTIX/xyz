@@ -50,6 +50,8 @@ sources:
   - id: layerstyle
     resource: ../../../../apps/ui/lib/elements/layerStyle.mjs
   - resource: ../../../../apps/mapp/tests/layer/styleParser.test.mjs
+  - resource: ../../../../apps/mapp/tests/layer/featureStyle.test.mjs
+  - resource: ../../../../apps/ui/tests/elements/layerStyle.test.mjs
 ---
 # Feature styles and icons
 

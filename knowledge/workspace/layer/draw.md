@@ -39,6 +39,8 @@ sources:
     resource: ../../../apps/mapp/lib/location/create.mjs
   - resource: ../../../apps/ui/lib/locations/entries/geometry.mjs
   - resource: ../../../apps/xyz/mod/workspace/templates/location_new.js
+  - resource: ../../../apps/mapp/lib/mapview/interactions/draw.mjs
+  - resource: ../../../apps/mapp/tests/mapview/interactions/draw.test.mjs
 ---
 # Layer drawing
 

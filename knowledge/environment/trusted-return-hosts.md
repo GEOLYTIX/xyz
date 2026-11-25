@@ -11,6 +11,7 @@ sources:
   - resource: ../../apps/xyz/mod/user/login.js
   - resource: ../../apps/xyz/mod/middleware/validateRequestAuth.js
   - resource: ../../apps/xyz/tests/mod/user/redirect.test.mjs
+  - resource: ../../apps/xyz/tests/mod/user/login.test.mjs
 ---
 # TRUSTED_RETURN_HOSTS
 

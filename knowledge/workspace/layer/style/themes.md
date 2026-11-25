@@ -52,6 +52,8 @@ sources:
     resource: ../../../../apps/mapp/lib/layer/featureFields.mjs
   - resource: ../../../../apps/mapp/lib/layer/themes/basic.mjs
   - resource: ../../../../apps/ui/lib/elements/layerStyle.mjs
+  - resource: ../../../../apps/mapp/tests/layer/themes
+  - resource: ../../../../apps/ui/tests/layers/legends
 ---
 # Themes
 
@@ -83,13 +85,11 @@ The legacy `cat`, keyed by value, and `cat_arr` become `categories`.[^parser]
 - **categorized**: values match as text. With `fields` instead of `field`,
   each category names its `field`, and a feature shows the icons of every
   matching category stacked. Cluster features are not themed.[^categorized]
-- **graduated**: values are numbers, sorted by the parser.
-  `graduated_breaks: less_than` (the default) picks the category with the
+- **graduated**: values are numbers, sorted by the parser. `graduated_breaks: less_than` (the default) picks the category with the
   lowest `value` at or above the feature value; `greater_than` the highest
   `value` at or below it. Values outside all ranges get the nearest
   category. Without categories the theme is ignored.[^graduated]
-- **distributed**: `field` defaults to `id`; features with the same value
-  share a category.[^distributed]
+- **distributed**: `field` defaults to `id`; features with the same value share a category.[^distributed]
 
 ## Distribution
 

@@ -30,6 +30,7 @@ sources:
     resource: ../../../apps/xyz/mod/workspace/templates/gaz_query.js
   - resource: ../../../apps/ui/lib/Gazetteer.mjs
   - resource: ../../../apps/ui/tests/Gazetteer.test.mjs
+  - resource: ../../../apps/mapp/tests/utils/gazetteer.test.mjs
 ---
 # Gazetteer
 

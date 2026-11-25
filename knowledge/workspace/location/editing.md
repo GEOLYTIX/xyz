@@ -43,6 +43,11 @@ sources:
   - resource: ../../../apps/ui/lib/locations/entries/geometry.mjs
   - resource: ../../../apps/xyz/mod/workspace/templates/location_update.js
   - resource: ../../../apps/mapp/tests/location/decorate.test.mjs
+  - resource: ../../../apps/ui/tests/locations/entries/text.test.mjs
+  - resource: ../../../apps/mapp/lib/mapview/interactions/modify.mjs
+  - resource: ../../../apps/mapp/lib/mapview/interactions/snap.mjs
+  - resource: ../../../apps/mapp/tests/mapview/interactions/modify.test.mjs
+  - resource: ../../../apps/mapp/tests/mapview/interactions/snap.test.mjs
 ---
 # Location editing
 

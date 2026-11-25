@@ -25,6 +25,7 @@ sources:
     resource: ../../.github/workflows/biome.yml
   - resource: ../../public/views/_default.html
   - resource: ../../apps/ui/tests/smoke.test.mjs
+  - resource: ../../apps/ui/tests/locations/infoj.test.mjs
 ---
 # MAPP.UI
 

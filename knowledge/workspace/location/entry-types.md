@@ -34,6 +34,8 @@ sources:
   - resource: ../../../apps/ui/lib/locations/entries/query_button.mjs
   - resource: ../../../apps/ui/lib/locations/entries/cloudinary.mjs
   - resource: ../../../apps/ui/tests/locations/entries/_entries.test.mjs
+  - resource: ../../../apps/ui/tests/locations/entries/layer.test.mjs
+  - resource: ../../../apps/ui/tests/locations/entries/query_button.test.mjs
 ---
 # Entry types
 

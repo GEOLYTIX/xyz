@@ -31,6 +31,7 @@ sources:
   - resource: ../apps/ui/tests/plugins
   - id: repo
     resource: https://github.com/GEOLYTIX/xyz_plugins
+  - resource: ../apps/ui/tests/locations/infoj.test.mjs
 ---
 # MAPP plugins
 

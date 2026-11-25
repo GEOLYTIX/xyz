@@ -20,6 +20,7 @@ sources:
   - resource: ../../apps/xyz/mod/workspace/_workspace.js
   - resource: ../../apps/xyz/README.md
   - resource: ../../apps/xyz/tests/mod/router.test.mjs
+  - resource: ../../apps/xyz/tests/mod/middleware/cors.test.mjs
 ---
 # XYZ API
 
@@ -138,9 +139,8 @@ is an own member of its method map, and rejects any other key.
 
 ## Corrections to the Wiki
 
-The Wiki said endpoint modules must assign `req._params`; the default chain and
-the endpoints already do.[^wiki] Its route table lacked `verify{/:key}`,
-`cors` and the `templates` key; `roles` now returns 410.
+The Wiki said endpoint modules must assign `req._params`; the default chain and the endpoints already do.[^wiki]
+Its route table lacked `verify{/:key}`, `cors` and the `templates` key; `roles` now returns 410.
 
 [^wiki]: XYZ Wiki page at revision 3fc379b
 [^router]: apps/xyz/router.js

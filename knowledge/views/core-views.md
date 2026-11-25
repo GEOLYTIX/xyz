@@ -23,6 +23,7 @@ sources:
   - resource: ../../apps/xyz/mod/user/register.js
   - resource: ../../apps/xyz/mod/user/admin.js
   - resource: ../../apps/ui/tests/default.spec.mjs
+  - resource: ../../apps/xyz/tests/mod/user/login.test.mjs
 ---
 # Core views
 

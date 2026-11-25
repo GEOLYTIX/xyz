@@ -50,6 +50,10 @@ sources:
   - resource: ../../apps/ui/tests/Dataview.test.mjs
   - id: plugins
     resource: https://github.com/GEOLYTIX/xyz_plugins
+  - resource: ../../apps/ui/tests/layers/panels/dataviews.test.mjs
+  - resource: ../../apps/ui/tests/locations/entries/dataview.test.mjs
+  - resource: ../../apps/ui/tests/utils/dataview.test.mjs
+  - resource: ../../apps/ui/tests/utils/jsonDataview.test.mjs
 ---
 # Dataviews
 

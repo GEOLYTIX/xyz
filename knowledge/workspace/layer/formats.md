@@ -43,6 +43,9 @@ sources:
   - resource: ../../../apps/mapp/lib/layer/format/mapboxStyle.mjs
   - resource: ../../../apps/mapp/lib/layer/format/googleMapTiles.mjs
   - resource: ../../../packages/testhost/README.md
+  - resource: ../../../apps/mapp/lib/layer/featureFormats.mjs
+  - resource: ../../../apps/mapp/tests/layer/featureFormats.test.mjs
+  - resource: ../../../apps/mapp/tests/layer/format/mvt.test.mjs
 ---
 # Layer formats
 

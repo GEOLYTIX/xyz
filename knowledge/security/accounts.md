@@ -20,6 +20,7 @@ sources:
   - resource: ../../apps/xyz/mod/user/acl.js
   - resource: ../../apps/xyz/mod/user/update.js
   - resource: ../../apps/xyz/tests/mod/user
+  - resource: ../../apps/xyz/tests/mod/user/login.test.mjs
 ---
 # User accounts and the ACL
 
