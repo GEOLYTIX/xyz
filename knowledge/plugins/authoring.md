@@ -1,7 +1,7 @@
 ---
 type: Guide
-title: Writing plugins
-description: What MAPP plugins are, how locale and layer keys run them, how the mapview loads plugin modules, and how to write and version one; use when adding a plugin or a tool that the core libraries do not have.
+title: Authoring
+description: What MAPP plugins are, how locale and layer keys run them, how the mapview loads plugin modules, and how to author and version one; use when adding a plugin or a tool that the core libraries do not have.
 resource: ../../apps/mapp/lib/utils/loadPlugins.mjs
 tags: [plugins, mapp, ui, guide]
 status: draft
@@ -33,7 +33,7 @@ sources:
     resource: https://github.com/GEOLYTIX/xyz_plugins
   - resource: ../../apps/ui/tests/locations/infoj.test.mjs
 ---
-# Writing plugins
+# Authoring
 
 A plugin is a function in `mapp.plugins`. A workspace turns it on with a
 key of the same name; the key's value is the plugin's configuration. The
@@ -75,7 +75,7 @@ fails to load is logged and skipped; the promise always resolves. A plugin
 which throws is logged and does not stop the mapview. The XYZ API replaces
 `${NAME}` in `locale.plugins` with the `SRC_NAME` variable.
 
-## Writing a plugin
+## Authoring a plugin
 
 A plugin module assigns its method on import; `loadPlugins` does not
 register exports. A minimal locale plugin which adds a button:

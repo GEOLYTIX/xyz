@@ -47,7 +47,7 @@ sources:
 - **Role** - A name in a user's roles which unlocks locales, layers,
   templates and entries; see [roles](workspace/roles.md).
 - **Plugin** - A function in `mapp.plugins` run by a locale or layer key of
-  its name; see [plugins](plugins/writing-plugins.md).
+  its name; see [plugins](plugins/authoring.md).
 
 ## Map
 

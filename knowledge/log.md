@@ -63,7 +63,7 @@
   MAPP with the npm package nested under it, then MAPP.UI. The MAPP concept
   covers MAPP only. Indented index items nest in the portal sidebar.
 - Moved the plugin guides into a [plugins](plugins/index.md) section:
-  [writing plugins](plugins/writing-plugins.md) (formerly MAPP plugins) and
+  [authoring](plugins/authoring.md) (formerly MAPP plugins) and
   [extension points](plugins/extension-points.md) (formerly extending and
   overriding MAPP). The Wiki Plugins stub links the new page.
 

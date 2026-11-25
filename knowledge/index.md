@@ -20,7 +20,7 @@ Look up a workspace key, environment variable or module with
 - [Architecture](architecture/index.md) - The monorepo, the XYZ API, the MAPP and MAPP.UI libraries and the npm package; use before changing code.
 - [Workspace](workspace/index.md) - Every workspace key with executable examples and a generated JSON Schema; use to write or review workspaces.
 - [Views](views/index.md) - Application views and how to build custom views.
-- [Plugins](plugins/index.md) - Writing plugins, and the extension points where they add types or replace MAPP methods.
+- [Plugins](plugins/index.md) - Authoring plugins, and the extension points where they add types or replace MAPP methods.
 - [Security](security/index.md) - Security practices, user accounts, authentication and authorization.
 - [Environment](environment/index.md) - Every environment variable of the XYZ API, grouped by feature.
 - [Deployment](deployment/index.md) - Local setup, Codespaces, Vercel, Neon, Node hosts, release builds and npm publishing.

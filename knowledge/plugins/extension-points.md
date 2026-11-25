@@ -40,7 +40,7 @@ sources:
 `mapp.mjs` assigns the MAPP library to `globalThis.mapp`, and `ui.mjs` adds
 `mapp.ui`.[^mapp] Core modules call each other through this object, eg.
 `mapp.layer.formats[layer.format](layer)`, and look the method up when they
-call it. A [plugin](writing-plugins.md) changes MAPP by assigning to it: a
+call it. A [plugin](authoring.md) changes MAPP by assigning to it: a
 new key in a registry adds a type, a new value for an existing key replaces
 a method. `ui.mjs` does the same: it replaces `mapp.utils.alert`,
 `mapp.utils.confirm` and `mapp.layer.drawLegend` with ui versions.[^ui]
@@ -63,7 +63,7 @@ adding the method; the workspace key then accepts it.
 | `mapp.ui.layers.panels` | `(layer)`, returns a panel | a layer key[^view] |
 | `mapp.ui.utils[name].create` | `(dataview)` | `dataview.dataview`, or `chart` and `table`[^dataview] |
 | `mapp.layer`, `mapp.plugins` | `(layer)` | a layer key[^decorate] |
-| `mapp.plugins` | `(config, mapview)` | a locale key; see [plugins](writing-plugins.md) |
+| `mapp.plugins` | `(config, mapview)` | a locale key; see [plugins](authoring.md) |
 
 A theme type needs a method in `mapp.layer.themes` to style features and one
 in `mapp.ui.layers.legends` to draw its legend. A layer with an unknown
