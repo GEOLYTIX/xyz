@@ -11,9 +11,9 @@ The bundle is the source of truth. Concepts are changed in pull requests togethe
 The portal is built with [VitePress](https://vitepress.dev/). Its configuration lives in `utils/knowledge/site/`, outside the bundle.
 
 ```bash
-pnpm knowledge:site:dev       # dev server with hot reload on http://localhost:5173
+pnpm knowledge:site:dev       # dev server with hot reload on http://localhost:5173/xyz/
 pnpm knowledge:site:build     # static build in utils/knowledge/site/.vitepress/dist
-pnpm knowledge:site:preview   # serve the build on http://localhost:4173
+pnpm knowledge:site:preview   # serve the build on http://localhost:4173/xyz/
 ```
 
 Review a pull request which changes the bundle or the portal with a local build: `pnpm knowledge:site:build` fails on dead links, and `pnpm knowledge:site:preview` serves the pages as they are deployed. Pull requests are not deployed to GitHub Pages.

@@ -25,7 +25,8 @@ import {
 const repo =
   process.env.KNOWLEDGE_SITE_REPO ?? 'https://github.com/GEOLYTIX/xyz';
 const ref = githubRef();
-const base = process.env.KNOWLEDGE_SITE_BASE ?? '/';
+// GitHub Pages serves the portal under /xyz/; local builds use the same base.
+const base = process.env.KNOWLEDGE_SITE_BASE ?? '/xyz/';
 const options = { repo, ref, base };
 const { version } = JSON.parse(
   readFileSync(resolve(repository, 'package.json'), 'utf8'),
