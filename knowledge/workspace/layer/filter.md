@@ -22,9 +22,13 @@ x-xyz-keys:
   - key: layer.filter.include
     type: array
     requires: [layer.infoj]
+    description: Entry fields listed in the panel although their entry has no filter.
+  - { key: "layer.filter.include[]", type: string }
   - key: layer.filter.exclude
     type: array
     requires: [layer.infoj]
+    description: Entry fields never listed in the panel, even with an entry filter.
+  - { key: "layer.filter.exclude[]", type: string }
   - key: layer.filter.includeAll
     type: boolean
     requires: [layer.infoj]
@@ -38,11 +42,6 @@ x-xyz-keys:
   - { key: layer.filter.viewport_description, type: string }
   - { key: layer.multi_filter, type: [boolean, object] }
   - { key: layer.multi_filter.target, type: string }
-  - { key: entry.filter, type: [boolean, string, object] }
-  - { key: entry.filter.type, type: string }
-  - { key: entry.filter.title, type: string }
-  - { key: entry.filter.field, type: string }
-  - { key: entry.filter.distinct, type: boolean }
 sources:
   - id: wiki
     resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration/3fc379b7ada42dff57f19e9f28694868e5a17cac
@@ -55,6 +54,7 @@ sources:
     resource: ../../../apps/ui/lib/layers/filters.mjs
   - id: query
     resource: ../../../apps/xyz/mod/query.js
+  - resource: ../../../apps/ui/lib/elements/drawer.mjs
   - resource: ../../../apps/ui/tests/layers/panels/filter.test.mjs
   - resource: ../../../apps/ui/tests/layers/filters.test.mjs
   - resource: ../../../apps/xyz/tests/mod/query.test.mjs
@@ -85,21 +85,20 @@ The panel lists a filter for each `layer.infoj` entry which has a `filter`
 (true, a type string, or an object with `type`). Without one, an entry is
 listed when `includeAll` is set or its field is in `include`. Entries with
 `skipEntry`, without `field`, with `filter: false`, or whose field is in
-`exclude` are never listed. A missing type is derived from the entry type:
-`numeric`, `integer`, `text` → `like`, `date`, `datetime`, `boolean`.[^panel]
+`exclude` are never listed.[^panel] The filter types and the keys inside
+`entry.filter` are described in [entry filters](filter-entries.md).
 
-Entry filter types are `like`, `match`, `numeric`, `integer`, `in`, `ni`,
-`date`, `datetime`, `boolean` and `null`.[^filters] The keys inside
-`entry.filter` belong to the location entry concepts.
-
-- `hidden` suppresses the panel; `drawer` defaults to `disableOnHide`;
-  `popout`, `dialog` and `classList` change how the panel is shown.
+- `hidden` suppresses the panel; `drawer` defaults to `disableOnHide`, which
+  disables the drawer while the layer is hidden. `popout: true` adds a button
+  which opens the drawer in a dialog; `dialog` (true or dialog options) shows
+  the panel in a dialog; `classList` is added to the drawer.
 - `count_meta` and `viewport_description` override the dictionary texts next
   to the location count.
 
 ## Pitfalls
 
-- An entry filter with an unknown type is skipped with a console warning.
+- `include` and `exclude` list entry fields, not entry keys.
+- `popout` is a flag; an object is replaced by the drawer.
 - The legacy `layer.multi_filter` plugin key rewrites the filter
   configuration before the panel is built. Its other keys, such as `target`,
   are read by the plugin, not by the filter panel.[^panel]
@@ -107,7 +106,7 @@ Entry filter types are `like`, `match`, `numeric`, `integer`, `in`, `ni`,
 # Examples
 
 The devdb retail points with a fixed default filter and a panel offering
-retailer, fascia and open date filters. Address fields are excluded.
+retailer, fascia and missing open date filters. Address fields are excluded.
 
 ```json
 {
@@ -127,9 +126,9 @@ retailer, fascia and open date filters. Address fields are excluded.
         },
         "infoj": [
           { "type": "key" },
-          { "title": "Retailer", "field": "retailer", "filter": { "type": "in", "distinct": true } },
-          { "title": "Fascia", "field": "fascia", "filter": { "type": "in", "distinct": true } },
-          { "title": "Open Date", "field": "open_date", "type": "date", "filter": "date" },
+          { "title": "Retailer", "field": "retailer", "filter": "in" },
+          { "title": "Fascia", "field": "fascia", "filter": { "type": "in", "dropdown": true } },
+          { "title": "Open Date", "field": "open_date", "type": "date", "filter": { "type": "null", "label": "No open date" } },
           { "field": "add_one" },
           { "field": "add_two" }
         ]
@@ -142,4 +141,3 @@ retailer, fascia and open date filters. Address fields are excluded.
 [^query]: query.js layerQuery
 [^decorate]: decorate.mjs
 [^panel]: panels/filter.mjs listFilter, excludeEntry and multi_filter
-[^filters]: layers/filters.mjs

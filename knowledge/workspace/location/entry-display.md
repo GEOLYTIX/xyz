@@ -28,6 +28,7 @@ sources:
   - id: infoj
     resource: ../../../apps/ui/lib/locations/infoj.mjs
   - resource: ../../../apps/ui/lib/locations/entries/title.mjs
+  - resource: ../../../apps/ui/lib/elements/drawer.mjs
   - resource: ../../../apps/ui/tests/locations/infoj.test.mjs
 ---
 # Entry display
@@ -42,7 +43,9 @@ its value.[^infoj]
 - `class` is added to the entry element; `css_title` and `css_val` are inline
   CSS for the title and the value.
 - `group` collects entries with the same group name into a drawer headed by
-  the name; `groupClassList` adds classes to the drawer.
+  the name; `groupClassList` adds classes to the drawer. Groups start
+  collapsed; `"groupClassList": "expanded"` opens one. An `expanded` key is
+  documented in older JSDoc but not read.[^infoj]
 
 ## Skipping
 
@@ -72,7 +75,7 @@ Address entries grouped in a drawer, empty values skipped.
         "infoj": [
           { "title": "Name", "field": "store_name", "css_val": "font-weight: bold" },
           { "title": "Size", "field": "size_band", "inline": true, "tooltip": "Sales area band" },
-          { "title": "Street", "field": "add_one", "group": "Address", "skipNullValue": true },
+          { "title": "Street", "field": "add_one", "group": "Address", "groupClassList": "expanded", "skipNullValue": true },
           { "title": "Town", "field": "town", "group": "Address", "skipNullValue": true },
           { "title": "Postcode", "field": "postcode", "group": "Address", "skipNullValue": true }
         ]

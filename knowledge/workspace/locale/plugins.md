@@ -11,12 +11,9 @@ x-xyz-keys:
   - { key: locale.admin, type: [boolean, object] }
   - { key: locale.custom_theme, type: [boolean, object] }
   - { key: locale.dark_mode, type: [boolean, object] }
-  - { key: locale.feature_info, type: [boolean, object] }
   - { key: locale.fullscreen, type: [boolean, object] }
-  - { key: locale.link_button, type: [boolean, object] }
   - { key: locale.locator, type: [boolean, object] }
   - { key: locale.login, type: [boolean, object] }
-  - { key: locale.userIDB, type: [boolean, object] }
   - { key: locale.userLayer, type: [boolean, object] }
   - { key: locale.userLocale, type: [boolean, object] }
   - { key: locale.zoomBtn, type: [boolean, object] }
@@ -40,6 +37,7 @@ sources:
   - id: repo
     resource: https://github.com/GEOLYTIX/xyz_plugins
   - resource: ../../../apps/mapp/tests/utils/loadPlugins.test.mjs
+  - resource: ../../../apps/mapp/lib/plugins/_plugins.mjs
   - resource: ../../../apps/mapp/lib/plugins/layer_order.mjs
   - resource: ../../../apps/mapp/tests/plugins/layer_order.test.mjs
 ---
@@ -52,7 +50,10 @@ logged and do not stop the mapview.
 
 The ui library provides `admin`, `custom_theme`, `dark_mode`, `feature_info`, `fullscreen`,
 `link_button`, `locator`, `login`, `userIDB`, `userLayer`, `userLocale`,
-`zoomBtn` and `zoomToArea`, eg. `"fullscreen": true`.[^ui]
+`zoomBtn` and `zoomToArea`, eg. `"fullscreen": true`.[^ui] The MAPP library
+provides `consent`, `layer_order` and `svg_templates`. The options of
+`consent`, `feature_info`, `link_button` and `userIDB` are described in
+[plugin options](plugin-options.md).
 
 The MAPP library's `layer_order` plugin sorts `locale.layers` by a list of
 layer keys. Layers are added with increasing zIndex, so later keys are drawn

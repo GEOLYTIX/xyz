@@ -24,6 +24,13 @@ x-xyz-keys:
   - { key: entry.max_size, type: integer }
   - { key: entry.alert, type: string }
   - { key: entry.reload, type: boolean }
+  - { key: entry.min, type: number, description: Lower bound of numeric and integer entries, for editing and the range filter. }
+  - { key: entry.max, type: number, description: Upper bound of numeric and integer entries, for editing and the range filter. }
+  - { key: entry.step, type: number, description: Step of the range filter of numeric and integer entries; editing uses edit.step. }
+  - { key: entry.dynamic, type: boolean, description: A dataview or tab entry is recreated and updated each time its tab is shown. }
+  - { key: entry.disabled, type: boolean, description: The tab of a tab or dataview entry is dimmed and inert; the display toggle of a layer entry is disabled. }
+  - { key: entry.disableTabClose, type: boolean, description: The tab of a tab or dataview entry has no close button and no middle click close. }
+  - { key: entry.hideTabClose, type: boolean, description: The tab of a tab or dataview entry has no close button. }
 sources:
   - id: wiki
     resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration/3fc379b7ada42dff57f19e9f28694868e5a17cac
@@ -33,6 +40,9 @@ sources:
   - resource: ../../../apps/ui/lib/locations/entries/layer.mjs
   - resource: ../../../apps/ui/lib/locations/entries/query_button.mjs
   - resource: ../../../apps/ui/lib/locations/entries/cloudinary.mjs
+  - resource: ../../../apps/ui/lib/locations/entries/numeric.mjs
+  - resource: ../../../apps/ui/lib/locations/entries/tab.mjs
+  - resource: ../../../apps/ui/lib/Tabview.mjs
   - resource: ../../../apps/ui/tests/locations/entries/_entries.test.mjs
   - resource: ../../../apps/ui/tests/locations/entries/layer.test.mjs
   - resource: ../../../apps/ui/tests/locations/entries/query_button.test.mjs
@@ -46,7 +56,7 @@ an error and is skipped.[^entries]
 | --- | --- | --- |
 | `text` (default) | The value as text | `prefix`, `suffix` |
 | `textarea`, `html` | Multi-line text; `html` renders HTML | |
-| `numeric`, `integer` | A number formatted for the locale | `formatterParams`, `prefix`, `suffix` |
+| `numeric`, `integer` | A number formatted for the locale | `formatterParams`, `prefix`, `suffix`, `min`, `max`, `step` |
 | `date`, `datetime`, `time` | A date, date and time, or time | |
 | `boolean` | A checkbox | `label` |
 | `title` | A heading row without value | `title`, `css_title` |
@@ -56,11 +66,12 @@ an error and is skipped.[^entries]
 | `link` | A link opening a new window | `url`, `label`, `icon_name` |
 | `pills` | An array value as pills | `pills` |
 | `json` | A JSON editor | |
-| `tab` | A tab in a tabview | `target`, `tab_style`, `label` |
-| `dataview` | A table or chart from a query | `target`, `query`, `display`; see dataviews |
+| `tab` | A tab in a tabview | `target`, `label`, `dynamic`, `disabled`, `disableTabClose`, `hideTabClose` |
+| `dataview` | A table or chart from a query | `target`, `query`, `display`, `tab_style` and the tab keys; see dataviews |
 | `layer` | A layer derived from the location | `layer`, `data`, `query`, `display`, `style` |
 | `query_button` | A button which runs a query | `query`, `queryparams`, `label`, `alert`, `reload`, `dependents` |
 | `image`, `images`, `documents` | Uploads to Cloudinary | `cloudinary_folder`, `max_size` |
+| `ping` | A textarea with the responses of the ping utility, for testing | |
 
 ## Notes
 
@@ -72,8 +83,15 @@ an error and is skipped.[^entries]
   types `mvt_clone` and `vector_layer` are mapped to `layer` with a warning.
 - `query_button` runs `query` and then reloads the `dependents` fields of the
   location; see [editing](editing.md).
-- `report` is a legacy alias for `link`; `defaults` is deprecated and does
-  nothing.
+- Aliases share one method: `datetime` → `date`, `html` → `textarea`,
+  `integer` → `numeric`, `image`, `images`, `documents` → Cloudinary.
+  `report` is a legacy alias for `link`; `defaults` is deprecated and does
+  nothing.[^entries]
+- `min` and `max` bound the numeric edit input and fix the bounds of the
+  entry's range filter; `step` only applies to the filter, see
+  [editing](editing.md) and [entry filters](../layer/filter-entries.md).
+- A `tab` entry sets its own `tab_style` from the location colour; only
+  `dataview` entries keep a configured one.
 - Uploads need the Cloudinary environment configuration of the instance.
 
 # Examples

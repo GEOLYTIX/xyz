@@ -7,13 +7,13 @@ tags: [workspace, layer, filter, sql, security]
 status: draft
 x-xyz-keys:
   - { key: filter.*, type: [object, array] }
-  - { key: filter.*.eq, type: number }
-  - { key: filter.*.gt, type: number }
-  - { key: filter.*.gte, type: number }
-  - { key: filter.*.lt, type: number }
-  - { key: filter.*.lte, type: number }
-  - { key: filter.*.in, type: array }
-  - { key: filter.*.ni, type: array }
+  - { key: filter.*.eq, type: [number, string], pattern: '^\s*[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?\s*$' }
+  - { key: filter.*.gt, type: [number, string], pattern: '^\s*[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?\s*$' }
+  - { key: filter.*.gte, type: [number, string], pattern: '^\s*[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?\s*$' }
+  - { key: filter.*.lt, type: [number, string], pattern: '^\s*[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?\s*$' }
+  - { key: filter.*.lte, type: [number, string], pattern: '^\s*[+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?\s*$' }
+  - { key: filter.*.in, type: [array, string, number, boolean], description: Values to match; a single value is wrapped in an array. }
+  - { key: filter.*.ni, type: [array, string, number, boolean], description: Values to match; a single value is wrapped in an array. }
   - { key: filter.*.like, type: string }
   - { key: filter.*.match, type: string }
   - { key: filter.*.boolean, type: boolean }
@@ -43,7 +43,7 @@ passes every value as a query parameter, never as SQL text.[^sqlfilter]
 | Type | Value | SQL |
 | --- | --- | --- |
 | `eq`, `gt`, `gte`, `lt`, `lte` | number or numeric string | `"col" = $1`, `>`, `>=`, `<`, `<=` |
-| `in` / `ni` | array | `"col" = ANY ($1)` / `NOT "col" = ANY ($1)` |
+| `in` / `ni` | array, or one value | `"col" = ANY ($1)` / `NOT "col" = ANY ($1)` |
 | `like` | string; commas separate alternatives | `("col" ILIKE $1 OR …)` with a trailing `%` |
 | `match` | string | `"col"::text = $1`, an exact text match |
 | `boolean` | boolean | `"col" IS true` / `IS false` |
@@ -58,7 +58,8 @@ passes every value as a query parameter, never as SQL text.[^sqlfilter]
 - A column name must match `^[a-zA-Z_]\w*$`. Otherwise the whole object is
   dropped with a warning.
 - An unknown type is ignored silently, so a misspelt type filters nothing.
-- The numeric types only check that the value is numeric. On a text column
+- The numeric types only check that the value is numeric; a value which
+  is not fails the query. The schema accepts numbers and decimal strings. On a text column
   PostgreSQL compares text, so `{"col": {"gte": 50}}` matches `'Rooftop'`.
   Use numeric types on numeric columns only.
 

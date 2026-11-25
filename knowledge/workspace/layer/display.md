@@ -13,6 +13,10 @@ x-xyz-keys:
   - { key: layer.meta, type: string }
   - { key: layer.group, type: string }
   - { key: layer.groupmeta, type: string }
+  - key: layer.groupClassList
+    type: string
+    requires: [layer.group]
+    description: CSS classes added to the group drawer; only the layer which creates the group applies them.
   - { key: layer.zIndex, type: integer }
   - { key: layer.promoteDisplay, type: boolean }
   - { key: layer.attribution, type: object }
@@ -36,6 +40,8 @@ sources:
     resource: ../../../apps/mapp/lib/layer/decorate.mjs
   - resource: ../../../apps/mapp/lib/layer/_layer.mjs
   - resource: ../../../apps/ui/lib/layers/view.mjs
+  - id: listview
+    resource: ../../../apps/ui/lib/layers/listview.mjs
   - resource: ../../../apps/xyz/mod/workspace/getLayer.js
 ---
 # Layer display and view
@@ -50,7 +56,9 @@ MAPP library decorates the layer when it is added to a mapview.[^decorate]
   `mapview.layers` and can be shown programmatically.
 - `name` is the header of the layer view. `meta` is HTML shown in the view.
 - `group` puts layer views with the same value into one group drawer;
-  `groupmeta` is HTML shown in the group.
+  `groupmeta` is HTML shown in the group. `groupClassList` adds CSS classes
+  to the group drawer; the first layer of the group creates the drawer, so
+  only its value applies.[^listview]
 - `attribution` maps source names to URLs, shown in the map attribution
   while the layer is displayed.
 - `zIndex` orders the layer canvas. Without one, layers get increasing values
@@ -119,3 +127,4 @@ Two layers in one group; the second is not displayed when the map opens.
 
 [^decorate]: decorate.mjs
 [^view]: ui layers/view.mjs viewConfig
+[^listview]: ui layers/listview.mjs createGroup

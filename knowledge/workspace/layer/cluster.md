@@ -6,13 +6,18 @@ resource: ../../../apps/mapp/lib/layer/format/vector.mjs
 tags: [workspace, layer, mapp, cluster]
 status: draft
 x-xyz-keys:
-  - { key: layer.cluster, type: object, formats: [wkt, geojson, cluster] }
-  - { key: layer.cluster.distance, type: number, formats: [wkt, geojson] }
+  - { key: layer.cluster, type: object, formats: [wkt, geojson, cluster, vector] }
+  - key: layer.cluster.distance
+    type: number
+    minimum: 1
+    formats: [wkt, geojson, vector]
+    description: Browser clustering distance in pixels; below 1 the cluster configuration is removed. Excludes resolution.
   - key: layer.cluster.resolution
     type: number
     formats: [cluster]
     requires: [layer.geom, layer.srid]
-  - { key: layer.cluster.hexgrid, type: boolean, formats: [cluster] }
+    description: Database cluster grid size as a fraction of the tile width at the current zoom; must be greater than 0. Excludes distance.
+  - { key: layer.cluster.hexgrid, type: boolean, formats: [cluster], description: Clusters on a hexagon grid with the cluster_hex template. }
   - { key: layer.cluster.label, type: string }
 sources:
   - id: wiki
@@ -41,7 +46,8 @@ The MAPP library then sets `format` to `cluster`, `params.viewport` and
 `params.z`, and the query template to `cluster`, or `cluster_hex` with
 `hexgrid`.[^templates] Use it for large tables.
 
-- `resolution` must be a number, and `srid` must not be `4326`.
+- `resolution` must be a number greater than 0, and `srid` must not be
+  `"4326"`.
 - `label` names the field shown for a cluster.
 - Cluster icons and their scaling belong to the layer style.
 
@@ -51,6 +57,11 @@ The MAPP library then sets `format` to `cluster`, `params.viewport` and
   `geom` and `srid` and returns nothing without a map extent.
 - The Wiki says `distance` is required for WKT layers; it is required for
   browser clustering of any vector format.
+- The `4326` check compares the string `"4326"`; a numeric `srid` of 4326
+  passes it and clusters degrees as if they were metres.
+- The grid cell is `resolution` × 40075016.68 / 2^z metres, rounded down to
+  an integer. A cell below 1 metre at the deepest zoom divides by zero in
+  the query, so keep `resolution` × 40075016.68 / 2^maxZoom ≥ 1.
 
 # Examples
 

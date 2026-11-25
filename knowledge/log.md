@@ -26,6 +26,24 @@
   tests added by #3087, #3126, #3127, #3128, #3136, #3146, #3147, #3079,
   #3082, #3069 and #3129, and the mapview draw, modify and snap interactions,
   are linked from the concepts they cover.
+- `x-xyz-keys` entries take `pattern`, `minimum`, `maximum`, `required` and
+  `open`. `pnpm knowledge:schema` also generates
+  [workspace.strict.schema.json](workspace/workspace.strict.schema.json), the
+  contract for generated workspaces: documented objects are closed and
+  required keys enforced, except in objects which merge a template. Concept
+  examples are checked against it.
+- Compared the concepts with a hand-written workspace schema for XYZ v4.23.4
+  and added the keys and constraints v5 code confirms: format requirements
+  (`srid`, `qID`, `table`, `URI`, `apiKey`), theme and icon types, entry and
+  filter types, filter panel options, icon keys, style panel keys, opacity
+  and coordinate ranges, MVT's string `srid`, and the locale plugin options.
+  Its deployment rules, such as hex colours and required breaks, were left
+  out. New concepts: [tile formats](workspace/layer/tile-formats.md),
+  [layer features](workspace/layer/features.md),
+  [entry filters](workspace/layer/filter-entries.md),
+  [icons](workspace/layer/style/icons.md),
+  [theme categories](workspace/layer/style/theme-categories.md) and
+  [plugin options](workspace/locale/plugin-options.md).
 
 ## 2026-11-24
 

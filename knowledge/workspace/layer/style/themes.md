@@ -11,45 +11,39 @@ x-xyz-keys:
   - { key: layer.style.themes.*, type: object, ref: theme }
   - { key: theme, type: object }
   - { key: theme.skip, type: boolean }
-  - { key: theme.type, type: string }
+  - key: theme.type
+    type: string
+    enum: [basic, categorized, distributed, graduated]
+    required: true
+    description: The theme method of mapp.layer.themes; a theme with an unknown or missing type is ignored with a warning.
   - { key: theme.title, type: string }
   - { key: theme.meta, type: string }
-  - { key: theme.field, type: string }
-  - { key: theme.fields, type: array }
+  - { key: theme.label, type: string, description: The legend label beside the symbol of a basic theme. }
   - { key: theme.style, type: object, ref: style }
-  - { key: theme.categories, type: array }
-  - { key: "theme.categories[]", type: object, ref: style }
-  - { key: "theme.categories[].value", type: [string, number] }
-  - { key: "theme.categories[].label", type: string }
-  - { key: "theme.categories[].field", type: string }
-  - { key: "theme.categories[].style", type: [object, array], ref: style }
-  - { key: theme.cat, type: object }
-  - { key: theme.cat.*, type: object, ref: style }
-  - { key: theme.cat.*.label, type: string }
-  - { key: theme.cat.*.value, type: [string, number] }
-  - { key: theme.cat_arr, type: array }
-  - { key: theme.graduated_breaks, type: string, default: less_than }
-  - { key: theme.distribution, type: string }
   - { key: theme.setLabel, type: string }
   - { key: theme.setHover, type: string }
-  - { key: theme.legend, type: object }
-  - { key: theme.legend.layout, type: string }
+  - key: theme.legend
+    type: object
+    open: true
+    description: Legend layout; a jenks distribution also passes it to formatNumericValue, eg. prefix, suffix and round for the category labels.
+  - { key: theme.legend.layout, type: string, default: grid }
   - { key: theme.legend.nowrap, type: boolean }
-  - { key: theme.legend.classList, type: string }
+  - { key: theme.legend.classList, type: string, description: Set by the ui from layout and nowrap; a configured value is replaced. }
+  - { key: theme.legend.showEmptyCat, type: boolean, description: Show categories without features in a count distribution legend. }
 sources:
   - id: wiki
     resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: parser
     resource: ../../../../apps/mapp/lib/layer/styleParser.mjs
-  - id: categorized
-    resource: ../../../../apps/mapp/lib/layer/themes/categorized.mjs
-  - id: graduated
-    resource: ../../../../apps/mapp/lib/layer/themes/graduated.mjs
-  - id: distributed
-    resource: ../../../../apps/mapp/lib/layer/themes/distributed.mjs
-  - id: fields
-    resource: ../../../../apps/mapp/lib/layer/featureFields.mjs
+  - id: registry
+    resource: ../../../../apps/mapp/lib/layer/_layer.mjs
+  - id: featureStyle
+    resource: ../../../../apps/mapp/lib/layer/featureStyle.mjs
+  - id: basicLegend
+    resource: ../../../../apps/ui/lib/layers/legends/basic.mjs
+  - id: legendUtils
+    resource: ../../../../apps/ui/lib/layers/legends/utils.mjs
   - resource: ../../../../apps/mapp/lib/layer/themes/basic.mjs
   - resource: ../../../../apps/ui/lib/elements/layerStyle.mjs
   - resource: ../../../../apps/mapp/tests/layer/themes
@@ -73,34 +67,31 @@ eg. by toggling it in the legend, hides its features.
 | `graduated` | The numeric category range the value falls into |
 | `distributed` | Categories handed out so that neighbouring features differ |
 
-An unknown `type` is ignored with a warning. `legend.layout`, `nowrap` and
-`classList` change the legend layout in the ui.
+`type` must be a key of `mapp.layer.themes`;[^registry] a theme with an
+unknown or missing `type` is ignored with a warning and features keep the
+default style.[^featureStyle] The ui legend dispatches on the same four types.
 
-## Categories
+[Theme categories](theme-categories.md) describes `field`, `categories`,
+graduated breaks and data distributions of the other three types.
 
-`categories` is an ordered array of `{ value, label, style }`; `label`
-defaults to `value`. Style keys directly on a category move into its `style`.
-The legacy `cat`, keyed by value, and `cat_arr` become `categories`.[^parser]
+## Basic
 
-- **categorized**: values match as text. With `fields` instead of `field`,
-  each category names its `field`, and a feature shows the icons of every
-  matching category stacked. Cluster features are not themed.[^categorized]
-- **graduated**: values are numbers, sorted by the parser. `graduated_breaks: less_than` (the default) picks the category with the
-  lowest `value` at or above the feature value; `greater_than` the highest
-  `value` at or below it. Values outside all ranges get the nearest
-  category. Without categories the theme is ignored.[^graduated]
-- **distributed**: `field` defaults to `id`; features with the same value share a category.[^distributed]
+A basic theme spreads `style` over every feature. Its legend shows one
+symbol from `style` (24px by default) with `label` beside it; without
+`label` the legend row has no text.[^basicLegend]
 
-## Distribution
+## Legend
 
-`distribution` computes the legend from the loaded features:[^fields] `count`
-shows only the values present, with counts; `jenks` replaces graduated values
-with natural breaks, one per category. To follow the map extent, set
-`params.viewport` on vector layers, or `wkt_properties` on MVT layers.
+`legend.layout` (default `grid`) and `legend.nowrap` set the css classes of
+the legend; the ui derives `legend.classList` from them.[^legendUtils]
+`legend.showEmptyCat` keeps categories with a zero count in a `count`
+distribution legend. A jenks distribution formats its category labels with
+the `legend` object as numeric formatter params, so it may carry formatter
+keys too.
 
 # Examples
 
-Countries in a graduated population theme, and a categorized continent theme.
+Countries in a graduated population theme, and a basic theme.
 
 ```json
 {
@@ -126,13 +117,10 @@ Countries in a graduated population theme, and a categorized continent theme.
                 { "value": 2000000000, "label": "Over 100m", "style": { "fillColor": "#a50f15" } }
               ]
             },
-            "continent": {
-              "type": "categorized",
-              "field": "continent",
-              "categories": [
-                { "value": "Europe", "style": { "fillColor": "#1b9e77" } },
-                { "value": "Africa", "style": { "fillColor": "#d95f02" } }
-              ]
+            "countries": {
+              "type": "basic",
+              "label": "Country",
+              "style": { "fillColor": "#1b9e77" }
             }
           }
         }
@@ -143,7 +131,7 @@ Countries in a graduated population theme, and a categorized continent theme.
 ```
 
 [^parser]: styleParser.mjs parseTheme
-[^categorized]: themes/categorized.mjs
-[^graduated]: themes/graduated.mjs
-[^distributed]: themes/distributed.mjs
-[^fields]: featureFields.mjs distribution
+[^registry]: _layer.mjs themes
+[^featureStyle]: featureStyle.mjs
+[^basicLegend]: legends/basic.mjs
+[^legendUtils]: legends/utils.mjs themeLegend, catElement

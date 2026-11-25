@@ -73,7 +73,9 @@
             "x-xyz-concept": "knowledge/workspace/templates.md"
           }
         },
-        "x-xyz-concept": "knowledge/workspace/templates.md"
+        "x-xyz-concept": "knowledge/workspace/templates.md",
+        "description": "A template; its content is a partial layer",
+        "x-xyz-open": true
       },
       "x-xyz-concept": "knowledge/workspace/templates.md"
     }
@@ -85,7 +87,12 @@
       "properties": {
         "ScaleLine": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/locale/view.md"
+          "x-xyz-concept": "knowledge/workspace/locale/view.md",
+          "description": "Units of the scale bar; any value other than imperial shows metric.",
+          "enum": [
+            "metric",
+            "imperial"
+          ]
         },
         "admin": {
           "anyOf": [
@@ -97,6 +104,24 @@
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+        },
+        "consent": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+              "description": "Text of the consent dialog.",
+              "x-xyz-required": true
+            },
+            "title": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+              "description": "Dialog title; the consent_title dictionary entry by default."
+            }
+          },
+          "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+          "description": "Asks a logged in user once for consent and stores the answer with the user."
         },
         "custom_theme": {
           "anyOf": [
@@ -130,25 +155,34 @@
             "east": {
               "type": "number",
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "minimum": -180,
+              "maximum": 180,
               "default": 180
             },
             "mask": {
               "type": "boolean",
-              "x-xyz-concept": "knowledge/workspace/locale/view.md"
+              "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "description": "Grey out the map outside the extent."
             },
             "north": {
               "type": "number",
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "minimum": -90,
+              "maximum": 90,
               "default": 90
             },
             "south": {
               "type": "number",
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "minimum": -90,
+              "maximum": 90,
               "default": -90
             },
             "west": {
               "type": "number",
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "minimum": -180,
+              "maximum": 180,
               "default": -180
             }
           },
@@ -160,10 +194,23 @@
               "type": "boolean"
             },
             {
-              "type": "object"
+              "type": "object",
+              "properties": {
+                "css": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+                  "description": "Inline style of the popup content."
+                },
+                "features": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+                  "description": "List the cluster label of each clustered feature instead of their number."
+                }
+              }
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+          "description": "A button which shows the properties of a clicked feature in a popup."
         },
         "fullscreen": {
           "anyOf": [
@@ -201,11 +248,14 @@
             "limit": {
               "type": "integer",
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md",
+              "description": "Maximum number of results per search.",
+              "minimum": 1,
               "default": 10
             },
             "maxZoom": {
               "type": "integer",
-              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
+              "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md",
+              "minimum": 0
             },
             "no_result": {
               "type": "string",
@@ -259,13 +309,85 @@
         "link_button": {
           "anyOf": [
             {
-              "type": "boolean"
+              "type": "object",
+              "properties": {
+                "css_class": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
+                },
+                "css_style": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
+                },
+                "href": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+                  "x-xyz-required": true
+                },
+                "icon_name": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+                  "description": "Name of a Material Symbols icon.",
+                  "x-xyz-required": true
+                },
+                "locale": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+                  "description": "Append ?locale=<locale key> to href."
+                },
+                "target": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
+                },
+                "title": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
+                }
+              }
             },
             {
-              "type": "object"
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "css_class": {
+                    "type": "string",
+                    "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
+                  },
+                  "css_style": {
+                    "type": "string",
+                    "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
+                  },
+                  "href": {
+                    "type": "string",
+                    "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+                    "x-xyz-required": true
+                  },
+                  "icon_name": {
+                    "type": "string",
+                    "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+                    "description": "Name of a Material Symbols icon.",
+                    "x-xyz-required": true
+                  },
+                  "locale": {
+                    "type": "boolean",
+                    "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+                    "description": "Append ?locale=<locale key> to href."
+                  },
+                  "target": {
+                    "type": "string",
+                    "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
+                  },
+                  "title": {
+                    "type": "string",
+                    "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
+                  }
+                }
+              }
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+          "description": "A link button in the map button column, or an array of them."
         },
         "listview_records": {
           "type": "array",
@@ -299,15 +421,33 @@
         },
         "mapviewControls": {
           "type": "array",
+          "items": {
+            "type": "string",
+            "x-xyz-concept": "knowledge/workspace/locale/view.md",
+            "description": "An Openlayers control class created without options; unknown names are ignored.",
+            "enum": [
+              "Attribution",
+              "FullScreen",
+              "MousePosition",
+              "OverviewMap",
+              "Rotate",
+              "ScaleLine",
+              "Zoom",
+              "ZoomSlider",
+              "ZoomToExtent"
+            ]
+          },
           "x-xyz-concept": "knowledge/workspace/locale/view.md"
         },
         "maxZoom": {
           "type": "integer",
-          "x-xyz-concept": "knowledge/workspace/locale/view.md"
+          "x-xyz-concept": "knowledge/workspace/locale/view.md",
+          "minimum": 0
         },
         "minZoom": {
           "type": "integer",
           "x-xyz-concept": "knowledge/workspace/locale/view.md",
+          "minimum": 0,
           "default": 0
         },
         "name": {
@@ -344,15 +484,24 @@
         "srid": {
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/locale/view.md",
+          "description": "EPSG code of the mapview projection, digits only.",
+          "pattern": "^[1-9][0-9]*$",
           "default": "3857"
         },
         "svgTemplates": {
           "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "x-xyz-concept": "knowledge/workspace/locale/view.md",
+            "description": "URL or data URI of an SVG template."
+          },
           "x-xyz-concept": "knowledge/workspace/locale/view.md"
         },
         "svg_templates": {
           "type": "object",
-          "x-xyz-concept": "knowledge/workspace/locale/view.md"
+          "x-xyz-concept": "knowledge/workspace/locale/view.md",
+          "deprecated": true,
+          "x-xyz-deprecated": "locale.svgTemplates"
         },
         "syncPlugins": {
           "type": "array",
@@ -379,15 +528,16 @@
           "x-xyz-concept": "knowledge/workspace/templates.md"
         },
         "userIDB": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "type": "object"
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+              "default": "userIDB"
             }
-          ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          },
+          "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
+          "description": "A developer button which edits the user record in the browser's IndexedDB."
         },
         "userLayer": {
           "anyOf": [
@@ -417,19 +567,39 @@
             "lat": {
               "type": "number",
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "minimum": -90,
+              "maximum": 90,
               "default": 0
             },
             "lng": {
               "type": "number",
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "minimum": -180,
+              "maximum": 180,
               "default": 0
+            },
+            "maxZoom": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "description": "Maximum zoom of the view; takes precedence over locale.maxZoom.",
+              "minimum": 0
+            },
+            "minZoom": {
+              "type": "number",
+              "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "description": "Minimum zoom of the view; takes precedence over locale.minZoom.",
+              "minimum": 0
             },
             "z": {
               "type": "number",
-              "x-xyz-concept": "knowledge/workspace/locale/view.md"
+              "x-xyz-concept": "knowledge/workspace/locale/view.md",
+              "description": "Start zoom; minZoom without it.",
+              "minimum": 0
             }
           },
-          "x-xyz-concept": "knowledge/workspace/locale/view.md"
+          "x-xyz-concept": "knowledge/workspace/locale/view.md",
+          "description": "The start view, passed to the Openlayers View; other ol.View options apply.",
+          "x-xyz-open": true
         },
         "zoomBtn": {
           "anyOf": [
@@ -461,14 +631,21 @@
       "properties": {
         "URI": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
+          "description": "Tile URL template, eg. with {z}/{x}/{y}; layer.params are appended as query string.",
           "x-xyz-formats": [
             "tiles"
-          ]
+          ],
+          "x-xyz-required": {
+            "when": {
+              "layer.format": "tiles"
+            }
+          }
         },
         "accessToken": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
+          "description": "Mapbox access token; maplibre only fetches style.URL when it is set.",
           "x-xyz-formats": [
             "maplibre",
             "mapboxStyle"
@@ -476,10 +653,16 @@
         },
         "apiKey": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
+          "description": "Google Map Tiles API key.",
           "x-xyz-formats": [
             "googleMapTiles"
-          ]
+          ],
+          "x-xyz-required": {
+            "when": {
+              "layer.format": "googleMapTiles"
+            }
+          }
         },
         "attribution": {
           "type": "object",
@@ -492,6 +675,9 @@
         "cacheSize": {
           "type": "integer",
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "description": "Number of tiles the MVT render source caches; 0 disables the cache.",
+          "minimum": 0,
+          "default": 0,
           "x-xyz-formats": [
             "mvt"
           ]
@@ -502,14 +688,18 @@
             "distance": {
               "type": "number",
               "x-xyz-concept": "knowledge/workspace/layer/cluster.md",
+              "description": "Browser clustering distance in pixels; below 1 the cluster configuration is removed. Excludes resolution.",
+              "minimum": 1,
               "x-xyz-formats": [
                 "wkt",
-                "geojson"
+                "geojson",
+                "vector"
               ]
             },
             "hexgrid": {
               "type": "boolean",
               "x-xyz-concept": "knowledge/workspace/layer/cluster.md",
+              "description": "Clusters on a hexagon grid with the cluster_hex template.",
               "x-xyz-formats": [
                 "cluster"
               ]
@@ -521,6 +711,7 @@
             "resolution": {
               "type": "number",
               "x-xyz-concept": "knowledge/workspace/layer/cluster.md",
+              "description": "Database cluster grid size as a fraction of the tile width at the current zoom; must be greater than 0. Excludes distance.",
               "x-xyz-formats": [
                 "cluster"
               ],
@@ -534,7 +725,8 @@
           "x-xyz-formats": [
             "wkt",
             "geojson",
-            "cluster"
+            "cluster",
+            "vector"
           ]
         },
         "dataviews": {
@@ -725,6 +917,47 @@
         "featureFormat": {
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "description": "The featureFormats method which parses the response or inline features; defaults to format.",
+          "enum": [
+            "cluster",
+            "geojson",
+            "wkt",
+            "wkth3"
+          ],
+          "x-xyz-formats": [
+            "wkt",
+            "geojson",
+            "cluster",
+            "vector"
+          ]
+        },
+        "featureLookup": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "x-xyz-concept": "knowledge/workspace/layer/features.md"
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/features.md",
+          "description": "Objects whose ID property matches a feature ID; only matched features display, with the object's properties."
+        },
+        "featureLookupId": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/features.md",
+          "description": "Property of the featureLookup objects which holds the feature ID.",
+          "default": "id",
+          "x-xyz-requires": [
+            "layer.featureLookup"
+          ]
+        },
+        "featureSet": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/layer/features.md",
+          "description": "Feature IDs to display; other features are not styled. An empty array displays all."
+        },
+        "features": {
+          "type": "array",
+          "x-xyz-concept": "knowledge/workspace/layer/features.md",
+          "description": "Inline features, parsed with layer.featureFormat. A layer with features requests no data.",
           "x-xyz-formats": [
             "wkt",
             "geojson",
@@ -793,7 +1026,12 @@
             },
             "exclude": {
               "type": "array",
+              "items": {
+                "type": "string",
+                "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+              },
               "x-xyz-concept": "knowledge/workspace/layer/filter.md",
+              "description": "Entry fields never listed in the panel, even with an entry filter.",
               "x-xyz-requires": [
                 "layer.infoj"
               ]
@@ -804,7 +1042,12 @@
             },
             "include": {
               "type": "array",
+              "items": {
+                "type": "string",
+                "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+              },
               "x-xyz-concept": "knowledge/workspace/layer/filter.md",
+              "description": "Entry fields listed in the panel although their entry has no filter.",
               "x-xyz-requires": [
                 "layer.infoj"
               ]
@@ -866,6 +1109,14 @@
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
         },
+        "groupClassList": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/display.md",
+          "description": "CSS classes added to the group drawer; only the layer which creates the group applies them.",
+          "x-xyz-requires": [
+            "layer.group"
+          ]
+        },
         "groupmeta": {
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
@@ -913,6 +1164,7 @@
         "mvt_cache": {
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "description": "Ignored with a warning; MVT tile caching is disabled.",
           "x-xyz-formats": [
             "mvt"
           ]
@@ -939,6 +1191,11 @@
                 "mvt"
               ]
             },
+            "layer_template": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
+              "description": "Workspace template key which the XYZ API uses as the layer for this layer's queries."
+            },
             "template": {
               "type": "string",
               "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
@@ -946,10 +1203,23 @@
             "viewport": {
               "type": "boolean",
               "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+            },
+            "z": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
+              "description": "Sends the current map zoom as the z param.",
+              "x-xyz-formats": [
+                "wkt",
+                "geojson",
+                "cluster",
+                "vector"
+              ]
             }
           },
           "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
-          "default": {}
+          "description": "Request params of every layer data query; custom query templates may read further params.",
+          "default": {},
+          "x-xyz-open": true
         },
         "plugins": {
           "type": "array",
@@ -957,14 +1227,15 @@
         },
         "preserveDrawingBuffer": {
           "type": "boolean",
-          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
+          "description": "Keeps the maplibre canvas readable",
           "x-xyz-formats": [
             "maplibre"
           ]
         },
         "projection": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
           "default": "EPSG:3857",
           "x-xyz-formats": [
             "tiles"
@@ -976,7 +1247,18 @@
         },
         "qID": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
+          "description": "Unique ID column of the layer table.",
+          "x-xyz-required": {
+            "when": {
+              "layer.format": [
+                "wkt",
+                "geojson",
+                "cluster",
+                "vector"
+              ]
+            }
+          }
         },
         "queryparams": {
           "type": "object",
@@ -999,7 +1281,8 @@
         },
         "source": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
+          "description": "Name of the Openlayers tile source class",
           "default": "OSM",
           "x-xyz-formats": [
             "tiles"
@@ -1014,18 +1297,41 @@
               "type": "integer"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
+          "description": "EPSG code of the geometry column. Write it as a string; mvt only accepts \"3857\" or no srid.",
+          "pattern": "^[0-9]+$",
+          "minimum": 1,
+          "x-xyz-required": {
+            "when": {
+              "layer.format": [
+                "wkt",
+                "geojson",
+                "cluster",
+                "vector"
+              ]
+            }
+          }
         },
         "style": {
           "type": "object",
           "properties": {
             "URL": {
               "type": "string",
-              "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+              "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
+              "description": "Mapbox GL style URL. maplibre only fetches it with layer.accessToken; otherwise it needs layer.style.object.",
               "x-xyz-formats": [
                 "maplibre",
                 "mapboxStyle"
               ]
+            },
+            "cache": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+              "description": "Reuse the style computed for each feature."
+            },
+            "classList": {
+              "type": "string",
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
             },
             "cluster": {
               "$ref": "#/$defs/style",
@@ -1034,6 +1340,23 @@
                   "type": "number",
                   "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
                   "default": 1
+                },
+                "logScale": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+                  "description": "Grow cluster icons with the natural log of the cluster size."
+                },
+                "zoomInScale": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+                  "deprecated": true,
+                  "x-xyz-deprecated": "layer.style.zoomInScale"
+                },
+                "zoomOutScale": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+                  "deprecated": true,
+                  "x-xyz-deprecated": "layer.style.zoomOutScale"
                 }
               },
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
@@ -1043,7 +1366,8 @@
             },
             "contextFilter": {
               "type": "string",
-              "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+              "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
+              "description": "CSS filter applied to the tile canvas",
               "x-xyz-formats": [
                 "tiles"
               ]
@@ -1051,6 +1375,44 @@
             "default": {
               "$ref": "#/$defs/style",
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+            },
+            "dialog": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "object"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+            },
+            "drawer": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "boolean"
+                }
+              ],
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+              "description": "false shows the panel without an expandable drawer.",
+              "default": "disableOnHide"
+            },
+            "elements": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+              },
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+              "description": "Order of the style panel elements."
+            },
+            "hidden": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+              "description": "Do not create the style panel."
             },
             "highlight": {
               "$ref": "#/$defs/style",
@@ -1072,6 +1434,11 @@
                     "field": {
                       "type": "string",
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                    },
+                    "hidden": {
+                      "type": "boolean",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
+                      "description": "Do not show the hover controls in the style panel."
                     },
                     "query": {
                       "type": "string",
@@ -1110,33 +1477,77 @@
                       "type": "string"
                     }
                   ],
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                 },
                 "clusterScale": {
                   "type": "boolean",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "x-xyz-requires": [
                     "layer.style.cluster"
                   ]
                 },
                 "field": {
                   "type": "string",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Numeric feature property which scales the icon."
+                },
+                "fields": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "field": {
+                        "type": "string",
+                        "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
+                      },
+                      "title": {
+                        "type": "string",
+                        "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
+                      }
+                    },
+                    "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                    "description": "Assigned to icon_scaling when selected; may also set scaleFactor",
+                    "x-xyz-open": true
+                  },
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Named fields offered in a style panel dropdown."
+                },
+                "hidden": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Do not show icon scaling controls in the style panel."
                 },
                 "icon": {
                   "type": "boolean",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                 },
                 "max": {
                   "type": "number",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
+                },
+                "maxScale": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
+                },
+                "minScale": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "default": 0.1
                 },
                 "scaleFactor": {
                   "type": "number",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
+                },
+                "zoomInScale": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
+                },
+                "zoomOutScale": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                 }
               },
-              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+              "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
             },
             "label": {
               "anyOf": [
@@ -1168,6 +1579,11 @@
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
                       "default": "12px sans-serif"
                     },
+                    "hidden": {
+                      "type": "boolean",
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
+                      "description": "Do not show the label controls in the style panel."
+                    },
                     "maxZoom": {
                       "type": "number",
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
@@ -1194,7 +1610,9 @@
                     },
                     "strokeWidth": {
                       "type": "number",
-                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                      "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
+                      "minimum": 0,
+                      "default": 1
                     },
                     "title": {
                       "type": "string",
@@ -1218,23 +1636,44 @@
             },
             "layerTypes": {
               "type": "array",
-              "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+              "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
               "x-xyz-formats": [
                 "googleMapTiles"
               ]
             },
             "mapType": {
               "type": "string",
-              "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+              "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
               "default": "roadmap",
               "x-xyz-formats": [
                 "googleMapTiles"
               ]
             },
+            "object": {
+              "type": "object",
+              "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
+              "description": "An inline Mapbox GL style document, used by maplibre when style.URL is not fetched.",
+              "x-xyz-formats": [
+                "maplibre"
+              ],
+              "x-xyz-open": true
+            },
             "opacity": {
               "type": "number",
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+              "description": "Opacity of the whole layer.",
+              "minimum": 0,
+              "maximum": 1,
               "default": 1
+            },
+            "opacitySlider": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+              "description": "Adds an opacity slider to the style panel."
+            },
+            "popout": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
             },
             "selected": {
               "$ref": "#/$defs/style",
@@ -1273,7 +1712,21 @@
         },
         "table": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
+          "x-xyz-required": {
+            "when": {
+              "layer.format": [
+                "wkt",
+                "geojson",
+                "cluster",
+                "vector"
+              ]
+            },
+            "or": [
+              "layer.tables",
+              "layer.features"
+            ]
+          }
         },
         "tables": {
           "type": "object",
@@ -1281,7 +1734,16 @@
             "type": "string",
             "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
           },
-          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
+          "description": "Tables by integer zoom level; null hides the layer at those levels.",
+          "x-xyz-required": {
+            "when": {
+              "layer.format": "mvt"
+            },
+            "or": [
+              "layer.table"
+            ]
+          }
         },
         "template": {
           "anyOf": [
@@ -1305,6 +1767,8 @@
         "transition": {
           "type": "integer",
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "description": "Tile fade-in duration in milliseconds.",
+          "minimum": 0,
           "x-xyz-formats": [
             "mvt"
           ]
@@ -1407,7 +1871,9 @@
         },
         "fillOpacity": {
           "type": "number",
-          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+          "minimum": 0,
+          "maximum": 1
         },
         "highlightScale": {
           "type": "number",
@@ -1420,31 +1886,119 @@
               "properties": {
                 "anchor": {
                   "type": "array",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Icon anchor as [x, y] fractions of the icon size.",
+                  "default": [
+                    0.5,
+                    0.5
+                  ]
+                },
+                "color": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Marker colour of the markerLetter symbol."
+                },
+                "colorDot": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Dot colour of the markerColor symbol."
+                },
+                "colorMarker": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Marker colour of the markerColor symbol."
                 },
                 "fillColor": {
                   "type": "string",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Fill of the dot"
                 },
                 "layers": {
                   "type": "object",
                   "additionalProperties": {
                     "type": "string",
-                    "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                    "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                   },
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Inner rings of the dot-like symbols"
+                },
+                "letter": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Text in the markerLetter symbol."
                 },
                 "scale": {
                   "type": "number",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "default": 1
+                },
+                "strokeColor": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Ring colour of the circle symbol.",
+                  "default": "#333"
+                },
+                "strokeWidth": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Ring width of the circle symbol.",
+                  "minimum": 0,
+                  "default": 1
+                },
+                "substitute": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      }
+                    ],
+                    "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
+                  },
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Map of strings in the SVG template to their replacements."
+                },
+                "svg": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "deprecated": true,
+                  "x-xyz-deprecated": "style.icon.url"
+                },
+                "template": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Key of a locale.svgTemplates entry drawn by the template type.",
+                  "x-xyz-required": {
+                    "when": {
+                      "style.icon.type": "template"
+                    }
+                  }
                 },
                 "type": {
                   "type": "string",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Built-in SVG symbol drawn when the icon has no url.",
+                  "enum": [
+                    "dot",
+                    "target",
+                    "triangle",
+                    "square",
+                    "diamond",
+                    "semiCircle",
+                    "markerLetter",
+                    "markerColor",
+                    "circle",
+                    "template"
+                  ],
+                  "default": "dot"
                 },
                 "url": {
                   "type": "string",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+                  "description": "Image or SVG URL; takes precedence over type."
                 }
               }
             },
@@ -1452,7 +2006,18 @@
               "type": "array"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+          "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
+          "description": "An icon"
+        },
+        "lineDash": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+            "minimum": 0
+          },
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+          "description": "Line and gap lengths in pixels, eg. [5, 4]."
         },
         "scale": {
           "type": "number",
@@ -1464,11 +2029,20 @@
         },
         "strokeOpacity": {
           "type": "number",
-          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+          "minimum": 0,
+          "maximum": 1
         },
         "strokeWidth": {
           "type": "number",
-          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+          "minimum": 0,
+          "default": 1
+        },
+        "zIndex": {
+          "type": "number",
+          "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+          "description": "Draw order within the layer; the highlight style defaults to Infinity."
         }
       }
     },
@@ -1482,7 +2056,7 @@
             "properties": {
               "label": {
                 "type": "string",
-                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+                "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
               },
               "value": {
                 "anyOf": [
@@ -1493,16 +2067,16 @@
                     "type": "number"
                   }
                 ],
-                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+                "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
               }
             },
-            "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+            "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
           },
-          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+          "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
         },
         "cat_arr": {
           "type": "array",
-          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+          "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
         },
         "categories": {
           "type": "array",
@@ -1511,11 +2085,31 @@
             "properties": {
               "field": {
                 "type": "string",
-                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+                "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
+              },
+              "icon": {
+                "anyOf": [
+                  {
+                    "type": "object"
+                  },
+                  {
+                    "type": "array"
+                  }
+                ],
+                "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
+                "description": "Shorthand for style.icon; the parser moves it into the category style."
               },
               "label": {
-                "type": "string",
-                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ],
+                "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
+                "description": "Legend label; defaults to value."
               },
               "style": {
                 "anyOf": [
@@ -1529,7 +2123,7 @@
                     }
                   }
                 ],
-                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+                "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
               },
               "value": {
                 "anyOf": [
@@ -1540,47 +2134,99 @@
                     "type": "number"
                   }
                 ],
-                "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+                "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
               }
             },
-            "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+            "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
           },
-          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+          "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
+          "x-xyz-required": {
+            "when": {
+              "theme.type": [
+                "categorized",
+                "distributed",
+                "graduated"
+              ]
+            },
+            "or": [
+              "theme.cat",
+              "theme.cat_arr"
+            ]
+          }
         },
         "distribution": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+          "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
+          "description": "Compute the legend from the loaded features; count shows present values with counts, jenks sets natural breaks.",
+          "enum": [
+            "count",
+            "jenks"
+          ]
         },
         "field": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+          "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
+          "description": "The feature property which selects the category; distributed themes default to id.",
+          "x-xyz-required": {
+            "when": {
+              "theme.type": "graduated"
+            }
+          }
         },
         "fields": {
           "type": "array",
-          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+          "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
+          "description": "Feature properties of a categorized icon theme; each category names its field.",
+          "x-xyz-required": {
+            "when": {
+              "theme.type": "categorized"
+            },
+            "or": [
+              "theme.field"
+            ]
+          }
         },
         "graduated_breaks": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
+          "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
+          "description": "Whether a graduated category value is the upper (less_than) or lower (greater_than) bound; other values become less_than.",
+          "enum": [
+            "less_than",
+            "greater_than"
+          ],
           "default": "less_than"
+        },
+        "label": {
+          "type": "string",
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
+          "description": "The legend label beside the symbol of a basic theme."
         },
         "legend": {
           "type": "object",
           "properties": {
             "classList": {
               "type": "string",
-              "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+              "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
+              "description": "Set by the ui from layout and nowrap; a configured value is replaced."
             },
             "layout": {
               "type": "string",
-              "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+              "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
+              "default": "grid"
             },
             "nowrap": {
               "type": "boolean",
               "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+            },
+            "showEmptyCat": {
+              "type": "boolean",
+              "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
+              "description": "Show categories without features in a count distribution legend."
             }
           },
-          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
+          "description": "Legend layout; a jenks distribution also passes it to formatNumericValue, eg. prefix, suffix and round for the category labels.",
+          "x-xyz-open": true
         },
         "meta": {
           "type": "string",
@@ -1608,7 +2254,15 @@
         },
         "type": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+          "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
+          "description": "The theme method of mapp.layer.themes; a theme with an unknown or missing type is ignored with a warning.",
+          "enum": [
+            "basic",
+            "categorized",
+            "distributed",
+            "graduated"
+          ],
+          "x-xyz-required": true
         }
       },
       "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
@@ -1675,6 +2329,16 @@
           "type": "array",
           "x-xyz-concept": "knowledge/workspace/location/editing.md"
         },
+        "disableTabClose": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
+          "description": "The tab of a tab or dataview entry has no close button and no middle click close."
+        },
+        "disabled": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
+          "description": "The tab of a tab or dataview entry is dimmed and inert; the display toggle of a layer entry is disabled."
+        },
         "display": {
           "type": "boolean",
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
@@ -1682,6 +2346,11 @@
         "draw": {
           "type": "object",
           "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+        },
+        "dynamic": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
+          "description": "A dataview or tab entry is recreated and updated each time its tab is shown."
         },
         "edit": {
           "anyOf": [
@@ -1798,24 +2467,141 @@
               "properties": {
                 "distinct": {
                   "type": "boolean",
-                  "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Not read. in and ni filters query distinct values whenever they have no value array.",
+                  "deprecated": true
+                },
+                "dropdown": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "in and ni filters show a dropdown instead of checkboxes."
+                },
+                "dropdown_pills": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "A dropdown which shows the selected values as pills."
+                },
+                "dropdown_search": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "A dropdown with a search input."
                 },
                 "field": {
                   "type": "string",
-                  "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Column to filter; defaults to entry.field."
+                },
+                "histogram": {
+                  "anyOf": [
+                    {
+                      "type": "boolean"
+                    },
+                    {
+                      "type": "object"
+                    }
+                  ],
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Shows a histogram dataview above a numeric range; an object is merged into the dataview configuration.",
+                  "x-xyz-open": true
+                },
+                "in": {
+                  "type": "array",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Values offered by an in filter instead of the distinct values of the field."
+                },
+                "label": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Checkbox label of boolean and null filters."
+                },
+                "label_a": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Label of the lower range input."
+                },
+                "label_b": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Label of the upper range input."
+                },
+                "leading_wildcard": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "A like filter matches anywhere in the value"
+                },
+                "max": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Fixed upper bound of a numeric or integer range; queried from the field when unset."
+                },
+                "meta": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Text shown at the top of the filter card."
+                },
+                "min": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Fixed lower bound of a numeric or integer range; queried from the field when unset."
+                },
+                "ni": {
+                  "type": "array",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Values offered by a ni filter instead of the distinct values of the field."
+                },
+                "placeholder": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Placeholder of the dropdown."
+                },
+                "prefix": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Unit shown in the range labels."
+                },
+                "searchbox": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "in and ni filters show a searchbox which adds values as pills."
+                },
+                "step": {
+                  "type": "number",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Slider step; 1 for integer"
+                },
+                "suffix": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Unit shown in the range labels when there is no prefix."
                 },
                 "title": {
                   "type": "string",
-                  "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "Card title; defaults to entry.title."
                 },
                 "type": {
                   "type": "string",
-                  "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+                  "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+                  "description": "The filter method of the panel and the filter expression type it writes.",
+                  "enum": [
+                    "like",
+                    "match",
+                    "numeric",
+                    "integer",
+                    "in",
+                    "ni",
+                    "date",
+                    "datetime",
+                    "boolean",
+                    "null"
+                  ],
+                  "x-xyz-required": true
                 }
               }
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+          "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
+          "description": "true derives the filter type from entry.type, a string is a filter type, false never lists the entry."
         },
         "formatterParams": {
           "type": "object",
@@ -1835,6 +2621,11 @@
         "hideLayer": {
           "type": "boolean",
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "hideTabClose": {
+          "type": "boolean",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
+          "description": "The tab of a tab or dataview entry has no close button."
         },
         "host": {
           "type": "string",
@@ -1889,9 +2680,19 @@
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
+        "max": {
+          "type": "number",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
+          "description": "Upper bound of numeric and integer entries"
+        },
         "max_size": {
           "type": "integer",
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+        },
+        "min": {
+          "type": "number",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
+          "description": "Lower bound of numeric and integer entries"
         },
         "nullValue": {
           "anyOf": [
@@ -1981,6 +2782,11 @@
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
+        "step": {
+          "type": "number",
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
+          "description": "Step of the range filter of numeric and integer entries; editing uses edit.step."
+        },
         "style": {
           "type": "object",
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
@@ -2019,6 +2825,37 @@
         "type": {
           "type": "string",
           "x-xyz-concept": "knowledge/workspace/location/infoj.md",
+          "description": "The entry method of the ui entries registry. Aliases datetime, html, integer, image, images, documents and report; mvt_clone and vector_layer are deprecated for layer, defaults does nothing. Plugins may register more types.",
+          "enum": [
+            "boolean",
+            "dataview",
+            "date",
+            "datetime",
+            "defaults",
+            "documents",
+            "geometry",
+            "html",
+            "image",
+            "images",
+            "integer",
+            "json",
+            "key",
+            "layer",
+            "link",
+            "mvt_clone",
+            "numeric",
+            "pills",
+            "pin",
+            "ping",
+            "query_button",
+            "report",
+            "tab",
+            "text",
+            "textarea",
+            "time",
+            "title",
+            "vector_layer"
+          ],
           "default": "text"
         },
         "url": {
@@ -2237,40 +3074,108 @@
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
               },
               "eq": {
-                "type": "number",
-                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
+                "pattern": "^\\s*[+-]?(\\d+(\\.\\d*)?|\\.\\d+)([eE][+-]?\\d+)?\\s*$"
               },
               "gt": {
-                "type": "number",
-                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
+                "pattern": "^\\s*[+-]?(\\d+(\\.\\d*)?|\\.\\d+)([eE][+-]?\\d+)?\\s*$"
               },
               "gte": {
-                "type": "number",
-                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
+                "pattern": "^\\s*[+-]?(\\d+(\\.\\d*)?|\\.\\d+)([eE][+-]?\\d+)?\\s*$"
               },
               "in": {
-                "type": "array",
-                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+                "anyOf": [
+                  {
+                    "type": "array"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
+                "description": "Values to match; a single value is wrapped in an array."
               },
               "like": {
                 "type": "string",
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
               },
               "lt": {
-                "type": "number",
-                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
+                "pattern": "^\\s*[+-]?(\\d+(\\.\\d*)?|\\.\\d+)([eE][+-]?\\d+)?\\s*$"
               },
               "lte": {
-                "type": "number",
-                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
+                "pattern": "^\\s*[+-]?(\\d+(\\.\\d*)?|\\.\\d+)([eE][+-]?\\d+)?\\s*$"
               },
               "match": {
                 "type": "string",
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
               },
               "ni": {
-                "type": "array",
-                "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
+                "anyOf": [
+                  {
+                    "type": "array"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ],
+                "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
+                "description": "Values to match; a single value is wrapped in an array."
               },
               "null": {
                 "type": "boolean",

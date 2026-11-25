@@ -2,8 +2,11 @@
 
 - [Layer display and view](display.md) - Name, display, grouping, z-order and the layer view; use for every layer.
 - [Layer data source](data-source.md) - Connection, table, geometry, ID, zoom ranges and query params; use for every data layer.
-- [Layer formats](formats.md) - Choosing `format` and the keys each format requires.
+- [Layer formats](formats.md) - Choosing `format`, the keys each format requires, and vector and MVT format keys.
+- [Layer tile and style formats](tile-formats.md) - Raster tiles, Mapbox GL styles and Google map tiles; use when adding a basemap.
+- [Layer features](features.md) - Inline features, and featureSet and featureLookup restricting the displayed features.
 - [Layer cluster](cluster.md) - Browser or database clustering of dense point layers.
 - [Layer style](style/index.md) - Feature styles, icons, themes, labels and hovers.
 - [Layer drawing](draw.md) - Buttons which draw a geometry and create a new location.
 - [Layer filter](filter.md) - Fixed default filter and the filter panel built from infoj entries; use when a layer needs filtering.
+- [Entry filters](filter-entries.md) - Filter types and inputs which infoj entries add to the filter panel; use to configure a single filter.

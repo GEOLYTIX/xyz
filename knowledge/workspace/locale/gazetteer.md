@@ -14,9 +14,9 @@ x-xyz-keys:
   - { key: locale.gazetteer.title, type: string }
   - { key: locale.gazetteer.placeholder, type: string }
   - { key: locale.gazetteer.leading_wildcard, type: boolean }
-  - { key: locale.gazetteer.limit, type: integer, default: 10 }
+  - { key: locale.gazetteer.limit, type: integer, default: 10, minimum: 1, description: Maximum number of results per search. }
   - { key: locale.gazetteer.no_result, type: string }
-  - { key: locale.gazetteer.maxZoom, type: integer }
+  - { key: locale.gazetteer.maxZoom, type: integer, minimum: 0 }
   - { key: locale.gazetteer.query, type: string, default: gaz_query }
   - { key: locale.gazetteer.provider, type: string }
   - { key: locale.gazetteer.datasets, type: array }
@@ -57,6 +57,8 @@ and lists up to `limit` results; selecting one opens the location.[^gazetteer]
 - A gazetteer `layer` which is not in the mapview logs a warning and finds
   nothing.
 - Without `qterm` the gazetteer only searches its `datasets` and provider.
+- `limit` is the SQL `LIMIT`; `0` falls back to 10 and a negative limit
+  fails the query.
 
 # Examples
 

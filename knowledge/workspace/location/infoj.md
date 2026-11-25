@@ -11,7 +11,11 @@ x-xyz-keys:
   - { key: layer.infoj_skip, type: array }
   - { key: entry, type: object }
   - { key: entry.key, type: [string, integer] }
-  - { key: entry.type, type: string, default: text }
+  - key: entry.type
+    type: string
+    default: text
+    enum: [boolean, dataview, date, datetime, defaults, documents, geometry, html, image, images, integer, json, key, layer, link, mvt_clone, numeric, pills, pin, ping, query_button, report, tab, text, textarea, time, title, vector_layer]
+    description: The entry method of the ui entries registry. Aliases datetime, html, integer, image, images, documents and report; mvt_clone and vector_layer are deprecated for layer, defaults does nothing. Plugins may register more types.
   - { key: entry.field, type: string }
   - { key: entry.fieldfx, type: string }
   - { key: entry.template, type: boolean }
@@ -39,6 +43,8 @@ sources:
     resource: ../../../apps/xyz/mod/query.js
   - id: get
     resource: ../../../apps/xyz/mod/workspace/templates/location_get.js
+  - id: entries
+    resource: ../../../apps/ui/lib/locations/entries/_entries.mjs
   - resource: ../../../apps/mapp/lib/layer/decorate.mjs
   - resource: ../../../apps/ui/tests/locations/infoj.test.mjs
 ---
@@ -47,6 +53,8 @@ sources:
 A location is one record of a layer table. `layer.infoj` is the ordered list
 of entries its location view shows. Each entry has a `type`, `text` by
 default, which selects how it is shown; see [entry types](entry-types.md).
+The type enum lists the built-in methods; a plugin which adds a method to
+`mapp.ui.locations.entries` adds a type the schema does not know.[^entries]
 
 ## Where values come from
 
@@ -111,3 +119,4 @@ The retail points with an ID, a pin, and text entries from the table.
 [^get]: templates/location_get.js
 [^query]: query.js infojMap and fields check
 [^infoj]: ui locations/infoj.mjs
+[^entries]: ui locations/entries/_entries.mjs
