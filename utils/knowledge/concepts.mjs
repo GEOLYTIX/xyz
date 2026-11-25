@@ -95,6 +95,7 @@ function checkEntry(entry) {
   );
   if (format)
     throw new Error(`${KEYS}: ${entry.key} has unknown layer format ${format}`);
+  checkAnnotations(entry, types);
   if (entry.ref !== undefined && !KEY_ROOTS.includes(entry.ref))
     throw new Error(
       `${KEYS}: ${entry.key} ref must be one of ${KEY_ROOTS.join(', ')}`,
@@ -103,6 +104,46 @@ function checkEntry(entry) {
   if (invalid)
     throw new Error(`${KEYS}: ${entry.key} requires invalid key ${invalid}`);
   return entry.key;
+}
+
+/** The key types a scalar enum value may have. */
+const scalarTypes = (value) =>
+  typeof value === 'string'
+    ? ['string']
+    : typeof value === 'boolean'
+      ? ['boolean']
+      : Number.isInteger(value)
+        ? ['integer', 'number']
+        : typeof value === 'number'
+          ? ['number']
+          : [];
+
+/** Throw on a malformed description, enum or deprecated annotation. */
+function checkAnnotations(entry, types) {
+  if (
+    entry.description !== undefined &&
+    (typeof entry.description !== 'string' || !entry.description.trim())
+  )
+    throw new Error(`${KEYS}: ${entry.key} description must be text`);
+  if (entry.enum !== undefined) {
+    if (!Array.isArray(entry.enum) || !entry.enum.length)
+      throw new Error(`${KEYS}: ${entry.key} enum must be a list of values`);
+    const invalid = entry.enum.find(
+      (value) => !scalarTypes(value).some((type) => types.includes(type)),
+    );
+    if (invalid !== undefined)
+      throw new Error(
+        `${KEYS}: ${entry.key} enum value ${JSON.stringify(invalid)} does not match its type`,
+      );
+  }
+  if (
+    entry.deprecated !== undefined &&
+    typeof entry.deprecated !== 'boolean' &&
+    (typeof entry.deprecated !== 'string' || !entry.deprecated.trim())
+  )
+    throw new Error(
+      `${KEYS}: ${entry.key} deprecated must be true or the replacement`,
+    );
 }
 
 /** The keys each entry requires, as [key, required key] pairs. */

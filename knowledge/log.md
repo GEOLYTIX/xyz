@@ -11,6 +11,8 @@
 - The checker fails on malformed `x-xyz-variables`, `requires` keys without
   an owner and unknown layer `formats`, and checks the workspace schema when
   other checks fail. The rules moved to [knowledge checks](workflows/checks.md).
+- `x-xyz-keys` entries take `description`, `enum` and `deprecated`, generated
+  into the workspace schema. `layer.format` lists the registry formats.
 
 ## 2026-11-24
 

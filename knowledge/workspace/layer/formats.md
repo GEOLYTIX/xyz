@@ -8,6 +8,8 @@ status: draft
 x-xyz-keys:
   - key: layer.format
     type: string
+    enum: [cluster, geojson, googleMapTiles, mapboxStyle, maplibre, mvt, tiles, vector, wkt]
+    description: Selects the MAPP format method which creates the OpenLayers layer.
   - { key: layer.fade, type: boolean, formats: [wkt, geojson, cluster, vector] }
   - { key: layer.vectorImage, type: boolean, formats: [wkt, geojson, cluster, vector] }
   - { key: layer.featureFormat, type: string, formats: [wkt, geojson, cluster, vector] }

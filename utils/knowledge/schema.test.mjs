@@ -28,6 +28,8 @@ x-xyz-keys:
   - { key: workspace.locale, type: object, ref: locale }
   - { key: locale.layers.*, type: object, ref: layer }
   - { key: layer.display, type: boolean }
+  - { key: layer.format, type: string, enum: [wkt, mvt], description: The format. }
+  - { key: layer.hover, type: object, deprecated: layer.style.hover }
   - { key: layer.srid, type: [string, integer] }
   - { key: layer.style, type: object }
   - { key: layer.style.default, type: object, ref: style }
@@ -101,6 +103,25 @@ describe('workspace schema:', () => {
       'locale.layers.a.infoj[0].colour',
       'locale.layers.a.plugin_key',
     ]);
+  });
+
+  it('carries descriptions, enums and deprecations and checks enum values', () => {
+    const schema = buildSchema(fixture());
+    expect(schema.$defs.layer.properties.format).toMatchObject({
+      type: 'string',
+      enum: ['wkt', 'mvt'],
+      description: 'The format.',
+    });
+    expect(schema.$defs.layer.properties.hover).toMatchObject({
+      deprecated: true,
+      'x-xyz-deprecated': 'layer.style.hover',
+    });
+    expect(
+      validateWorkspace(schema, { format: 'wkt2' }, 'layer').errors,
+    ).toEqual(['layer.format: expected one of "wkt", "mvt", got "wkt2"']);
+    expect(
+      validateWorkspace(schema, { format: 'mvt' }, 'layer').errors,
+    ).toEqual([]);
   });
 
   it('validates a locale or layer by its definition and ignores null', () => {

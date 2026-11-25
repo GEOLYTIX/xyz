@@ -831,7 +831,19 @@
         },
         "format": {
           "type": "string",
-          "x-xyz-concept": "knowledge/workspace/layer/formats.md"
+          "x-xyz-concept": "knowledge/workspace/layer/formats.md",
+          "description": "Selects the MAPP format method which creates the OpenLayers layer.",
+          "enum": [
+            "cluster",
+            "geojson",
+            "googleMapTiles",
+            "mapboxStyle",
+            "maplibre",
+            "mvt",
+            "tiles",
+            "vector",
+            "wkt"
+          ]
         },
         "geom": {
           "type": "string",

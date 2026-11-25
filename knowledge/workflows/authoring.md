@@ -55,7 +55,11 @@ x-xyz-keys:
   `[]` or `*` inside `{ … }` flow mappings: `{ key: "layer.infoj[]", … }`.
 - `type` (required) is one or a list of `string`, `number`, `integer`,
   `boolean`, `object` and `array`.
-- `default`, `formats` and `requires` are filled in when known.
+- `default`, `formats` and `requires` are filled in when known. `formats` are
+  keys of the MAPP format registry; `requires` are keys a concept owns.
+- `description` says what the key does, `enum` lists its only valid values,
+  and `deprecated` is `true` or names the replacement key. They are generated
+  into the schema, which rejects a value outside the `enum`.
 - `ref` names the root whose keys the value has, eg.
   `{ key: locale.layers.*, type: object, ref: layer }`. For an array the
   items have them; a style category is `ref: style`.

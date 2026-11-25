@@ -10,7 +10,7 @@ import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { jsonPaths, LAYER_FORMATS } from './concepts.mjs';
 import { findConcepts } from './find.mjs';
-import { validateBundle } from './validate.mjs';
+import { splitDocument, validateBundle } from './validate.mjs';
 
 const roots = [];
 
@@ -72,6 +72,16 @@ describe('workspace keys:', () => {
         '  - { key: layer.filter, type: object, formats: [wkt2] }',
         /unknown layer format wkt2/,
       ],
+      ['  - { key: layer.format, type: string, enum: [] }', /enum must be/],
+      [
+        '  - { key: layer.format, type: string, enum: [wkt, 1] }',
+        /enum value 1 does not match/,
+      ],
+      ['  - { key: layer.format, type: string, description: "" }', /text/],
+      [
+        '  - { key: layer.format, type: string, deprecated: 1 }',
+        /deprecated must be/,
+      ],
     ]) {
       const root = fixture({ 'knowledge/a.md': keyConcept(keys) });
       const { errors } = validateBundle(root);
@@ -99,6 +109,17 @@ describe('workspace keys:', () => {
     const body = registry.slice(registry.indexOf('export default {'));
     const keys = [...body.matchAll(/^\s+(\w+)[:,]/gm)].map((match) => match[1]);
     expect(keys.sort()).toEqual([...LAYER_FORMATS].sort());
+  });
+
+  it('enumerates the registry formats for layer.format', () => {
+    const concept = readFileSync(
+      new URL('../../knowledge/workspace/layer/formats.md', import.meta.url),
+      'utf8',
+    );
+    const entry = splitDocument(concept).metadata['x-xyz-keys'].find(
+      (key) => key.key === 'layer.format',
+    );
+    expect(entry.enum).toEqual(LAYER_FORMATS);
   });
 
   it('fails when two concepts own the same key', () => {

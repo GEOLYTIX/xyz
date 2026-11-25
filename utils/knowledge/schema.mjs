@@ -86,6 +86,11 @@ const typeSchema = (type, ref) => {
 function annotations(entry) {
   if (!entry) return {};
   const result = { 'x-xyz-concept': entry.concept };
+  if (entry.description) result.description = entry.description;
+  if (entry.enum) result.enum = entry.enum;
+  if (entry.deprecated) result.deprecated = true;
+  if (typeof entry.deprecated === 'string')
+    result['x-xyz-deprecated'] = entry.deprecated;
   if (entry.default !== undefined) result.default = entry.default;
   if (entry.formats) result['x-xyz-formats'] = list(entry.formats);
   if (entry.requires) result['x-xyz-requires'] = list(entry.requires);
@@ -165,6 +170,13 @@ function check(schema, value, path, context) {
     // Sibling properties extend the referenced definition.
     const properties = { ...def.properties, ...rest.properties };
     check({ ...def, ...rest, properties }, value, path, context);
+    return;
+  }
+  if (schema.enum && value !== null && !schema.enum.includes(value)) {
+    const values = schema.enum.map((option) => JSON.stringify(option));
+    context.errors.push(
+      `${path}: expected one of ${values.join(', ')}, got ${JSON.stringify(value)}`,
+    );
     return;
   }
   if (schema.anyOf) {
