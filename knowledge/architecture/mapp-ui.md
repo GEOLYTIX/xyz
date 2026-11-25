@@ -7,7 +7,7 @@ tags: [ui, mapp, architecture, browser]
 status: draft
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/MAPP.UI
+    resource: https://github.com/GEOLYTIX/xyz/wiki/MAPP.UI/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: ui
     resource: ../../apps/ui/lib/ui.mjs

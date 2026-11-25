@@ -19,10 +19,17 @@ x-xyz-keys:
   - { key: layer.draw.popout, type: boolean }
   - { key: layer.draw.dialog, type: [boolean, object] }
   - { key: layer.draw.classList, type: string }
+  - { key: layer.draw.point.label, type: string }
+  - { key: layer.draw.line.label, type: string }
+  - { key: layer.draw.polygon.label, type: string }
+  - { key: layer.draw.rectangle.label, type: string }
+  - { key: layer.draw.circle_2pt.label, type: string }
+  - { key: layer.draw.circle.label, type: string }
+  - { key: layer.draw.locator.label, type: string }
   - { key: entry.draw, type: object }
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: panel
     resource: ../../../apps/ui/lib/layers/panels/draw.mjs
@@ -49,7 +56,8 @@ and opens the new location.[^create]
 | `locator` | A point at the user's current position |
 
 A key set to `true` uses the defaults; an object configures the drawing
-interaction. Keys which are not drawing methods are ignored.[^drawing]
+interaction; its `label` is the button text. Keys which are not drawing
+methods are ignored.[^drawing]
 
 - `hidden` creates no drawer; `drawer: false` shows the buttons without a
   drawer; `dialog` shows them in a dialog; `popout` and `classList` change

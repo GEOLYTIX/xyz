@@ -106,7 +106,6 @@
         },
         "label": {
           "title": "Cluster Count",
-          "declutter": true,
           "display": true,
           "count": true,
           "strokeColor": "#ffffff",

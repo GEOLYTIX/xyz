@@ -9,7 +9,7 @@ sources:
   - id: deployment
     resource: ../../DEPLOYMENT.md
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/VERCEL
+    resource: https://github.com/GEOLYTIX/xyz/wiki/VERCEL/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: process-env
     resource: ../../apps/xyz/mod/utils/processEnv.js

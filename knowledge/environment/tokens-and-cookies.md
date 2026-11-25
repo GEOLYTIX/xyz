@@ -8,7 +8,7 @@ status: draft
 x-xyz-variables: [SECRET, SECRET_KEY, SECRET_ALGORITHM, TITLE, COOKIE_TTL, COOKIE_PROPS]
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - resource: ../../apps/xyz/mod/utils/processEnv.js
   - resource: ../../apps/xyz/mod/user/auth.js

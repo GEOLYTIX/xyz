@@ -7,7 +7,7 @@ tags: [xyz, api, architecture, express]
 status: draft
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/XYZ
+    resource: https://github.com/GEOLYTIX/xyz/wiki/XYZ/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: router
     resource: ../../apps/xyz/router.js

@@ -37,6 +37,7 @@ x-xyz-keys:
   - { key: layer.filter.count_meta, type: string }
   - { key: layer.filter.viewport_description, type: string }
   - { key: layer.multi_filter, type: [boolean, object] }
+  - { key: layer.multi_filter.target, type: string }
   - { key: entry.filter, type: [boolean, string, object] }
   - { key: entry.filter.type, type: string }
   - { key: entry.filter.title, type: string }
@@ -44,7 +45,7 @@ x-xyz-keys:
   - { key: entry.filter.distinct, type: boolean }
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: decorate
     resource: ../../../apps/mapp/lib/layer/decorate.mjs
@@ -100,7 +101,8 @@ Entry filter types are `like`, `match`, `numeric`, `integer`, `in`, `ni`,
 
 - An entry filter with an unknown type is skipped with a console warning.
 - The legacy `layer.multi_filter` plugin key rewrites the filter
-  configuration before the panel is built.
+  configuration before the panel is built. Its other keys, such as `target`,
+  are read by the plugin, not by the filter panel.[^panel]
 
 # Examples
 
@@ -139,5 +141,5 @@ retailer, fascia and open date filters. Address fields are excluded.
 
 [^query]: query.js layerQuery
 [^decorate]: decorate.mjs
-[^panel]: panels/filter.mjs listFilter and excludeEntry
+[^panel]: panels/filter.mjs listFilter, excludeEntry and multi_filter
 [^filters]: layers/filters.mjs

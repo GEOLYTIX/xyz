@@ -7,7 +7,7 @@ tags: [xyz, environment, workspace]
 status: draft
 x-xyz-variables: [WORKSPACE, WORKSPACE_AGE]
 sources:
-  - resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment
+  - resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - resource: ../../apps/xyz/mod/utils/processEnv.js
   - resource: ../../apps/xyz/mod/provider/getSrc.js

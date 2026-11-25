@@ -561,7 +561,13 @@
                   "type": "boolean"
                 },
                 {
-                  "type": "object"
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+                    }
+                  }
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
@@ -572,7 +578,13 @@
                   "type": "boolean"
                 },
                 {
-                  "type": "object"
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+                    }
+                  }
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
@@ -606,7 +618,13 @@
                   "type": "boolean"
                 },
                 {
-                  "type": "object"
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+                    }
+                  }
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
@@ -617,7 +635,13 @@
                   "type": "boolean"
                 },
                 {
-                  "type": "object"
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+                    }
+                  }
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
@@ -628,7 +652,13 @@
                   "type": "boolean"
                 },
                 {
-                  "type": "object"
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+                    }
+                  }
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
@@ -639,7 +669,13 @@
                   "type": "boolean"
                 },
                 {
-                  "type": "object"
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+                    }
+                  }
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
@@ -654,7 +690,13 @@
                   "type": "boolean"
                 },
                 {
-                  "type": "object"
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+                    }
+                  }
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
@@ -840,7 +882,13 @@
               "type": "boolean"
             },
             {
-              "type": "object"
+              "type": "object",
+              "properties": {
+                "target": {
+                  "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+                }
+              }
             }
           ],
           "x-xyz-concept": "knowledge/workspace/layer/filter.md"
@@ -1047,8 +1095,19 @@
                   ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
                 },
+                "clusterScale": {
+                  "type": "boolean",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+                  "x-xyz-requires": [
+                    "layer.style.cluster"
+                  ]
+                },
                 "field": {
                   "type": "string",
+                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+                },
+                "icon": {
+                  "type": "boolean",
                   "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
                 },
                 "max": {

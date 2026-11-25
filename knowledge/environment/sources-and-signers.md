@@ -8,7 +8,7 @@ status: draft
 x-xyz-variables: [SRC_*, SIGN_*, FILE_RESOURCES, KEY_CLOUDFRONT, AWS_S3_CLIENT, CLOUDINARY_URL, CUSTOM_TEMPLATES]
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - resource: ../../apps/xyz/mod/provider/getSrc.js
   - resource: ../../apps/xyz/mod/provider/file.js

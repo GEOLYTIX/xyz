@@ -8,7 +8,7 @@ status: draft
 x-xyz-variables: [PRIVATE, PUBLIC, AUTH_PATH, LEGACY_ROLES]
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - resource: ../../apps/xyz/mod/user/acl.js
   - resource: ../../apps/xyz/mod/middleware/validateRequestAuth.js

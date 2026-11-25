@@ -6,7 +6,7 @@ tags: [deployment, database, postgis, neon, tutorial]
 status: draft
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Neon-Serverless-Postgres
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Neon-Serverless-Postgres/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: dbs
     resource: ../../apps/xyz/mod/utils/dbs.js

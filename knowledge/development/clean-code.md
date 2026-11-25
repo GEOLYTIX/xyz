@@ -7,7 +7,7 @@ tags: [development, style, biome, jsdoc]
 status: draft
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Clean-code-guidelines
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Clean-code-guidelines/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: biome
     resource: ../../biome.json

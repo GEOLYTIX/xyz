@@ -7,7 +7,7 @@ tags: [monorepo, pnpm, turbo, build, architecture]
 status: draft
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Monorepo
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Monorepo/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: workspace
     resource: ../../pnpm-workspace.yaml

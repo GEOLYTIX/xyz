@@ -14,7 +14,7 @@ x-xyz-keys:
   - { key: entry.roles, type: object }
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Roles-%5BWorkspace%5D
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Roles-%5BWorkspace%5D/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: compose
     resource: ../../apps/xyz/mod/workspace/composeObj.js

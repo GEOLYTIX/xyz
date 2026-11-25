@@ -9,6 +9,11 @@ on:
 permissions:
   contents: read
 
+# A newer push to the same pull request or branch supersedes a running check.
+concurrency:
+  group: knowledge-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   knowledge:
     runs-on: ubuntu-26.04
@@ -18,6 +23,7 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '22'
+          cache: pnpm
       - name: Install dependencies
         run: pnpm install --ignore-scripts
       - name: Test the validator

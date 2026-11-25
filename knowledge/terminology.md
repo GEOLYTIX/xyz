@@ -6,7 +6,7 @@ tags: [terminology, glossary]
 status: draft
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Terminology
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Terminology/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - resource: ../apps/mapp/lib/mapp.mjs
   - resource: ../apps/ui/lib/ui.mjs

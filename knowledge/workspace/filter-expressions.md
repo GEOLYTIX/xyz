@@ -21,7 +21,7 @@ x-xyz-keys:
   - { key: filter.*.email, type: boolean }
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: sqlfilter
     resource: ../../apps/xyz/mod/utils/sqlFilter.js

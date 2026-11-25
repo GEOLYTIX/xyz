@@ -20,6 +20,8 @@ x-xyz-keys:
   - { key: layer.style.icon_scaling.scaleFactor, type: number }
   - { key: layer.style.icon_scaling.max, type: number }
   - { key: layer.style.icon_scaling.cluster, type: [boolean, string] }
+  - { key: layer.style.icon_scaling.icon, type: boolean }
+  - { key: layer.style.icon_scaling.clusterScale, type: boolean, requires: [layer.style.cluster] }
   - { key: style.fillColor, type: string }
   - { key: style.fillOpacity, type: number }
   - { key: style.strokeColor, type: string }
@@ -37,7 +39,7 @@ x-xyz-keys:
   - { key: style.icon.layers.*, type: string }
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: parser
     resource: ../../../../apps/mapp/lib/layer/styleParser.mjs
@@ -45,6 +47,8 @@ sources:
     resource: ../../../../apps/mapp/lib/layer/featureStyle.mjs
   - id: symbols
     resource: ../../../../apps/mapp/lib/utils/svgSymbols.mjs
+  - id: layerstyle
+    resource: ../../../../apps/ui/lib/elements/layerStyle.mjs
   - resource: ../../../../apps/mapp/tests/layer/styleParser.test.mjs
 ---
 # Feature styles and icons
@@ -84,6 +88,9 @@ icons drawn on top of each other.
 the zoom level. `icon_scaling` scales icons by a numeric `field`: the scale is
 `1 + value / scaleFactor`. Cluster icons are only scaled with
 `icon_scaling.cluster`, summing values, or averaging them with `"avg"`.[^featurestyle]
+`icon_scaling.icon` adds a style panel slider for the icon scale, and
+`icon_scaling.clusterScale` one for `style.cluster.clusterScale`, shown only
+when the cluster style sets it.[^layerstyle]
 
 ## Pitfalls
 
@@ -127,3 +134,4 @@ Countries as grey polygons with a yellow highlight.
 [^parser]: styleParser.mjs warnings and clusterChecks
 [^featurestyle]: featureStyle.mjs
 [^symbols]: utils/svgSymbols.mjs
+[^layerstyle]: ui/elements/layerStyle.mjs icon_scaling()

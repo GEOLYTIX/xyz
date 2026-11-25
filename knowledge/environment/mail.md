@@ -8,7 +8,7 @@ status: draft
 x-xyz-variables: [TRANSPORT_EMAIL, TRANSPORT_PASSWORD, TRANSPORT_PORT, TRANSPORT_TLS]
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - resource: ../../apps/xyz/mod/utils/resend.js
   - resource: ../../apps/xyz/mod/utils/processEnv.js

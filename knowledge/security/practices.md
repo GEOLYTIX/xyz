@@ -6,7 +6,7 @@ tags: [security, workspace, deployment, review]
 status: draft
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Security
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Security/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: query
     resource: ../../apps/xyz/mod/query.js

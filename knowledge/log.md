@@ -1,5 +1,14 @@
 # Knowledge changes
 
+## 2026-11-25
+
+- Wiki `sources` link the snapshot revision of each page, since the page URLs
+  now show the generated stubs.
+- Documented the remaining keys used in the test workspaces: drawing button
+  `label`s, `icon_scaling.icon` and `clusterScale`, and `multi_filter.target`.
+  `style.label.declutter` and `entry.draw.geometry` are read by no code and
+  were removed from the test workspaces.
+
 ## 2026-11-24
 
 - The VitePress knowledge portal is the published documentation, deployed to

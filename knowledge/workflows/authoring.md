@@ -85,10 +85,10 @@ module that reads them as `resource` with its tests in `sources`.
 
 ## Provenance and review
 
-Record each migrated Wiki URL and its Git revision in `sources`. Record current
-implementation and relevant tests separately. `x-xyz-revision` is an XYZ extension
-of a `sources` entry for the Wiki snapshot; it is not a replacement for OKF
-timestamps.
+Record each migrated Wiki page in `sources` as `…/wiki/<Page>/<revision>` (the
+bare page URL shows the generated stub) with the revision in `x-xyz-revision`,
+an XYZ extension which does not replace OKF timestamps. Record current
+implementation and relevant tests separately.
 
 If recording generation, use `generated: { by, at }` with a truthful actor and
 timestamp. Add `verified` only for an actual content check, with the actor and

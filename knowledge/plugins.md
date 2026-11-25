@@ -7,7 +7,7 @@ tags: [plugins, mapp, ui, guide]
 status: draft
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Plugins
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Plugins/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: load
     resource: ../apps/mapp/lib/utils/loadPlugins.mjs

@@ -71,6 +71,14 @@ jobs:
         if: steps.version.outputs.build == 'true'
         run: pnpm test
 
+      # The knowledge portal is published from the release, so the bundle
+      # must be well formed and its source links must resolve.
+      - name: Check knowledge
+        if: steps.version.outputs.build == 'true'
+        run: |
+          pnpm knowledge:test
+          pnpm knowledge:check
+
       - name: Build MAPP and MAPP.UI bundles
         if: steps.version.outputs.build == 'true'
         run: pnpm build --filter=@geolytix/mapp --filter=@geolytix/mapp-ui --force

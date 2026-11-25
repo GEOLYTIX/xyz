@@ -7,10 +7,10 @@ tags: [security, authentication, cookie, token, saml, xyz]
 status: draft
 sources:
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Security
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Security/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: custom
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Custom-Authentication
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Custom-Authentication/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: auth
     resource: ../../apps/xyz/mod/user/auth.js

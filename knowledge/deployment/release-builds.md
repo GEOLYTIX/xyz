@@ -26,7 +26,7 @@ sources:
   - id: cache
     resource: ../../apps/xyz/utils/cache-workspace.js
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/VERCEL
+    resource: https://github.com/GEOLYTIX/xyz/wiki/VERCEL/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
 ---
 # Release builds and build artefacts

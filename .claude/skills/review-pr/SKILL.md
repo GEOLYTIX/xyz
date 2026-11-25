@@ -98,7 +98,7 @@ Flag a new exported function with no JSDoc, and a changed signature whose `@para
 The `knowledge/` bundle documents behaviour, configuration and constraints that JSDoc does not. Search it for the touched modules, eg. `grep -rl "mod/user/redirect.js" knowledge`, since concepts link their implementation and tests in `resource` and `sources`.
 
 - A change to behaviour a concept describes, without an update to that concept, is a `[Consider]` finding. Name the concept and the statement that no longer holds.
-- A new environment variable read in `apps/xyz` needs a concept which lists it in `variables`. Run `pnpm knowledge:check`: it warns about variables without a concept and fails on broken source links, eg. after a file was moved or renamed.
+- A new environment variable read in `apps/xyz` needs a concept which lists it in `x-xyz-variables`. Run `pnpm knowledge:check`: it fails on variables without a concept and on broken source links, eg. after a file was moved or renamed.
 - A change to `knowledge/` itself follows [the authoring workflow](../../../knowledge/workflows/authoring.md). Check its claims against the code it links, and that nothing claims a verification which did not happen.
 
 ## Report Format

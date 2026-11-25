@@ -9,7 +9,7 @@ sources:
   - id: setup
     resource: ../../SETUP.md
   - id: wiki
-    resource: https://github.com/GEOLYTIX/xyz/wiki/Getting-started
+    resource: https://github.com/GEOLYTIX/xyz/wiki/Getting-started/3fc379b7ada42dff57f19e9f28694868e5a17cac
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - id: package
     resource: ../../package.json
