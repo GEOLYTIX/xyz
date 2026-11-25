@@ -38,7 +38,7 @@ which use `||=`. An empty value, as declared by a varlock schema without a value
 is kept rather than replaced, and gives an empty claim. The
 [jwtClaims JSDoc](../../apps/xyz/mod/user/jwtClaims.js) still says the variables
 must be configured for the claims to be included; the defaults make that
-obsolete.
+obsolete ([#3155](https://github.com/GEOLYTIX/xyz/issues/3155)).
 
 Changing these values invalidates tokens for any service which verifies the
 previous claims.

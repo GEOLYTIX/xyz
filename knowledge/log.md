@@ -54,6 +54,8 @@
 - The [actor convention](decisions/actor-convention.md) records no `process:`
   events: `verified` is maintainer review only, and
   `process:knowledge-examples` is reserved for the example runs.
+- The databases, JWT claims and agent baseline concepts link the issues
+  opened for their gaps: #3155, #3156 and the generation pilot #3157.
 
 ## 2026-11-24
 

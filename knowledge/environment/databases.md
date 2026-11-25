@@ -54,4 +54,5 @@ Nonblocking queries are attempted once.
 
 Use a positive integer for `RETRY_LIMIT`. `0` or a non-numeric value gives one
 attempt. A negative value currently gives no attempt at all, so the query
-returns nothing; this is a known gap in the dbs module.
+returns nothing; this is a known gap in the dbs module
+([#3156](https://github.com/GEOLYTIX/xyz/issues/3156)).

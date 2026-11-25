@@ -54,7 +54,9 @@ test locales and library source to find which keys exist:
   `query.js`.
 - t3 read "redraw" as modifying the geometry (`edit: true`) and named drawing
   anew (`edit.draw`) as the alternative.
-- t6 and t7 found nothing to update besides the code; with the bundle the
+- t6 and t7 found nothing to update besides the code; the issues are
+  [#3156](https://github.com/GEOLYTIX/xyz/issues/3156) and
+  [#3155](https://github.com/GEOLYTIX/xyz/issues/3155). With the bundle the
   [databases](../environment/databases.md) and
   [JWT claims](../environment/jwt-claims.md) concepts would change too.
 
@@ -64,4 +66,5 @@ After the release, run the same prompts on the release tag, which has the
 bundle and `AGENTS.md`, with the same model and agent type. Compare result,
 tokens, tool calls, time, files opened and the corrections a maintainer needs.
 Record the run next to this one, eg. `utils/knowledge/baseline/<date>/`, and
-add a column here rather than replacing the baseline.
+add a column here rather than replacing the baseline. The follow-up work is
+tracked in [#3157](https://github.com/GEOLYTIX/xyz/issues/3157).
