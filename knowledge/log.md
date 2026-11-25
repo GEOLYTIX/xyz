@@ -51,6 +51,9 @@
   [extending and overriding MAPP](plugin-extensions.md): the registries,
   replacing and wrapping methods, and when an assignment takes effect.
 - The zoom scaling pitfall links #3154.
+- The [actor convention](decisions/actor-convention.md) records no `process:`
+  events: `verified` is maintainer review only, and
+  `process:knowledge-examples` is reserved for the example runs.
 
 ## 2026-11-24
 

@@ -23,7 +23,7 @@ machine-confirmed, or human-reviewed, which only a `human:` actor gives
 | --- | --- |
 | `human:<github-handle>` | A maintainer who wrote the content, or read it against its sources and confirmed it |
 | `<tool>/<model>`, eg. `claude-code/claude-opus-5-5` | An agent which wrote the content, in `generated` only |
-| `process:<workflow>` | Reserved for an automated check which confirms what a concept states, not only its format |
+| `process:knowledge-examples` | Reserved; not recorded. See below |
 
 The GitHub handle identifies the reviewer in the pull request history. An
 agent never appears in `verified`: an agent which wrote or checked content
@@ -44,12 +44,26 @@ under a maintainer's direction does not confirm it.
   checker fails on `status: stable` without one, so rewriting a reviewed
   concept (moving `generated.at`) requires a new review or `draft`.
 
-## No process verification for format checks
+## No process verification
 
-The issue outline proposed `process:knowledge-check` for CI confirmations.
-`pnpm knowledge:check` confirms that a concept is well formed and that its
-sources exist, not that its statements hold, so it records no `verified`
-event; writing one on every run would also turn CI into a committer. The
-`process:` scheme is kept for a later check which does confirm content, such
-as a workspace example run tied to one concept. See
-[knowledge checks](../workflows/checks.md).
+`verified` records maintainer reviews only; no automated check writes an
+event. The issue outline proposed `process:knowledge-check` for CI
+confirmations, but `pnpm knowledge:check` confirms that a concept is well
+formed and its sources exist, not that its statements hold.
+
+`pnpm knowledge:examples` comes closest: it runs the example of each
+workspace concept against the testhost and devdb. That proves the XYZ API
+accepts the example and its queries return rows, not that the prose is
+right. The actor `process:knowledge-examples` is reserved for it, but not
+recorded, because:
+
+- a release workflow writing events would commit to `knowledge/` and touch
+  the frontmatter of every workspace concept on each release;
+- migrated concepts have no `generated.at`, so an old event would stay
+  current after the prose changes;
+- consumers read the machine-confirmed tier as the concept being confirmed,
+  which overclaims what an example run shows.
+
+The examples still fail CI when they break. A portal badge computed at build
+time, or events with a content hash, can be added later without changing
+this convention. See [knowledge checks](../workflows/checks.md).
