@@ -10,7 +10,11 @@ process.env.TESTHOST_WORKSPACE = fileURLToPath(
 );
 
 export default defineConfig({
-  root: fileURLToPath(new URL('.', import.meta.url)),
+  // The drive letter is uppercased on Windows. The VS Code extension starts Vitest with a lowercase drive letter cwd, eg. c:\. Vite would then serve the lib modules from two urls and the test files would import another module instance than the mapp global.
+  root: fileURLToPath(new URL('.', import.meta.url)).replace(
+    /^[a-z]:/,
+    (drive) => drive.toUpperCase(),
+  ),
   test: {
     include: ['tests/**/*.test.mjs'],
     setupFiles: ['tests/setup.mjs'],
@@ -34,10 +38,10 @@ export default defineConfig({
       exclude: ['lib/utils/uhtml.mjs'],
       // The coverage floor. Raise the thresholds with new tests.
       thresholds: {
-        statements: 65,
-        branches: 66,
-        functions: 64,
-        lines: 65,
+        statements: 75,
+        branches: 73,
+        functions: 73,
+        lines: 75,
       },
       // The lcov.info is for SonarQube, which resolves the source paths from the repository root.
       // The VS Code extension shows the coverage in the editor.

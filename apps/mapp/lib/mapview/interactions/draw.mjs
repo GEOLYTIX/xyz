@@ -174,11 +174,12 @@ export default function draw(params, mapview = this) {
         // Get first OL feature from source.
         mapview.interaction.source.getFeatures()[0],
         {
-          // Use mapview.interaction.srid as dataProjection if defined in params.
-          dataProjection:
-            'EPSG:' + mapview.interaction.layer?.srid ||
+          // The layer srid has precedence over the srid param and the mapview srid.
+          dataProjection: `EPSG:${
+            mapview.interaction.layer?.srid ||
             mapview.interaction.srid ||
-            mapview.srid,
+            mapview.srid
+          }`,
           featureProjection: 'EPSG:' + mapview.srid,
         },
       ),
