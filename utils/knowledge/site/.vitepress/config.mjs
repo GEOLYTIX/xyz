@@ -93,7 +93,7 @@ export default defineConfig({
       { text: 'Workspace', link: '/workspace/' },
       { text: 'Changes', link: '/log' },
     ],
-    sidebar: [{ text: 'Knowledge', items: sidebar() }],
+    sidebar: sidebar(),
     search: { provider: 'local' },
     outline: [2, 3],
     editLink: {
