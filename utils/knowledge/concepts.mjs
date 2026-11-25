@@ -119,24 +119,36 @@ const scalarTypes = (value) =>
           ? ['number']
           : [];
 
-/** Throw on a malformed description, enum or deprecated annotation. */
+/**
+Throw on a list of values which is empty or does not match the key's types.
+`enum` lists the only valid values; `examples` the known values of a key
+which plugins can extend, eg. the layer formats.
+*/
+function checkValues(entry, types, field) {
+  const values = entry[field];
+  if (values === undefined) return;
+  if (!Array.isArray(values) || !values.length)
+    throw new Error(`${KEYS}: ${entry.key} ${field} must be a list of values`);
+  const invalid = values.find(
+    (value) => !scalarTypes(value).some((type) => types.includes(type)),
+  );
+  if (invalid !== undefined)
+    throw new Error(
+      `${KEYS}: ${entry.key} ${field} value ${JSON.stringify(invalid)} does not match its type`,
+    );
+}
+
+/** Throw on a malformed description, enum, examples or deprecated annotation. */
 function checkAnnotations(entry, types) {
   if (
     entry.description !== undefined &&
     (typeof entry.description !== 'string' || !entry.description.trim())
   )
     throw new Error(`${KEYS}: ${entry.key} description must be text`);
-  if (entry.enum !== undefined) {
-    if (!Array.isArray(entry.enum) || !entry.enum.length)
-      throw new Error(`${KEYS}: ${entry.key} enum must be a list of values`);
-    const invalid = entry.enum.find(
-      (value) => !scalarTypes(value).some((type) => types.includes(type)),
-    );
-    if (invalid !== undefined)
-      throw new Error(
-        `${KEYS}: ${entry.key} enum value ${JSON.stringify(invalid)} does not match its type`,
-      );
-  }
+  checkValues(entry, types, 'enum');
+  checkValues(entry, types, 'examples');
+  if (entry.enum !== undefined && entry.examples !== undefined)
+    throw new Error(`${KEYS}: ${entry.key} has both enum and examples`);
   if (
     entry.deprecated !== undefined &&
     typeof entry.deprecated !== 'boolean' &&

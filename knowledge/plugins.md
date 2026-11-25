@@ -47,11 +47,11 @@ configuration keys are documented in
   `mapview.mapButton`, panels, or behaviour.
 - **Layer plugins** run as `plugin(layer)` in `mapp.layer.decorate` for every
   layer key which names a plugin.[^layer] The layer view does not exist yet.
-- **ui extensions** are not in `mapp.plugins`. A module adds a method to a
-  ui lookup: `mapp.ui.layers.panels[key](layer)` adds a panel to the layer
-  view of layers with that key, `mapp.ui.locations.entries[type](entry)`
-  renders an infoj entry type, and the tabulator and chartjs plugins add
-  dataview renderers to `mapp.ui.utils`.
+- **Extensions** are not in `mapp.plugins`. A module adds a method to a
+  registry, eg. a layer format to `mapp.layer.formats` or an entry type to
+  `mapp.ui.locations.entries`, or replaces a MAPP method; the tabulator and
+  chartjs plugins add dataview renderers to `mapp.ui.utils`. See
+  [extending and overriding MAPP](plugin-extensions.md) for every registry.
 
 Built in are `consent`, `layer_order` and `svg_templates` from
 `apps/mapp/lib/plugins`,[^core] and the ui plugins, eg. `zoomBtn`, `login`,

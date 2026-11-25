@@ -14,8 +14,8 @@ x-xyz-keys:
   - key: entry.type
     type: string
     default: text
-    enum: [boolean, dataview, date, datetime, defaults, documents, geometry, html, image, images, integer, json, key, layer, link, mvt_clone, numeric, pills, pin, ping, query_button, report, tab, text, textarea, time, title, vector_layer]
-    description: The entry method of the ui entries registry. Aliases datetime, html, integer, image, images, documents and report; mvt_clone and vector_layer are deprecated for layer, defaults does nothing. Plugins may register more types.
+    examples: [boolean, dataview, date, datetime, defaults, documents, geometry, html, image, images, integer, json, key, layer, link, mvt_clone, numeric, pills, pin, ping, query_button, report, tab, text, textarea, time, title, vector_layer]
+    description: The entry method of the ui entries registry. Aliases datetime, html, integer, image, images, documents and report; mvt_clone and vector_layer are deprecated for layer, defaults does nothing. Plugins add values to the registry; see plugin-extensions.md.
   - { key: entry.field, type: string }
   - { key: entry.fieldfx, type: string }
   - { key: entry.template, type: boolean }
@@ -53,8 +53,9 @@ sources:
 A location is one record of a layer table. `layer.infoj` is the ordered list
 of entries its location view shows. Each entry has a `type`, `text` by
 default, which selects how it is shown; see [entry types](entry-types.md).
-The type enum lists the built-in methods; a plugin which adds a method to
-`mapp.ui.locations.entries` adds a type the schema does not know.[^entries]
+The type's `examples` list the built-in methods; a plugin which adds a
+method to `mapp.ui.locations.entries` adds a type, which the schema accepts;
+see [extending MAPP](../../plugin-extensions.md).[^entries]
 
 ## Where values come from
 

@@ -7,7 +7,7 @@ tags: [workspace, layer, style, icon, mapp]
 status: draft
 x-xyz-keys:
   - { key: style.icon, type: [object, array], description: An icon, or an array of icons drawn on top of each other. }
-  - { key: style.icon.type, type: string, default: dot, enum: [dot, target, triangle, square, diamond, semiCircle, markerLetter, markerColor, circle, template], description: Built-in SVG symbol drawn when the icon has no url. }
+  - { key: style.icon.type, type: string, default: dot, examples: [dot, target, triangle, square, diamond, semiCircle, markerLetter, markerColor, circle, template], description: The mapp.utils.svgSymbols method drawn when the icon has no url. Plugins add values to the registry; see plugin-extensions.md. }
   - { key: style.icon.url, type: string, description: Image or SVG URL; takes precedence over type. }
   - { key: style.icon.svg, type: string, deprecated: style.icon.url }
   - { key: style.icon.scale, type: number, default: 1 }
@@ -102,7 +102,7 @@ The ui adds style panel controls unless `hidden`:[^layerstyle]
 - `clusterScale` adds one for `style.cluster.clusterScale`, shown only when the
   cluster style sets it.
 - `zoomInScale` and `zoomOutScale` add sliders for the layer.style keys,
-  which currently have no effect; see [feature styles](feature-style.md).
+  which have no effect ([#3154](https://github.com/GEOLYTIX/xyz/issues/3154)).
 
 ## Pitfalls
 

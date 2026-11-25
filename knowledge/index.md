@@ -21,6 +21,7 @@ Look up a workspace key, environment variable or module with
 - [Workspace](workspace/index.md) - Every workspace key with executable examples and a generated JSON Schema; use to write or review workspaces.
 - [Views](views/index.md) - Application views and how to build custom views.
 - [Plugins](plugins.md) - What MAPP plugins are and how to write one.
+- [Extending and overriding MAPP](plugin-extensions.md) - The registries plugins add layer formats, theme, entry, filter and icon types to, and how to replace or wrap a MAPP method.
 - [Security](security/index.md) - Security practices, user accounts, authentication and authorization.
 - [Environment](environment/index.md) - Every environment variable of the XYZ API, grouped by feature.
 - [Deployment](deployment/index.md) - Local setup, Codespaces, Vercel, Neon, Node hosts, release builds and npm publishing.

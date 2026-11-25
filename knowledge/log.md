@@ -44,6 +44,13 @@
   [icons](workspace/layer/style/icons.md),
   [theme categories](workspace/layer/style/theme-categories.md) and
   [plugin options](workspace/locale/plugin-options.md).
+- Keys which select a method from a registry plugins extend (`layer.format`,
+  `layer.featureFormat`, theme, icon, entry and filter types, theme
+  `distribution`) list their core values as `examples`, not `enum`, so
+  workspaces with plugin values pass the schemas. Added
+  [extending and overriding MAPP](plugin-extensions.md): the registries,
+  replacing and wrapping methods, and when an assignment takes effect.
+- The zoom scaling pitfall links #3154.
 
 ## 2026-11-24
 

@@ -111,7 +111,7 @@ and `classList` change how it is shown.
 - `layer.style.zoomInScale` and `zoomOutScale` are meant to scale icons with
   the zoom level. The parser moves a cluster style's keys there, but the
   feature style function reads them from `style.cluster`, so they currently
-  do not change the render.
+  do not change the render ([#3154](https://github.com/GEOLYTIX/xyz/issues/3154)).
 
 # Examples
 

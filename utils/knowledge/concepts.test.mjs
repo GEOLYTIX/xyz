@@ -79,6 +79,14 @@ describe('workspace keys:', () => {
       ],
       ['  - { key: layer.format, type: string, description: "" }', /text/],
       [
+        '  - { key: layer.format, type: string, examples: [wkt, 1] }',
+        /examples value 1 does not match/,
+      ],
+      [
+        '  - { key: layer.format, type: string, enum: [wkt], examples: [mvt] }',
+        /both enum and examples/,
+      ],
+      [
         '  - { key: layer.format, type: string, deprecated: 1 }',
         /deprecated must be/,
       ],
@@ -148,7 +156,7 @@ describe('workspace keys:', () => {
     expect(keys.sort()).toEqual([...LAYER_FORMATS].sort());
   });
 
-  it('enumerates the registry formats for layer.format', () => {
+  it('lists the registry formats as examples of layer.format, which plugins extend', () => {
     const concept = readFileSync(
       new URL('../../knowledge/workspace/layer/formats.md', import.meta.url),
       'utf8',
@@ -156,7 +164,8 @@ describe('workspace keys:', () => {
     const entry = splitDocument(concept).metadata['x-xyz-keys'].find(
       (key) => key.key === 'layer.format',
     );
-    expect(entry.enum).toEqual(LAYER_FORMATS);
+    expect(entry.enum).toBeUndefined();
+    expect(entry.examples).toEqual(LAYER_FORMATS);
   });
 
   it('fails when two concepts own the same key', () => {

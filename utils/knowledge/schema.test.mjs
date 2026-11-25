@@ -28,6 +28,7 @@ x-xyz-keys:
   - { key: workspace.locale, type: object, ref: locale }
   - { key: locale.layers.*, type: object, ref: layer }
   - { key: layer.display, type: boolean }
+  - { key: layer.featureFormat, type: string, examples: [wkt, geojson] }
   - { key: layer.format, type: string, enum: [wkt, mvt], description: The format. }
   - { key: layer.hover, type: object, deprecated: layer.style.hover }
   - { key: layer.srid, type: [string, integer] }
@@ -134,6 +135,17 @@ describe('workspace schema:', () => {
     ).toEqual(['layer.format: expected one of "wkt", "mvt", got "wkt2"']);
     expect(
       validateWorkspace(schema, { format: 'mvt' }, 'layer').errors,
+    ).toEqual([]);
+  });
+
+  it('lists examples without rejecting other values', () => {
+    const schema = buildSchema(fixture());
+    expect(schema.$defs.layer.properties.featureFormat).toMatchObject({
+      examples: ['wkt', 'geojson'],
+    });
+    expect(schema.$defs.layer.properties.featureFormat.enum).toBeUndefined();
+    expect(
+      validateWorkspace(schema, { featureFormat: 'plugin' }, 'layer').errors,
     ).toEqual([]);
   });
 

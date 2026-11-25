@@ -11,9 +11,9 @@ x-xyz-keys:
     description: true derives the filter type from entry.type, a string is a filter type, false never lists the entry.
   - key: entry.filter.type
     type: string
-    enum: [like, match, numeric, integer, in, ni, date, datetime, boolean, "null"]
+    examples: [like, match, numeric, integer, in, ni, date, datetime, boolean, "null"]
     required: true
-    description: The filter method of the panel and the filter expression type it writes.
+    description: The mapp.ui.layers.filters method of the panel and the filter expression type it writes. Plugins add values to the registry; see plugin-extensions.md.
   - { key: entry.filter.title, type: string, description: Card title; defaults to entry.title. }
   - { key: entry.filter.field, type: string, description: Column to filter; defaults to entry.field. }
   - { key: entry.filter.label, type: string, description: Checkbox label of boolean and null filters. }

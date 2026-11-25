@@ -100,6 +100,7 @@ function annotations(entry) {
   const result = { 'x-xyz-concept': entry.concept };
   if (entry.description) result.description = entry.description;
   if (entry.enum) result.enum = entry.enum;
+  if (entry.examples) result.examples = entry.examples;
   for (const field of ['pattern', 'minimum', 'maximum'])
     if (entry[field] !== undefined) result[field] = entry[field];
   if (entry.deprecated) result.deprecated = true;

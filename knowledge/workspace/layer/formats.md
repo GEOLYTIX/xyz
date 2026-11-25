@@ -8,15 +8,15 @@ status: draft
 x-xyz-keys:
   - key: layer.format
     type: string
-    enum: [cluster, geojson, googleMapTiles, mapboxStyle, maplibre, mvt, tiles, vector, wkt]
-    description: Selects the MAPP format method which creates the OpenLayers layer.
+    examples: [cluster, geojson, googleMapTiles, mapboxStyle, maplibre, mvt, tiles, vector, wkt]
+    description: Selects the method of mapp.layer.formats which creates the OpenLayers layer. Plugins add values to the registry; see plugin-extensions.md.
   - { key: layer.fade, type: boolean, formats: [wkt, geojson, cluster, vector] }
   - { key: layer.vectorImage, type: boolean, formats: [wkt, geojson, cluster, vector] }
   - key: layer.featureFormat
     type: string
-    enum: [cluster, geojson, wkt, wkth3]
+    examples: [cluster, geojson, wkt, wkth3]
     formats: [wkt, geojson, cluster, vector]
-    description: The featureFormats method which parses the response or inline features; defaults to format.
+    description: The mapp.layer.featureFormats method which parses the response or inline features; defaults to format. Plugins add values to the registry; see plugin-extensions.md.
   - { key: layer.wkt_properties, type: boolean, formats: [mvt] }
   - key: layer.cacheSize
     type: integer
