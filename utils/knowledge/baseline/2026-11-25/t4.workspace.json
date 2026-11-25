@@ -1,0 +1,219 @@
+{
+  "dbs": "DEVDB",
+  "locale": {
+    "layers": {
+      "osm": {
+        "name": "OSM Basemap",
+        "display": true,
+        "format": "tiles",
+        "URI": "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "attribution": {
+          "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+        },
+        "style": {
+          "contextFilter": "grayscale(100%)"
+        }
+      }
+    }
+  },
+  "locales": {
+    "retail": {
+      "name": "UK Retail Points",
+      "view": {
+        "lat": 51.5074,
+        "lng": -0.1278,
+        "z": 12
+      },
+      "layers": {
+        "retail_points": {
+          "name": "Retail Points",
+          "display": true,
+          "format": "wkt",
+          "table": "geodata.uk_glx_open_retail_points",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "qID": "id",
+          "params": {
+            "viewport": true
+          },
+          "infoj": [
+            {
+              "type": "key"
+            },
+            {
+              "title": "Store name",
+              "field": "store_name",
+              "inline": true
+            },
+            {
+              "title": "Retailer",
+              "field": "retailer",
+              "inline": true
+            },
+            {
+              "title": "Town",
+              "field": "town",
+              "inline": true
+            }
+          ],
+          "style": {
+            "default": {
+              "icon": {
+                "type": "dot",
+                "fillColor": "#999999"
+              }
+            },
+            "highlight": {
+              "scale": 1.3
+            },
+            "theme": {
+              "title": "Retailer",
+              "type": "categorized",
+              "field": "retailer",
+              "categories": [
+                {
+                  "value": "Tesco",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#00539F"
+                    }
+                  }
+                },
+                {
+                  "value": "Sainsburys",
+                  "label": "Sainsbury's",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#F06C00"
+                    }
+                  }
+                },
+                {
+                  "value": "Asda",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#78BE20"
+                    }
+                  }
+                },
+                {
+                  "value": "Morrisons",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#00563F"
+                    }
+                  }
+                },
+                {
+                  "value": "Aldi",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#00005F"
+                    }
+                  }
+                },
+                {
+                  "value": "Lidl",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#FFF000"
+                    }
+                  }
+                },
+                {
+                  "value": "Waitrose",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#7F9C3B"
+                    }
+                  }
+                },
+                {
+                  "value": "Marks and Spencer",
+                  "label": "M&S",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#000000"
+                    }
+                  }
+                },
+                {
+                  "value": "Iceland",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#D2212E"
+                    }
+                  }
+                },
+                {
+                  "value": "The Co-operative Group",
+                  "label": "Co-op",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#00B1E7"
+                    }
+                  }
+                },
+                {
+                  "value": "Spar",
+                  "style": {
+                    "icon": {
+                      "type": "dot",
+                      "fillColor": "#E2001A"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "dataviews": {
+            "stores_in_viewport": {
+              "label": "Stores in viewport",
+              "display": true,
+              "query": "retail_points_viewport_stores",
+              "viewport": true,
+              "mapChange": true,
+              "queryparams": {
+                "table": true,
+                "filter": true
+              },
+              "table": {
+                "layout": "fitColumns",
+                "height": "300px",
+                "columns": [
+                  {
+                    "title": "Store name",
+                    "field": "store_name"
+                  },
+                  {
+                    "title": "Retailer",
+                    "field": "retailer"
+                  },
+                  {
+                    "title": "Town",
+                    "field": "town"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "templates": {
+    "retail_points_viewport_stores": {
+      "template": "SELECT store_name, retailer, town FROM ${table} WHERE TRUE ${viewport} ${filter} ORDER BY store_name"
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "dbs": "DEVDB",
+  "locales": {
+    "countries": {
+      "name": "Countries",
+      "view": { "lat": 30, "lng": 10, "z": 2 },
+      "layers": {
+        "countries": {
+          "name": "Countries by population",
+          "display": true,
+          "format": "wkt",
+          "table": "naturalearth.countries",
+          "geom": "geom_3857",
+          "srid": 3857,
+          "qID": "id",
+          "infoj": [
+            { "type": "key" },
+            { "title": "Name", "field": "name" },
+            { "title": "ISO A3", "field": "iso_a3" },
+            { "title": "Continent", "field": "continent" },
+            {
+              "title": "Population estimate",
+              "field": "pop_est",
+              "type": "integer"
+            }
+          ],
+          "style": {
+            "default": {
+              "strokeColor": "#555",
+              "strokeWidth": 1,
+              "fillColor": "#cccccc99"
+            },
+            "highlight": {
+              "strokeColor": "#000",
+              "strokeWidth": 2
+            },
+            "hover": { "field": "name" },
+            "label": {
+              "title": "Country name",
+              "field": "name",
+              "display": true,
+              "font": "11px sans-serif",
+              "fillColor": "#222",
+              "strokeColor": "#fff",
+              "strokeWidth": 3,
+              "overflow": false
+            },
+            "theme": {
+              "title": "Population estimate",
+              "type": "graduated",
+              "field": "pop_est",
+              "graduated_breaks": "greater_than",
+              "categories": [
+                {
+                  "value": 0,
+                  "label": "< 2.5 million",
+                  "style": { "fillColor": "#ffffb2cc" }
+                },
+                {
+                  "value": 2500000,
+                  "label": "2.5 – 7 million",
+                  "style": { "fillColor": "#fecc5ccc" }
+                },
+                {
+                  "value": 7000000,
+                  "label": "7 – 16 million",
+                  "style": { "fillColor": "#fd8d3ccc" }
+                },
+                {
+                  "value": 16000000,
+                  "label": "16 – 40 million",
+                  "style": { "fillColor": "#f03b20cc" }
+                },
+                {
+                  "value": 40000000,
+                  "label": "≥ 40 million",
+                  "style": { "fillColor": "#bd0026cc" }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

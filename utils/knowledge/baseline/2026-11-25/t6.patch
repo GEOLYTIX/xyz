@@ -1,0 +1,43 @@
+diff --git a/apps/xyz/mod/utils/dbs.js b/apps/xyz/mod/utils/dbs.js
+index ad6bad2fa..4c39e7050 100644
+--- a/apps/xyz/mod/utils/dbs.js
++++ b/apps/xyz/mod/utils/dbs.js
+@@ -20,7 +20,7 @@ import logger from './logger.js';
+ import { activeSpan, flushAfter, withSpan } from './telemetry.js';
+ 
+ // At least one attempt is made if the RETRY_LIMIT is not a positive number.
+-const RETRY_LIMIT = Number.parseInt(xyzEnv.RETRY_LIMIT) || 1;
++const RETRY_LIMIT = Math.max(Number.parseInt(xyzEnv.RETRY_LIMIT) || 1, 1);
+ 
+ const RETRY_CODES = new Set([
+   '53300', // too_many_connections
+diff --git a/apps/xyz/tests/mod/utils/dbs.test.mjs b/apps/xyz/tests/mod/utils/dbs.test.mjs
+index 7250086ee..db60e0579 100644
+--- a/apps/xyz/tests/mod/utils/dbs.test.mjs
++++ b/apps/xyz/tests/mod/utils/dbs.test.mjs
+@@ -205,14 +205,17 @@ describe('dbs Module', () => {
+       expect(client.release).toHaveBeenCalledTimes(1);
+     });
+ 
+-    it('makes a single attempt if the RETRY_LIMIT is not a positive number', async () => {
+-      const dbs = await importDbs({ RETRY_LIMIT: '0' });
+-      const error = pgError('53300');
+-      pools[0].connect.mockResolvedValueOnce(mockClient(error));
+-
+-      await expect(dbs.TEST({ query: 'SELECT 1' })).resolves.toBe(error);
+-      expect(pools[0].connect).toHaveBeenCalledTimes(1);
+-    });
++    it.each(['0', '-1', 'invalid'])(
++      'makes a single attempt if the RETRY_LIMIT is %s',
++      async (RETRY_LIMIT) => {
++        const dbs = await importDbs({ RETRY_LIMIT });
++        const error = pgError('53300');
++        pools[0].connect.mockResolvedValueOnce(mockClient(error));
++
++        await expect(dbs.TEST({ query: 'SELECT 1' })).resolves.toBe(error);
++        expect(pools[0].connect).toHaveBeenCalledTimes(1);
++      },
++    );
+   });
+ 
+   describe('retry logging', () => {

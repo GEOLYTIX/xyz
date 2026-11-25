@@ -1,0 +1,49 @@
+diff --git a/apps/xyz/mod/user/jwtClaims.js b/apps/xyz/mod/user/jwtClaims.js
+index 67b567a4e..7f06e612e 100644
+--- a/apps/xyz/mod/user/jwtClaims.js
++++ b/apps/xyz/mod/user/jwtClaims.js
+@@ -4,7 +4,7 @@
+ Export the jwtClaims function which generates the claims for a signed user [session] cookie token.
+ 
+ @requires module:/utils/processEnv
+-@module jwtClaims
++@module /user/jwtClaims
+ */
+ 
+ /**
+@@ -13,11 +13,17 @@ Export the jwtClaims function which generates the claims for a signed user [sess
+ @description
+ The jwtClaims method returns a claims object to be included in a signed user [session] cookie token.
+ 
++The [auth]{@link module:/user/auth}, [cookie]{@link module:/user/cookie}, and [redirect]{@link module:/user/redirect} modules spread the claims into the payload after the user properties, so the claims replace any user properties with the same name. API keys signed by the [key]{@link module:/user/key} module and tokens signed by the [token]{@link module:/user/token} module do not carry these claims.
++
+ The claims allow another service to authenticate its users through xyz by verifying the token type, issuer, and audience.
+ 
+ The `typ` claim distinguishes a real user session token from a key.js API-key token.
+ 
+-The `xyzEnv.JWT_TYPE`, `xyzEnv.JWT_ISSUER`, and `xyzEnv.JWT_AUDIENCE` variables must be configured for the claims to be included in the signed token.
++The claims are always included. Their values are read from the `xyzEnv.JWT_TYPE`, `xyzEnv.JWT_ISSUER`, and `xyzEnv.JWT_AUDIENCE` variables, which the /utils/processEnv module defaults to `session`, `xyz`, and `xyz` when they are not set. The defaults name the deployment itself; a service which verifies a different issuer or audience requires `JWT_ISSUER` and `JWT_AUDIENCE` to be set to match.
++
++The defaults are not applied to empty values. A variable which is set to an empty string, eg. declared without a value in a varlock schema, results in an empty `typ` or `iss` claim, or an `aud` claim of `['']`.
++
++The `JWT_AUDIENCE` value is split on commas into the `aud` array. Whitespace around the commas is not trimmed.
+ 
+ @returns {object} The claims object with typ, iss, and aud properties to be merged into the signed token payload.
+ */
+diff --git a/apps/xyz/mod/utils/processEnv.js b/apps/xyz/mod/utils/processEnv.js
+index 48e0ef674..71bcfd04e 100644
+--- a/apps/xyz/mod/utils/processEnv.js
++++ b/apps/xyz/mod/utils/processEnv.js
+@@ -111,9 +111,9 @@ The process.ENV object holds configuration provided to the node process from the
+ @property {String} [SAML_PROVIDER_NAME] Display name for your service
+ @property {String} [SLO_CALLBACK] URL for handling logout callbacks
+ @property {Boolean} [LEGACY_ROLES] Enable legacy role checks
+-@property {String} [JWT_TYPE='session'] The typ (type) claim in a JSON Web Token (JWT) is an optional header parameter that declares the media type or category of the token. Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}
+-@property {String} [JWT_ISSUER='xyz'] The iss (issuer) claim in a JSON Web Token (JWT) is a case-sensitive string or URI that identifies the principal or authorization server that created and signed the token. Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}
+-@property {String} [JWT_AUDIENCE='xyz'] The aud (audience) claim in a JSON Web Token (JWT) identifies the specific recipient or resource server that the token is intended for. The string property will be split into an array of audiences.Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}
++@property {String} [JWT_TYPE='session'] The typ (type) claim which declares the category of the token. Will be assigned to the payload, not the header, of signed user session tokens in the [jwtClaims module]{@link module:/user/jwtClaims}. The default applies only if the variable is not set; an empty value is kept.
++@property {String} [JWT_ISSUER='xyz'] The iss (issuer) claim in a JSON Web Token (JWT) is a case-sensitive string or URI that identifies the principal or authorization server that created and signed the token. Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}. The default applies only if the variable is not set; an empty value is kept.
++@property {String} [JWT_AUDIENCE='xyz'] The aud (audience) claim in a JSON Web Token (JWT) identifies the specific recipient or resource server that the token is intended for. The string property will be split on commas into an array of audiences, without trimming whitespace. Will be assigned in the [jwtClaims module]{@link module:/user/jwtClaims}. The default applies only if the variable is not set; an empty value is kept.
+ @property {String} [OTEL_EXPORTER_OTLP_ENDPOINT] Enables tracing in the [telemetry module]{@link module:/utils/telemetry} with spans exported to the OTLP/HTTP collector endpoint, eg. http://localhost:4318. See the [OTLP exporter configuration]{@link https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/}.
+ @property {String} [OTEL_EXPORTER_OTLP_TRACES_ENDPOINT] Enables tracing in the [telemetry module]{@link module:/utils/telemetry} with a traces specific OTLP/HTTP endpoint which takes precedence over the OTEL_EXPORTER_OTLP_ENDPOINT.
+ @property {String} [OTEL_EXPORTER_OTLP_HEADERS] Comma separated key=value headers sent with OTLP export requests, eg. an authorization header for a hosted collector.

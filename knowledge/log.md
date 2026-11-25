@@ -2,6 +2,8 @@
 
 ## 2026-11-25
 
+- Recorded the [agent baseline](workflows/agent-baseline.md): seven tasks run
+  on `minor` without the bundle, with their prompts and outputs.
 - Wiki `sources` link the snapshot revision of each page, since the page URLs
   now show the generated stubs.
 - Documented the remaining keys used in the test workspaces: drawing button
