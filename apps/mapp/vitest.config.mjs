@@ -10,7 +10,7 @@ process.env.TESTHOST_WORKSPACE = fileURLToPath(
   new URL('./tests/workspaces/_workspace.json', import.meta.url),
 );
 
-// The Mapbox tests need an access token. The token is read from the environment, or from one of Vite's .env files for the test mode in the repository root: .env, .env.local, .env.test and .env.test.local. The .env files are gitignored. The tests are skipped without a token.
+// The Mapbox tests need an access token. The token is read from the environment, or from one of Vite's .env files for the test mode in the repository root: .env, .env.local, .env.test and .env.test.local. The .env files are gitignored. The tests which require a token are skipped without one. The invalid-token test always runs and requests the Mapbox API.
 const env = loadEnv('test', repoRoot, 'MAPBOX_');
 
 export default defineConfig({
