@@ -3,10 +3,11 @@ name: Knowledge check
 on:
   pull_request:
     branches: ['main', 'major', 'minor', 'patch']
-    # The knowledge-unaffected label changes the freshness result.
-    types: [opened, synchronize, reopened, labeled, unlabeled]
   push:
     branches: ['main', 'major', 'minor', 'patch']
+
+# The freshness check of pull requests runs in knowledge-freshness.yml, so a
+# label change does not run this workflow again.
 
 permissions:
   contents: read
@@ -36,28 +37,3 @@ jobs:
       # The build fails on dead links, which would otherwise surface on publishing.
       - name: Build the knowledge portal
         run: pnpm knowledge:site:build
-
-  # A pull request which changes a module described by a concept must change
-  # the concept, or carry the knowledge-unaffected label. Pull requests into
-  # main merge development branches whose changes were checked already.
-  freshness:
-    if: github.event_name == 'pull_request' && github.base_ref != 'main'
-    runs-on: ubuntu-26.04
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: '22'
-      - name: Install dependencies
-        run: pnpm install --ignore-scripts
-      - name: Check the concepts of changed modules
-        env:
-          BASE: ${{ github.base_ref }}
-          UNAFFECTED: ${{ contains(github.event.pull_request.labels.*.name, 'knowledge-unaffected') }}
-        run: |
-          args=(--base "origin/$BASE")
-          if [ "$UNAFFECTED" = 'true' ]; then args+=(--warn-only); fi
-          pnpm knowledge:changed "${args[@]}"

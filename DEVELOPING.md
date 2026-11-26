@@ -68,7 +68,7 @@ pnpm knowledge:check                          # structure, source links and exam
 pnpm knowledge:changed --base origin/<base>   # concepts linking the modules the branch changed
 ```
 
-`<base>` is the target branch, eg. `patch`. Label the pull request `knowledge-unaffected` when a change leaves the concepts true. The [Knowledge check](./.github/workflows/knowledge-check.yml) workflow runs these checks on pull requests. See [knowledge checks](./knowledge/workflows/checks.md) and [DOCUMENTATION.md](./DOCUMENTATION.md).
+`<base>` is the target branch, eg. `patch`. Label the pull request `knowledge-unaffected` when a change leaves the concepts true. The [Knowledge check](./.github/workflows/knowledge-check.yml) and [Knowledge freshness](./.github/workflows/knowledge-freshness.yml) workflows run these checks on pull requests. See [knowledge checks](./knowledge/workflows/checks.md) and [DOCUMENTATION.md](./DOCUMENTATION.md).
 
 ## Related Docs
 

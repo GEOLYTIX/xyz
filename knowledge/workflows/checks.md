@@ -10,6 +10,7 @@ sources:
   - resource: ../../utils/knowledge/schema.mjs
   - resource: ../../utils/knowledge/examples.mjs
   - resource: ../../utils/knowledge/changed.mjs
+  - resource: ../../utils/knowledge/files.mjs
   - resource: ../../utils/knowledge/validate.test.mjs
   - resource: ../../utils/knowledge/concepts.test.mjs
   - resource: ../../utils/knowledge/examples.test.mjs
@@ -17,7 +18,9 @@ sources:
 ---
 # Knowledge checks
 
-The checker fails on:
+The checker reports every failing check of a file. A file whose frontmatter
+does not parse is not checked further, and does not stop the checks of the
+other files. The checker fails on:
 
 - missing or malformed frontmatter, or a missing `type` (OKF v0.3 skips such
   files with a warning; XYZ fails, since every file here is meant as a concept)
@@ -69,19 +72,25 @@ files inside it. Deleting a resource counts as a change. It also compares the
 concepts at the merge base with those on the branch: when a concept or its
 `resource` is deleted, a module which it described and which still exists
 must be described by another concept, or the check fails. A changed module
-which a concept cited and no concept cites any more warns. CI runs it on pull
-requests which do not target `main`, with `--warn-only` when the pull request
-has the `knowledge-unaffected` label. The label is for changes which leave
+which a concept cited and no concept cites any more warns. A concept whose
+frontmatter does not parse fails on the branch and warns at the merge base,
+since the modules it links cannot be compared. The `knowledge-freshness.yml`
+workflow runs it on pull requests which do not target `main`, with
+`--warn-only` when the pull request has the `knowledge-unaffected` label, and
+runs again when the label is added or removed. The label is for changes which leave
 every statement of the concept true, or modules which no longer need a
 concept; `review-pr` checks that claim.
 
 `pnpm knowledge:examples` runs every example in the testhost with the devdb:
 each example must load as a locale, its `wkt` and `geojson` layers must return
-rows, `location_get` must return the first row of each layer with `infoj`,
-each dataview query must return a result, the gazetteer must find a match, and
+rows, `location_get` must return the first row of each layer with `infoj`, with a
+column for each `infoj` field, each dataview query must return a nonempty
+result, the gazetteer must find a match, and
 each `filter.default` must return fewer rows than the same layer without it.
-CI runs it in the knowledge workflow, followed by `pnpm knowledge:site:build`,
-which fails on dead links in the portal.
+A check which does not apply to an example, eg. a gazetteer search without
+a gazetteer, is reported as skipped. CI runs it in the knowledge workflow,
+followed by `pnpm knowledge:site:build`, which fails on dead links in the
+portal.
 
 The examples are API smoke tests. They run as an anonymous user, do not query
 `mvt`, `cluster` or tile layers, render nothing, and do not test roles,

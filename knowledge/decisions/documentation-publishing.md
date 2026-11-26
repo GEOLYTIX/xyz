@@ -37,8 +37,10 @@ links open the concept on `patch`.
 A maintainer runs the workflow manually with a ref to publish a correction:
 fix the concept in a pull request, then run the workflow for the release line
 which carries the fix, eg. `patch`. The workflow accepts `main`, `minor`,
-`patch`, a release tag or a full commit SHA, resolves it to a commit once,
-and links sources at that commit, so a branch moving while the run is queued
+`patch`, an existing release tag, or the full SHA of a commit on `main`,
+`minor` or `patch`, and fails on other refs, so a run cannot publish an
+unmerged branch. It resolves the ref to a commit once and links sources at
+that commit, so a branch moving while the run is queued
 does not change the links. Do not build from a branch with
 unreleased features, or the portal describes behaviour which no released
 version has.

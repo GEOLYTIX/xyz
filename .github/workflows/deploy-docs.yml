@@ -3,7 +3,8 @@
 # The Release workflow calls this workflow after it has created a release, with the release tag, so the portal is
 # only published for a release which succeeded and is built from the tagged commit. A manual run publishes a
 # correction between releases, or the minor for evaluation before a release, from a release line branch, a release
-# tag or a commit. The ref is resolved to a commit once; source links and the footer use the tag or that commit.
+# tag or a commit. A tag must exist and a commit must be on main, minor or patch, so a run cannot publish a commit
+# of an unmerged branch. The ref is resolved to a commit once; source links and the footer use the tag or that commit.
 #
 # GitHub Pages is set up after the knowledge migration is merged into minor: the repository Pages source must be
 # GitHub Actions, and the github-pages environment must allow the branch a run starts from, which is main for a
@@ -21,7 +22,7 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: 'Release line branch (main, minor, patch), release tag or commit to build the portal from'
+        description: 'Release line branch (main, minor, patch), existing release tag, or full SHA of a commit on a release line'
         required: true
         default: 'main'
 
@@ -48,17 +49,41 @@ jobs:
         run: |
           case "$REF" in
             main | minor | patch) ;;
-            v[0-9]* | [0-9]*.[0-9]*.[0-9]*) ;;
             *)
-              if ! [[ "$REF" =~ ^[0-9a-f]{40}$ ]]; then
+              if ! [[ "$REF" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ || "$REF" =~ ^[0-9a-f]{40}$ ]]; then
                 echo "::error::$REF is not a release line branch, release tag or full commit SHA."
                 exit 1
               fi
               ;;
           esac
+      # The full history has the release line branches and the tags which the ref is verified against.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ inputs.ref }}
+          fetch-depth: 0
+      - name: Verify the ref
+        env:
+          REF: ${{ inputs.ref }}
+        run: |
+          case "$REF" in
+            main | minor | patch) ;;
+            *)
+              if [[ "$REF" =~ ^[0-9a-f]{40}$ ]]; then
+                for branch in main minor patch; do
+                  if git merge-base --is-ancestor "$REF" "origin/$branch" 2> /dev/null; then
+                    echo "$REF is on $branch"
+                    exit 0
+                  fi
+                done
+                echo "::error::$REF is not a commit of main, minor or patch."
+                exit 1
+              fi
+              if ! git show-ref --verify --quiet "refs/tags/$REF"; then
+                echo "::error::$REF is not a release tag of the repository."
+                exit 1
+              fi
+              ;;
+          esac
       # A branch moves while a run is queued; links name the tag or the commit which was built.
       - name: Resolve the ref
         id: ref

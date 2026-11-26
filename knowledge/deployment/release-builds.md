@@ -106,10 +106,11 @@ read at runtime, since their render functions cannot be serialised.
 | `biome.yml` | push, PR | `biome ci .`, and a check that `apps/mapp` does not reference MAPP.UI |
 | `unit_tests.yml` | push, PR on `main`, `major`, `minor`, `patch` | `pnpm test` |
 | `build.yml` | push on those branches, any PR | coverage and SonarQube, skipped for fork PRs |
-| `knowledge-check.yml` | push, PR on those branches | `knowledge:test`, `knowledge:check`, `knowledge:examples`, `knowledge:site:build`; on PRs not into `main`, `knowledge:changed` |
+| `knowledge-check.yml` | push, PR on those branches | `knowledge:test`, `knowledge:check`, `knowledge:examples`, `knowledge:site:build` |
+| `knowledge-freshness.yml` | PR into `major`, `minor`, `patch`, and label changes | `knowledge:changed`, with `--warn-only` for the `knowledge-unaffected` label, see [knowledge checks](../workflows/checks.md) |
 | `mapp_package.yml` | push on those branches, PRs touching the package | packs and tests `@geolytix/mapp`, see [MAPP package](mapp-publishing.md) |
 | `publish_mapp.yml` | manual | publishes `@geolytix/mapp` to npm |
-| `deploy-docs.yml` | called by `release.yml` with the tag, manual with a ref | the knowledge portal to GitHub Pages, see [documentation publishing](../decisions/documentation-publishing.md) |
+| `deploy-docs.yml` | called by `release.yml` with the tag, manual with a release line, an existing tag or a commit on a release line | the knowledge portal to GitHub Pages, see [documentation publishing](../decisions/documentation-publishing.md) |
 | `release.yml` | push to `main` | builds, tags and releases, see above |
 
 No workflow deploys the app. DEPLOYMENT.md listed `build.yml` PRs as limited
