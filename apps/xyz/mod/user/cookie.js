@@ -17,6 +17,17 @@ import jwtClaims from './jwtClaims.js';
 import login from './login.js';
 
 /**
+The claims of a SAML login which are carried over to a refreshed token. The SAML app builds the LogoutRequest to the IdP from them.
+*/
+const SAML_LOGOUT_CLAIMS = [
+  'nameID',
+  'nameIDFormat',
+  'nameQualifier',
+  'sessionIndex',
+  'spNameQualifier',
+];
+
+/**
 @function cookie
 @async
 
@@ -56,8 +67,6 @@ export default async function cookie(req, res) {
   if (!cookie) {
     return res.send(false);
   }
-
-  const decodedCookie = jwt.decode(cookie);
 
   if (req.params.destroy) {
     // Remove cookie.
@@ -124,14 +133,11 @@ export default async function cookie(req, res) {
         user.authorization_provider = payload.authorization_provider;
       }
 
-      //If we have a sessionIndex from a SAML IdP then we need to pass it from the
-      //already created cookie as this is not stored in the acl.
-      if (decodedCookie.sessionIndex) {
-        user.sessionIndex = decodedCookie.sessionIndex;
-      }
-
-      if (decodedCookie.nameID) {
-        user.nameID = decodedCookie.nameID;
+      // The SAML NameID and session are not stored in the ACL and must be carried over from the current token. A LogoutRequest to the IdP is built from them, and some IdPs reject a LogoutRequest without the NameID format and qualifiers of the login.
+      for (const key of SAML_LOGOUT_CLAIMS) {
+        if (payload[key]) {
+          user[key] = payload[key];
+        }
       }
 
       const token = jwt.sign({ ...user, ...jwtClaims() }, xyzEnv.SECRET, {
