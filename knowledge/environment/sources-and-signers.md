@@ -20,6 +20,8 @@ sources:
   - resource: ../../apps/xyz/mod/sign/s3.js
   - resource: ../../apps/xyz/mod/sign/cloudinary.js
   - resource: ../../apps/xyz/mod/workspace/cache.js
+  - resource: ../../apps/xyz/mod/workspace/getLocale.js
+  - resource: ../../apps/xyz/mod/workspace/getLayer.js
   - resource: ../../apps/xyz/tests/mod/utils/envReplace.test.mjs
   - resource: ../../apps/xyz/tests/mod/provider/getSrc.test.mjs
   - resource: ../../apps/xyz/tests/mod/provider/file.test.mjs
@@ -56,8 +58,11 @@ SRC_ASSETS=assets.example.com/maps
 eg. `file:{RESOURCES}/layer.json`. There a missing variable gives the text
 `undefined`.
 
-Values are only substituted in src references, not elsewhere in a workspace.
-A `${DIR}` in a `plugins` URL is not substituted by the API.
+Values are substituted in src references and in the URLs of
+`locale.plugins` and `layer.plugins`, which `getLocale` and `getLayer` pass
+through the same `envReplace`; not elsewhere in a workspace. `DIR` is not an
+`SRC_*` variable, so a `${DIR}` in a plugin URL stays unless `SRC_DIR` is
+set.
 
 ## SIGN_*
 

@@ -18,6 +18,7 @@ sources:
   - id: cors
     resource: ../../apps/xyz/mod/middleware/cors.js
   - resource: ../../apps/xyz/mod/workspace/_workspace.js
+  - resource: ../../apps/xyz/mod/utils/telemetry.js
   - resource: ../../apps/xyz/README.md
   - resource: ../../apps/xyz/tests/mod/router.test.mjs
   - resource: ../../apps/xyz/tests/mod/middleware/cors.test.mjs
@@ -42,7 +43,9 @@ are its browser clients; this page is the server side of that boundary.
   [apps/saml](../../apps/saml/server.js) imports the default app and adds the
   `${DIR}/saml/*` routes to it.
 - The package exports only `./router`, `./server` and `./mod/*`. Importing `mod/utils/processEnv.js` assigns the frozen `globalThis.xyzEnv`.
-  Modules read configuration from `xyzEnv`, not `process.env`. See
+  Modules read configuration from `xyzEnv`. Exceptions read `process.env`
+  directly: `processEnv.js` itself, `telemetry.js` for the standard `OTEL_*`
+  and platform variables, and `_workspace.js` for `VITEST`. See
   [Server](../environment/server.md) and the other [environment](../environment/index.md) concepts.
 
 ## Request flow

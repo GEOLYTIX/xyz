@@ -16,5 +16,5 @@
 - [CORS_ORIGINS](cors.md) - Origins allowed to read the API and public files cross-origin.
 
 Concepts group the variables which are configured together, one concept per
-feature. The knowledge check warns about every variable read by the XYZ API
+feature. The knowledge check fails on every variable read by the XYZ API
 which no concept lists in its `x-xyz-variables` metadata.

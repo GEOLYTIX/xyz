@@ -12,6 +12,8 @@ sources:
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - resource: ../../apps/xyz/mod/user/acl.js
   - resource: ../../apps/xyz/mod/middleware/validateRequestAuth.js
+  - resource: ../../apps/xyz/mod/user/auth.js
+  - resource: ../../apps/xyz/mod/user/login.js
   - resource: ../../apps/xyz/mod/view.js
   - resource: ../../apps/xyz/mod/workspace/scopes.js
   - resource: ../../apps/xyz/mod/utils/processEnv.js
@@ -42,8 +44,10 @@ pipe. The schema defaults to `public`:
 PRIVATE=postgres://user:password@host:5432/database|acl_schema.acl_table
 ```
 
-A value without the `|table` part does not configure an ACL, so the instance
-behaves as if neither variable were set. The ACL has its own connection pool with a 5 second connection timeout, separate from the
+A value without the `|table` part does not configure an ACL: no user can be
+authenticated. With `PUBLIC` the instance serves every request
+anonymously. With `PRIVATE` it fails closed: every request is redirected to
+the login, and `/api/user/login` answers `405`. The ACL has its own connection pool with a 5 second connection timeout, separate from the
 `DBS_*` connections. An error on an idle ACL connection is logged and does
 not end the process.
 

@@ -12,6 +12,7 @@ x-xyz-keys:
   - { key: layer.roles, type: object }
   - { key: layer.roles.*, type: [boolean, object], ref: layer }
   - { key: entry.roles, type: object }
+  - { key: entry.roles.*, type: [boolean, object], ref: entry }
 sources:
   - id: wiki
     resource: https://github.com/GEOLYTIX/xyz/wiki/Roles-%5BWorkspace%5D/3fc379b7ada42dff57f19e9f28694868e5a17cac
@@ -67,8 +68,9 @@ provider can replace these checks; see the security concepts.
 
 ## Pitfalls
 
-- A role name starting with `!` is listed by the roles endpoint, but
-  composition does not treat it as a negation. Do not rely on negated roles.
+- A role name starting with `!` is listed as `negatedRoles` by the
+  admin-only `/api/workspace/test` endpoint, but composition does not treat
+  it as a negation. `/api/workspace/roles` responds `410 Gone`. Do not rely on negated roles.
 - Without `"*"`, every object role also gates the layer, so users without
   any of the roles lose the whole layer.
 

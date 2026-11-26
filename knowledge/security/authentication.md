@@ -47,8 +47,10 @@ instance it is redirected to the login, `${DIR}${AUTH_PATH}/login`
    login ends earlier sessions. Without it a cookie stays valid until it
    expires.
 
-The user's roles are expanded: `europe.france` adds `europe`, and every
-authenticated user has `*`. Users from a token or API key never have admin
+For a token or cookie user the roles are expanded: `europe.france` adds
+`europe`, and every such user has `*`. A user from an `Authorization` header
+(HTTP Basic credentials) is returned before this expansion and has only the
+roles stored in the ACL. Users from a token or API key never have admin
 rights. `/api/user/token` issues a token, 8 hours by default; `/api/user/key` an API key
 for accounts with the `api` field set.
 
@@ -61,13 +63,14 @@ in the ACL for its roles, signs the JWT cookie and redirects.[^redirect]
 - **SAML**: `apps/saml` mounts `/saml/login`, `/saml/acs`, `/saml/logout`,
   `/saml/logout/callback` and `/saml/metadata`; see the SAML variables in
   [environment](../environment/index.md). The SAML email must have an ACL
-  record; SAML users are never admins.
+  record. `redirect.js` copies `admin` and `roles` from that record, so a
+  SAML user is an admin when the ACL says so.
 - **Custom**: `apps/auth` is a template provider with `/custom/login`,
   `/custom/verify` and `/custom/logout` routes; `AUTH_PATH` points the login
   links and the `PRIVATE` redirect at it.[^authapp]
 
-Cookies use `COOKIE_PROPS`, by default `Secure; HttpOnly; SameSite=Strict`,
-and live `COOKIE_TTL` seconds. A provider setting or revoking a cookie must
+Cookies use `COOKIE_PROPS`, by default
+`Secure; HttpOnly; SameSite=Strict; Path=<DIR or />`, and live `COOKIE_TTL` seconds. A provider setting or revoking a cookie must
 use the same properties.
 
 ## Flow

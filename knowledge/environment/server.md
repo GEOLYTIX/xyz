@@ -28,7 +28,7 @@ sources:
 
 ## Paths and hosts
 
-`DIR` mounts the API, the static `public` files and the `docs` under a common
+`DIR` mounts the API and the static `public` files under a common
 prefix, eg. `DIR=/geo` serves the API at `/geo/api/...`. `processEnv.js` adds a
 leading slash and removes a trailing slash, so `geo/` becomes `/geo`. When the
 server uses the root redirect middleware, as `server.js` does, a request to `/`
@@ -41,7 +41,7 @@ behind a proxy or a custom domain. A request from `localhost` always uses
 `http://` and the request host; any other uses `https://`.
 
 `XYZ_CWD` is the root for local paths: `file:` workspace and template sources,
-the `public` and `docs` directories, `SECRET_KEY` and `SIGN_*` key files.
+the `public` directory, `SECRET_KEY` and `SIGN_*` key files.
 `processEnv.js` defaults it to the repository root, not the process working
 directory.
 

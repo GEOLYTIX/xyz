@@ -18,6 +18,8 @@ sources:
     resource: ../../apps/xyz/mod/workspace/scopes.js
   - id: compose
     resource: ../../apps/xyz/mod/workspace/composeObj.js
+  - id: workspace
+    resource: ../../apps/xyz/mod/workspace/_workspace.js
   - resource: ../../apps/xyz/tests/mod/workspace/authorization.test.mjs
   - resource: ../../apps/xyz/tests/mod/workspace/scopes.test.mjs
 ---
@@ -33,9 +35,12 @@ workspace is described in [roles](../workspace/roles.md).
 
 The decision for a scope is made by `authorizeScope`:[^authorization]
 
-- **Roles** (default): access when the scope is empty or `*`, or the user has
-  the scope as a role, or a role nested below it, eg. `europe.france.paris`
-  grants `europe`.[^scopes] Admin routes bypass the check.
+- **Roles** (default): access when the scope is empty, or the user has the
+  scope as a role, or a role nested below it, eg. `europe.france.paris`
+  grants `europe`.[^scopes] A `*` scope grants every user with roles but
+  denies anonymous users, who have none; `roles: {"*": true}` on a locale
+  or layer, by contrast, opens it to anonymous users too.[^compose] Admin
+  routes bypass the check.
 - **Provider**: a user with an `authorization_provider` property is decided by
   the provider registered under that key. The provider's async
   `checkScope(context)` receives `scope`, `scopeKey`, `obj` and `user` and
@@ -45,7 +50,9 @@ A user with a provider also skips the `roles` gate of locales and
 layers; the provider alone decides.[^compose]
 
 `/api/workspace/scopes` lists the scopes of the workspace for the admin
-view; `/api/workspace/roles` is a deprecated alias.
+view. `/api/workspace/roles` was removed and responds `410 Gone`. The
+admin-only `/api/workspace/test` lists scope segments beginning with `!` as
+`negatedRoles`.[^workspace]
 
 ## Flow
 
@@ -77,3 +84,4 @@ and `rolesTemplates` → `authorizeScope` → `checkScope` or provider.
 [^authorization]: workspace/authorization.js authorizeScope
 [^scopes]: workspace/scopes.js checkScope
 [^compose]: workspace/composeObj.js rolesTemplates
+[^workspace]: workspace/_workspace.js roles and test

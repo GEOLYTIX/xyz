@@ -93,7 +93,7 @@ A consent dialog, feature info with cluster labels and two link buttons.
     "consent": { "text": "Please confirm you consent to third party cookies." },
     "feature_info": { "features": true },
     "link_button": [
-      { "href": "/docs", "icon_name": "help", "title": "Help", "target": "_blank" },
+      { "href": "https://geolytix.github.io/xyz/", "icon_name": "help", "title": "Help", "target": "_blank" },
       { "href": "/view", "icon_name": "grid_view", "locale": true }
     ],
     "layers": {

@@ -34,9 +34,16 @@ and `OPTIONS` and caching the answer for 10 minutes.
 
 ## Credentials
 
-Credentials are never allowed, so the browser does not send the user cookie
-with a cross-origin request. Such a request is anonymous unless it provides
-a token itself, as an `Authorization` header or a `token` parameter, and is
-then served with that token's rights. CORS is therefore most useful for
-`PUBLIC` instances and public files; a page on another site cannot use the
-session of a user logged in to XYZ.
+Two things keep the user cookie out of cross-origin requests. The user
+cookie is `SameSite=Strict` by default (`COOKIE_PROPS`), so the browser does
+not send it with a request from another site. And
+`Access-Control-Allow-Credentials` is never set, so a page cannot read the
+response to a request sent with credentials, eg. from a same-site origin on
+another subdomain or with a relaxed `COOKIE_PROPS`.
+
+A cross-origin request is therefore anonymous unless it authenticates
+itself, with a `token` parameter (a user token or API key) or an
+`Authorization` header carrying HTTP Basic credentials, the email and
+password of an ACL account; see [authentication](../security/authentication.md).
+CORS is therefore most useful for `PUBLIC` instances and public files; a page
+on another site cannot use the session of a user logged in to XYZ.

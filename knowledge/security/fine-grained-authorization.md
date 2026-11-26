@@ -39,7 +39,7 @@ user.
 | Locale | `locale.roles`, `locale.role` | The locale is not listed and cannot be loaded. |
 | Layer | `layer.roles` | The layer is not in the locale; its queries fail. |
 | Template | `role` on a layer, locale or query template | The template is not merged; its content never reaches the user. |
-| Rows | a role's `filter.default` | Every layer query has the filter added; the request cannot remove it. |
+| Rows | a role's `filter.default` | Layer queries whose template contains `${filter}` have the filter added; the request cannot remove it. |
 | Fields | `roles` on an infoj entry | The entry is removed, and `location_get` does not select its field. |
 | Features | a role object merged into the layer | Themes, dataviews, entries or `edit` settings exist only for the role. |
 | Admin queries | `admin` on a query template | Only admin users may run the query. |
@@ -75,8 +75,11 @@ its own rows, fields and themes, without the layer being copied.
 3. The [query API](../architecture/xyz-api.md) runs only named query
    templates. A query naming a layer composes that layer for the user first.
    A `table` param must be one of the layer's tables. The layer's
-   `filter.default` is always added. `location_get` selects only the fields
-   of the user's composed infoj.[^query]
+   `filter.default` is added to templates which contain `${filter}`; the
+   location templates (`location_get`, `location_update`, `location_delete`,
+   `location_new`, `location_field_value`), `mvt_geom`, `sql_table_insert`
+   and `table_schema` have none. `location_get` selects only the fields of
+   the user's composed infoj.[^query]
 4. The query runs on the `dbs` connection of the template, the layer or the
    workspace, in that order. Different layers can read different databases
    under the same authorization rules.
@@ -87,7 +90,12 @@ its own rows, fields and themes, without the layer being copied.
   locale and layer which has no `roles`; see
   [security practices](practices.md).
 - Restrict rows with a role `filter.default` and fields with entry `roles`;
-  both are enforced by the server, not only hidden in the UI.
+  both are enforced by the server, not only hidden in the UI. A role filter
+  applies only to templates containing `${filter}`: a user who knows an id
+  can still get that location, and change or delete it where the layer is
+  editable. Restrict those with layer
+  `roles`, entry `roles` and database privileges; see
+  [filter expressions](../workspace/filter-expressions.md).
 - Give editing its own layer, gated by an editor role, and a `DBS_*`
   connection whose database role can only change the tables and columns that
   layer edits. Database privileges are the last line of defence for data at

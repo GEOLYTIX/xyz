@@ -40,8 +40,10 @@
   now show the generated stubs.
 - Documented the remaining keys used in the test workspaces: drawing button
   `label`s, `icon_scaling.icon` and `clusterScale`, and `multi_filter.target`.
-  `style.label.declutter` and `entry.draw.geometry` are read by no code and
-  were removed from the test workspaces.
+  `style.label.declutter` is read by no code, and `entry.draw.geometry` names
+  no drawing method, so the geometry entry's draw loop skips it. Both were
+  removed from the test workspaces; the scratch locale lost its whole
+  `entry.draw` object, which the geometry entry does read.
 - The checker fails on malformed `x-xyz-variables`, `requires` keys without
   an owner and unknown layer `formats`, and checks the workspace schema when
   other checks fail. The rules moved to [knowledge checks](workflows/checks.md).

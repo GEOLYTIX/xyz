@@ -8,7 +8,9 @@ keys. Validate a generated workspace against
 [workspace.strict.schema.json](workspace.strict.schema.json) before deploying:
 it rejects keys no concept documents and missing required keys, except in
 objects which merge a `template`. [workspace.schema.json](workspace.schema.json)
-accepts every workspace the XYZ API accepts and only reports unknown keys.
+allows unknown keys, but still checks the JSON types, `enum` values and
+patterns of documented keys. These are strict JSON constraints, so a value
+the XYZ API coerces or ignores can still fail it.
 
 - [Workspace and locales](locales.md) - Root keys, default and named locales, nested locales and layer defaults; the frame of every workspace.
 - [Locale keys](locale/index.md) - View, extent, gazetteer and plugins of a locale.

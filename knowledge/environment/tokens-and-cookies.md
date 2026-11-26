@@ -15,6 +15,7 @@ sources:
   - resource: ../../apps/xyz/mod/user/cookie.js
   - resource: ../../apps/xyz/mod/user/redirect.js
   - resource: ../../apps/xyz/mod/user/key.js
+  - resource: ../../apps/xyz/mod/user/login.js
   - resource: ../../apps/xyz/mod/view.js
   - resource: ../../apps/xyz/mod/workspace/cache.js
   - resource: ../../apps/xyz/tests/mod/utils/processEnv.test.mjs
@@ -56,7 +57,9 @@ with a `SECRET` string.
 ## The user cookie
 
 The user token is stored in a cookie named after `TITLE`. A login redirect
-target is held for 60 seconds in a `<TITLE>_redirect` cookie. `TITLE` is also
+target is held in a `<TITLE>_redirect` cookie: for 60 seconds when a
+`PRIVATE` request is redirected to the login, and for 300 seconds when the
+login view is opened with a `return_to` param. `TITLE` is also
 the `title` parameter of view templates and the default `workspace.key`.
 Instances served from one domain and path need different titles, or their
 cookies collide.
