@@ -39,6 +39,11 @@ export default !connection?.[1]
         connectionTimeoutMillis: 5000,
       });
 
+      // An idle client which loses its connection emits an error on the pool. Without a listener the error is uncaught and ends the process.
+      pool.on('error', (err) => {
+        console.error(err);
+      });
+
       return acl;
     })();
 
