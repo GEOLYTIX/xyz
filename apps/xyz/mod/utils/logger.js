@@ -11,6 +11,7 @@ Possible log values are:
 - reqhost: Logs the host for the request.
 - workspace: Logs responses for requests made to /workspace.
 - dbs_retry: Logs the reason and backoff delay when a query is retried by the [dbs module]{@link module:/utils/dbs}, and when the retries are exhausted.
+- sql: Logs every query sent to a database, not only the query endpoint's. The log has the query and its variables, with the dbs property naming the DBS_* connection or `ACL` for the [acl module]{@link module:/user/acl}. ACL queries are logged without variables and with their string literals masked, since they carry passwords, tokens, and keys. A composing host may log queries from its own connections with the sql key.
 
 By default the logs are only written to the stdout console.
 
@@ -169,9 +170,10 @@ function postgresql() {
     //This is to pull the short Error message from the stack
     const errorMessage = log.err?.toString().split('\n')[0];
 
-    // Nonblocking log inserts are not retried.
-    // A retried insert would log dbs_retry, which would insert another log into the failing dbs.
+    // A retried insert would log dbs_retry, and a logged insert would log sql,
+    // each inserting another log. Log inserts are therefore neither retried nor logged.
     dbs[params.dbs]({
+      log: false,
       nonblocking: true,
       query: `INSERT INTO ${table}
       (process, datetime, key, log, message)
