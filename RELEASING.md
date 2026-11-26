@@ -82,12 +82,15 @@ The workflow merges `main` into `patch` after each release; check `patch` has a 
 
 Merging `main` either adds the bundles or stops with a modify/delete conflict on them; untracking them resolves both cases and keeps the built files in the working tree.
 
+The release notes file is added on `patch` and amended in the release commit, so the merge conflicts on it (add/add). `main`'s version is the final one. The workflow takes it, and so do the commands below.
+
 ```bash
 git switch patch
 git pull --ff-only origin patch
 git fetch origin main
 git merge --no-commit origin/main
 git rm -r --cached --ignore-unmatch --quiet public/js/lib public/css/mapp.css public/css/ui.css
+git checkout origin/main -- release-notes
 git status --short
 git commit -m "Merge main into patch"
 git push origin patch

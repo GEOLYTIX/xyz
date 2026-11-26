@@ -108,8 +108,12 @@ jobs:
             --notes-file "release-notes/$TAG.md"
 
       # Merging main adds the bundles to patch, or conflicts with patch not
-      # tracking them. Untracking the bundles resolves both cases. Any other
-      # conflict fails the step and patch must be synced manually.
+      # tracking them. Untracking the bundles resolves both cases.
+      # The release notes are added on patch and amended in the release commit,
+      # so both sides add the file since the last sync and the merge conflicts.
+      # The release commit is patch plus the final notes, so main's version is
+      # taken. Any other conflict fails the step and patch must be synced
+      # manually.
       - name: Sync patch with main
         if: steps.version.outputs.build == 'true'
         run: |
@@ -118,6 +122,9 @@ jobs:
           git switch --detach origin/patch
           git merge --no-commit --no-ff "$main_sha" || true
           git rm -r --cached --ignore-unmatch --quiet public/js/lib public/css/mapp.css public/css/ui.css
+          git diff --name-only --diff-filter=U -- release-notes | while read -r file; do
+            git checkout "$main_sha" -- "$file"
+          done
           conflicts=$(git diff --name-only --diff-filter=U)
           if [ -n "$conflicts" ]; then
             echo "::error::Merging main into patch conflicts in:"
