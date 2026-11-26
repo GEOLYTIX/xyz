@@ -2,6 +2,13 @@
 
 ## 2026-11-26
 
+- [SAML](environment/saml.md) follows v5.0.10: the clock skew defaults to
+  `60000` and cannot disable the assertion checks, certificates are read and
+  shipped from `apps/saml`, the configuration is checked on startup, logout
+  verifies the cookie and answers IdP LogoutRequests, and cookie renewal keeps
+  every NameID claim. [Deploy to Vercel](deployment/vercel.md) lists the SAML
+  certificate paths and [access control](environment/access-control.md) notes
+  the ACL pool error listener.
 - Optional keys accept `null` in both workspace schemas, as XYZ treats it as
   unset; required keys and layers or locales of a map do not. The checker
   validates the combined example workspace, unfiltered twins included.

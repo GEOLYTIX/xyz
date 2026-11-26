@@ -123,8 +123,9 @@ vercel --prod --local-config=apps/saml/vercel.json
 ```
 
 Deploy each to its own Vercel project; every config claims `/(.*)`. The SAML
-config ships `apps/xyz/*.crt` and `apps/xyz/*.pem`, which are gitignored and
-must be present locally.
+config ships the gitignored `apps/saml/*.crt`, `apps/saml/*.pem` and, for a
+`SECRET_KEY` file, `apps/xyz/*.pem` from the working copy. An invalid
+[SAML configuration](../environment/saml.md) fails every request.
 
 ## Headers
 

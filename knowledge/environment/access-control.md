@@ -44,7 +44,8 @@ PRIVATE=postgres://user:password@host:5432/database|acl_schema.acl_table
 
 A value without the `|table` part does not configure an ACL, so the instance
 behaves as if neither variable were set. The ACL has its own connection pool with a 5 second connection timeout, separate from the
-`DBS_*` connections.
+`DBS_*` connections. An error on an idle ACL connection is logged and does
+not end the process.
 
 A user token is only signed and verified with a `SECRET`; see
 [Tokens and cookies](tokens-and-cookies.md).
