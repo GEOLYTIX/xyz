@@ -1,5 +1,19 @@
 # Knowledge changes
 
+## 2026-11-26
+
+- Optional keys accept `null` in both workspace schemas, as XYZ treats it as
+  unset; required keys and layers or locales of a map do not. The checker
+  validates the combined example workspace, unfiltered twins included.
+- [Authoring](workflows/authoring.md), [about](about.md),
+  [templates](workspace/templates.md) and [knowledge checks](workflows/checks.md)
+  state that the schemas check a workspace before template composition, that
+  `formats` and `requires` are advisory, and that the examples are API smoke
+  tests.
+- The [portal](decisions/documentation-publishing.md) is deployed by the
+  release workflow from the release tag, and manual runs resolve their ref to
+  a commit. The knowledge check builds the portal on pull requests.
+
 ## 2026-11-25
 
 - [Plugin authoring](plugins/authoring.md) and [dataviews](workspace/dataviews.md)

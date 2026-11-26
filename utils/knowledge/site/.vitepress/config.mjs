@@ -98,7 +98,7 @@ export default defineConfig({
     search: { provider: 'local' },
     outline: [2, 3],
     editLink: {
-      pattern: `${repo}/edit/${ref}/knowledge/:path`,
+      pattern: `${repo}/edit/${process.env.KNOWLEDGE_SITE_EDIT_REF ?? ref}/knowledge/:path`,
       text: 'Edit this concept on GitHub',
     },
     socialLinks: [{ icon: 'github', link: repo }],

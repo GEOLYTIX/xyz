@@ -29,17 +29,24 @@ link rewriting and a generated sidebar, and its search is weak.
 
 ## On release and between releases
 
-`deploy-docs.yml` builds and deploys the portal on every push to `main`,
-which is a release. The footer names the version and the ref.
+`release.yml` calls `deploy-docs.yml` with the release tag once it has
+created the release, so a failed release publishes nothing and the portal is
+built from the tagged commit. Source links and the footer name the tag; edit
+links open the concept on `patch`.
 
 A maintainer runs the workflow manually with a ref to publish a correction:
 fix the concept in a pull request, then run the workflow for the release line
-which carries the fix, eg. `patch`. Do not build from a branch with
+which carries the fix, eg. `patch`. The workflow accepts `main`, `minor`,
+`patch`, a release tag or a full commit SHA, resolves it to a commit once,
+and links sources at that commit, so a branch moving while the run is queued
+does not change the links. Do not build from a branch with
 unreleased features, or the portal describes behaviour which no released
 version has.
 
 Pull requests are reviewed with a local build (`pnpm knowledge:site:build`,
-`pnpm knowledge:site:preview`); they are not deployed. GitHub Pages is set up
+`pnpm knowledge:site:preview`); they are not deployed. The knowledge check
+workflow builds the portal on every pull request, so a dead link fails there
+rather than on publishing. GitHub Pages is set up
 after the migration is merged into `minor`, and a manual run with the `minor`
 ref publishes the portal for evaluation before the v5.1 release.
 

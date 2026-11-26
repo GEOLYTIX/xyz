@@ -15,7 +15,7 @@ A squash merge from a development branch removes the bundles from `main`, becaus
 
 The workflow pushes to the protected `main` and `patch` branches with the `PAT_TOKEN` repository secret. The token owner must be allowed to push to `main` and to bypass the pull request rule on both branches.
 
-The workflow **does not deploy the app or publish an npm package**. For deployment, see [DEPLOYMENT.md](./DEPLOYMENT.md). The push to `main` also runs the [deploy-docs workflow](./.github/workflows/deploy-docs.yml), which publishes the knowledge portal; see [DOCUMENTATION.md](./DOCUMENTATION.md#knowledge-portal). The MAPP library is published to npm manually, see [Publish the MAPP library to npm](#publish-the-mapp-library-to-npm).
+The workflow **does not deploy the app or publish an npm package**. For deployment, see [DEPLOYMENT.md](./DEPLOYMENT.md). Once the release is created, the workflow calls the [deploy-docs workflow](./.github/workflows/deploy-docs.yml) with the tag, which publishes the knowledge portal; see [DOCUMENTATION.md](./DOCUMENTATION.md#knowledge-portal). The MAPP library is published to npm manually, see [Publish the MAPP library to npm](#publish-the-mapp-library-to-npm).
 
 The example below releases **v5.0.3**. Replace that version everywhere with your target version.
 

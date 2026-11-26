@@ -1,46 +1,82 @@
 # Builds the knowledge portal from knowledge/ with VitePress and deploys it to GitHub Pages.
 #
+# The Release workflow calls this workflow after it has created a release, with the release tag, so the portal is
+# only published for a release which succeeded and is built from the tagged commit. A manual run publishes a
+# correction between releases, or the minor for evaluation before a release, from a release line branch, a release
+# tag or a commit. The ref is resolved to a commit once; source links and the footer use the tag or that commit.
+#
 # GitHub Pages is set up after the knowledge migration is merged into minor: the repository Pages source must be
-# GitHub Actions, and the github-pages environment must allow the branches deployed from. Until the v5.1 release, a
-# manual run with the minor ref publishes the portal for evaluation of the minor. Pull requests are reviewed with a
-# local build: pnpm knowledge:site:build && pnpm knowledge:site:preview.
+# GitHub Actions, and the github-pages environment must allow the branch a run starts from, which is main for a
+# release and the branch selected for a manual run. Pull requests build the portal in the Knowledge check workflow.
 name: Deploy the knowledge portal to Pages
 
 on:
-  # A push to main is a release.
-  push:
-    branches: ['main']
+  workflow_call:
+    inputs:
+      ref:
+        description: 'Release tag to build the portal from'
+        required: true
+        type: string
 
-  # Publishes a correction between releases from the release line which carries it, eg. patch.
   workflow_dispatch:
     inputs:
       ref:
-        description: 'Branch, tag or commit to build the portal from'
+        description: 'Release line branch (main, minor, patch), release tag or commit to build the portal from'
         required: true
         default: 'main'
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: 'pages'
-  cancel-in-progress: false
-
 jobs:
   deploy:
+    # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+    # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+    concurrency:
+      group: 'pages'
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-26.04
     steps:
+      - name: Check the ref
+        env:
+          REF: ${{ inputs.ref }}
+        run: |
+          case "$REF" in
+            main | minor | patch) ;;
+            v[0-9]* | [0-9]*.[0-9]*.[0-9]*) ;;
+            *)
+              if ! [[ "$REF" =~ ^[0-9a-f]{40}$ ]]; then
+                echo "::error::$REF is not a release line branch, release tag or full commit SHA."
+                exit 1
+              fi
+              ;;
+          esac
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ inputs.ref || github.ref }}
+          ref: ${{ inputs.ref }}
+      # A branch moves while a run is queued; links name the tag or the commit which was built.
+      - name: Resolve the ref
+        id: ref
+        env:
+          REF: ${{ inputs.ref }}
+        run: |
+          sha=$(git rev-parse HEAD)
+          if git show-ref --verify --quiet "refs/tags/$REF"; then
+            echo "links=$REF" >> "$GITHUB_OUTPUT"
+          else
+            echo "links=$sha" >> "$GITHUB_OUTPUT"
+          fi
+          # Concepts are edited on a release line branch; a tag or commit is corrected on patch.
+          case "$REF" in
+            main | minor | patch) echo "edit=$REF" >> "$GITHUB_OUTPUT" ;;
+            *) echo "edit=patch" >> "$GITHUB_OUTPUT" ;;
+          esac
+          echo "Building $REF at $sha"
       - name: Install pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
       - name: Setup Pages
@@ -52,7 +88,8 @@ jobs:
         run: pnpm knowledge:site:build
         env:
           KNOWLEDGE_SITE_BASE: ${{ steps.pages.outputs.base_path }}/
-          KNOWLEDGE_SITE_REF: ${{ inputs.ref || github.ref_name }}
+          KNOWLEDGE_SITE_REF: ${{ steps.ref.outputs.links }}
+          KNOWLEDGE_SITE_EDIT_REF: ${{ steps.ref.outputs.edit }}
           KNOWLEDGE_SITE_REPO: ${{ github.server_url }}/${{ github.repository }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0

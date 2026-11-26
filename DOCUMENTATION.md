@@ -18,7 +18,7 @@ pnpm knowledge:site:preview   # serve the build on http://localhost:4173/xyz/
 
 Review a pull request which changes the bundle or the portal with a local build: `pnpm knowledge:site:build` fails on dead links, and `pnpm knowledge:site:preview` serves the pages as they are deployed. Pull requests are not deployed to GitHub Pages.
 
-The `deploy-docs.yml` workflow builds the portal and deploys it to GitHub Pages on every push to `main`, which is a release. A maintainer can run the workflow manually with a branch, tag or commit to publish a correction between releases. Run it from the release line which carries the correction, eg. `patch`, so that the portal does not describe unreleased behaviour. The portal footer names the version and the ref it was built from.
+The `deploy-docs.yml` workflow builds the portal and deploys it to GitHub Pages. The Release workflow calls it with the release tag after it has created a release. A maintainer can run the workflow manually with `main`, `minor`, `patch`, a release tag or a full commit SHA to publish a correction between releases. Run it from the release line which carries the correction, eg. `patch`, so that the portal does not describe unreleased behaviour. The portal footer names the version and the tag or commit it was built from. The knowledge check workflow builds the portal on pull requests, so dead links fail before publishing.
 
 See [documentation publishing](knowledge/decisions/documentation-publishing.md) for the decision.
 

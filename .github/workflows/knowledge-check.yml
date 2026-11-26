@@ -33,6 +33,9 @@ jobs:
         run: pnpm knowledge:check
       - name: Run the workspace examples against the devdb
         run: pnpm knowledge:examples
+      # The build fails on dead links, which would otherwise surface on publishing.
+      - name: Build the knowledge portal
+        run: pnpm knowledge:site:build
 
   # A pull request which changes a module described by a concept must change
   # the concept, or carry the knowledge-unaffected label. Pull requests into

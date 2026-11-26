@@ -21,6 +21,9 @@ concurrency:
 jobs:
   release:
     runs-on: ubuntu-26.04
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+      created: ${{ steps.release.outcome == 'success' }}
     steps:
       # The GITHUB_TOKEN cannot push to the protected main and patch branches.
       # The full history is required to merge main into patch.
@@ -105,6 +108,7 @@ jobs:
       # Checked separately from the tag so a rerun creates the release
       # when a previous run pushed the tag but failed to create the release.
       - name: Create GitHub release
+        id: release
         if: steps.version.outputs.release_exists != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
@@ -135,3 +139,17 @@ jobs:
           fi
           git commit --no-edit -m "Merge main into patch"
           git push origin HEAD:refs/heads/patch
+
+  # The portal is published once a release was created, from its tag. Events
+  # of the GITHUB_TOKEN which creates the release start no workflows, so the
+  # deployment is called here rather than on release: published.
+  docs:
+    needs: release
+    if: needs.release.outputs.created == 'true'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    uses: ./.github/workflows/deploy-docs.yml
+    with:
+      ref: ${{ needs.release.outputs.tag }}

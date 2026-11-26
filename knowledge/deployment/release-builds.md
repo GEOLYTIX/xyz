@@ -63,7 +63,8 @@ The [release workflow](../../.github/workflows/release.yml) runs on every
 push to `main`. For an untagged version it tests, builds the bundles with
 `--force`, commits them in a `Build <tag>` commit, pushes `main` and the tag
 atomically, creates the GitHub release from `release-notes/<tag>.md`, and
-merges `main` into `patch` without the bundles. A push to `main` without the
+merges `main` into `patch` without the bundles. A run which created the
+release then publishes the knowledge portal from the tag. A push to `main` without the
 bundles, eg. a squash merge, is rebuilt even when the tag exists.[^release]
 The step-by-step release procedure is in [RELEASING.md](../../RELEASING.md).
 
@@ -105,10 +106,10 @@ read at runtime, since their render functions cannot be serialised.
 | `biome.yml` | push, PR | `biome ci .`, and a check that `apps/mapp` does not reference MAPP.UI |
 | `unit_tests.yml` | push, PR on `main`, `major`, `minor`, `patch` | `pnpm test` |
 | `build.yml` | push on those branches, any PR | coverage and SonarQube, skipped for fork PRs |
-| `knowledge-check.yml` | push, PR on those branches | `knowledge:test`, `knowledge:check`, `knowledge:examples`; on PRs not into `main`, `knowledge:changed` |
+| `knowledge-check.yml` | push, PR on those branches | `knowledge:test`, `knowledge:check`, `knowledge:examples`, `knowledge:site:build`; on PRs not into `main`, `knowledge:changed` |
 | `mapp_package.yml` | push on those branches, PRs touching the package | packs and tests `@geolytix/mapp`, see [MAPP package](mapp-publishing.md) |
 | `publish_mapp.yml` | manual | publishes `@geolytix/mapp` to npm |
-| `deploy-docs.yml` | push to `main`, manual with a ref | the knowledge portal to GitHub Pages, see [documentation publishing](../decisions/documentation-publishing.md) |
+| `deploy-docs.yml` | called by `release.yml` with the tag, manual with a ref | the knowledge portal to GitHub Pages, see [documentation publishing](../decisions/documentation-publishing.md) |
 | `release.yml` | push to `main` | builds, tags and releases, see above |
 
 No workflow deploys the app. DEPLOYMENT.md listed `build.yml` PRs as limited
