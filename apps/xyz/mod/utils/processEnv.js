@@ -106,7 +106,7 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SAML_AUTHN_RESPONSE_SIGNED] Require signed responses (true/false)
 @property {String} [SAML_SIGNATURE_ALGORITHM] Algorithm for signing (e.g., 'sha256')
 @property {String} [SAML_IDENTIFIER_FORMAT] Format for name identifiers
-@property {String} [SAML_ACCEPTED_CLOCK_SKEW] Allowed time difference in ms
+@property {String} [SAML_ACCEPTED_CLOCK_SKEW=60000] Allowed clock difference in ms for the assertion NotBefore/NotOnOrAfter checks. Negative or non-integer values fall back to 60000; the checks cannot be disabled.
 @property {String} [SAML_PROVIDER_NAME] Display name for your service
 @property {String} [SLO_CALLBACK] URL for handling logout callbacks
 @property {Boolean} [LEGACY_ROLES] Enable legacy role checks

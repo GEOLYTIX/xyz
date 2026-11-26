@@ -196,7 +196,7 @@ describe('cookie:', async () => {
     expect(status).toEqual(403);
   });
 
-  it('saml user', async () => {
+  it('carries the SAML logout claims over to the new cookie', async () => {
     const user = {
       email: 'test@geolytix.co.uk',
       roles: [],
@@ -207,7 +207,11 @@ describe('cookie:', async () => {
       email: 'test@geolytix.co.uk',
       roles: [],
       admin: false,
+      nameID: 'name-id',
+      nameIDFormat: 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+      nameQualifier: 'https://idp.example.com',
       sessionIndex: crypto.randomUUID(),
+      spNameQualifier: 'https://sp.example.com',
     };
 
     const secret = crypto.randomUUID();
@@ -242,7 +246,13 @@ describe('cookie:', async () => {
       }
     });
 
-    expect(Object.hasOwn(token, 'sessionIndex')).toBeTruthy();
+    expect(token).toMatchObject({
+      nameID: samlUser.nameID,
+      nameIDFormat: samlUser.nameIDFormat,
+      nameQualifier: samlUser.nameQualifier,
+      sessionIndex: samlUser.sessionIndex,
+      spNameQualifier: samlUser.spNameQualifier,
+    });
   });
 
   it('carries the authorization_provider property over to the new cookie', async () => {

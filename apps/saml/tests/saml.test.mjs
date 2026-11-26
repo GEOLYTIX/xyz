@@ -16,6 +16,7 @@ const strategy = {
   generateServiceProviderMetadata: vi.fn(() => '<xml />'),
   getAuthorizeUrlAsync,
   getLogoutUrlAsync,
+  options: { publicCert: 'sp-certificate' },
   validatePostResponseAsync,
 };
 
@@ -88,6 +89,7 @@ describe('saml:', async () => {
     expect(getLogoutUrlAsync).not.toHaveBeenCalled();
     expect(res.statusCode).toBe(302);
     expect(res.getHeader('location')).toBe('/app');
+    expect(res.getHeader('Set-Cookie')).toMatch(/^TEST_APP=null; Max-Age=0/);
   });
 
   it('passes SAML identity fields from ACS to the shared redirect helper', async () => {
@@ -264,6 +266,43 @@ describe('saml:', async () => {
     expect(html).toContain('/app/&quot;&gt;&lt;script&gt;');
   });
 
+  it('rejects an ACS response without an authenticated profile', async () => {
+    validatePostResponseAsync.mockResolvedValueOnce({
+      loggedOut: true,
+      profile: null,
+    });
+
+    const { req, res } = createMocks({
+      body: { SAMLResponse: 'response' },
+      url: '/app/saml/acs',
+    });
+
+    await saml(req, res);
+
+    expect(res.statusCode).toBe(401);
+    expect(redirectFn).not.toHaveBeenCalled();
+  });
+
+  it('sends a 500 when the ACS user redirect throws', async () => {
+    vi.spyOn(console, 'error').mockImplementationOnce(() => {});
+
+    validatePostResponseAsync.mockResolvedValueOnce({
+      profile: { email: 'test@example.com', nameID: 'name-id' },
+    });
+
+    redirectFn.mockRejectedValueOnce(new Error('ACL connection lost'));
+
+    const { req, res } = createMocks({
+      body: { SAMLResponse: 'response' },
+      url: '/app/saml/acs',
+    });
+
+    await saml(req, res);
+
+    expect(res.statusCode).toBe(500);
+    expect(res._isEndCalled()).toBe(true);
+  });
+
   it('sends ACL errors from ACS unchanged', async () => {
     aclFn.mockResolvedValueOnce([]);
 
@@ -283,6 +322,41 @@ describe('saml:', async () => {
 
     expect(res.statusCode).toBe(401);
     expect(res._getData()).toBe('User not found.');
+  });
+
+  it('sends a 500 when the SP certificate cannot be published in the metadata', async () => {
+    strategy.generateServiceProviderMetadata.mockImplementationOnce(() => {
+      throw new Error('publicCert must be a single X.509 certificate');
+    });
+
+    const { req, res } = createMocks({ url: '/app/saml/metadata' });
+
+    await saml(req, res);
+
+    expect(strategy.generateServiceProviderMetadata).toHaveBeenCalledWith(
+      null,
+      'sp-certificate',
+    );
+    expect(res.statusCode).toBe(500);
+    expect(res.getHeader('Content-Type')).toBeUndefined();
+    expect(res._isEndCalled()).toBe(true);
+  });
+
+  it('requests the authorize URL without the forwarded host', async () => {
+    getAuthorizeUrlAsync.mockResolvedValueOnce('https://idp.example.com/sso');
+
+    const { req, res } = createMocks({
+      cookies: {},
+      headers: { 'x-forwarded-host': 'evil.example.com' },
+      url: '/app/saml/login',
+    });
+
+    await saml(req, res);
+
+    expect(getAuthorizeUrlAsync).toHaveBeenCalledWith('/app', {
+      additionalParams: {},
+    });
+    expect(res.getHeader('location')).toBe('https://idp.example.com/sso');
   });
 });
 
