@@ -17,6 +17,10 @@ vi.mock('pg', () => ({
   },
 }));
 
+const logger = vi.fn();
+
+vi.mock('../../../mod/utils/logger.js', () => ({ default: logger }));
+
 const { default: acl } = await import('@geolytix/xyz-app/mod/user/acl.js');
 
 describe('acl:', () => {
@@ -42,5 +46,32 @@ describe('acl:', () => {
     const result = await acl(q, arr);
 
     expect(result).toEqual(['user1', 'user2', 'user3']);
+  });
+
+  it('logs the query without variables and with string literals masked', async () => {
+    mockPgConnectFn.mockImplementation(() => ({
+      query: mockPgQueryFn,
+      release: vi.fn(),
+    }));
+    mockPgQueryFn.mockImplementation(() => ({ rows: [] }));
+    logger.mockClear();
+
+    await acl(
+      `UPDATE logins SET api = 'secret''key', session = 'abc' WHERE email = $1`,
+      ['user@example.com'],
+    );
+
+    // The query is sent with its literals and variables.
+    expect(mockPgQueryFn).toHaveBeenLastCalledWith(
+      `UPDATE logins SET api = 'secret''key', session = 'abc' WHERE email = $1`,
+      ['user@example.com'],
+    );
+    expect(logger).toHaveBeenCalledExactlyOnceWith(
+      {
+        dbs: 'ACL',
+        query: `UPDATE logins SET api = '***', session = '***' WHERE email = $1`,
+      },
+      'sql',
+    );
   });
 });

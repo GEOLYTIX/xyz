@@ -80,12 +80,19 @@ describe('logger Module', () => {
 
     await vi.waitFor(() => expect(dbsQuery).toHaveBeenCalled());
 
-    const { nonblocking, query, timeout, variables } =
-      dbsQuery.mock.calls[0][0];
+    const {
+      log: logged,
+      nonblocking,
+      query,
+      timeout,
+      variables,
+    } = dbsQuery.mock.calls[0][0];
     expect(query).toContain('INSERT INTO public.logs');
     expect(variables[2]).toBe('dbs_retry');
     expect(timeout).toBe(3000);
     expect(nonblocking).toBe(true);
+    // A logged insert would log another insert with the sql key.
+    expect(logged).toBe(false);
 
     vi.doUnmock('../../../mod/utils/dbs.js');
   });

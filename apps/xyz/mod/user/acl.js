@@ -7,12 +7,14 @@ The module will split either the PRIVATE or PUBLIC xyzEnv variables as an array 
 The module will export null if neither a PRIVATE or PUBLIC xyzEnv are provided.
 
 @requires pg
+@requires /utils/logger
 @requires module:/utils/processEnv
 
 @module /user/acl
 */
 
 import pg from 'pg';
+import logger from '../utils/logger.js';
 
 const { Pool } = pg;
 
@@ -46,18 +48,26 @@ export default !connection?.[1]
 @description
 The acl method will connect to pg pool and query the ACL with a provided query template. The `/acl_table/` and `/acl_schema/` in the query template will be replaced with values provided as `PRIVATE` or `PUBLIC` environment variable.
 
+The query is logged with the `sql` key without its variables and with its string literals masked, since ACL queries carry passwords, verification tokens, sessions, and API keys in both.
+
 @param {string} q Query template.
 @param {array} arr Parameters to be substrituted in query template.
 */
 async function acl(q, arr) {
+  const query = q
+    .replace(/acl_table/g, acl_table)
+    .replace(/acl_schema/g, acl_schema);
+
+  logger(
+    { dbs: 'ACL', query: query.replace(/'(?:[^']|'')*'/g, "'***'") },
+    'sql',
+  );
+
   let client;
   try {
     client = await pool.connect();
 
-    const { rows } = await client.query(
-      q.replace(/acl_table/g, acl_table).replace(/acl_schema/g, acl_schema),
-      arr,
-    );
+    const { rows } = await client.query(query, arr);
 
     return rows;
   } catch (err) {
