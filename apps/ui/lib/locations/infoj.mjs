@@ -529,7 +529,7 @@ function queryCallback(response, entry) {
 @description
 Creates and adds a tooltip element to a label_element.
 
-Shortcircuits if the tooltipElement has already been created and added to the label_element.
+The tooltipElement is created once and reused, so it is moved onto the new label_element when the location view is re-rendered.
 
 @param {infoj-entry} entry
 @property {string} entry.tooltip The content to be shown in a tooltip.
@@ -543,10 +543,8 @@ function entryTooltipIcon(entry) {
 
   if (!label_element) return;
 
-  // The tooltipElement already exists.
-  if (entry.tooltipElement) return;
-
-  entry.tooltipElement = mapp.ui.elements.tooltip({
+  // Reuse the tooltipElement across re-renders, append() moves it to the new label.
+  entry.tooltipElement ??= mapp.ui.elements.tooltip({
     content: entry.tooltip,
   });
 
