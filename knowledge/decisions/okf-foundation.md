@@ -25,6 +25,13 @@ stay `draft` until reviewed. Every Wiki page must be in the bundle before the
 release, because the Wiki is reduced to stubs which point to the knowledge
 portal; see [documentation publishing](documentation-publishing.md).
 
+The portal therefore ships with every concept `draft`: agent-written content
+which no person has reviewed replaces the Wiki on release. This is accepted
+deliberately, so that a content review does not hold back the format. Readers
+should treat `draft` concepts as unreviewed. Concepts become `stable` one by
+one after a person reviews them against the code, in v5.1 patch releases;
+the [actor convention](actor-convention.md) records that review.
+
 ## Spec version
 
 The bundle pins one OKF version in the root index and the checker rejects

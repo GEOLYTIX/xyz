@@ -39,9 +39,11 @@ The checker fails on:
 - malformed `generated` or `verified` frontmatter, an agent actor in
   `verified`, and `status: stable` without a `human:` verification at or after
   `generated.at`; see the [actor convention](../decisions/actor-convention.md)
-- environment variables read by the XYZ API (`apps/xyz/mod`, `router.js`,
-  `apps/saml`) which no concept lists in `x-xyz-variables`. Platform
-  variables such as `VERCEL_*` and `NODE_ENV` are ignored.
+- environment variables read by name in the XYZ API (`apps/xyz/mod`,
+  `router.js`, `apps/saml`) which no concept lists in `x-xyz-variables`. Only
+  `xyzEnv.NAME`, `process.env.NAME` and a quoted `['NAME']` count; computed
+  keys and destructuring are not found. Platform variables such as `VERCEL_*`
+  and `NODE_ENV` are ignored.
 
 It warns on:
 
@@ -62,7 +64,8 @@ HTML links are not checked.
 `pnpm knowledge:changed --base <ref>` compares a branch with its merge base:
 it fails when a concept's `resource` changed but the concept did not, and
 warns when a module in its `sources` changed. A directory resource covers the
-files inside it. CI runs it on pull requests which do not target `main`, with
+files inside it. Deleting a resource counts as a change; deleting a concept
+leaves its modules unlinked and is not reported. CI runs it on pull requests which do not target `main`, with
 `--warn-only` when the pull request has the `knowledge-unaffected` label. The
 label is for changes which leave every statement of the concept true;
 `review-pr` checks that claim.

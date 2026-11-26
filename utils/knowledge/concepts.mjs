@@ -7,7 +7,12 @@ knowledge/workflows/authoring.md.
 /** XYZ extension key listing the workspace keys a concept owns. */
 export const KEYS = 'x-xyz-keys';
 
-/** Roots of a workspace key path; they match the JSDoc typedef names. */
+/**
+Roots of a workspace key path: the workspace objects a key belongs to. They
+name the objects as workspace authors know them; the JSDoc typedefs differ for
+`style` (layer-style, feature-style), `entry` (infoj-entry) and `filter`
+(filterTypes), and `theme` has no typedef.
+*/
 export const KEY_ROOTS = [
   'workspace',
   'locale',

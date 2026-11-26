@@ -90,7 +90,9 @@ target the next major.
 ## 6. Test
 
 - Add or change the test file which mirrors the module path. A bug fix comes
-  with a test which fails before the fix.[^review]
+  with a test which fails before the fix.[^review] A new feature's test must
+  fail when the feature is removed; a test written from the implementation
+  can only confirm what the code already does.
 - Run the suite of each app you touched: `pnpm test:xyz`, `pnpm test:mapp`,
   `pnpm test:ui`, and the coverage variants to see the touched files.
 - A turbo run which prints `FULL TURBO` replayed a cache and ran nothing;
