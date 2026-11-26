@@ -12,6 +12,9 @@ described to another concept: a module which still exists and no concept
 describes any more fails. A changed module which a concept cited and no
 concept cites any more warns.
 
+A concept whose frontmatter does not parse fails on the branch and warns at
+the merge base: the modules it links cannot be compared.
+
 The changes are taken from the merge base of the branch with the base, so
 commits merged in from the base do not count. `--warn-only` reports failures
 as warnings, for changes which do not affect what a concept describes, or
@@ -20,28 +23,16 @@ the `knowledge-unaffected` label.
 */
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, realpathSync } from 'node:fs';
-import { dirname, relative, resolve, sep } from 'node:path';
+import { relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { conceptFiles } from './find.mjs';
+import { conceptFiles, localPath, posix, reserved } from './files.mjs';
 import { splitDocument } from './validate.mjs';
-
-const posix = (path) => path.split(sep).join('/');
-
-/** A repository-relative path for a local path field, or undefined. */
-function localPath(value, file, root) {
-  if (typeof value !== 'string' || !/^(\.\.?\/|\/)/.test(value)) return;
-  const path = decodeURIComponent(value.split(/[?#]/)[0]);
-  const target = path.startsWith('/')
-    ? resolve(root, 'knowledge', `.${path}`)
-    : resolve(dirname(file), path);
-  return posix(relative(root, target));
-}
 
 /** Whether a repository path is a concept file, not an index or a log. */
 const isConcept = (path) =>
   path.startsWith('knowledge/') &&
   path.endsWith('.md') &&
-  !['index.md', 'log.md'].includes(path.split('/').pop());
+  !reserved(path.split('/').pop());
 
 /** The concept files of the working tree with their text. */
 function readConcepts(root) {
@@ -90,8 +81,14 @@ export function commitConcepts(root, commit) {
 /**
 Each concept with the local paths of its resource and its sources. Reads the
 concepts of the working tree, or the given concept files, eg. of a commit.
+Concepts without parseable frontmatter are pushed to malformed as
+{ concept, error }; their links are unknown.
 */
-export function conceptLinks(root, documents = readConcepts(root)) {
+export function conceptLinks(
+  root,
+  documents = readConcepts(root),
+  malformed = [],
+) {
   const concepts = [];
   const sorted = [...documents].sort((a, b) =>
     a.path < b.path ? -1 : a.path > b.path ? 1 : 0,
@@ -101,10 +98,14 @@ export function conceptLinks(root, documents = readConcepts(root)) {
     let metadata;
     try {
       metadata = splitDocument(text).metadata;
-    } catch {
-      continue; // pnpm knowledge:check reports malformed concepts.
+    } catch (error) {
+      malformed.push({ concept: path, error: error.message });
+      continue;
     }
-    if (!metadata) continue;
+    if (!metadata) {
+      malformed.push({ concept: path, error: 'Concept has no frontmatter' });
+      continue;
+    }
     const sources = Array.isArray(metadata.sources) ? metadata.sources : [];
     concepts.push({
       concept: posix(relative(root, file)),
@@ -181,6 +182,13 @@ export function lostCoverage(before, after, changed, exists) {
   return { errors: [...errors], warnings: [...warnings] };
 }
 
+/** Messages for concepts whose links could not be read. */
+export const malformedReport = (malformed, where) =>
+  malformed.map(
+    ({ concept, error }) =>
+      `${concept} is malformed ${where}, so the modules it links were not compared: ${error}`,
+  );
+
 /** The merge base of HEAD with the base ref. */
 export function mergeBase(root, base) {
   return execFileSync('git', ['merge-base', base, 'HEAD'], {
@@ -215,17 +223,32 @@ if (main === realpathSync(fileURLToPath(import.meta.url))) {
   const root = fileURLToPath(new URL('../../', import.meta.url));
   const options = parseArgs(process.argv.slice(2));
   const changed = changedFiles(root, options.base);
-  const after = conceptLinks(root);
+  const broken = [];
+  const brokenBefore = [];
+  const after = conceptLinks(root, undefined, broken);
   const before = conceptLinks(
     root,
     commitConcepts(root, mergeBase(root, options.base)),
+    brokenBefore,
   );
   const fresh = freshness(after, changed);
-  const lost = lostCoverage(before, after, changed, (path) =>
+  // A concept malformed on the branch is reported once, not as lost coverage.
+  const comparable = before.filter(
+    ({ concept }) => !broken.some((entry) => entry.concept === concept),
+  );
+  const lost = lostCoverage(comparable, after, changed, (path) =>
     existsSync(resolve(root, path)),
   );
-  const errors = [...fresh.errors, ...lost.errors];
-  const warnings = [...fresh.warnings, ...lost.warnings];
+  const errors = [
+    ...malformedReport(broken, 'on the branch'),
+    ...fresh.errors,
+    ...lost.errors,
+  ];
+  const warnings = [
+    ...malformedReport(brokenBefore, 'at the merge base'),
+    ...fresh.warnings,
+    ...lost.warnings,
+  ];
   const failures = options.warnOnly ? [] : errors;
   for (const warning of options.warnOnly ? [...errors, ...warnings] : warnings)
     console.warn(`WARN ${warning}`);

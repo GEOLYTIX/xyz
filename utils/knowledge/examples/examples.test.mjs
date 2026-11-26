@@ -58,15 +58,31 @@ const locales = collectExamples(root).flatMap((example) =>
   exampleLocales(example).map(([id]) => ({ path: example.path, id })),
 );
 
+/** The infoj fields which location_get selects: entries with a field and no query. */
+const infojFields = (layer) =>
+  layer.infoj
+    .filter((entry) => entry?.field && !entry.query)
+    .map((entry) => entry.field.toLowerCase());
+
+/** A query result with rows, a row with values, or a single value, eg. a count. */
+const nonEmpty = (result) =>
+  Array.isArray(result)
+    ? result.length > 0
+    : result !== null && typeof result === 'object'
+      ? Object.keys(result).length > 0
+      : result !== undefined && result !== null;
+
+// Checks which do not apply to an example skip, so a pass means the check ran.
 describe.each(locales)('$path example $id', ({ id }) => {
   it('loads as a locale with layers', async () => {
     expect((await layers(id)).length).toBeGreaterThan(0);
   });
 
-  it('returns data for its vector layers', async () => {
+  it('returns data for its vector layers', async ({ skip }) => {
     const queried = (await layers(id)).filter((layer) =>
       QUERIED.has(layer.format),
     );
+    skip(!queried.length, 'no wkt or geojson layer');
     for (const layer of queried) {
       const result = await rows(id, layer);
       expect(Array.isArray(result), `${layer.key} returns rows`).toBe(true);
@@ -74,10 +90,11 @@ describe.each(locales)('$path example $id', ({ id }) => {
     }
   });
 
-  it('opens a location of each layer with infoj', async () => {
+  it('opens a location of each layer with infoj', async ({ skip }) => {
     const located = (await layers(id)).filter(
       (layer) => QUERIED.has(layer.format) && Array.isArray(layer.infoj),
     );
+    skip(!located.length, 'no wkt or geojson layer with infoj');
     for (const layer of located) {
       const [first] = await rows(id, layer);
       // The wkt and geojson templates return the id first.
@@ -89,28 +106,34 @@ describe.each(locales)('$path example $id', ({ id }) => {
         table: firstTable(layer),
         id: locationId,
       });
-      const location = await get(`/api/query?${params}`);
+      const [location] = [await get(`/api/query?${params}`)].flat();
       expect(location, `${layer.key} location ${locationId}`).toBeTruthy();
-    }
-  });
-
-  it('runs the query of each layer dataview', async () => {
-    for (const layer of await layers(id)) {
-      const dataviews = Object.entries(layer.dataviews ?? {}).filter(
-        ([, dataview]) => dataview?.query,
+      // Unquoted column aliases are lower case in PostgreSQL.
+      const keys = Object.keys(location).map((key) => key.toLowerCase());
+      expect(keys, `${layer.key} location fields`).toEqual(
+        expect.arrayContaining(infojFields(layer)),
       );
-      for (const [key, dataview] of dataviews) {
-        const params = dataviewParams(id, layer, dataview);
-        const response = await get(`/api/query?${params}`);
-        expect(response, `${layer.key} dataview ${key}`).toBeTruthy();
-      }
     }
   });
 
-  it('searches with its gazetteer', async () => {
+  it('runs the query of each layer dataview', async ({ skip }) => {
+    const dataviews = (await layers(id)).flatMap((layer) =>
+      Object.entries(layer.dataviews ?? {})
+        .filter(([, dataview]) => dataview?.query)
+        .map(([key, dataview]) => ({ layer, key, dataview })),
+    );
+    skip(!dataviews.length, 'no layer dataview with a query');
+    for (const { layer, key, dataview } of dataviews) {
+      const params = dataviewParams(id, layer, dataview);
+      const response = await get(`/api/query?${params}`);
+      expect(nonEmpty(response), `${layer.key} dataview ${key}`).toBe(true);
+    }
+  });
+
+  it('searches with its gazetteer', async ({ skip }) => {
     const locale = await get(`/api/workspace/locale?locale=${id}`);
     const gazetteer = locale.gazetteer;
-    if (!gazetteer?.qterm) return;
+    skip(!gazetteer?.qterm, 'no gazetteer with a qterm');
     const layer = (await layers(id)).find((l) => l.key === gazetteer.layer);
     expect(layer, `gazetteer layer ${gazetteer.layer}`).toBeTruthy();
     const params = new URLSearchParams({
@@ -129,10 +152,11 @@ describe.each(locales)('$path example $id', ({ id }) => {
     expect([results].flat().length, 'gazetteer results').toBeGreaterThan(0);
   });
 
-  it('removes rows with each default filter', async () => {
+  it('removes rows with each default filter', async ({ skip }) => {
     const filtered = (await layers(id)).filter(
       (layer) => QUERIED.has(layer.format) && layer.filter?.default,
     );
+    skip(!filtered.length, 'no wkt or geojson layer with filter.default');
     for (const layer of filtered) {
       const all = await rows(`${id}${UNFILTERED}`, layer);
       const some = await rows(id, layer);

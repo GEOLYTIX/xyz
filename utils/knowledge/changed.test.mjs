@@ -15,6 +15,7 @@ import {
   conceptLinks,
   freshness,
   lostCoverage,
+  malformedReport,
   mergeBase,
   parseArgs,
 } from './changed.mjs';
@@ -92,6 +93,30 @@ describe('knowledge freshness:', () => {
         'knowledge/dir/b.md',
       ]),
     ).toEqual({ errors: [], warnings: [] });
+  });
+
+  it('does not match a resource directory by a path prefix', () => {
+    const concepts = conceptLinks(fixture(BUNDLE));
+    expect(freshness(concepts, ['apps/bc.js'])).toEqual({
+      errors: [],
+      warnings: [],
+    });
+  });
+
+  it('reports concepts whose frontmatter does not parse', () => {
+    const malformed = [];
+    const root = fixture({
+      ...BUNDLE,
+      'knowledge/empty.md': '# No frontmatter',
+    });
+    conceptLinks(root, undefined, malformed);
+    expect(malformed).toEqual([
+      { concept: 'knowledge/broken.md', error: expect.any(String) },
+      { concept: 'knowledge/empty.md', error: 'Concept has no frontmatter' },
+    ]);
+    expect(malformedReport(malformed.slice(1), 'on the branch')).toEqual([
+      'knowledge/empty.md is malformed on the branch, so the modules it links were not compared: Concept has no frontmatter',
+    ]);
   });
 
   it('reads the changes since the merge base with the base', () => {

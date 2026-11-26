@@ -8,7 +8,7 @@ import {
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { jsonPaths, LAYER_FORMATS } from './concepts.mjs';
+import { LAYER_FORMATS } from './concepts.mjs';
 import { findConcepts } from './find.mjs';
 import { splitDocument, validateBundle } from './validate.mjs';
 
@@ -227,18 +227,6 @@ describe('concept bodies:', () => {
     });
     expect(validateBundle(root).errors).toEqual([]);
   });
-
-  it('collects the object paths of an example', () => {
-    expect([
-      ...jsonPaths({ locale: { layers: { a: { infoj: [{ field: 'x' }] } } } }),
-    ]).toEqual([
-      'locale',
-      'locale.layers',
-      'locale.layers.a',
-      'locale.layers.a.infoj',
-      'locale.layers.a.infoj[].field',
-    ]);
-  });
 });
 
 describe('knowledge:find', () => {
@@ -270,5 +258,15 @@ describe('knowledge:find', () => {
     ]);
     expect(findConcepts(base, 'connections')[0].matches).toEqual(['text']);
     expect(findConcepts(base, 'nothing')).toEqual([]);
+  });
+
+  it('finds a module by a bundle-root resource path', () => {
+    const base = fixture({
+      'apps/x.js': '// x',
+      'knowledge/dir/c.md': '---\ntype: Guide\nresource: /../apps/x.js\n---',
+    });
+    expect(findConcepts(base, 'apps/x.js')).toMatchObject([
+      { path: 'knowledge/dir/c.md', matches: ['module apps/x.js'] },
+    ]);
   });
 });

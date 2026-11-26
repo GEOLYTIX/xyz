@@ -69,16 +69,36 @@ export const FEATURE_HEADINGS = [
 const list = (value) =>
   value === undefined ? [] : Array.isArray(value) ? value : [value];
 
+const rethrow = (error) => {
+  throw error;
+};
+
 /**
-Validate the x-xyz-keys entries of a concept and return the key paths.
-Malformed entries throw: agents generate workspaces from them.
+The well-formed x-xyz-keys entries of a concept. Each malformed entry is
+passed to report, which throws by default: agents generate workspaces from
+the entries.
 */
-export function checkKeys(metadata) {
-  const entries = metadata[KEYS];
+export function keyEntries(metadata, report = rethrow) {
+  const entries = metadata?.[KEYS];
   if (entries === undefined) return [];
-  if (!Array.isArray(entries)) throw new Error(`${KEYS} must be an array`);
-  return entries.map(checkEntry);
+  if (!Array.isArray(entries)) {
+    report(new Error(`${KEYS} must be an array`));
+    return [];
+  }
+  return entries.filter((entry) => {
+    try {
+      checkEntry(entry);
+      return true;
+    } catch (error) {
+      report(error);
+      return false;
+    }
+  });
 }
+
+/** Validate the x-xyz-keys entries of a concept and return their key paths. */
+export const checkKeys = (metadata, report) =>
+  keyEntries(metadata, report).map((entry) => entry.key);
 
 /** Throw on a malformed x-xyz-keys entry; return its key path. */
 function checkEntry(entry) {
@@ -245,7 +265,7 @@ The keys each entry refers to, as [key, target] pairs: the keys it requires
 and the sibling keys of its required rule. Each target must have an owner.
 */
 export const requirements = (metadata) =>
-  (metadata[KEYS] ?? []).flatMap((entry) => {
+  keyEntries(metadata, () => {}).flatMap((entry) => {
     const rule = requiredRule(entry);
     const targets = [
       ...list(entry.requires),
@@ -295,26 +315,12 @@ export function examples(tokens) {
   return blocks;
 }
 
-/** Collect the dotted object paths of a parsed JSON value. */
-export function jsonPaths(value, prefix = '', paths = new Set()) {
-  if (Array.isArray(value)) {
-    for (const item of value) jsonPaths(item, `${prefix}[]`, paths);
-  } else if (value !== null && typeof value === 'object') {
-    for (const [key, child] of Object.entries(value)) {
-      const path = prefix ? `${prefix}.${key}` : key;
-      paths.add(path);
-      jsonPaths(child, path, paths);
-    }
-  }
-  return paths;
-}
-
 /**
-Check the concept rules which depend on the body. Examples must parse; a
-Workspace Key concept without an example and a Feature without its headings
-warn.
+Check the concept rules which depend on the body. Each example which does
+not parse is passed to report, which throws by default; a Workspace Key
+concept without an example and a Feature without its headings warn.
 */
-export function checkBody(metadata, tokens, lines, warn) {
+export function checkBody(metadata, tokens, lines, warn, report = rethrow) {
   if (lines > LINE_BUDGET)
     warn(`Concept has ${lines} lines; split it below ${LINE_BUDGET}`);
   const blocks = examples(tokens);
@@ -322,8 +328,10 @@ export function checkBody(metadata, tokens, lines, warn) {
     try {
       JSON.parse(block.text);
     } catch (error) {
-      throw new Error(
-        `Example at line ${block.line} is not JSON: ${error.message}`,
+      report(
+        new Error(
+          `Example at line ${block.line} is not JSON: ${error.message}`,
+        ),
       );
     }
   }

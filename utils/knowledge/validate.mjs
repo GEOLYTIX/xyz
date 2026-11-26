@@ -5,12 +5,20 @@ import {
   realpathSync,
   statSync,
 } from 'node:fs';
-import { basename, dirname, relative, resolve, sep } from 'node:path';
+import { basename, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import MarkdownIt from 'markdown-it';
 import { parse } from 'yaml';
 import { checkBody, checkKeys, requirements } from './concepts.mjs';
 import { collectExamples, combineExamples, GENERATED } from './examples.mjs';
+import {
+  LOCAL_PREFIX,
+  markdownFiles,
+  posix,
+  reserved,
+  localTarget as resolveTarget,
+  directories as walk,
+} from './files.mjs';
 import {
   buildSchema,
   checkExample,
@@ -24,7 +32,6 @@ const textValue = (value) =>
   typeof value === 'string' && value.trim().length > 0;
 const mapping = (value) =>
   value !== null && typeof value === 'object' && !Array.isArray(value);
-const reserved = (name) => name === 'index.md' || name === 'log.md';
 
 /** The OKF specification version this checker implements. */
 export const OKF_VERSION = '0.3';
@@ -33,8 +40,17 @@ export const OKF_VERSION = '0.3';
 const TIMESTAMP =
   /^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2}))?$/i;
 
-/** Directories scanned for environment variables read by the XYZ API. */
-const ENV_SOURCES = ['apps/xyz/mod', 'apps/xyz/router.js', 'apps/saml'];
+/**
+Directories and files scanned for environment variables read by the XYZ API,
+its server entry, and the auth and SAML apps.
+*/
+const ENV_SOURCES = [
+  'apps/xyz/mod',
+  'apps/xyz/router.js',
+  'apps/xyz/server.js',
+  'apps/auth',
+  'apps/saml',
+];
 
 /**
 Names which are not deployment configuration: variables set by the platform or
@@ -64,25 +80,6 @@ export function splitDocument(text) {
   return { metadata, body: normalized.slice(match[0].length) };
 }
 
-function walk(directory, directories = []) {
-  directories.push(directory);
-  for (const entry of readdirSync(directory, { withFileTypes: true })) {
-    if (entry.isDirectory()) walk(resolve(directory, entry.name), directories);
-  }
-  return directories;
-}
-
-function markdownFiles(directories) {
-  const files = [];
-  for (const directory of directories) {
-    for (const entry of readdirSync(directory, { withFileTypes: true })) {
-      if (entry.isFile() && entry.name.endsWith('.md'))
-        files.push(resolve(directory, entry.name));
-    }
-  }
-  return files.sort();
-}
-
 function linkTargets(tokens) {
   const targets = [];
   for (const token of tokens) {
@@ -93,14 +90,8 @@ function linkTargets(tokens) {
   return targets;
 }
 
-function localTarget(target, file, context) {
-  if (!textValue(target) || target.startsWith('#')) return;
-  if (/^[a-z][a-z\d+.-]*:|^\/\//i.test(target)) return;
-  const path = decodeURIComponent(target.split(/[?#]/)[0]);
-  return path.startsWith('/')
-    ? resolve(context.bundle, `.${path}`)
-    : resolve(dirname(file), path);
-}
+const localTarget = (target, file, context) =>
+  resolveTarget(target, file, context.bundle);
 
 function checkTarget(target, file, context) {
   const resolved = localTarget(target, file, context);
@@ -151,17 +142,26 @@ function checkBundleMetadata(metadata, file, context, warn) {
   }
   if (metadata.license !== undefined && !textValue(metadata.license))
     warn('Optional license should be an SPDX expression or a path');
-  else if (/^(\.\.?\/|\/)/.test(metadata.license ?? ''))
+  else if (LOCAL_PREFIX.test(metadata.license ?? ''))
     checkTarget(metadata.license, file, context);
 }
 
-function checkMetadata(metadata, file, context, warn) {
-  if (!textValue(metadata?.type))
-    throw new Error('Concept requires a nonempty string type');
+/**
+Check the frontmatter of a concept and report each failing check. Throws when
+the concept has no frontmatter, so its concept rules are not checked.
+*/
+function checkMetadata(metadata, file, context, warn, attempt) {
+  if (!mapping(metadata))
+    throw new Error('Concept requires frontmatter with a nonempty string type');
+  attempt(() => {
+    if (!textValue(metadata.type))
+      throw new Error('Concept requires a nonempty string type');
+  });
   checkQuality(metadata, context, warn);
-  checkResources(metadata, file, context, warn);
-  checkVariables(metadata);
-  checkTrust(metadata);
+  checkResources(metadata, file, context, warn, attempt);
+  attempt(() => checkVariables(metadata));
+  attempt(() => checkTrust(metadata));
+  return true;
 }
 
 /** `<tool>/<model>` for agents, `<scheme>:<id>` for people and processes (OKF §7). */
@@ -254,7 +254,7 @@ const pathFields = (metadata) => [
   metadata.attester?.resource,
 ];
 
-function checkResources(metadata, file, context, warn) {
+function checkResources(metadata, file, context, warn, attempt) {
   const resources = pathFields(metadata);
   if (metadata.sources !== undefined && !Array.isArray(metadata.sources)) {
     warn('Optional sources should be an array');
@@ -270,12 +270,14 @@ function checkResources(metadata, file, context, warn) {
     if (!textValue(resource))
       warn('Optional path field should be a nonempty string');
     // Explicit local prefixes distinguish paths from OKF scope descriptions.
-    else if (/^(\.\.?\/|\/)/.test(resource))
-      checkTarget(resource, file, context);
+    else if (LOCAL_PREFIX.test(resource))
+      attempt(() => checkTarget(resource, file, context));
     else if (pathLike(resource))
-      throw new Error(
-        `Local resource needs a ./, ../ or / prefix: ${resource}`,
-      );
+      attempt(() => {
+        throw new Error(
+          `Local resource needs a ./, ../ or / prefix: ${resource}`,
+        );
+      });
   }
 }
 
@@ -349,6 +351,13 @@ function sourceFiles(path) {
   return files;
 }
 
+/**
+Remove block comments, line comments and trailing line comments. A // after a
+colon or a quote, eg. in a URL, is kept.
+*/
+export const stripComments = (code) =>
+  code.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/.*$/gm, '$1');
+
 /** Collect xyzEnv and process.env names read by the XYZ API source. */
 export function readEnvironment(root) {
   const names = new Set();
@@ -357,9 +366,7 @@ export function readEnvironment(root) {
   for (const source of ENV_SOURCES) {
     for (const file of sourceFiles(resolve(root, source))) {
       // Comments describe variables; only code reads count.
-      const code = readFileSync(file, 'utf8')
-        .replace(/\/\*[\s\S]*?\*\//g, '')
-        .replace(/^\s*\/\/.*$/gm, '');
+      const code = stripComments(readFileSync(file, 'utf8'));
       for (const match of code.matchAll(pattern)) {
         const name = match[1] ?? match[2];
         if (!ENV_IGNORED.test(name)) names.add(name);
@@ -420,34 +427,48 @@ function checkSchemaExamples(context, errors, warnings) {
   }
 }
 
-/** Check one Markdown file of the bundle; throws on errors. */
+/**
+Check one Markdown file of the bundle and report each failing check with
+error. A file which does not parse is not checked further.
+*/
 function checkFile(
   file,
   label,
   context,
-  { owners, requires, variables, warn },
+  { owners, requires, variables, warn, error },
 ) {
+  const report = (failure) => error(failure.message);
+  const attempt = (check) => {
+    try {
+      return check();
+    } catch (failure) {
+      report(failure);
+    }
+  };
   const text = readFileSync(file, 'utf8');
-  const doc = splitDocument(text);
+  const doc = attempt(() => splitDocument(text));
+  if (!doc) return;
   const tokens = markdown.parse(stripFootnotes(doc.body), {});
   const name = basename(file);
-  if (reserved(name)) checkReserved(name, file, doc, context, warn);
-  else {
-    checkMetadata(doc.metadata, file, context, warn);
+  if (reserved(name))
+    attempt(() => checkReserved(name, file, doc, context, warn));
+  else if (
+    attempt(() => checkMetadata(doc.metadata, file, context, warn, attempt))
+  ) {
     if (Array.isArray(doc.metadata[VARIABLES]))
       variables.push(...doc.metadata[VARIABLES].filter(textValue));
     // Each workspace key is owned by exactly one concept.
-    for (const key of checkKeys(doc.metadata)) {
+    for (const key of checkKeys(doc.metadata, report)) {
       if (owners.has(key))
-        throw new Error(`${key} is already owned by ${owners.get(key)}`);
-      owners.set(key, label);
+        error(`${key} is already owned by ${owners.get(key)}`);
+      else owners.set(key, label);
     }
     for (const [key, target] of requirements(doc.metadata))
       requires.push({ label, key, target });
-    checkBody(doc.metadata, tokens, text.split('\n').length, warn);
+    checkBody(doc.metadata, tokens, text.split('\n').length, warn, report);
   }
   for (const target of linkTargets(tokens)) {
-    checkTarget(target, file, context);
+    attempt(() => checkTarget(target, file, context));
   }
 }
 
@@ -464,19 +485,22 @@ export function validateBundle(root, now = Date.now()) {
     return { errors: ['Missing knowledge directory'], warnings, files: 0 };
   }
   const directories = walk(context.bundle);
-  const files = markdownFiles(directories);
+  const files = markdownFiles(context.bundle);
   if (!files.length) errors.push('Knowledge bundle contains no Markdown files');
   const variables = [];
   const owners = new Map();
   const requires = [];
   for (const file of files) {
-    const label = relative(context.root, file).split(sep).join('/');
+    const label = posix(relative(context.root, file));
     const warn = (message) => warnings.push(`${label}: ${message}`);
-    try {
-      checkFile(file, label, context, { owners, requires, variables, warn });
-    } catch (error) {
-      errors.push(`${label}: ${error.message}`);
-    }
+    const error = (message) => errors.push(`${label}: ${message}`);
+    checkFile(file, label, context, {
+      owners,
+      requires,
+      variables,
+      warn,
+      error,
+    });
   }
   for (const { label, key, target } of requires) {
     if (!owners.has(target))

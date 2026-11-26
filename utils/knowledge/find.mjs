@@ -8,30 +8,19 @@ reading bodies.
   pnpm knowledge:find apps/xyz/mod/utils/sqlFilter.js
   pnpm knowledge:find filter        # title, description and tag words
 */
-import { readdirSync, readFileSync, realpathSync } from 'node:fs';
-import { dirname, relative, resolve, sep } from 'node:path';
+import { readFileSync, realpathSync } from 'node:fs';
+import { relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { KEYS } from './concepts.mjs';
+import { conceptFiles, localPath, posix } from './files.mjs';
 import { splitDocument } from './validate.mjs';
 
 const VARIABLES = 'x-xyz-variables';
-const posix = (path) => path.split(sep).join('/');
 
-/** Concept files of the bundle, without indexes and logs. */
-export function conceptFiles(directory, files = []) {
-  for (const entry of readdirSync(directory, { withFileTypes: true })) {
-    const path = resolve(directory, entry.name);
-    if (entry.isDirectory()) conceptFiles(path, files);
-    else if (
-      entry.name.endsWith('.md') &&
-      !['index.md', 'log.md'].includes(entry.name)
-    )
-      files.push(path);
-  }
-  return files;
-}
-
-/** Repository-relative paths of a concept's local resource and sources. */
+/**
+Repository-relative paths of a concept's local resource and sources, with a
+./, ../ or bundle-root / prefix.
+*/
 function modules(metadata, file, root) {
   const values = [
     metadata.resource,
@@ -40,8 +29,8 @@ function modules(metadata, file, root) {
       : []),
   ];
   const paths = values
-    .filter((value) => typeof value === 'string' && /^\.\.?\//.test(value))
-    .map((value) => posix(relative(root, resolve(dirname(file), value))));
+    .map((value) => localPath(value, file, root))
+    .filter(Boolean);
   return [...new Set(paths)];
 }
 

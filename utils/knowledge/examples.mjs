@@ -5,18 +5,13 @@ becomes a named locale keyed by its concept path, eg. `workspace__layer__filter`
 
   node utils/knowledge/examples.mjs   # writes the combined workspace
 */
-import {
-  mkdirSync,
-  readdirSync,
-  readFileSync,
-  realpathSync,
-  writeFileSync,
-} from 'node:fs';
+import { mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import MarkdownIt from 'markdown-it';
 import merge from '../../apps/xyz/mod/utils/merge.js';
 import { examples } from './concepts.mjs';
+import { markdownFiles } from './files.mjs';
 import { splitDocument } from './validate.mjs';
 
 const markdown = new MarkdownIt();
@@ -30,32 +25,47 @@ export const UNFILTERED = '__unfiltered';
 /** Top-level workspace keys an example may use. */
 const WORKSPACE_KEYS = new Set(['dbs', 'locale', 'locales', 'templates']);
 
-function markdownFiles(directory, files = []) {
-  for (const entry of readdirSync(directory, { withFileTypes: true })) {
-    const path = resolve(directory, entry.name);
-    if (entry.isDirectory()) markdownFiles(path, files);
-    else if (entry.name.endsWith('.md')) files.push(path);
+/** The parsed frontmatter and body of a file, or undefined if it does not parse. */
+function readDocument(file) {
+  try {
+    return splitDocument(readFileSync(file, 'utf8'));
+  } catch {
+    // pnpm knowledge:check reports the concept.
   }
-  return files.sort();
 }
 
-/** Every example of every concept, with a locale key derived from its path. */
+/** A parsed example, or undefined for one which is not JSON. */
+function parseExample(text) {
+  try {
+    return JSON.parse(text);
+  } catch {
+    // pnpm knowledge:check reports the example.
+  }
+}
+
+/**
+Every example of every concept, with a locale key derived from its path.
+Concepts which do not parse and examples which are not JSON are skipped;
+pnpm knowledge:check reports them.
+*/
 export function collectExamples(root) {
   const bundle = resolve(root, 'knowledge');
   const result = [];
   for (const file of markdownFiles(bundle)) {
-    const doc = splitDocument(readFileSync(file, 'utf8'));
-    if (!doc.metadata?.type) continue;
+    const doc = readDocument(file);
+    if (!doc?.metadata?.type) continue;
     const id = relative(bundle, file)
       .replace(/\.md$/, '')
       .split(sep)
       .join('__')
       .replace(/[^\w]/g, '_');
     examples(markdown.parse(doc.body, {})).forEach((block, index) => {
+      const workspace = parseExample(block.text);
+      if (workspace === undefined) return;
       result.push({
         id: index ? `${id}_${index + 1}` : id,
         path: relative(root, file).split(sep).join('/'),
-        workspace: JSON.parse(block.text),
+        workspace,
       });
     });
   }

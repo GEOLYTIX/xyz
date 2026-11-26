@@ -1,7 +1,8 @@
-import { mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { join, relative } from 'node:path';
+import { afterEach, describe, expect, it } from 'vitest';
+import { markdownFiles, posix } from '../files.mjs';
 import {
   bundle,
   frontmatterHtml,
@@ -13,6 +14,13 @@ import {
 
 const options = { repo: 'https://github.com/o/r', ref: 'main' };
 
+const roots = [];
+
+afterEach(() => {
+  for (const root of roots.splice(0))
+    rmSync(root, { recursive: true, force: true });
+});
+
 describe('knowledge site', () => {
   it('turns bundle paths into page links', () => {
     expect(pageLink('index.md')).toBe('/');
@@ -22,6 +30,7 @@ describe('knowledge site', () => {
 
   it('builds the sidebar from the directory indexes', () => {
     const root = mkdtempSync(join(tmpdir(), 'okf-site-'));
+    roots.push(root);
     mkdirSync(join(root, 'sub'));
     writeFileSync(
       join(root, 'index.md'),
@@ -55,8 +64,13 @@ describe('knowledge site', () => {
         if (item.items) walk(item.items);
       });
     walk(sidebar());
-    expect(links.has('/workspace/layer/filter')).toBe(true);
-    expect(links.has('/environment/')).toBe(true);
+    // Every concept and directory index except the root index and the log.
+    const pages = markdownFiles(bundle)
+      .map((file) => posix(relative(bundle, file)))
+      .filter((path) => path !== 'index.md' && path !== 'log.md')
+      .map(pageLink);
+    expect(pages.length).toBeGreaterThan(50);
+    expect(pages.filter((page) => !links.has(page))).toEqual([]);
   });
 
   it('links files outside the bundle to GitHub', () => {

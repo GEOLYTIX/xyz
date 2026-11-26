@@ -1,7 +1,13 @@
-import { existsSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import {
   inventory,
   PORTAL,
@@ -11,6 +17,13 @@ import {
 } from './wiki.mjs';
 
 const portal = 'https://example.org/xyz/';
+
+const directories = [];
+
+afterEach(() => {
+  for (const directory of directories.splice(0))
+    rmSync(directory, { recursive: true, force: true });
+});
 
 describe('knowledge wiki', () => {
   it('links concepts to the portal and other files to GitHub', () => {
@@ -48,6 +61,7 @@ describe('knowledge wiki', () => {
 
   it('replaces the Markdown pages of a Wiki checkout', () => {
     const directory = mkdtempSync(join(tmpdir(), 'okf-wiki-'));
+    directories.push(directory);
     writeFileSync(join(directory, 'Old-Page.md'), 'old');
     writeFileSync(join(directory, 'image.png'), 'png');
     writeWiki(directory, { portal });

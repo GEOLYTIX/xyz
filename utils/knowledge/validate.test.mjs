@@ -309,6 +309,54 @@ describe('knowledge validator:', () => {
     ]);
   });
 
+  it('reports every error of a concept', () => {
+    const root = fixture({
+      'knowledge/index.md': `${INDEX}\n\n- [A](a.md)`,
+      'knowledge/a.md': [
+        '---',
+        'type: Guide',
+        'resource: ../missing.js',
+        'x-xyz-keys:',
+        '  - { key: layer.a, type: nothing }',
+        '  - { key: layer.b, type: string }',
+        '---',
+        '[bad](missing.md)',
+        '',
+        '# Examples',
+        '',
+        '```json',
+        '{ broken',
+        '```',
+      ].join('\n'),
+    });
+    const { errors, owners } = validateBundle(root);
+    expect(errors).toEqual([
+      'knowledge/a.md: Missing local target: ../missing.js',
+      expect.stringMatching(/^knowledge\/a\.md: x-xyz-keys: layer\.a type/),
+      expect.stringMatching(
+        /^knowledge\/a\.md: Example at line \d+ is not JSON/,
+      ),
+      'knowledge/a.md: Missing local target: missing.md',
+    ]);
+    expect([...owners.keys()]).toEqual(['layer.b']);
+  });
+
+  it('checks the other concepts when one is malformed', () => {
+    const root = fixture({
+      'apps/xyz/mod/a.js': 'xyzEnv.UNDOCUMENTED;',
+      'knowledge/index.md': `${INDEX}\n\n- [A](a.md)\n- [B](b.md)`,
+      'knowledge/a.md': '---\ntype: [broken\n---\n[bad](missing.md)',
+      'knowledge/b.md': '---\ntype: Guide\n---\n[bad](missing.md)',
+    });
+    const { errors } = validateBundle(root);
+    expect(errors).toHaveLength(3);
+    expect(errors[0]).toMatch(/^knowledge\/a\.md: /);
+    expect(errors.slice(1)).toEqual([
+      'knowledge/b.md: Missing local target: missing.md',
+      'knowledge/environment: 1 variables read in code have no concept: UNDOCUMENTED',
+    ]);
+  });
+
   it('missing and empty bundles fail instead of passing without validation', () => {
     const root = fixture({ 'knowledge/index.md': null });
     expect(validateBundle(root).errors).toHaveLength(1);
@@ -321,6 +369,7 @@ describe('environment coverage:', () => {
   const code = [
     '/** xyzEnv.IN_BLOCK_COMMENT */',
     '// xyzEnv.IN_LINE_COMMENT',
+    'const url = "https://x.org/"; // xyzEnv.IN_TRAILING_COMMENT',
     'const a = xyzEnv.DOCUMENTED;',
     "const b = xyzEnv['BRACKET_NAME'];",
     'const c = process.env.FAMILY_ONE || process.env.VERCEL_ENV;',
@@ -331,11 +380,15 @@ describe('environment coverage:', () => {
     const root = fixture({
       'apps/xyz/mod/a.js': code,
       'apps/xyz/tests/ignored.test.mjs': 'xyzEnv.TEST_ONLY',
+      'apps/xyz/server.js': 'app.listen(xyzEnv.SERVER_PORT);',
+      'apps/auth/server.js': "const u = 'http://h'; process.env.AUTH_NAME;",
     });
     expect([...readEnvironment(root)].sort()).toEqual([
+      'AUTH_NAME',
       'BRACKET_NAME',
       'DOCUMENTED',
       'FAMILY_ONE',
+      'SERVER_PORT',
     ]);
   });
 
