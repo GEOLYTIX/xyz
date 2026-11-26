@@ -76,7 +76,7 @@ function fixture(
 describe('workspace schema:', () => {
   it('links key groups with ref and keeps type unions', () => {
     const schema = buildSchema(fixture());
-    expect(schema.properties.locale.$ref).toBe('#/$defs/locale');
+    expect(schema.properties.locale.anyOf[0].$ref).toBe('#/$defs/locale');
     expect(
       schema.$defs.locale.properties.layers.additionalProperties.$ref,
     ).toBe('#/$defs/layer');
@@ -86,6 +86,7 @@ describe('workspace schema:', () => {
     expect(schema.$defs.layer.properties.srid.anyOf).toEqual([
       { type: 'string' },
       { type: 'integer' },
+      { type: 'null' },
     ]);
     expect(schema.$defs.layer.properties.display['x-xyz-concept']).toBe(
       'knowledge/workspace/locales.md',
@@ -122,8 +123,8 @@ describe('workspace schema:', () => {
   it('carries descriptions, enums and deprecations and checks enum values', () => {
     const schema = buildSchema(fixture());
     expect(schema.$defs.layer.properties.format).toMatchObject({
-      type: 'string',
-      enum: ['wkt', 'mvt'],
+      type: ['string', 'null'],
+      enum: ['wkt', 'mvt', null],
       description: 'The format.',
     });
     expect(schema.$defs.layer.properties.hover).toMatchObject({
@@ -149,11 +150,54 @@ describe('workspace schema:', () => {
     ).toEqual([]);
   });
 
-  it('validates a locale or layer by its definition and ignores null', () => {
+  it('validates a locale or layer by its definition', () => {
     const schema = buildSchema(fixture());
     expect(
-      validateWorkspace(schema, { display: null, srid: 1.5 }, 'layer').errors,
+      validateWorkspace(schema, { display: true, srid: 1.5 }, 'layer').errors,
     ).toEqual(['layer.srid: expected string or integer, got number']);
+  });
+
+  it('accepts null as unset for optional keys and scalar map entries only', () => {
+    const root = fixture(
+      undefined,
+      STRICT_KEYS.replace(
+        '  - { key: layer.tables, type: object }',
+        '  - { key: layer.tables, type: object }\n  - { key: layer.tables.*, type: string }',
+      ),
+    );
+    for (const strict of [false, true]) {
+      const schema = buildSchema(root, { strict });
+      const layer = schema.$defs.layer.properties;
+      expect(layer.display.type).toEqual(['boolean', 'null']);
+      expect(layer.srid.anyOf).toContainEqual({ type: 'null' });
+      expect(layer.name.type).toBe('string');
+      expect(layer.infoj.type).toEqual(['array', 'null']);
+      expect(layer.style.properties.default.anyOf).toContainEqual({
+        type: 'null',
+      });
+      const layers = schema.$defs.locale.properties.layers;
+      expect(layers.additionalProperties.$ref).toBe('#/$defs/layer');
+      const errors = (value) =>
+        validateWorkspace(schema, value, 'layer').errors;
+      // A zoom table hides the layer at zoom levels with a null table.
+      expect(
+        errors({
+          name: 'a',
+          format: null,
+          display: null,
+          srid: null,
+          tables: { 5: null, 6: 'public.points' },
+        }),
+      ).toEqual([]);
+      expect(errors({ name: 'a', display: 'yes' })).toEqual([
+        'layer.display: expected boolean, got string',
+      ]);
+      expect(errors({ name: 'a', style: { default: null } })).toEqual([]);
+      // A layer of a locale is not optional.
+      expect(
+        validateWorkspace(schema, { layers: { a: null } }, 'locale').errors,
+      ).toEqual(['locale.layers.a: expected object, got null']);
+    }
   });
 
   it('checks pattern, minimum and maximum in both schemas', () => {
@@ -230,9 +274,11 @@ describe('workspace schema:', () => {
       then: { anyOf: [{ required: ['table'] }, { required: ['tables'] }] },
     });
     const errors = (layer) => validateWorkspace(strict, layer, 'layer').errors;
+    // A required key does not accept null.
     expect(errors({ format: 'wkt', name: null })).toEqual([
       'layer: missing name',
       'layer: missing table or tables (required when format is "wkt" or "mvt")',
+      'layer.name: expected string, got null',
     ]);
     expect(errors({ format: 'wkt', name: 'a', tables: {} })).toEqual([]);
     expect(errors({ name: 'a' })).toEqual([]);

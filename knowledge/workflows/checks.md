@@ -69,8 +69,16 @@ label is for changes which leave every statement of the concept true;
 
 `pnpm knowledge:examples` runs every example in the testhost with the devdb:
 each example must load as a locale, its `wkt` and `geojson` layers must return
-rows, and each `filter.default` must return fewer rows than the same layer
-without it. CI runs it in the knowledge workflow.
+rows, `location_get` must return the first row of each layer with `infoj`,
+each dataview query must return a result, the gazetteer must find a match, and
+each `filter.default` must return fewer rows than the same layer without it.
+CI runs it in the knowledge workflow, followed by `pnpm knowledge:site:build`,
+which fails on dead links in the portal.
+
+The examples are API smoke tests. They run as an anonymous user, do not query
+`mvt`, `cluster` or tile layers, render nothing, and do not test roles,
+editing or dataview plugins. The schemas check a workspace before template
+composition, and `formats` and `requires` are not enforced.
 
 The examples are combined into one workspace, so the combiner composes the
 `locale` defaults of an example into each of its named locales as XYZ does:
@@ -79,7 +87,8 @@ properties. That template must be defined in the example. The layers of the
 unfiltered twin set `filter.default` to `null`, which precedes a default filter
 inherited from `locale.layer` or a layer `template`. An entry of a layer
 `templates` array precedes the layer itself, so the combiner fails when a
-layer inherits a default filter from one. Source
+layer inherits a default filter from one. The checker validates the combined
+workspace, twins included, against the strict schema. Source
 paths existing on disk does not mean their behavior still matches the prose.
 Review both when code changes. See [migration inventory](wiki-migration.md)
 and [authoring](authoring.md).

@@ -79,6 +79,10 @@ connection; `admin` requires an admin user, and `layer` a layer param;
 - `${...}` is written into the SQL. Use `%{...}` for any value a user can
   choose.
 - A template's role hides it from users without the role, silently.
+- The workspace schemas do not resolve templates. A layer whose `template` is
+  missing or incomplete passes them, and is dropped or fails when XYZ composes
+  the locale. Template contents are not checked; test the composed workspace
+  with the admin-only `/api/workspace/test`.
 
 # Examples
 

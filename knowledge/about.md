@@ -74,11 +74,14 @@ Two JSON Schemas are generated from all keys.
 for wrong values and reports keys no concept documents.
 [workspace.strict.schema.json](workspace/workspace.strict.schema.json) is the
 contract for generated workspaces: it also rejects undocumented keys and
-missing required keys.
+missing required keys. Both check a workspace before template composition and
+do not prove that it renders or that its roles hold; see
+[authoring](workflows/authoring.md).
 
 Every workspace concept ends with a minimal JSON workspace under `# Examples`.
 The examples use the devdb test database, so they run in tests and demos and
-give agents a working starting point.
+give agents a working starting point. The tests call the XYZ API as an
+anonymous user; they do not render the map or test roles.
 
 ## Working with an agent
 

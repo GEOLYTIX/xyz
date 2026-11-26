@@ -6,19 +6,32 @@
   "type": "object",
   "properties": {
     "dbs": {
-      "type": "string",
+      "type": [
+        "string",
+        "null"
+      ],
       "x-xyz-concept": "knowledge/workspace/locales.md"
     },
     "locale": {
-      "$ref": "#/$defs/locale",
-      "unevaluatedProperties": false,
+      "anyOf": [
+        {
+          "$ref": "#/$defs/locale",
+          "unevaluatedProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ],
       "x-xyz-concept": "knowledge/workspace/locales.md",
       "default": {
         "layers": {}
       }
     },
     "locales": {
-      "type": "object",
+      "type": [
+        "object",
+        "null"
+      ],
       "additionalProperties": {
         "$ref": "#/$defs/locale",
         "unevaluatedProperties": false,
@@ -27,51 +40,84 @@
       "x-xyz-concept": "knowledge/workspace/locales.md"
     },
     "templates": {
-      "type": "object",
+      "type": [
+        "object",
+        "null"
+      ],
       "additionalProperties": {
         "type": "object",
         "properties": {
           "admin": {
-            "type": "boolean",
+            "type": [
+              "boolean",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/templates.md"
           },
           "dbs": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/templates.md"
           },
           "exclude_props": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/templates.md"
           },
           "include_props": {
-            "type": "array",
+            "type": [
+              "array",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/templates.md"
           },
           "layer": {
-            "type": "boolean",
+            "type": [
+              "boolean",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/templates.md"
           },
           "module": {
-            "type": "boolean",
+            "type": [
+              "boolean",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/templates.md",
             "x-xyz-requires": [
               "workspace.templates.*.src"
             ]
           },
           "role": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/templates.md"
           },
           "src": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/templates.md"
           },
           "statement_timeout": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/templates.md"
           },
           "template": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/templates.md"
           }
         },
@@ -89,12 +135,16 @@
       "type": "object",
       "properties": {
         "ScaleLine": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locale/view.md",
           "description": "Units of the scale bar; any value other than imperial shows metric.",
           "enum": [
             "metric",
-            "imperial"
+            "imperial",
+            null
           ]
         },
         "admin": {
@@ -104,12 +154,18 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
         },
         "consent": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "text": {
               "type": "string",
@@ -118,7 +174,10 @@
               "x-xyz-required": true
             },
             "title": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
               "description": "Dialog title; the consent_title dictionary entry by default."
             }
@@ -146,6 +205,9 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
@@ -157,45 +219,69 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
         },
         "dbs": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locales.md"
         },
         "extent": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "east": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
               "minimum": -180,
               "maximum": 180,
               "default": 180
             },
             "mask": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
               "description": "Grey out the map outside the extent."
             },
             "north": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
               "minimum": -90,
               "maximum": 90,
               "default": 90
             },
             "south": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
               "minimum": -90,
               "maximum": 90,
               "default": -90
             },
             "west": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
               "minimum": -180,
               "maximum": 180,
@@ -214,17 +300,26 @@
               "type": "object",
               "properties": {
                 "css": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
                   "description": "Inline style of the popup content."
                 },
                 "features": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
                   "description": "List the cluster label of each clustered feature instead of their number."
                 }
               },
               "unevaluatedProperties": false
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
@@ -237,71 +332,116 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
         },
         "gazetteer": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "datasets": {
-              "type": "array",
+              "type": [
+                "array",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
             },
             "label": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
             },
             "layer": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md",
               "x-xyz-requires": [
                 "locale.layers.*"
               ]
             },
             "leading_wildcard": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
             },
             "limit": {
-              "type": "integer",
+              "type": [
+                "integer",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md",
               "description": "Maximum number of results per search.",
               "minimum": 1,
               "default": 10
             },
             "maxZoom": {
-              "type": "integer",
+              "type": [
+                "integer",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md",
               "minimum": 0
             },
             "no_result": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
             },
             "placeholder": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
             },
             "provider": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
             },
             "qterm": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
             },
             "query": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md",
               "default": "gaz_query"
             },
             "table": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
             },
             "title": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
             }
           },
@@ -309,17 +449,30 @@
           "x-xyz-concept": "knowledge/workspace/locale/gazetteer.md"
         },
         "layer": {
-          "$ref": "#/$defs/layer",
-          "unevaluatedProperties": false,
+          "anyOf": [
+            {
+              "$ref": "#/$defs/layer",
+              "unevaluatedProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ],
           "x-xyz-concept": "knowledge/workspace/locales.md"
         },
         "layer_order": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
           "description": "Layer keys in draw order; layers not listed are drawn on top."
         },
         "layers": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "additionalProperties": {
             "$ref": "#/$defs/layer",
             "unevaluatedProperties": false,
@@ -333,11 +486,17 @@
               "type": "object",
               "properties": {
                 "css_class": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
                 },
                 "css_style": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
                 },
                 "href": {
@@ -352,16 +511,25 @@
                   "x-xyz-required": true
                 },
                 "locale": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
                   "description": "Append ?locale=<locale key> to href."
                 },
                 "target": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
                 },
                 "title": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
                 }
               },
@@ -395,11 +563,17 @@
                 "type": "object",
                 "properties": {
                   "css_class": {
-                    "type": "string",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
                     "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
                   },
                   "css_style": {
-                    "type": "string",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
                     "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
                   },
                   "href": {
@@ -414,16 +588,25 @@
                     "x-xyz-required": true
                   },
                   "locale": {
-                    "type": "boolean",
+                    "type": [
+                      "boolean",
+                      "null"
+                    ],
                     "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
                     "description": "Append ?locale=<locale key> to href."
                   },
                   "target": {
-                    "type": "string",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
                     "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
                   },
                   "title": {
-                    "type": "string",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
                     "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md"
                   }
                 },
@@ -451,17 +634,26 @@
                 ],
                 "unevaluatedProperties": false
               }
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
           "description": "A link button in the map button column, or an array of them."
         },
         "listview_records": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locale/view.md"
         },
         "locales": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locales.md"
         },
         "locator": {
@@ -471,6 +663,9 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
@@ -482,12 +677,18 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
         },
         "mapviewControls": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "items": {
             "type": "string",
             "x-xyz-concept": "knowledge/workspace/locale/view.md",
@@ -507,34 +708,55 @@
           "x-xyz-concept": "knowledge/workspace/locale/view.md"
         },
         "maxZoom": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locale/view.md",
           "minimum": 0
         },
         "minZoom": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locale/view.md",
           "minimum": 0,
           "default": 0
         },
         "name": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locales.md"
         },
         "plugins": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
         },
         "queryparams": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locales.md"
         },
         "role": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/roles.md"
         },
         "roles": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "additionalProperties": {
             "anyOf": [
               {
@@ -550,29 +772,44 @@
           "x-xyz-concept": "knowledge/workspace/roles.md"
         },
         "srid": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locale/view.md",
           "description": "EPSG code of the mapview projection, digits only.",
           "pattern": "^[1-9][0-9]*$",
           "default": "3857"
         },
         "svgTemplates": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "additionalProperties": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/locale/view.md",
             "description": "URL or data URI of an SVG template."
           },
           "x-xyz-concept": "knowledge/workspace/locale/view.md"
         },
         "svg_templates": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locale/view.md",
           "deprecated": true,
           "x-xyz-deprecated": "locale.svgTemplates"
         },
         "syncPlugins": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
           "default": [
             "zoomBtn",
@@ -587,19 +824,31 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/templates.md"
         },
         "templates": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/templates.md"
         },
         "userIDB": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "title": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/plugin-options.md",
               "default": "userIDB"
             }
@@ -615,6 +864,9 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
@@ -626,41 +878,62 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
         },
         "view": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "lat": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
               "minimum": -90,
               "maximum": 90,
               "default": 0
             },
             "lng": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
               "minimum": -180,
               "maximum": 180,
               "default": 0
             },
             "maxZoom": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
               "description": "Maximum zoom of the view; takes precedence over locale.maxZoom.",
               "minimum": 0
             },
             "minZoom": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
               "description": "Minimum zoom of the view; takes precedence over locale.minZoom.",
               "minimum": 0
             },
             "z": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/locale/view.md",
               "description": "Start zoom; minZoom without it.",
               "minimum": 0
@@ -677,6 +950,9 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
@@ -688,6 +964,9 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
@@ -712,7 +991,10 @@
           }
         },
         "accessToken": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
           "description": "Mapbox access token; maplibre only fetches style.URL when it is set.",
           "x-xyz-formats": [
@@ -734,15 +1016,24 @@
           }
         },
         "attribution": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "additionalProperties": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/layer/display.md"
           },
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
         },
         "cacheSize": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
           "description": "Number of tiles the MVT render source caches; 0 disables the cache.",
           "minimum": 0,
@@ -752,10 +1043,16 @@
           ]
         },
         "cluster": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "distance": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/cluster.md",
               "description": "Browser clustering distance in pixels; below 1 the cluster configuration is removed. Excludes resolution.",
               "minimum": 1,
@@ -766,7 +1063,10 @@
               ]
             },
             "hexgrid": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/cluster.md",
               "description": "Clusters on a hexagon grid with the cluster_hex template.",
               "x-xyz-formats": [
@@ -774,11 +1074,17 @@
               ]
             },
             "label": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/cluster.md"
             },
             "resolution": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/cluster.md",
               "description": "Database cluster grid size as a fraction of the tile width at the current zoom; must be greater than 0. Excludes distance.",
               "x-xyz-formats": [
@@ -800,7 +1106,10 @@
           ]
         },
         "dataviews": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "additionalProperties": {
             "$ref": "#/$defs/dataview",
             "unevaluatedProperties": false,
@@ -809,19 +1118,31 @@
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "dbs": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
         },
         "deleteLocation": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/editing.md"
         },
         "display": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
         },
         "draw": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "circle": {
               "anyOf": [
@@ -832,11 +1153,17 @@
                   "type": "object",
                   "properties": {
                     "label": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/draw.md"
                     }
                   },
                   "unevaluatedProperties": false
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
@@ -850,17 +1177,26 @@
                   "type": "object",
                   "properties": {
                     "label": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/draw.md"
                     }
                   },
                   "unevaluatedProperties": false
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
             },
             "classList": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
             },
             "dialog": {
@@ -870,16 +1206,25 @@
                 },
                 {
                   "type": "object"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
             },
             "drawer": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
             },
             "hidden": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
             },
             "line": {
@@ -891,11 +1236,17 @@
                   "type": "object",
                   "properties": {
                     "label": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/draw.md"
                     }
                   },
                   "unevaluatedProperties": false
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
@@ -909,11 +1260,17 @@
                   "type": "object",
                   "properties": {
                     "label": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/draw.md"
                     }
                   },
                   "unevaluatedProperties": false
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
@@ -927,11 +1284,17 @@
                   "type": "object",
                   "properties": {
                     "label": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/draw.md"
                     }
                   },
                   "unevaluatedProperties": false
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
@@ -945,17 +1308,26 @@
                   "type": "object",
                   "properties": {
                     "label": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/draw.md"
                     }
                   },
                   "unevaluatedProperties": false
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
             },
             "popout": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
             },
             "rectangle": {
@@ -967,11 +1339,17 @@
                   "type": "object",
                   "properties": {
                     "label": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/draw.md"
                     }
                   },
                   "unevaluatedProperties": false
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/draw.md"
@@ -984,7 +1362,10 @@
           ]
         },
         "fade": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
           "x-xyz-formats": [
             "wkt",
@@ -994,7 +1375,10 @@
           ]
         },
         "featureFormat": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
           "description": "The mapp.layer.featureFormats method which parses the response or inline features; defaults to format. Plugins add values to the registry; see plugins/extension-points.md.",
           "examples": [
@@ -1011,7 +1395,10 @@
           ]
         },
         "featureLookup": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "items": {
             "type": "object",
             "x-xyz-concept": "knowledge/workspace/layer/features.md"
@@ -1020,7 +1407,10 @@
           "description": "Objects whose ID property matches a feature ID; only matched features display, with the object's properties."
         },
         "featureLookupId": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/features.md",
           "description": "Property of the featureLookup objects which holds the feature ID.",
           "default": "id",
@@ -1029,12 +1419,18 @@
           ]
         },
         "featureSet": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/features.md",
           "description": "Feature IDs to display; other features are not styled. An empty array displays all."
         },
         "features": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/features.md",
           "description": "Inline features, parsed with layer.featureFormat. A layer with features requests no data.",
           "x-xyz-formats": [
@@ -1045,19 +1441,35 @@
           ]
         },
         "filter": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "classList": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/filter.md"
             },
             "count_meta": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/filter.md"
             },
             "current": {
-              "$ref": "#/$defs/filter",
-              "unevaluatedProperties": false,
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/filter",
+                  "unevaluatedProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/filter.md",
               "default": {}
             },
@@ -1076,6 +1488,9 @@
                 },
                 {
                   "type": "string"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/filter.md",
@@ -1090,6 +1505,9 @@
                 },
                 {
                   "type": "boolean"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/filter.md"
@@ -1101,13 +1519,19 @@
                 },
                 {
                   "type": "boolean"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/filter.md",
               "default": "disableOnHide"
             },
             "exclude": {
-              "type": "array",
+              "type": [
+                "array",
+                "null"
+              ],
               "items": {
                 "type": "string",
                 "x-xyz-concept": "knowledge/workspace/layer/filter.md"
@@ -1119,11 +1543,17 @@
               ]
             },
             "hidden": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/filter.md"
             },
             "include": {
-              "type": "array",
+              "type": [
+                "array",
+                "null"
+              ],
               "items": {
                 "type": "string",
                 "x-xyz-concept": "knowledge/workspace/layer/filter.md"
@@ -1135,22 +1565,34 @@
               ]
             },
             "includeAll": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/filter.md",
               "x-xyz-requires": [
                 "layer.infoj"
               ]
             },
             "popout": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/filter.md"
             },
             "viewport": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/filter.md"
             },
             "viewport_description": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/filter.md"
             }
           },
@@ -1161,7 +1603,10 @@
           }
         },
         "format": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
           "description": "Selects the method of mapp.layer.formats which creates the OpenLayers layer. Plugins add values to the registry; see plugins/extension-points.md.",
           "examples": [
@@ -1177,23 +1622,38 @@
           ]
         },
         "geom": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
         },
         "geoms": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "additionalProperties": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
           },
           "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
         },
         "group": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
         },
         "groupClassList": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/display.md",
           "description": "CSS classes added to the group drawer; only the layer which creates the group applies them.",
           "x-xyz-requires": [
@@ -1201,15 +1661,24 @@
           ]
         },
         "groupmeta": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
         },
         "hidden": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
         },
         "infoj": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "items": {
             "$ref": "#/$defs/entry",
             "unevaluatedProperties": false
@@ -1217,15 +1686,24 @@
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "infoj_order": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "infoj_skip": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "meta": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
         },
         "multi_filter": {
@@ -1237,17 +1715,26 @@
               "type": "object",
               "properties": {
                 "target": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter.md"
                 }
               },
               "unevaluatedProperties": false
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/layer/filter.md"
         },
         "mvt_cache": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
           "description": "Ignored with a warning; MVT tile caching is disabled.",
           "x-xyz-formats": [
@@ -1255,18 +1742,30 @@
           ]
         },
         "name": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
         },
         "panelOrder": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
         },
         "params": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "default_fields": {
-              "type": "array",
+              "type": [
+                "array",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
               "x-xyz-formats": [
                 "wkt",
@@ -1277,20 +1776,32 @@
               ]
             },
             "layer_template": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
               "description": "Workspace template key which the XYZ API uses as the layer for this layer's queries."
             },
             "template": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
             },
             "viewport": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
             },
             "z": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
               "description": "Sends the current map zoom as the z param.",
               "x-xyz-formats": [
@@ -1307,11 +1818,17 @@
           "x-xyz-open": true
         },
         "plugins": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
         },
         "preserveDrawingBuffer": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
           "description": "Keeps the maplibre canvas readable",
           "x-xyz-formats": [
@@ -1319,7 +1836,10 @@
           ]
         },
         "projection": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
           "default": "EPSG:3857",
           "x-xyz-formats": [
@@ -1327,7 +1847,10 @@
           ]
         },
         "promoteDisplay": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
         },
         "qID": {
@@ -1346,11 +1869,17 @@
           }
         },
         "queryparams": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
         },
         "roles": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "additionalProperties": {
             "anyOf": [
               {
@@ -1366,7 +1895,10 @@
           "x-xyz-concept": "knowledge/workspace/roles.md"
         },
         "source": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
           "description": "Name of the Openlayers tile source class",
           "default": "OSM",
@@ -1399,10 +1931,16 @@
           }
         },
         "style": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "URL": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
               "description": "Mapbox GL style URL. maplibre only fetches it with layer.accessToken; otherwise it needs layer.style.object.",
               "x-xyz-formats": [
@@ -1411,48 +1949,76 @@
               ]
             },
             "cache": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
               "description": "Reuse the style computed for each feature."
             },
             "classList": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
             },
             "cluster": {
-              "$ref": "#/$defs/style",
-              "properties": {
-                "clusterScale": {
-                  "type": "number",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
-                  "default": 1
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/style",
+                  "properties": {
+                    "clusterScale": {
+                      "type": [
+                        "number",
+                        "null"
+                      ],
+                      "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+                      "default": 1
+                    },
+                    "logScale": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ],
+                      "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+                      "description": "Grow cluster icons with the natural log of the cluster size."
+                    },
+                    "zoomInScale": {
+                      "type": [
+                        "number",
+                        "null"
+                      ],
+                      "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+                      "deprecated": true,
+                      "x-xyz-deprecated": "layer.style.zoomInScale"
+                    },
+                    "zoomOutScale": {
+                      "type": [
+                        "number",
+                        "null"
+                      ],
+                      "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+                      "deprecated": true,
+                      "x-xyz-deprecated": "layer.style.zoomOutScale"
+                    }
+                  },
+                  "unevaluatedProperties": false
                 },
-                "logScale": {
-                  "type": "boolean",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
-                  "description": "Grow cluster icons with the natural log of the cluster size."
-                },
-                "zoomInScale": {
-                  "type": "number",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
-                  "deprecated": true,
-                  "x-xyz-deprecated": "layer.style.zoomInScale"
-                },
-                "zoomOutScale": {
-                  "type": "number",
-                  "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
-                  "deprecated": true,
-                  "x-xyz-deprecated": "layer.style.zoomOutScale"
+                {
+                  "type": "null"
                 }
-              },
-              "unevaluatedProperties": false,
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
               "x-xyz-requires": [
                 "layer.cluster"
               ]
             },
             "contextFilter": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
               "description": "CSS filter applied to the tile canvas",
               "x-xyz-formats": [
@@ -1460,8 +2026,15 @@
               ]
             },
             "default": {
-              "$ref": "#/$defs/style",
-              "unevaluatedProperties": false,
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/style",
+                  "unevaluatedProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
             },
             "dialog": {
@@ -1471,6 +2044,9 @@
                 },
                 {
                   "type": "object"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
@@ -1482,6 +2058,9 @@
                 },
                 {
                   "type": "boolean"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
@@ -1489,7 +2068,10 @@
               "default": "disableOnHide"
             },
             "elements": {
-              "type": "array",
+              "type": [
+                "array",
+                "null"
+              ],
               "items": {
                 "type": "string",
                 "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
@@ -1498,13 +2080,23 @@
               "description": "Order of the style panel elements."
             },
             "hidden": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
               "description": "Do not create the style panel."
             },
             "highlight": {
-              "$ref": "#/$defs/style",
-              "unevaluatedProperties": false,
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/style",
+                  "unevaluatedProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
             },
             "hover": {
@@ -1513,29 +2105,47 @@
                   "type": "object",
                   "properties": {
                     "display": {
-                      "type": "boolean",
+                      "type": [
+                        "boolean",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     },
                     "dynamic": {
-                      "type": "boolean",
+                      "type": [
+                        "boolean",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     },
                     "field": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     },
                     "hidden": {
-                      "type": "boolean",
+                      "type": [
+                        "boolean",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
                       "description": "Do not show the hover controls in the style panel."
                     },
                     "query": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
                       "default": "infotip"
                     },
                     "title": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     }
                   },
@@ -1543,12 +2153,18 @@
                 },
                 {
                   "type": "string"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
             },
             "hovers": {
-              "type": "object",
+              "type": [
+                "object",
+                "null"
+              ],
               "additionalProperties": {
                 "type": "object",
                 "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
@@ -1556,7 +2172,10 @@
               "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
             },
             "icon_scaling": {
-              "type": "object",
+              "type": [
+                "object",
+                "null"
+              ],
               "properties": {
                 "cluster": {
                   "anyOf": [
@@ -1565,33 +2184,51 @@
                     },
                     {
                       "type": "string"
+                    },
+                    {
+                      "type": "null"
                     }
                   ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                 },
                 "clusterScale": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "x-xyz-requires": [
                     "layer.style.cluster"
                   ]
                 },
                 "field": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "Numeric feature property which scales the icon."
                 },
                 "fields": {
-                  "type": "object",
+                  "type": [
+                    "object",
+                    "null"
+                  ],
                   "additionalProperties": {
                     "type": "object",
                     "properties": {
                       "field": {
-                        "type": "string",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
                         "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                       },
                       "title": {
-                        "type": "string",
+                        "type": [
+                          "string",
+                          "null"
+                        ],
                         "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                       }
                     },
@@ -1603,37 +2240,61 @@
                   "description": "Named fields offered in a style panel dropdown."
                 },
                 "hidden": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "Do not show icon scaling controls in the style panel."
                 },
                 "icon": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                 },
                 "max": {
-                  "type": "number",
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                 },
                 "maxScale": {
-                  "type": "number",
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                 },
                 "minScale": {
-                  "type": "number",
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "default": 0.1
                 },
                 "scaleFactor": {
-                  "type": "number",
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                 },
                 "zoomInScale": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                 },
                 "zoomOutScale": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                 }
               },
@@ -1646,67 +2307,109 @@
                   "type": "object",
                   "properties": {
                     "count": {
-                      "type": "boolean",
+                      "type": [
+                        "boolean",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
                       "x-xyz-requires": [
                         "layer.cluster"
                       ]
                     },
                     "display": {
-                      "type": "boolean",
+                      "type": [
+                        "boolean",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     },
                     "field": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     },
                     "fillColor": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
                       "default": "#000"
                     },
                     "font": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
                       "default": "12px sans-serif"
                     },
                     "hidden": {
-                      "type": "boolean",
+                      "type": [
+                        "boolean",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
                       "description": "Do not show the label controls in the style panel."
                     },
                     "maxZoom": {
-                      "type": "number",
+                      "type": [
+                        "number",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     },
                     "minZoom": {
-                      "type": "number",
+                      "type": [
+                        "number",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     },
                     "offsetX": {
-                      "type": "number",
+                      "type": [
+                        "number",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     },
                     "offsetY": {
-                      "type": "number",
+                      "type": [
+                        "number",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     },
                     "overflow": {
-                      "type": "boolean",
+                      "type": [
+                        "boolean",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     },
                     "strokeColor": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     },
                     "strokeWidth": {
-                      "type": "number",
+                      "type": [
+                        "number",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
                       "minimum": 0,
                       "default": 1
                     },
                     "title": {
-                      "type": "string",
+                      "type": [
+                        "string",
+                        "null"
+                      ],
                       "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
                     }
                   },
@@ -1714,12 +2417,18 @@
                 },
                 {
                   "type": "string"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
             },
             "labels": {
-              "type": "object",
+              "type": [
+                "object",
+                "null"
+              ],
               "additionalProperties": {
                 "type": "object",
                 "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
@@ -1727,14 +2436,20 @@
               "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
             },
             "layerTypes": {
-              "type": "array",
+              "type": [
+                "array",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
               "x-xyz-formats": [
                 "googleMapTiles"
               ]
             },
             "mapType": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
               "default": "roadmap",
               "x-xyz-formats": [
@@ -1742,7 +2457,10 @@
               ]
             },
             "object": {
-              "type": "object",
+              "type": [
+                "object",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/tile-formats.md",
               "description": "An inline Mapbox GL style document, used by maplibre when style.URL is not fetched.",
               "x-xyz-formats": [
@@ -1751,7 +2469,10 @@
               "x-xyz-open": true
             },
             "opacity": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
               "description": "Opacity of the whole layer.",
               "minimum": 0,
@@ -1759,17 +2480,30 @@
               "default": 1
             },
             "opacitySlider": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
               "description": "Adds an opacity slider to the style panel."
             },
             "popout": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
             },
             "selected": {
-              "$ref": "#/$defs/style",
-              "unevaluatedProperties": false,
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/style",
+                  "unevaluatedProperties": false
+                },
+                {
+                  "type": "null"
+                }
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
             },
             "theme": {
@@ -1780,12 +2514,18 @@
                 },
                 {
                   "type": "string"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
             },
             "themes": {
-              "type": "object",
+              "type": [
+                "object",
+                "null"
+              ],
               "additionalProperties": {
                 "$ref": "#/$defs/theme",
                 "unevaluatedProperties": false,
@@ -1794,11 +2534,17 @@
               "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
             },
             "zoomInScale": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
             },
             "zoomOutScale": {
-              "type": "number",
+              "type": [
+                "number",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
             }
           },
@@ -1827,7 +2573,10 @@
         "tables": {
           "type": "object",
           "additionalProperties": {
-            "type": "string",
+            "type": [
+              "string",
+              "null"
+            ],
             "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
           },
           "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
@@ -1848,20 +2597,32 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/templates.md"
         },
         "templates": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/templates.md"
         },
         "toggleLocationViewEdits": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/editing.md"
         },
         "transition": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
           "description": "Tile fade-in duration in milliseconds.",
           "minimum": 0,
@@ -1870,7 +2631,10 @@
           ]
         },
         "vectorImage": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
           "x-xyz-formats": [
             "wkt",
@@ -1880,19 +2644,31 @@
           ]
         },
         "viewConfig": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "classList": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/display.md"
             },
             "displayToggle": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/display.md",
               "default": true
             },
             "headerOrder": {
-              "type": "array",
+              "type": [
+                "array",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/display.md",
               "default": [
                 "zoomToFilteredExtentBtn",
@@ -1902,7 +2678,10 @@
               ]
             },
             "hideDisabled": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/display.md",
               "default": false,
               "x-xyz-requires": [
@@ -1910,19 +2689,31 @@
               ]
             },
             "keyOrder": {
-              "type": "array",
+              "type": [
+                "array",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/display.md"
             },
             "panelOrder": {
-              "type": "array",
+              "type": [
+                "array",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/display.md"
             },
             "popoutBtn": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/display.md"
             },
             "zoomBtn": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/display.md",
               "default": true,
               "x-xyz-requires": [
@@ -1930,7 +2721,10 @@
               ]
             },
             "zoomToFilteredExtentBtn": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/display.md",
               "default": true
             }
@@ -1939,18 +2733,27 @@
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
         },
         "wkt_properties": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
           "x-xyz-formats": [
             "mvt"
           ]
         },
         "zIndex": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/display.md"
         },
         "z_field": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
           "x-xyz-formats": [
             "mvt"
@@ -2123,17 +2926,26 @@
       "type": "object",
       "properties": {
         "fillColor": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
         },
         "fillOpacity": {
-          "type": "number",
+          "type": [
+            "number",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
           "minimum": 0,
           "maximum": 1
         },
         "highlightScale": {
-          "type": "number",
+          "type": [
+            "number",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
         },
         "icon": {
@@ -2142,7 +2954,10 @@
               "type": "object",
               "properties": {
                 "anchor": {
-                  "type": "array",
+                  "type": [
+                    "array",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "Icon anchor as [x, y] fractions of the icon size.",
                   "default": [
@@ -2151,59 +2966,92 @@
                   ]
                 },
                 "color": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "Marker colour of the markerLetter symbol."
                 },
                 "colorDot": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "Dot colour of the markerColor symbol."
                 },
                 "colorMarker": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "Marker colour of the markerColor symbol."
                 },
                 "fillColor": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "Fill of the dot"
                 },
                 "layers": {
-                  "type": "object",
+                  "type": [
+                    "object",
+                    "null"
+                  ],
                   "additionalProperties": {
-                    "type": "string",
+                    "type": [
+                      "string",
+                      "null"
+                    ],
                     "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
                   },
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "Inner rings of the dot-like symbols"
                 },
                 "letter": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "Text in the markerLetter symbol."
                 },
                 "scale": {
-                  "type": "number",
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "default": 1
                 },
                 "strokeColor": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "Ring colour of the circle symbol.",
                   "default": "#333"
                 },
                 "strokeWidth": {
-                  "type": "number",
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "Ring width of the circle symbol.",
                   "minimum": 0,
                   "default": 1
                 },
                 "substitute": {
-                  "type": "object",
+                  "type": [
+                    "object",
+                    "null"
+                  ],
                   "additionalProperties": {
                     "anyOf": [
                       {
@@ -2211,6 +3059,9 @@
                       },
                       {
                         "type": "number"
+                      },
+                      {
+                        "type": "null"
                       }
                     ],
                     "x-xyz-concept": "knowledge/workspace/layer/style/icons.md"
@@ -2219,7 +3070,10 @@
                   "description": "Map of strings in the SVG template to their replacements."
                 },
                 "svg": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "deprecated": true,
                   "x-xyz-deprecated": "style.icon.url"
@@ -2235,7 +3089,10 @@
                   }
                 },
                 "type": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "The mapp.utils.svgSymbols method drawn when the icon has no url. Plugins add values to the registry; see plugins/extension-points.md.",
                   "examples": [
@@ -2253,7 +3110,10 @@
                   "default": "dot"
                 },
                 "url": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
                   "description": "Image or SVG URL; takes precedence over type."
                 }
@@ -2284,13 +3144,19 @@
             },
             {
               "type": "array"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/layer/style/icons.md",
           "description": "An icon"
         },
         "lineDash": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "items": {
             "type": "number",
             "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
@@ -2300,27 +3166,42 @@
           "description": "Line and gap lengths in pixels, eg. [5, 4]."
         },
         "scale": {
-          "type": "number",
+          "type": [
+            "number",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
         },
         "strokeColor": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
         },
         "strokeOpacity": {
-          "type": "number",
+          "type": [
+            "number",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
           "minimum": 0,
           "maximum": 1
         },
         "strokeWidth": {
-          "type": "number",
+          "type": [
+            "number",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
           "minimum": 0,
           "default": 1
         },
         "zIndex": {
-          "type": "number",
+          "type": [
+            "number",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
           "description": "Draw order within the layer; the highlight style defaults to Infinity."
         }
@@ -2330,12 +3211,18 @@
       "type": "object",
       "properties": {
         "cat": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "additionalProperties": {
             "$ref": "#/$defs/style",
             "properties": {
               "label": {
-                "type": "string",
+                "type": [
+                  "string",
+                  "null"
+                ],
                 "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
               },
               "value": {
@@ -2345,6 +3232,9 @@
                   },
                   {
                     "type": "number"
+                  },
+                  {
+                    "type": "null"
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
@@ -2356,7 +3246,10 @@
           "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
         },
         "cat_arr": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
         },
         "categories": {
@@ -2365,7 +3258,10 @@
             "$ref": "#/$defs/style",
             "properties": {
               "field": {
-                "type": "string",
+                "type": [
+                  "string",
+                  "null"
+                ],
                 "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
               },
               "icon": {
@@ -2375,6 +3271,9 @@
                   },
                   {
                     "type": "array"
+                  },
+                  {
+                    "type": "null"
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
@@ -2387,6 +3286,9 @@
                   },
                   {
                     "type": "number"
+                  },
+                  {
+                    "type": "null"
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
@@ -2404,6 +3306,9 @@
                       "$ref": "#/$defs/style",
                       "unevaluatedProperties": false
                     }
+                  },
+                  {
+                    "type": "null"
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
@@ -2415,6 +3320,9 @@
                   },
                   {
                     "type": "number"
+                  },
+                  {
+                    "type": "null"
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md"
@@ -2439,7 +3347,10 @@
           }
         },
         "distribution": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
           "description": "Compute the legend from the loaded features; count shows present values with counts, jenks sets natural breaks. A method of mapp.layer.featureFields.distribution; plugins add values to it; see plugins/extension-points.md.",
           "examples": [
@@ -2471,39 +3382,61 @@
           }
         },
         "graduated_breaks": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
           "description": "Whether a graduated category value is the upper (less_than) or lower (greater_than) bound; other values become less_than.",
           "enum": [
             "less_than",
-            "greater_than"
+            "greater_than",
+            null
           ],
           "default": "less_than"
         },
         "label": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
           "description": "The legend label beside the symbol of a basic theme."
         },
         "legend": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "classList": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
               "description": "Set by the ui from layout and nowrap; a configured value is replaced."
             },
             "layout": {
-              "type": "string",
+              "type": [
+                "string",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
               "default": "grid"
             },
             "nowrap": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
             },
             "showEmptyCat": {
-              "type": "boolean",
+              "type": [
+                "boolean",
+                "null"
+              ],
               "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
               "description": "Show categories without features in a count distribution legend."
             }
@@ -2513,28 +3446,50 @@
           "x-xyz-open": true
         },
         "meta": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
         },
         "setHover": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
         },
         "setLabel": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
         },
         "skip": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
         },
         "style": {
-          "$ref": "#/$defs/style",
-          "unevaluatedProperties": false,
+          "anyOf": [
+            {
+              "$ref": "#/$defs/style",
+              "unevaluatedProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
         },
         "title": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
         },
         "type": {
@@ -2650,23 +3605,38 @@
       "type": "object",
       "properties": {
         "alert": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "class": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "cloudinary_folder": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "css_title": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "css_val": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "data": {
@@ -2676,6 +3646,9 @@
             },
             {
               "type": "array"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
@@ -2696,38 +3669,62 @@
             },
             {
               "type": "array"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "dependents": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/editing.md"
         },
         "dependents_layers": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/editing.md"
         },
         "disableTabClose": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
           "description": "The tab of a tab or dataview entry has no close button and no middle click close."
         },
         "disabled": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
           "description": "The tab of a tab or dataview entry is dimmed and inert; the display toggle of a layer entry is disabled."
         },
         "display": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "draw": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/layer/draw.md"
         },
         "dynamic": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
           "description": "A dataview or tab entry is recreated and updated each time its tab is shown."
         },
@@ -2740,69 +3737,114 @@
               "type": "object",
               "properties": {
                 "arraySeparator": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 },
                 "delete": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 },
                 "delete_label": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 },
                 "draw": {
-                  "type": "object",
+                  "type": [
+                    "object",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 },
                 "dynamic": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 },
                 "max": {
-                  "type": "number",
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md",
                   "default": 2147483647
                 },
                 "maxlength": {
-                  "type": "integer",
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 },
                 "min": {
-                  "type": "number",
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md",
                   "default": -2147483648
                 },
                 "modify_btn": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 },
                 "modify_label": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 },
                 "options": {
-                  "type": "array",
+                  "type": [
+                    "array",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 },
                 "placeholder": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 },
                 "query": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md",
                   "default": "distinct_values"
                 },
                 "radio": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md",
                   "x-xyz-requires": [
                     "entry.edit.options"
                   ]
                 },
                 "range": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 },
                 "snap": {
@@ -2812,26 +3854,41 @@
                     },
                     {
                       "type": "boolean"
+                    },
+                    {
+                      "type": "null"
                     }
                   ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 },
                 "step": {
-                  "type": "number",
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/location/editing.md"
                 }
               },
               "unevaluatedProperties": false
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/location/editing.md"
         },
         "field": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "fieldfx": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "filter": {
@@ -2846,28 +3903,43 @@
               "type": "object",
               "properties": {
                 "distinct": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Not read. in and ni filters query distinct values whenever they have no value array.",
                   "deprecated": true
                 },
                 "dropdown": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "in and ni filters show a dropdown instead of checkboxes."
                 },
                 "dropdown_pills": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "A dropdown which shows the selected values as pills."
                 },
                 "dropdown_search": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "A dropdown with a search input."
                 },
                 "field": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Column to filter; defaults to entry.field."
                 },
@@ -2878,6 +3950,9 @@
                     },
                     {
                       "type": "object"
+                    },
+                    {
+                      "type": "null"
                     }
                   ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
@@ -2885,77 +3960,122 @@
                   "x-xyz-open": true
                 },
                 "in": {
-                  "type": "array",
+                  "type": [
+                    "array",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Values offered by an in filter instead of the distinct values of the field."
                 },
                 "label": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Checkbox label of boolean and null filters."
                 },
                 "label_a": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Label of the lower range input."
                 },
                 "label_b": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Label of the upper range input."
                 },
                 "leading_wildcard": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "A like filter matches anywhere in the value"
                 },
                 "max": {
-                  "type": "number",
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Fixed upper bound of a numeric or integer range; queried from the field when unset."
                 },
                 "meta": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Text shown at the top of the filter card."
                 },
                 "min": {
-                  "type": "number",
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Fixed lower bound of a numeric or integer range; queried from the field when unset."
                 },
                 "ni": {
-                  "type": "array",
+                  "type": [
+                    "array",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Values offered by a ni filter instead of the distinct values of the field."
                 },
                 "placeholder": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Placeholder of the dropdown."
                 },
                 "prefix": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Unit shown in the range labels."
                 },
                 "searchbox": {
-                  "type": "boolean",
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "in and ni filters show a searchbox which adds values as pills."
                 },
                 "step": {
-                  "type": "number",
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Slider step; 1 for integer"
                 },
                 "suffix": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Unit shown in the range labels when there is no prefix."
                 },
                 "title": {
-                  "type": "string",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
                   "description": "Card title; defaults to entry.title."
                 },
@@ -2991,64 +4111,103 @@
                 }
               ],
               "unevaluatedProperties": false
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/layer/filter-entries.md",
           "description": "true derives the filter type from entry.type, a string is a filter type, false never lists the entry."
         },
         "formatterParams": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "group": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "groupClassList": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md",
           "x-xyz-requires": [
             "entry.group"
           ]
         },
         "hideLayer": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "hideTabClose": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
           "description": "The tab of a tab or dataview entry has no close button."
         },
         "host": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "icon_name": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "inline": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "json_field": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "json_key": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md",
           "x-xyz-requires": [
             "entry.json_field"
           ]
         },
         "jsonb_field": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "jsonb_key": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md",
           "x-xyz-requires": [
             "entry.jsonb_field"
@@ -3061,29 +4220,47 @@
             },
             {
               "type": "integer"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "label": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "layer": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "max": {
-          "type": "number",
+          "type": [
+            "number",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
           "description": "Upper bound of numeric and integer entries"
         },
         "max_size": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "min": {
-          "type": "number",
+          "type": [
+            "number",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
           "description": "Lower bound of numeric and integer entries"
         },
@@ -3103,93 +4280,159 @@
             },
             {
               "type": "array"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "objectAssignFromField": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "objectMergeFromField": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "pills": {
-          "type": "array",
+          "type": [
+            "array",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "prefix": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "query": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "queryCheck": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "queryparams": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "reload": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "report": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "roles": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/roles.md"
         },
         "run": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "runOnce": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "skipEntry": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "skipFalsyValue": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "skipNullValue": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "skipUndefinedValue": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "srid": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "step": {
-          "type": "number",
+          "type": [
+            "number",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
           "description": "Step of the range filter of numeric and integer entries; editing uses edit.step."
         },
         "style": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "suffix": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "tab_style": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "target": {
@@ -3199,24 +4442,39 @@
             },
             {
               "type": "object"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "template": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md"
         },
         "title": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "tooltip": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-display.md"
         },
         "type": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/infoj.md",
           "description": "The entry method of the ui entries registry. Aliases datetime, html, integer, image, images, documents and report; mvt_clone and vector_layer are deprecated for layer, defaults does nothing. Plugins add values to the registry; see plugins/extension-points.md.",
           "examples": [
@@ -3252,11 +4510,17 @@
           "default": "text"
         },
         "url": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         },
         "zIndex": {
-          "type": "integer",
+          "type": [
+            "integer",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
         }
       },
@@ -3266,7 +4530,10 @@
       "type": "object",
       "properties": {
         "chart": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "data": {
@@ -3276,40 +4543,67 @@
             },
             {
               "type": "array"
+            },
+            {
+              "type": "null"
             }
           ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "dataview": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "display": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "dynamic": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "label": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "mapChange": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "props": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "query": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "queryparams": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "properties": {
             "center": {
               "anyOf": [
@@ -3318,6 +4612,9 @@
                 },
                 {
                   "type": "string"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/dataviews.md"
@@ -3329,6 +4626,9 @@
                 },
                 {
                   "type": "object"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/dataviews.md"
@@ -3340,6 +4640,9 @@
                 },
                 {
                   "type": "string"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/dataviews.md"
@@ -3354,6 +4657,9 @@
                 },
                 {
                   "type": "integer"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/dataviews.md"
@@ -3365,6 +4671,9 @@
                 },
                 {
                   "type": "string"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/dataviews.md"
@@ -3376,6 +4685,9 @@
                 },
                 {
                   "type": "string"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/dataviews.md"
@@ -3387,6 +4699,9 @@
                 },
                 {
                   "type": "string"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/dataviews.md"
@@ -3398,6 +4713,9 @@
                 },
                 {
                   "type": "number"
+                },
+                {
+                  "type": "null"
                 }
               ],
               "x-xyz-concept": "knowledge/workspace/dataviews.md"
@@ -3419,6 +4737,9 @@
               },
               {
                 "type": "array"
+              },
+              {
+                "type": "null"
               }
             ],
             "x-xyz-concept": "knowledge/workspace/dataviews.md"
@@ -3427,27 +4748,45 @@
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "reload": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "table": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "target": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "title": {
-          "type": "string",
+          "type": [
+            "string",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "toolbar": {
-          "type": "object",
+          "type": [
+            "object",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         },
         "viewport": {
-          "type": "boolean",
+          "type": [
+            "boolean",
+            "null"
+          ],
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
         }
       }
@@ -3460,11 +4799,17 @@
             "type": "object",
             "properties": {
               "boolean": {
-                "type": "boolean",
+                "type": [
+                  "boolean",
+                  "null"
+                ],
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
               },
               "email": {
-                "type": "boolean",
+                "type": [
+                  "boolean",
+                  "null"
+                ],
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
               },
               "eq": {
@@ -3474,6 +4819,9 @@
                   },
                   {
                     "type": "string"
+                  },
+                  {
+                    "type": "null"
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
@@ -3486,6 +4834,9 @@
                   },
                   {
                     "type": "string"
+                  },
+                  {
+                    "type": "null"
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
@@ -3498,6 +4849,9 @@
                   },
                   {
                     "type": "string"
+                  },
+                  {
+                    "type": "null"
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
@@ -3516,13 +4870,19 @@
                   },
                   {
                     "type": "boolean"
+                  },
+                  {
+                    "type": "null"
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
                 "description": "Values to match; a single value is wrapped in an array."
               },
               "like": {
-                "type": "string",
+                "type": [
+                  "string",
+                  "null"
+                ],
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
               },
               "lt": {
@@ -3532,6 +4892,9 @@
                   },
                   {
                     "type": "string"
+                  },
+                  {
+                    "type": "null"
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
@@ -3544,13 +4907,19 @@
                   },
                   {
                     "type": "string"
+                  },
+                  {
+                    "type": "null"
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
                 "pattern": "^\\s*[+-]?(\\d+(\\.\\d*)?|\\.\\d+)([eE][+-]?\\d+)?\\s*$"
               },
               "match": {
-                "type": "string",
+                "type": [
+                  "string",
+                  "null"
+                ],
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
               },
               "ni": {
@@ -3566,13 +4935,19 @@
                   },
                   {
                     "type": "boolean"
+                  },
+                  {
+                    "type": "null"
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md",
                 "description": "Values to match; a single value is wrapped in an array."
               },
               "null": {
-                "type": "boolean",
+                "type": [
+                  "boolean",
+                  "null"
+                ],
                 "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
               }
             },

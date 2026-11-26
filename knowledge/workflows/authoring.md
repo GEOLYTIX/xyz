@@ -56,7 +56,8 @@ x-xyz-keys:
 - `type` (required) is one or a list of `string`, `number`, `integer`,
   `boolean`, `object` and `array`.
 - `default`, `formats` and `requires` are filled in when known. `formats` are
-  keys of the MAPP format registry; `requires` are keys a concept owns.
+  keys of the MAPP format registry; `requires` are keys a concept owns. Both
+  are advisory schema annotations; use `required` where the code fails.
 - `description` says what the key does, `enum` lists its only valid values,
   and `deprecated` is `true` or names the replacement key. They are generated
   into the schema, which rejects a value outside the `enum`.
@@ -71,7 +72,8 @@ x-xyz-keys:
   required (`when`) and the sibling keys which satisfy it instead (`or`):
   `{ key: layer.URI, type: string, required: { when: { layer.format: tiles } } }`.
   It describes the composed object, so objects with a `template` or
-  `templates` key are exempt.
+  `templates` key are exempt. Optional keys accept `null`, which XYZ treats
+  as unset, eg. `filter.default: null` over a template; required keys do not.
 - `open: true` keeps a documented object open in the strict schema, eg. for
   options passed on to a library.
 - `ref` names the root whose keys the value has, eg.
@@ -91,6 +93,9 @@ them with the concepts:
 - `knowledge/workspace/workspace.strict.schema.json` is the contract for
   generated workspaces. It rejects undocumented keys in documented objects and
   enforces `required`. Agents validate generated workspaces with it.
+
+Both check a workspace before template composition and are not a functional
+or security review; see [knowledge checks](checks.md).
 
 End the concept with `# Examples` and a complete, minimal JSON workspace in a
 `json` code block. Use the devdb tables (`packages/devdb/seed`) and the

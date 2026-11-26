@@ -7,7 +7,10 @@ allowed but reported as undocumented. The strict schema is the contract for
 generated workspaces: documented objects are closed with
 unevaluatedProperties, unless their key is marked open, and required keys are
 enforced with if/then. Requirements describe the composed object, so they are
-skipped for objects with a template or templates key.
+skipped for objects with a template or templates key; neither schema resolves
+templates. Optional keys accept null, which XYZ treats as unset because a
+merge copies it over a template value; required keys and object or array map
+entries, eg. a layer of a locale, do not.
 
 Both use only type, enum, pattern, minimum, maximum, properties, items,
 additionalProperties, unevaluatedProperties, required, $ref, anyOf, allOf and
@@ -145,15 +148,34 @@ function requiredRules(node) {
   return rules;
 }
 
+const SCALARS = new Set(['string', 'number', 'integer', 'boolean']);
+
+/** An optional key, which accepts null as unset. */
+const nullableKey = (node) => !requiredRule(node.entry ?? {});
+
+/** A map entry with scalar values, eg. a zoom table, which accepts null. */
+const nullableEntry = (node) =>
+  !node.entry?.ref && list(node.entry?.type).some((type) => SCALARS.has(type));
+
 /** The structural part of a node: properties, named entries and items. */
 function structure(node, options) {
   const result = {};
   const names = Object.keys(node.children).sort();
   if (names.length)
     result.properties = Object.fromEntries(
-      names.map((name) => [name, nodeSchema(node.children[name], options)]),
+      names.map((name) => [
+        name,
+        nodeSchema(node.children[name], {
+          ...options,
+          nullable: nullableKey(node.children[name]),
+        }),
+      ]),
     );
-  if (node.map) result.additionalProperties = nodeSchema(node.map, options);
+  if (node.map)
+    result.additionalProperties = nodeSchema(node.map, {
+      ...options,
+      nullable: nullableEntry(node.map),
+    });
   if (node.items) result.items = nodeSchema(node.items, options);
   return result;
 }
@@ -190,7 +212,19 @@ function nodeSchema(node, options = {}) {
     return branch;
   });
   const schema = branches.length === 1 ? branches[0] : { anyOf: branches };
-  return { ...schema, ...annotations(node.entry) };
+  const result = {
+    ...(options.nullable ? allowNull(schema) : schema),
+    ...annotations(node.entry),
+  };
+  if (options.nullable && result.enum) result.enum = [...result.enum, null];
+  return result;
+}
+
+/** A schema which also accepts null; a reference becomes a branch of anyOf. */
+function allowNull(schema) {
+  if (schema.anyOf) return { anyOf: [...schema.anyOf, { type: 'null' }] };
+  if (schema.$ref) return { anyOf: [schema, { type: 'null' }] };
+  return { ...schema, type: [schema.type, 'null'] };
 }
 
 const SCHEMA_URL = 'https://github.com/GEOLYTIX/xyz/blob/main/';
@@ -226,9 +260,12 @@ const jsonType = (value) =>
         ? 'integer'
         : typeof value;
 
-const typeMatches = (type, value) =>
-  type === jsonType(value) ||
-  (type === 'number' && jsonType(value) === 'integer');
+const typeMatches = (types, value) =>
+  list(types).some(
+    (type) =>
+      type === jsonType(value) ||
+      (type === 'number' && jsonType(value) === 'integer'),
+  );
 
 const present = (value, name) =>
   Object.hasOwn(value, name) && value[name] !== null;
@@ -252,6 +289,12 @@ const conditionText = (condition) =>
         `${name} is ${condition.properties[name].enum.map((v) => JSON.stringify(v)).join(' or ')}`,
     )
     .join(' and ');
+
+/** The expected types of an error message; null is implied for optional keys. */
+const typeNames = (types) =>
+  list(types)
+    .filter((type) => type !== 'null')
+    .join(' or ');
 
 /** Check the if/then requirements of an object. */
 function checkRequirements(rules, value, path, context) {
@@ -303,8 +346,10 @@ function check(schema, value, path, context) {
     check(resolveRef(schema, context), value, path, context);
     return;
   }
-  if (schema.enum && value !== null && !schema.enum.includes(value)) {
-    const values = schema.enum.map((option) => JSON.stringify(option));
+  if (schema.enum && !schema.enum.includes(value)) {
+    const values = schema.enum
+      .filter((option) => option !== null)
+      .map((option) => JSON.stringify(option));
     context.errors.push(
       `${path}: expected one of ${values.join(', ')}, got ${JSON.stringify(value)}`,
     );
@@ -316,7 +361,7 @@ function check(schema, value, path, context) {
     );
     if (!branch) {
       context.errors.push(
-        `${path}: expected ${schema.anyOf.map((o) => o.type ?? 'object').join(' or ')}, got ${jsonType(value)}`,
+        `${path}: expected ${typeNames(schema.anyOf.map((o) => o.type ?? 'object'))}, got ${jsonType(value)}`,
       );
       return;
     }
@@ -326,11 +371,9 @@ function check(schema, value, path, context) {
     check({ ...branch, ...open }, value, path, context);
     return;
   }
-  // A null value means an absent key.
-  if (value === null) return;
   if (schema.type && !typeMatches(schema.type, value)) {
     context.errors.push(
-      `${path}: expected ${schema.type}, got ${jsonType(value)}`,
+      `${path}: expected ${typeNames(schema.type)}, got ${jsonType(value)}`,
     );
     return;
   }

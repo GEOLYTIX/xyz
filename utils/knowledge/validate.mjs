@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import MarkdownIt from 'markdown-it';
 import { parse } from 'yaml';
 import { checkBody, checkKeys, requirements } from './concepts.mjs';
-import { collectExamples } from './examples.mjs';
+import { collectExamples, combineExamples, GENERATED } from './examples.mjs';
 import {
   buildSchema,
   checkExample,
@@ -397,12 +397,19 @@ function checkSchemaExamples(context, errors, warnings) {
     errors.push(`${path}: out of date; run pnpm knowledge:schema`);
   const schema = buildSchema(context.root);
   const strict = buildSchema(context.root, { strict: true });
-  for (const example of collectExamples(context.root)) {
+  const examples = collectExamples(context.root);
+  for (const example of examples) {
     const result = checkExample(strict, example.workspace);
     for (const error of result.errors)
       errors.push(`${example.path}: example ${error}`);
     for (const path of result.undocumented)
       errors.push(`${example.path}: example uses undocumented key ${path}`);
+  }
+  // The combined workspace adds the unfiltered twins which the tests run;
+  // test bundles which do not document locales cannot describe it.
+  if (examples.length && strict.properties?.locales) {
+    const combined = checkExample(strict, combineExamples(examples));
+    for (const error of combined.errors) errors.push(`${GENERATED}: ${error}`);
   }
   const tests = checkTestWorkspaces(context.root, schema);
   warnings.push(...tests.errors);
