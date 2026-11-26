@@ -6,13 +6,20 @@ concept, and warns when a module in its `sources` changes without it.
   pnpm knowledge:changed --base origin/minor
   pnpm knowledge:changed --base origin/minor --warn-only
 
+It also compares the concepts at the merge base with the concepts on the
+branch. Deleting a concept, or its `resource`, must hand each module it
+described to another concept: a module which still exists and no concept
+describes any more fails. A changed module which a concept cited and no
+concept cites any more warns.
+
 The changes are taken from the merge base of the branch with the base, so
 commits merged in from the base do not count. `--warn-only` reports failures
-as warnings, for changes which do not affect what a concept describes; CI
-passes it when a pull request has the `knowledge-unaffected` label.
+as warnings, for changes which do not affect what a concept describes, or
+modules which no longer need a concept; CI passes it when a pull request has
+the `knowledge-unaffected` label.
 */
 import { execFileSync } from 'node:child_process';
-import { readFileSync, realpathSync } from 'node:fs';
+import { existsSync, readFileSync, realpathSync } from 'node:fs';
 import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { conceptFiles } from './find.mjs';
@@ -30,13 +37,70 @@ function localPath(value, file, root) {
   return posix(relative(root, target));
 }
 
-/** Each concept with the local paths of its resource and its sources. */
-export function conceptLinks(root) {
+/** Whether a repository path is a concept file, not an index or a log. */
+const isConcept = (path) =>
+  path.startsWith('knowledge/') &&
+  path.endsWith('.md') &&
+  !['index.md', 'log.md'].includes(path.split('/').pop());
+
+/** The concept files of the working tree with their text. */
+function readConcepts(root) {
+  return conceptFiles(resolve(root, 'knowledge')).map((file) => ({
+    path: posix(relative(root, file)),
+    text: readFileSync(file, 'utf8'),
+  }));
+}
+
+/** The concept files of a commit with their text, read in one git call. */
+export function commitConcepts(root, commit) {
+  const git = (args, input) =>
+    execFileSync('git', args, { cwd: root, input, maxBuffer: 1 << 28 });
+  const paths = git([
+    'ls-tree',
+    '-r',
+    '-z',
+    '--name-only',
+    commit,
+    '--',
+    'knowledge',
+  ])
+    .toString('utf8')
+    .split('\0')
+    .filter(isConcept);
+  if (!paths.length) return [];
+  const output = git(
+    ['cat-file', '--batch'],
+    paths.map((path) => `${commit}:${path}\n`).join(''),
+  );
+  // Each object is "<oid> blob <size>\n<content>\n"; size counts bytes.
   const concepts = [];
-  for (const file of conceptFiles(resolve(root, 'knowledge')).sort()) {
+  let offset = 0;
+  for (const path of paths) {
+    const end = output.indexOf(10, offset);
+    const size = Number(output.toString('utf8', offset, end).split(' ')[2]);
+    concepts.push({
+      path,
+      text: output.toString('utf8', end + 1, end + 1 + size),
+    });
+    offset = end + 1 + size + 1;
+  }
+  return concepts;
+}
+
+/**
+Each concept with the local paths of its resource and its sources. Reads the
+concepts of the working tree, or the given concept files, eg. of a commit.
+*/
+export function conceptLinks(root, documents = readConcepts(root)) {
+  const concepts = [];
+  const sorted = [...documents].sort((a, b) =>
+    a.path < b.path ? -1 : a.path > b.path ? 1 : 0,
+  );
+  for (const { path, text } of sorted) {
+    const file = resolve(root, path);
     let metadata;
     try {
-      metadata = splitDocument(readFileSync(file, 'utf8')).metadata;
+      metadata = splitDocument(text).metadata;
     } catch {
       continue; // pnpm knowledge:check reports malformed concepts.
     }
@@ -81,6 +145,50 @@ export function freshness(concepts, changed) {
   return { errors, warnings };
 }
 
+/**
+Compare the concepts at the merge base with the concepts on the branch.
+Returns errors for modules which a concept described, still exist and no
+concept describes now, and warnings for changed modules which a concept cited
+and no concept cites now. A module deleted on the branch needs no concept.
+*/
+export function lostCoverage(before, after, changed, exists) {
+  const described = after.map(({ resource }) => resource).filter(Boolean);
+  const cited = after.flatMap(({ resource, sources }) =>
+    [resource, ...sources].filter(Boolean),
+  );
+  const errors = new Set();
+  const warnings = new Set();
+  for (const { concept, resource, sources } of before) {
+    if (
+      resource &&
+      exists(resource) &&
+      !described.some((path) => within(resource, path))
+    )
+      errors.add(
+        `${resource} lost its concept; ${concept} described it at the merge base and no concept describes it now`,
+      );
+    for (const source of sources) {
+      if (
+        changed.some((file) => within(file, source)) &&
+        exists(source) &&
+        !cited.some((path) => within(source, path))
+      )
+        warnings.add(
+          `${source} changed and lost its citation; ${concept} cited it at the merge base and no concept cites it now`,
+        );
+    }
+  }
+  return { errors: [...errors], warnings: [...warnings] };
+}
+
+/** The merge base of HEAD with the base ref. */
+export function mergeBase(root, base) {
+  return execFileSync('git', ['merge-base', base, 'HEAD'], {
+    cwd: root,
+    encoding: 'utf8',
+  }).trim();
+}
+
 /** Files changed on the branch since its merge base with the base ref. */
 export function changedFiles(root, base) {
   const output = execFileSync(
@@ -107,7 +215,17 @@ if (main === realpathSync(fileURLToPath(import.meta.url))) {
   const root = fileURLToPath(new URL('../../', import.meta.url));
   const options = parseArgs(process.argv.slice(2));
   const changed = changedFiles(root, options.base);
-  const { errors, warnings } = freshness(conceptLinks(root), changed);
+  const after = conceptLinks(root);
+  const before = conceptLinks(
+    root,
+    commitConcepts(root, mergeBase(root, options.base)),
+  );
+  const fresh = freshness(after, changed);
+  const lost = lostCoverage(before, after, changed, (path) =>
+    existsSync(resolve(root, path)),
+  );
+  const errors = [...fresh.errors, ...lost.errors];
+  const warnings = [...fresh.warnings, ...lost.warnings];
   const failures = options.warnOnly ? [] : errors;
   for (const warning of options.warnOnly ? [...errors, ...warnings] : warnings)
     console.warn(`WARN ${warning}`);
@@ -117,7 +235,7 @@ if (main === realpathSync(fileURLToPath(import.meta.url))) {
   );
   if (failures.length)
     console.log(
-      'Update the concepts, or label the pull request knowledge-unaffected when the change does not affect what they describe.',
+      'Update the concepts, or label the pull request knowledge-unaffected when the change does not affect what they describe or a module no longer needs a concept.',
     );
   process.exitCode = failures.length ? 1 : 0;
 }

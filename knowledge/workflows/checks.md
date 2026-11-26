@@ -13,6 +13,7 @@ sources:
   - resource: ../../utils/knowledge/validate.test.mjs
   - resource: ../../utils/knowledge/concepts.test.mjs
   - resource: ../../utils/knowledge/examples.test.mjs
+  - resource: ../../utils/knowledge/changed.test.mjs
 ---
 # Knowledge checks
 
@@ -64,11 +65,15 @@ HTML links are not checked.
 `pnpm knowledge:changed --base <ref>` compares a branch with its merge base:
 it fails when a concept's `resource` changed but the concept did not, and
 warns when a module in its `sources` changed. A directory resource covers the
-files inside it. Deleting a resource counts as a change; deleting a concept
-leaves its modules unlinked and is not reported. CI runs it on pull requests which do not target `main`, with
-`--warn-only` when the pull request has the `knowledge-unaffected` label. The
-label is for changes which leave every statement of the concept true;
-`review-pr` checks that claim.
+files inside it. Deleting a resource counts as a change. It also compares the
+concepts at the merge base with those on the branch: when a concept or its
+`resource` is deleted, a module which it described and which still exists
+must be described by another concept, or the check fails. A changed module
+which a concept cited and no concept cites any more warns. CI runs it on pull
+requests which do not target `main`, with `--warn-only` when the pull request
+has the `knowledge-unaffected` label. The label is for changes which leave
+every statement of the concept true, or modules which no longer need a
+concept; `review-pr` checks that claim.
 
 `pnpm knowledge:examples` runs every example in the testhost with the devdb:
 each example must load as a locale, its `wkt` and `geojson` layers must return

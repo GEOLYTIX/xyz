@@ -20,6 +20,9 @@
 - The [portal](decisions/documentation-publishing.md) is deployed by the
   release workflow from the release tag, and manual runs resolve their ref to
   a commit. The knowledge check builds the portal on pull requests.
+- `pnpm knowledge:changed` compares the concepts at the merge base with the
+  branch, and fails when deleting a concept or its `resource` leaves an
+  existing module without a concept; see [knowledge checks](workflows/checks.md).
 
 ## 2026-11-25
 
