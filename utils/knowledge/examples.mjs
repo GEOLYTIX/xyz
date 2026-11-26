@@ -63,16 +63,29 @@ export function collectExamples(root) {
 }
 
 /**
-The locales of an example: its locale, or each of its named locales merged
-into a clone of its locale, as the XYZ API merges workspace.locale defaults.
+The locales of an example: its locale, or each of its named locales composed
+with its locale as defaults, as the XYZ API composes workspace.locale defaults.
+The defaults precede the template of a named locale, which precedes its own
+properties. The template of a named locale must be defined by the example.
 */
 export function exampleLocales(example) {
-  const { locale, locales } = example.workspace;
+  const { locale, locales, templates = {} } = example.workspace;
   if (!locales) return [[example.id, locale]];
-  return Object.entries(locales).map(([key, named]) => [
-    `${example.id}__${key}`,
-    merge(structuredClone(locale ?? {}), named),
-  ]);
+  return Object.entries(locales).map(([key, named]) => {
+    const defaults = structuredClone(locale ?? {});
+    if (!named.template)
+      return [`${example.id}__${key}`, merge(defaults, named)];
+    if (!Object.hasOwn(templates, named.template))
+      throw new Error(
+        `${example.path}: locale ${key} uses template ${named.template}, which the example does not define`,
+      );
+    const { template, ...own } = named;
+    delete defaults.template;
+    return [
+      `${example.id}__${key}`,
+      merge(defaults, structuredClone(templates[template]), own),
+    ];
+  });
 }
 
 /** Throw unless the example uses only the supported workspace keys. */
@@ -88,11 +101,24 @@ function checkExample(example) {
     throw new Error(`${example.path}: the example has no locale`);
 }
 
-/** A twin without default filters shows whether each filter removes rows. */
-function unfiltered(locale) {
+/**
+A twin without default filters shows whether each filter removes rows. An
+explicit null default precedes a default inherited from locale.layer or the
+layer template. Templates of a templates array precede the layer, so a layer
+must not inherit a default filter from one.
+*/
+function unfiltered(locale, templates, path) {
   const twin = structuredClone(locale);
-  for (const layer of Object.values(twin.layers ?? {})) {
-    if (layer?.filter) delete layer.filter.default;
+  for (const [key, layer] of Object.entries(twin.layers ?? {})) {
+    if (!layer) continue;
+    const filtering = [layer.templates ?? []]
+      .flat()
+      .filter((template) => templates[template]?.filter?.default);
+    if (filtering.length)
+      throw new Error(
+        `${path}: layer ${key} inherits a default filter from the templates array entry ${filtering.join(', ')}, which the unfiltered twin cannot remove`,
+      );
+    layer.filter = { ...layer.filter, default: null };
   }
   return twin;
 }
@@ -113,6 +139,8 @@ export function combineExamples(list) {
       workspace.locales[key] = { dbs: example.workspace.dbs, ...locale };
       workspace.locales[`${key}${UNFILTERED}`] = unfiltered(
         workspace.locales[key],
+        workspace.templates,
+        example.path,
       );
     }
   }

@@ -12,6 +12,7 @@ sources:
   - resource: ../../utils/knowledge/changed.mjs
   - resource: ../../utils/knowledge/validate.test.mjs
   - resource: ../../utils/knowledge/concepts.test.mjs
+  - resource: ../../utils/knowledge/examples.test.mjs
 ---
 # Knowledge checks
 
@@ -69,7 +70,16 @@ label is for changes which leave every statement of the concept true;
 `pnpm knowledge:examples` runs every example in the testhost with the devdb:
 each example must load as a locale, its `wkt` and `geojson` layers must return
 rows, and each `filter.default` must return fewer rows than the same layer
-without it. CI runs it in the knowledge workflow. Source
+without it. CI runs it in the knowledge workflow.
+
+The examples are combined into one workspace, so the combiner composes the
+`locale` defaults of an example into each of its named locales as XYZ does:
+the defaults precede the template of a named locale, which precedes its own
+properties. That template must be defined in the example. The layers of the
+unfiltered twin set `filter.default` to `null`, which precedes a default filter
+inherited from `locale.layer` or a layer `template`. An entry of a layer
+`templates` array precedes the layer itself, so the combiner fails when a
+layer inherits a default filter from one. Source
 paths existing on disk does not mean their behavior still matches the prose.
 Review both when code changes. See [migration inventory](wiki-migration.md)
 and [authoring](authoring.md).
