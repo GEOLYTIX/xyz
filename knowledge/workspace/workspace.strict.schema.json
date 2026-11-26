@@ -130,6 +130,33 @@
   },
   "unevaluatedProperties": false,
   "x-xyz-concept": "knowledge/workspace/locales.md",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "locale": {
+            "properties": {
+              "layer": false,
+              "template": false,
+              "templates": false
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "locale": {
+            "$ref": "#/$defs/locale-layers"
+          },
+          "locales": {
+            "additionalProperties": {
+              "$ref": "#/$defs/locale-layers"
+            }
+          }
+        }
+      }
+    }
+  ],
   "$defs": {
     "locale": {
       "type": "object",
@@ -159,7 +186,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
+          "x-xyz-open": true
         },
         "consent": {
           "type": [
@@ -210,7 +238,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
+          "x-xyz-open": true
         },
         "dark_mode": {
           "anyOf": [
@@ -224,7 +253,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
+          "x-xyz-open": true
         },
         "dbs": {
           "type": [
@@ -337,7 +367,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
+          "x-xyz-open": true
         },
         "gazetteer": {
           "type": [
@@ -451,7 +482,7 @@
         "layer": {
           "anyOf": [
             {
-              "$ref": "#/$defs/layer",
+              "$ref": "#/$defs/layer-partial",
               "unevaluatedProperties": false
             },
             {
@@ -474,7 +505,7 @@
             "null"
           ],
           "additionalProperties": {
-            "$ref": "#/$defs/layer",
+            "$ref": "#/$defs/layer-partial",
             "unevaluatedProperties": false,
             "x-xyz-concept": "knowledge/workspace/locales.md"
           },
@@ -668,7 +699,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
+          "x-xyz-open": true
         },
         "login": {
           "anyOf": [
@@ -682,7 +714,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
+          "x-xyz-open": true
         },
         "mapviewControls": {
           "type": [
@@ -743,7 +776,8 @@
             "object",
             "null"
           ],
-          "x-xyz-concept": "knowledge/workspace/locales.md"
+          "x-xyz-concept": "knowledge/workspace/locales.md",
+          "x-xyz-open": true
         },
         "role": {
           "type": [
@@ -803,7 +837,8 @@
           ],
           "x-xyz-concept": "knowledge/workspace/locale/view.md",
           "deprecated": true,
-          "x-xyz-deprecated": "locale.svgTemplates"
+          "x-xyz-deprecated": "locale.svgTemplates",
+          "x-xyz-open": true
         },
         "syncPlugins": {
           "type": [
@@ -829,7 +864,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/templates.md"
+          "x-xyz-concept": "knowledge/workspace/templates.md",
+          "x-xyz-open": true
         },
         "templates": {
           "type": [
@@ -869,7 +905,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
+          "x-xyz-open": true
         },
         "userLocale": {
           "anyOf": [
@@ -883,7 +920,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
+          "x-xyz-open": true
         },
         "view": {
           "type": [
@@ -955,7 +993,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
+          "x-xyz-open": true
         },
         "zoomToArea": {
           "anyOf": [
@@ -969,12 +1008,13 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/locale/plugins.md"
+          "x-xyz-concept": "knowledge/workspace/locale/plugins.md",
+          "x-xyz-open": true
         }
       },
       "x-xyz-concept": "knowledge/workspace/locales.md"
     },
-    "layer": {
+    "layer-partial": {
       "type": "object",
       "properties": {
         "URI": {
@@ -1211,7 +1251,8 @@
                   "type": "null"
                 }
               ],
-              "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+              "x-xyz-concept": "knowledge/workspace/layer/draw.md",
+              "x-xyz-open": true
             },
             "drawer": {
               "type": [
@@ -1401,7 +1442,9 @@
           ],
           "items": {
             "type": "object",
-            "x-xyz-concept": "knowledge/workspace/layer/features.md"
+            "x-xyz-concept": "knowledge/workspace/layer/features.md",
+            "description": "The properties of a feature.",
+            "x-xyz-open": true
           },
           "x-xyz-concept": "knowledge/workspace/layer/features.md",
           "description": "Objects whose ID property matches a feature ID; only matched features display, with the object's properties."
@@ -1510,7 +1553,8 @@
                   "type": "null"
                 }
               ],
-              "x-xyz-concept": "knowledge/workspace/layer/filter.md"
+              "x-xyz-concept": "knowledge/workspace/layer/filter.md",
+              "x-xyz-open": true
             },
             "drawer": {
               "anyOf": [
@@ -1603,10 +1647,7 @@
           }
         },
         "format": {
-          "type": [
-            "string",
-            "null"
-          ],
+          "type": "string",
           "x-xyz-concept": "knowledge/workspace/layer/formats.md",
           "description": "Selects the method of mapp.layer.formats which creates the OpenLayers layer. Plugins add values to the registry; see plugins/extension-points.md.",
           "examples": [
@@ -1619,7 +1660,8 @@
             "tiles",
             "vector",
             "wkt"
-          ]
+          ],
+          "x-xyz-required": true
         },
         "geom": {
           "type": [
@@ -1873,7 +1915,8 @@
             "object",
             "null"
           ],
-          "x-xyz-concept": "knowledge/workspace/layer/data-source.md"
+          "x-xyz-concept": "knowledge/workspace/layer/data-source.md",
+          "x-xyz-open": true
         },
         "roles": {
           "type": [
@@ -1886,7 +1929,7 @@
                 "type": "boolean"
               },
               {
-                "$ref": "#/$defs/layer",
+                "$ref": "#/$defs/layer-partial",
                 "unevaluatedProperties": false
               }
             ],
@@ -2049,7 +2092,8 @@
                   "type": "null"
                 }
               ],
-              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md"
+              "x-xyz-concept": "knowledge/workspace/layer/style/feature-style.md",
+              "x-xyz-open": true
             },
             "drawer": {
               "anyOf": [
@@ -2167,7 +2211,8 @@
               ],
               "additionalProperties": {
                 "type": "object",
-                "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
+                "x-xyz-open": true
               },
               "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
             },
@@ -2431,7 +2476,8 @@
               ],
               "additionalProperties": {
                 "type": "object",
-                "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
+                "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md",
+                "x-xyz-open": true
               },
               "x-xyz-concept": "knowledge/workspace/layer/style/labels-hovers.md"
             },
@@ -2602,7 +2648,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/templates.md"
+          "x-xyz-concept": "knowledge/workspace/templates.md",
+          "x-xyz-open": true
         },
         "templates": {
           "type": [
@@ -2760,6 +2807,11 @@
           ]
         }
       },
+      "x-xyz-concept": "knowledge/workspace/layer/display.md",
+      "description": "The keys of a layer without its requirements, for a value which is merged with others."
+    },
+    "layer": {
+      "$ref": "#/$defs/layer-partial",
       "allOf": [
         {
           "if": {
@@ -2800,6 +2852,19 @@
           "then": {
             "required": [
               "apiKey"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "template": false,
+              "templates": false
+            }
+          },
+          "then": {
+            "required": [
+              "format"
             ]
           }
         },
@@ -2919,8 +2984,7 @@
             ]
           }
         }
-      ],
-      "x-xyz-concept": "knowledge/workspace/layer/display.md"
+      ]
     },
     "style": {
       "type": "object",
@@ -3207,7 +3271,7 @@
         }
       }
     },
-    "theme": {
+    "theme-partial": {
       "type": "object",
       "properties": {
         "cat": {
@@ -3277,7 +3341,8 @@
                   }
                 ],
                 "x-xyz-concept": "knowledge/workspace/layer/style/theme-categories.md",
-                "description": "Shorthand for style.icon; the parser moves it into the category style."
+                "description": "Shorthand for style.icon; the parser moves it into the category style.",
+                "x-xyz-open": true
               },
               "label": {
                 "anyOf": [
@@ -3505,6 +3570,11 @@
           "x-xyz-required": true
         }
       },
+      "x-xyz-concept": "knowledge/workspace/layer/style/themes.md",
+      "description": "The keys of a theme without its requirements, for a value which is merged with others."
+    },
+    "theme": {
+      "$ref": "#/$defs/theme-partial",
       "allOf": [
         {
           "if": {
@@ -3598,8 +3668,7 @@
             ]
           }
         }
-      ],
-      "x-xyz-concept": "knowledge/workspace/layer/style/themes.md"
+      ]
     },
     "entry": {
       "type": "object",
@@ -3651,7 +3720,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
+          "x-xyz-open": true
         },
         "default": {
           "anyOf": [
@@ -3674,7 +3744,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md",
+          "x-xyz-open": true
         },
         "dependents": {
           "type": [
@@ -3718,7 +3789,8 @@
             "object",
             "null"
           ],
-          "x-xyz-concept": "knowledge/workspace/layer/draw.md"
+          "x-xyz-concept": "knowledge/workspace/layer/draw.md",
+          "x-xyz-open": true
         },
         "dynamic": {
           "type": [
@@ -3762,7 +3834,8 @@
                     "object",
                     "null"
                   ],
-                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md",
+                  "x-xyz-open": true
                 },
                 "dynamic": {
                   "type": [
@@ -3859,7 +3932,8 @@
                       "type": "null"
                     }
                   ],
-                  "x-xyz-concept": "knowledge/workspace/location/editing.md"
+                  "x-xyz-concept": "knowledge/workspace/location/editing.md",
+                  "x-xyz-open": true
                 },
                 "step": {
                   "type": [
@@ -4124,7 +4198,9 @@
             "object",
             "null"
           ],
-          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
+          "description": "Options of Number.toLocaleString.",
+          "x-xyz-open": true
         },
         "group": {
           "type": [
@@ -4285,7 +4361,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md",
+          "x-xyz-open": true
         },
         "objectAssignFromField": {
           "type": [
@@ -4334,7 +4411,8 @@
             "object",
             "null"
           ],
-          "x-xyz-concept": "knowledge/workspace/location/infoj.md"
+          "x-xyz-concept": "knowledge/workspace/location/infoj.md",
+          "x-xyz-open": true
         },
         "reload": {
           "type": [
@@ -4348,13 +4426,26 @@
             "object",
             "null"
           ],
-          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
+          "x-xyz-open": true
         },
         "roles": {
           "type": [
             "object",
             "null"
           ],
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "$ref": "#/$defs/entry",
+                "unevaluatedProperties": false
+              }
+            ],
+            "x-xyz-concept": "knowledge/workspace/roles.md"
+          },
           "x-xyz-concept": "knowledge/workspace/roles.md"
         },
         "run": {
@@ -4415,11 +4506,17 @@
           "description": "Step of the range filter of numeric and integer entries; editing uses edit.step."
         },
         "style": {
-          "type": [
-            "object",
-            "null"
+          "anyOf": [
+            {
+              "$ref": "#/$defs/style"
+            },
+            {
+              "type": "null"
+            }
           ],
-          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
+          "description": "The feature style of a pin or geometry entry; a layer entry takes the keys of layer.style.",
+          "x-xyz-open": true
         },
         "suffix": {
           "type": [
@@ -4447,7 +4544,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/location/entry-types.md"
+          "x-xyz-concept": "knowledge/workspace/location/entry-types.md",
+          "x-xyz-open": true
         },
         "template": {
           "type": [
@@ -4534,7 +4632,9 @@
             "object",
             "null"
           ],
-          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+          "x-xyz-concept": "knowledge/workspace/dataviews.md",
+          "description": "Options passed on to the Chart.js chart.",
+          "x-xyz-open": true
         },
         "data": {
           "anyOf": [
@@ -4548,7 +4648,8 @@
               "type": "null"
             }
           ],
-          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+          "x-xyz-concept": "knowledge/workspace/dataviews.md",
+          "x-xyz-open": true
         },
         "dataview": {
           "type": [
@@ -4590,7 +4691,8 @@
             "object",
             "null"
           ],
-          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+          "x-xyz-concept": "knowledge/workspace/dataviews.md",
+          "x-xyz-open": true
         },
         "query": {
           "type": [
@@ -4631,7 +4733,8 @@
                   "type": "null"
                 }
               ],
-              "x-xyz-concept": "knowledge/workspace/dataviews.md"
+              "x-xyz-concept": "knowledge/workspace/dataviews.md",
+              "x-xyz-open": true
             },
             "geom": {
               "anyOf": [
@@ -4742,7 +4845,8 @@
                 "type": "null"
               }
             ],
-            "x-xyz-concept": "knowledge/workspace/dataviews.md"
+            "x-xyz-concept": "knowledge/workspace/dataviews.md",
+            "x-xyz-open": true
           },
           "unevaluatedProperties": false,
           "x-xyz-concept": "knowledge/workspace/dataviews.md"
@@ -4759,7 +4863,9 @@
             "object",
             "null"
           ],
-          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+          "x-xyz-concept": "knowledge/workspace/dataviews.md",
+          "description": "Options passed on to the Tabulator table.",
+          "x-xyz-open": true
         },
         "target": {
           "type": [
@@ -4780,7 +4886,8 @@
             "object",
             "null"
           ],
-          "x-xyz-concept": "knowledge/workspace/dataviews.md"
+          "x-xyz-concept": "knowledge/workspace/dataviews.md",
+          "x-xyz-open": true
         },
         "viewport": {
           "type": [
@@ -4959,6 +5066,29 @@
         ],
         "x-xyz-concept": "knowledge/workspace/filter-expressions.md"
       }
+    },
+    "locale-layers": {
+      "description": "Applies the layer requirements to the layers of a locale without a locale.layer, template or templates.",
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "layer": false,
+              "template": false,
+              "templates": false
+            }
+          },
+          "then": {
+            "properties": {
+              "layers": {
+                "additionalProperties": {
+                  "$ref": "#/$defs/layer"
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   }
 }

@@ -54,6 +54,10 @@ const STRICT_KEYS = `${LOCALE_KEYS.slice(0, LOCALE_KEYS.lastIndexOf('---'))}  - 
 ---
 `;
 
+/** The layer keys; with requirements, the strict layer adds them to a partial layer. */
+const layerKeys = (schema) =>
+  schema.$defs['layer-partial'] ?? schema.$defs.layer;
+
 function fixture(
   example = '{ "locale": { "layers": { "a": { "display": true } } } }',
   keys = LOCALE_KEYS,
@@ -167,7 +171,7 @@ describe('workspace schema:', () => {
     );
     for (const strict of [false, true]) {
       const schema = buildSchema(root, { strict });
-      const layer = schema.$defs.layer.properties;
+      const layer = layerKeys(schema).properties;
       expect(layer.display.type).toEqual(['boolean', 'null']);
       expect(layer.srid.anyOf).toContainEqual({ type: 'null' });
       expect(layer.name.type).toBe('string');
@@ -176,7 +180,9 @@ describe('workspace schema:', () => {
         type: 'null',
       });
       const layers = schema.$defs.locale.properties.layers;
-      expect(layers.additionalProperties.$ref).toBe('#/$defs/layer');
+      expect(layers.additionalProperties.$ref).toBe(
+        strict ? '#/$defs/layer-partial' : '#/$defs/layer',
+      );
       const errors = (value) =>
         validateWorkspace(schema, value, 'layer').errors;
       // A zoom table hides the layer at zoom levels with a null table.
@@ -205,7 +211,7 @@ describe('workspace schema:', () => {
     const layer = { name: 'a', table: 'Bad-Table', opacity: 1.5, zIndex: 'x' };
     for (const strict of [false, true]) {
       const schema = buildSchema(root, { strict });
-      expect(schema.$defs.layer.properties.opacity).toMatchObject({
+      expect(layerKeys(schema).properties.opacity).toMatchObject({
         minimum: 0,
         maximum: 1,
       });
@@ -225,10 +231,10 @@ describe('workspace schema:', () => {
       strict: true,
     });
     // Definitions are closed where they are referenced.
-    expect(schema.$defs.layer.unevaluatedProperties).toBeUndefined();
+    expect(layerKeys(schema).unevaluatedProperties).toBeUndefined();
     expect(schema.$defs.locale.properties.layers.additionalProperties).toEqual(
       expect.objectContaining({
-        $ref: '#/$defs/layer',
+        $ref: '#/$defs/layer-partial',
         unevaluatedProperties: false,
       }),
     );
@@ -250,11 +256,10 @@ describe('workspace schema:', () => {
       'locale.layers.a.colour: not allowed; no concept documents it',
       'locale.layers.a.infoj[0].colour: not allowed; no concept documents it',
     ]);
-    // Open and opaque objects stay open; unknown keys of an opaque object
-    // are undocumented, those of an open object are passed on by design.
-    expect(result.undocumented).toEqual([
-      'locale.layers.a.queryparams.anything',
-    ]);
+    // An open object and one without documented keys stay open in both
+    // schemas, and their keys are not reported.
+    expect(layerKeys(schema).properties.queryparams['x-xyz-open']).toBe(true);
+    expect(result.undocumented).toEqual([]);
   });
 
   it('enforces requirements only in the strict schema', () => {
@@ -289,6 +294,61 @@ describe('workspace schema:', () => {
     );
   });
 
+  it('exempts layers from requirements where a locale.layer may supply them', () => {
+    const root = fixture(
+      undefined,
+      STRICT_KEYS.replace(
+        '  - { key: layer.template, type: string }',
+        [
+          '  - { key: layer.template, type: string }',
+          '  - { key: workspace.locales.*, type: object, ref: locale }',
+          '  - { key: locale.layer, type: object, ref: layer }',
+          '  - { key: layer.roles.*, type: [boolean, object], ref: layer }',
+        ].join('\n'),
+      ),
+    );
+    const strict = buildSchema(root, { strict: true });
+    // Merged values reference the layer keys without the requirements.
+    expect(strict.$defs.layer).toMatchObject({
+      $ref: '#/$defs/layer-partial',
+    });
+    expect(strict.$defs['layer-partial'].allOf).toBeUndefined();
+    expect(strict.$defs.locale.properties.layer.anyOf[0].$ref).toBe(
+      '#/$defs/layer-partial',
+    );
+    const errors = (workspace) => validateWorkspace(strict, workspace).errors;
+    const layer = { format: 'wkt', table: 'points' };
+    // locale.layer supplies the name; it is partial itself.
+    expect(
+      errors({ locale: { layer: { name: 'a' }, layers: { a: layer } } }),
+    ).toEqual([]);
+    // The workspace.locale is the default of every locale.
+    expect(
+      errors({
+        locale: { layer: { name: 'a' } },
+        locales: { uk: { layers: { a: layer } } },
+      }),
+    ).toEqual([]);
+    // A roles entry is merged into the layer.
+    expect(
+      errors({
+        locale: {
+          layers: { a: { ...layer, name: 'a', roles: { admin: { srid: 1 } } } },
+        },
+      }),
+    ).toEqual([]);
+    // Without a locale.layer the layer is checked as composed; a type error
+    // found by the requirements and by the partial layer is reported once.
+    expect(
+      errors({
+        locales: { uk: { layers: { a: { ...layer, opacity: 2 } } } },
+      }),
+    ).toEqual([
+      'locales.uk.layers.a.opacity: 2 is greater than 1',
+      'locales.uk.layers.a: missing name',
+    ]);
+  });
+
   it('generalises concrete paths', () => {
     expect(keyPattern('locales.uk.layers.osm.infoj[2].field')).toBe(
       'locales.*.layers.*.infoj[].field',
@@ -315,6 +375,23 @@ describe('knowledge check with a workspace schema:', () => {
     writeSchema(root);
     expect(validateBundle(root).errors).toEqual([
       'knowledge/workspace/locales.md: example locale.layers.a: missing table or tables (required when format is "wkt" or "mvt")',
+    ]);
+  });
+
+  it('accepts keys of open objects and objects without documented keys in examples', () => {
+    const layer = (keys) =>
+      `{ "locale": { "layers": { "a": { "name": "a", ${keys} } } } }`;
+    const passes = fixture(
+      layer('"params": { "custom": 1 }, "queryparams": { "foo": 1 }'),
+      STRICT_KEYS,
+    );
+    writeSchema(passes);
+    expect(validateBundle(passes).errors).toEqual([]);
+    // The keys of a documented, closed object are still checked.
+    const fails = fixture(layer('"style": { "colour": "red" }'), STRICT_KEYS);
+    writeSchema(fails);
+    expect(validateBundle(fails).errors).toEqual([
+      'knowledge/workspace/locales.md: example locale.layers.a.style.colour: not allowed; no concept documents it',
     ]);
   });
 

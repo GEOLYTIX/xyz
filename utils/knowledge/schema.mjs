@@ -2,13 +2,23 @@
 Generate JSON Schemas for workspaces from the x-xyz-keys of the knowledge
 concepts, and validate workspaces against them.
 
-The open schema accepts every workspace the XYZ API accepts: unknown keys are
-allowed but reported as undocumented. The strict schema is the contract for
-generated workspaces: documented objects are closed with
-unevaluatedProperties, unless their key is marked open, and required keys are
-enforced with if/then. Requirements describe the composed object, so they are
-skipped for objects with a template or templates key; neither schema resolves
-templates. Optional keys accept null, which XYZ treats as unset because a
+The open schema checks the types and values of documented keys and allows
+unknown keys, which the knowledge check reports as undocumented; it describes
+the documented keys, not everything the XYZ API accepts. The strict schema is
+the contract for generated workspaces: documented objects are closed with
+unevaluatedProperties, and required keys are enforced with if/then.
+
+An object stays open in both schemas, annotated x-xyz-open, when its key is
+marked open or no concept documents its keys, eg. options passed on to a
+library; the check does not report the keys of an open object.
+
+Requirements describe the composed object, so they are skipped for objects
+with a template or templates key, and for the layers of a locale whose
+locale.layer, its own or the workspace.locale's, may supply them. Values
+which are merged into other objects, eg. locale.layer and roles entries,
+reference a partial definition without the requirements. Neither schema
+resolves templates or merges; validating the composed workspace is a
+follow-up. Optional keys accept null, which XYZ treats as unset because a
 merge copies it over a template value; required keys and object or array map
 entries, eg. a layer of a locale, do not.
 
@@ -28,7 +38,14 @@ import {
 } from 'node:fs';
 import { relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { KEY_ROOTS, KEYS, keyName, requiredRule } from './concepts.mjs';
+import {
+  KEY_ROOTS,
+  KEYS,
+  keyEntries,
+  keyName,
+  requiredRule,
+} from './concepts.mjs';
+import { markdownFiles } from './files.mjs';
 import { splitDocument } from './validate.mjs';
 
 /** The generated schemas, assets of the knowledge bundle. */
@@ -39,26 +56,47 @@ export const STRICT_SCHEMA_PATH =
 /** Keys which merge another object into theirs and exempt it from requirements. */
 const TEMPLATE_KEYS = ['template', 'templates'];
 
+/**
+Keys whose value is merged with other objects before XYZ uses it, so it may
+be partial: locale.layer under each layer, a layer over its locale.layer,
+and a roles entry over its object. In the strict schema they reference the
+partial definition of their root, which has no requirements of its own.
+*/
+const PARTIAL_KEYS = [
+  'locale.layer',
+  'locale.layers.*',
+  'layer.roles.*',
+  'locale.roles.*',
+  'entry.roles.*',
+];
+
+/** The name of the partial definition of a root. */
+const partialDef = (name) => `${name}-partial`;
+
+/** Properties which must be absent: the keys which may supply a locale.layer. */
+const noLayerDefaults = () =>
+  Object.fromEntries(['layer', ...TEMPLATE_KEYS].map((name) => [name, false]));
+
 const list = (value) =>
   value === undefined ? [] : Array.isArray(value) ? value : [value];
 
-function conceptFiles(directory, files = []) {
-  for (const entry of readdirSync(directory, { withFileTypes: true })) {
-    const path = resolve(directory, entry.name);
-    if (entry.isDirectory()) conceptFiles(path, files);
-    else if (entry.name.endsWith('.md')) files.push(path);
-  }
-  return files.sort();
-}
-
-/** Every x-xyz-keys entry with the concept which owns it. */
+/**
+Every valid x-xyz-keys entry with the concept which owns it. A concept which
+does not parse, and a malformed entry, are skipped; knowledge:check reports
+them, so one malformed concept does not stop the schema checks of the others.
+*/
 export function collectKeys(root) {
   const keys = [];
-  for (const file of conceptFiles(resolve(root, 'knowledge'))) {
-    const metadata = splitDocument(readFileSync(file, 'utf8')).metadata;
-    if (!Array.isArray(metadata?.[KEYS])) continue;
+  for (const file of markdownFiles(resolve(root, 'knowledge'))) {
+    let metadata;
+    try {
+      metadata = splitDocument(readFileSync(file, 'utf8')).metadata;
+    } catch {
+      continue;
+    }
     const concept = relative(root, file).split(sep).join('/');
-    for (const entry of metadata[KEYS]) keys.push({ ...entry, concept });
+    for (const entry of keyEntries(metadata, () => {}))
+      keys.push({ ...entry, concept });
   }
   return keys;
 }
@@ -158,7 +196,8 @@ const nullableEntry = (node) =>
   !node.entry?.ref && list(node.entry?.type).some((type) => SCALARS.has(type));
 
 /** The structural part of a node: properties, named entries and items. */
-function structure(node, options) {
+function structure(node, { strict, partials }) {
+  const options = { strict, partials };
   const result = {};
   const names = Object.keys(node.children).sort();
   if (names.length)
@@ -182,7 +221,7 @@ function structure(node, options) {
 
 /** Add the strict rules to an object branch: requirements and closure. */
 function strictRules(branch, node, options) {
-  const rules = requiredRules(node);
+  const rules = options.partial ? [] : requiredRules(node);
   if (rules.length) branch.allOf = rules;
   const documented = branch.properties || branch.$ref;
   // A definition is closed where it is referenced, so that sibling
@@ -193,9 +232,20 @@ function strictRules(branch, node, options) {
 
 function nodeSchema(node, options = {}) {
   const types = list(node.entry?.type);
-  const ref = node.entry?.ref;
-  const inner = structure(node, { strict: options.strict });
+  const ref =
+    node.entry?.ref &&
+    options.partials?.has(node.entry.ref) &&
+    PARTIAL_KEYS.includes(node.entry.key)
+      ? partialDef(node.entry.ref)
+      : node.entry?.ref;
+  const inner = structure(node, options);
   if (!types.length) types.push(node.items ? 'array' : 'object');
+  // No concept documents the keys of the object, eg. library options.
+  const opaque =
+    types.includes('object') &&
+    !ref &&
+    !Object.keys(node.children).length &&
+    !node.map;
   const branches = types.map((type) => {
     const branch = typeSchema(type, ref);
     if (type === 'object')
@@ -216,6 +266,7 @@ function nodeSchema(node, options = {}) {
     ...(options.nullable ? allowNull(schema) : schema),
     ...annotations(node.entry),
   };
+  if (opaque) result['x-xyz-open'] = true;
   if (options.nullable && result.enum) result.enum = [...result.enum, null];
   return result;
 }
@@ -235,9 +286,32 @@ documented objects and enforces required keys.
 */
 export function buildSchema(root, { strict = false } = {}) {
   const roots = keyTree(collectKeys(root));
+  const names = KEY_ROOTS.filter((name) => name !== 'workspace');
+  // Only a root with requirements of its own needs a partial definition.
+  const partials = new Set(
+    strict ? names.filter((name) => requiredRules(roots[name]).length) : [],
+  );
+  const options = { strict, partials, definition: true };
   const $defs = {};
-  for (const name of KEY_ROOTS.filter((name) => name !== 'workspace')) {
-    $defs[name] = nodeSchema(roots[name], { strict, definition: true });
+  for (const name of names) {
+    if (!partials.has(name)) {
+      $defs[name] = nodeSchema(roots[name], options);
+      continue;
+    }
+    // The definition adds its requirements to the partial one.
+    $defs[partialDef(name)] = {
+      ...nodeSchema(roots[name], { ...options, partial: true }),
+      description: `The keys of a ${name} without its requirements, for a value which is merged with others.`,
+    };
+    $defs[name] = {
+      $ref: `#/$defs/${partialDef(name)}`,
+      allOf: requiredRules(roots[name]),
+    };
+  }
+  const workspace = nodeSchema(roots.workspace, { strict, partials });
+  if (partials.has('layer')) {
+    $defs['locale-layers'] = localeLayers();
+    workspace.allOf = [...(workspace.allOf ?? []), workspaceLayers()];
   }
   return {
     $schema: 'https://json-schema.org/draft/2020-12/schema',
@@ -246,10 +320,44 @@ export function buildSchema(root, { strict = false } = {}) {
     description: strict
       ? 'Generated from the x-xyz-keys of the knowledge concepts by pnpm knowledge:schema, for generating workspaces. Documented objects are closed and required keys are enforced; an object with a template or templates key is exempt from requirements.'
       : 'Generated from the x-xyz-keys of the knowledge concepts by pnpm knowledge:schema. Unknown keys are allowed but undocumented.',
-    ...nodeSchema(roots.workspace, { strict }),
+    ...workspace,
     $defs,
   };
 }
+
+/**
+The requirements of the layers of a locale without a locale.layer or
+template which may supply their keys; its layers reference the partial
+layer otherwise.
+*/
+const localeLayers = () => ({
+  description:
+    'Applies the layer requirements to the layers of a locale without a locale.layer, template or templates.',
+  allOf: [
+    {
+      if: { properties: noLayerDefaults() },
+      then: {
+        properties: {
+          layers: { additionalProperties: { $ref: '#/$defs/layer' } },
+        },
+      },
+    },
+  ],
+});
+
+/**
+Every locale is merged into workspace.locale, so its locale.layer is the
+default for the layers of every locale.
+*/
+const workspaceLayers = () => ({
+  if: { properties: { locale: { properties: noLayerDefaults() } } },
+  then: {
+    properties: {
+      locale: { $ref: '#/$defs/locale-layers' },
+      locales: { additionalProperties: { $ref: '#/$defs/locale-layers' } },
+    },
+  },
+});
 
 const jsonType = (value) =>
   value === null
@@ -270,14 +378,22 @@ const typeMatches = (types, value) =>
 const present = (value, name) =>
   Object.hasOwn(value, name) && value[name] !== null;
 
-/** Whether an object meets an if condition: required keys, enum and absent (false) properties. */
+/**
+Whether a value meets an if condition: required keys, enum, absent (false)
+and nested properties. Like JSON Schema, a condition holds for a value which
+is not an object.
+*/
 function conditionMet(condition, value) {
+  if (jsonType(value) !== 'object') return true;
   if (!(condition.required ?? []).every((name) => present(value, name)))
     return false;
   return Object.entries(condition.properties ?? {}).every(([name, rule]) =>
     rule === false
       ? !Object.hasOwn(value, name)
-      : !present(value, name) || rule.enum.includes(value[name]),
+      : !present(value, name) ||
+        (rule.enum
+          ? rule.enum.includes(value[name])
+          : conditionMet(rule, value[name])),
   );
 }
 
@@ -296,9 +412,12 @@ const typeNames = (types) =>
     .filter((type) => type !== 'null')
     .join(' or ');
 
+/** Whether the then of a rule names required keys, rather than a schema. */
+const requirement = (rule) => rule.then.required || rule.then.anyOf;
+
 /** Check the if/then requirements of an object. */
 function checkRequirements(rules, value, path, context) {
-  for (const rule of rules) {
+  for (const rule of rules.filter(requirement)) {
     if (!conditionMet(rule.if, value)) continue;
     const options = rule.then.anyOf ?? [rule.then];
     const names = options.flatMap((option) => option.required);
@@ -307,6 +426,18 @@ function checkRequirements(rules, value, path, context) {
     context.errors.push(
       `${path || 'workspace'}: missing ${names.join(' or ')}${when ? ` (required when ${when})` : ''}`,
     );
+  }
+}
+
+/**
+Apply the if/then rules whose then is a schema, eg. the layer requirements of
+a locale, after the keys of the object. Its undocumented keys are reported by
+the schema it extends.
+*/
+function checkRuleSchemas(rules, value, path, context) {
+  for (const rule of rules.filter((rule) => !requirement(rule))) {
+    if (conditionMet(rule.if, value))
+      check(rule.then, value, path, { ...context, undocumented: [] });
   }
 }
 
@@ -386,6 +517,7 @@ function check(schema, value, path, context) {
   if (jsonType(value) !== 'object') return;
   checkRequirements(schema.allOf ?? [], value, path, context);
   checkProperties(schema, value, path, context);
+  checkRuleSchemas(schema.allOf ?? [], value, path, context);
 }
 
 /** Check the keys of an object; unknown keys are undocumented, or errors where closed. */
@@ -417,6 +549,8 @@ export function validateWorkspace(schema, value, def) {
   };
   const target = def ? { $ref: `#/$defs/${def}`, ...closed } : schema;
   check(target, value, def ?? '', context);
+  // A value checked by a rule and by its schema reports an error once.
+  context.errors = [...new Set(context.errors)];
   return context;
 }
 

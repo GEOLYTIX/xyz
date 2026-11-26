@@ -8,6 +8,7 @@ status: draft
 x-xyz-keys:
   - key: layer.format
     type: string
+    required: true
     examples: [cluster, geojson, googleMapTiles, mapboxStyle, maplibre, mvt, tiles, vector, wkt]
     description: Selects the method of mapp.layer.formats which creates the OpenLayers layer. Plugins add values to the registry; see plugins/extension-points.md.
   - { key: layer.fade, type: boolean, formats: [wkt, geojson, cluster, vector] }

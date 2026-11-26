@@ -47,9 +47,11 @@ single `locale` entry is listed.[^cache]
 ## Resolution
 
 A locale request names a key of `workspace.locales`, or a template; `locale`
-is the default key. The XYZ API composes the locale from its templates and
-roles, deep merges it into a clone of `workspace.locale`, and names it after
-its key unless it has a `name`.[^getlocale]
+is the default key. A clone of `workspace.locale` is the base: the
+locale's `template`, then its own keys, are merged over it before
+composition, and the locale's `templates` and roles merge on top. Nested locales and the
+`locale` key itself get no defaults. The locale is named after its key unless
+it has a `name`.[^getlocale]
 
 Deep merging replaces strings and numbers and merges objects key by key. An
 array whose items are all in the existing array replaces it, eg. to reorder
@@ -74,6 +76,10 @@ see [roles](roles.md).
   The presence of a key does not mean every user sees it.
 - Check nested composition against the getLocale tests before generating
   complex workspaces.
+- The strict schema checks layers before they are merged. `locale.layer` may
+  be a partial layer, and the layers of a locale with a `locale.layer`, its
+  own or that of `workspace.locale`, or with a template are exempt from the
+  required layer keys. Validating the composed layer is not implemented.
 
 # Examples
 

@@ -6,7 +6,7 @@ resource: ../../../apps/ui/lib/locations/entries/_entries.mjs
 tags: [workspace, location, infoj, ui]
 status: draft
 x-xyz-keys:
-  - { key: entry.formatterParams, type: object }
+  - { key: entry.formatterParams, type: object, open: true, description: Options of Number.toLocaleString. }
   - { key: entry.url, type: string }
   - { key: entry.report, type: object }
   - { key: entry.icon_name, type: string }
@@ -15,7 +15,7 @@ x-xyz-keys:
   - { key: entry.target, type: [string, object] }
   - { key: entry.tab_style, type: string }
   - { key: entry.display, type: boolean }
-  - { key: entry.style, type: object }
+  - { key: entry.style, type: object, ref: style, open: true, description: The feature style of a pin or geometry entry; a layer entry takes the keys of layer.style. }
   - { key: entry.zIndex, type: integer }
   - { key: entry.srid, type: string }
   - { key: entry.layer, type: string }

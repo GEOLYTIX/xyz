@@ -16,7 +16,7 @@ x-xyz-keys:
   - key: layer.featureLookup
     type: array
     description: Objects whose ID property matches a feature ID; only matched features display, with the object's properties.
-  - { key: "layer.featureLookup[]", type: object }
+  - { key: "layer.featureLookup[]", type: object, open: true, description: The properties of a feature. }
   - key: layer.featureLookupId
     type: string
     default: id

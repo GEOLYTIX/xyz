@@ -31,8 +31,8 @@ x-xyz-keys:
   - { key: dataview.data, type: [object, array] }
   - { key: dataview.props, type: object }
   - { key: dataview.toolbar, type: object }
-  - { key: dataview.table, type: object }
-  - { key: dataview.chart, type: object }
+  - { key: dataview.table, type: object, open: true, description: Options passed on to the Tabulator table. }
+  - { key: dataview.chart, type: object, open: true, description: Options passed on to the Chart.js chart. }
 sources:
   - id: wiki
     resource: https://github.com/GEOLYTIX/xyz/wiki/Workspace-Configuration/3fc379b7ada42dff57f19e9f28694868e5a17cac

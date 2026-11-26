@@ -72,10 +72,10 @@ x-xyz-keys:
   required (`when`) and the sibling keys which satisfy it instead (`or`):
   `{ key: layer.URI, type: string, required: { when: { layer.format: tiles } } }`.
   It describes the composed object, so objects with a `template` or
-  `templates` key are exempt. Optional keys accept `null`, which XYZ treats
-  as unset, eg. `filter.default: null` over a template; required keys do not.
+  `templates` key, and layers of a locale with a `locale.layer`, are exempt.
+  Optional keys accept `null`, which XYZ treats as unset; required keys do not.
 - `open: true` keeps a documented object open in the strict schema, eg. for
-  options passed on to a library.
+  library options. An object with no documented keys is always open.
 - `ref` names the root whose keys the value has, eg.
   `{ key: locale.layers.*, type: object, ref: layer }`. For an array the
   items have them; a style category is `ref: style`.
@@ -88,8 +88,9 @@ schema of that deployment which extends the generated one with `allOf`.
 `pnpm knowledge:schema` generates two schemas from all `x-xyz-keys`; commit
 them with the concepts:
 
-- `knowledge/workspace/workspace.schema.json` accepts every workspace the XYZ
-  API accepts. Unknown keys are allowed; editors can validate with it.
+- `knowledge/workspace/workspace.schema.json` allows unknown keys; editors
+  validate with it. It checks documented keys strictly by JSON type, `enum`
+  and pattern, so a value the XYZ API coerces or ignores can fail it.
 - `knowledge/workspace/workspace.strict.schema.json` is the contract for
   generated workspaces. It rejects undocumented keys in documented objects and
   enforces `required`. Agents validate generated workspaces with it.
