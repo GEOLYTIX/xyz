@@ -27,15 +27,24 @@ import utils from './utils/_utils.mjs';
 
 hooks.parse();
 
-const ol_current = 10.8; //07/04/2026
+// The current Openlayers [major, minor] version. 07/04/2026
+const ol_current = [10, 8];
 
 globalThis.ol ??= {};
+
+// The major and minor versions are compared as numbers, a float would read v10.11 as below v10.8.
+const [ol_major, ol_minor] = (ol.util?.VERSION || '').split('.').map(Number);
 
 // Check whether Openlayers has been loaded.
 if (!ol.util?.VERSION) {
   console.warn(`Openlayers has not been loaded.`);
-} else if (Number.parseFloat(ol.util?.VERSION) < ol_current) {
-  console.warn(`Openlayers v${ol.util?.VERSION} below current v${ol_current}.`);
+} else if (
+  ol_major < ol_current[0] ||
+  (ol_major === ol_current[0] && ol_minor < ol_current[1])
+) {
+  console.warn(
+    `Openlayers v${ol.util?.VERSION} below current v${ol_current.join('.')}.`,
+  );
 } else {
   console.log(`Openlayers v${ol.util?.VERSION}`);
 }
@@ -54,3 +63,6 @@ globalThis.mapp = {
   utils,
   version: '5.1.0',
 };
+
+// The @geolytix/mapp package exports the mapp object as default export. The mapp global remains for the MAPP.UI library and the XYZ views.
+export default globalThis.mapp;

@@ -13,6 +13,8 @@ Assigns feature properties based on layer configuration.
 
 Features not in the layer featureSet, featuresObject, or featureLookup will not be displayed and return null.
 
+The id of a feature is not changed by the properties from the featuresObject.
+
 @param {layer} layer The decorated mapp layer.
 @param {Object} properties The feature properties.
 @property {Set} [layer.featureSet] A set of feature IDs to be displayed.
@@ -27,9 +29,14 @@ export function featureProperties(layer, properties) {
 
   // Assign MVT feature properties from the layer featuresObject.
   if (layer.featuresObject) {
-    if (!Object.hasOwn(layer.featuresObject, properties.id)) return null;
+    const { id } = properties;
 
-    Object.assign(properties, layer.featuresObject[properties.id]);
+    if (!Object.hasOwn(layer.featuresObject, id)) return null;
+
+    Object.assign(properties, layer.featuresObject[id]);
+
+    // The properties of the tile feature are kept between renders. The id must not be changed by the properties, or the feature would not be found in the featuresObject again.
+    properties.id = id;
   }
 
   // Check whether feature is in lookup.

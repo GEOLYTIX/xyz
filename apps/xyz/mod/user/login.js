@@ -62,7 +62,7 @@ export default function login(req, res) {
   }
 
   req.params.template = 'login_view';
-  view(req, res);
+  return view(req, res);
 }
 
 /**
@@ -94,8 +94,7 @@ async function loginBody(req, res) {
     ) {
       req.params.msg = user.message;
       req.params.template = 'login_view';
-      view(req, res);
-      return;
+      return view(req, res);
     }
 
     return res
@@ -104,5 +103,5 @@ async function loginBody(req, res) {
       .send(user.message);
   }
 
-  redirect(req, res, user);
+  return redirect(req, res, user);
 }

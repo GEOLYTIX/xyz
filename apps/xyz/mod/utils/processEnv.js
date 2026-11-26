@@ -76,6 +76,7 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [LOGGER] Required to configure the [LOGGER]{@link module:/utils/logger} module for a remote out.
 @property {String} [RATE_LIMIT=1000] Maximum requests per window in the [express]{@link module:express} module
 @property {String} [RATE_LIMIT_WINDOW=60000] Time window in ms in the [express]{@link module:express} module
+@property {String} [CORS_ORIGINS] Comma separated list of origins, or `*` for any origin, which are allowed cross-origin access to the XYZ API and public files by the [cors]{@link module:/middleware/cors} middleware. Credentials are not allowed. Cross-origin requests are anonymous unless they explicitly provide a token.
 @property {String} [PRIVATE] All requests to XYZ API require authentication. The PRIVATE value represents the ACL connection.
 @property {String} [PUBLIC] General requests to XYZ API do require authentication. The PUBLIC value represents an ACL connection for optional authentication.
 @property {String} [SECRET] A secret string is required to sign and [validate JWT]{@link module:/user/auth}.
@@ -106,7 +107,7 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SAML_AUTHN_RESPONSE_SIGNED] Require signed responses (true/false)
 @property {String} [SAML_SIGNATURE_ALGORITHM] Algorithm for signing (e.g., 'sha256')
 @property {String} [SAML_IDENTIFIER_FORMAT] Format for name identifiers
-@property {String} [SAML_ACCEPTED_CLOCK_SKEW] Allowed time difference in ms
+@property {String} [SAML_ACCEPTED_CLOCK_SKEW=60000] Allowed clock difference in ms for the assertion NotBefore/NotOnOrAfter checks. Negative or non-integer values fall back to 60000; the checks cannot be disabled.
 @property {String} [SAML_PROVIDER_NAME] Display name for your service
 @property {String} [SLO_CALLBACK] URL for handling logout callbacks
 @property {Boolean} [LEGACY_ROLES] Enable legacy role checks
@@ -139,7 +140,7 @@ const defaults = {
   TITLE: 'GEOLYTIX | XYZ',
   TRANSPORT_PORT: 587,
   TRANSPORT_TLS: false,
-  WORKSPACE_AGE: 3600000, // 1 min
+  WORKSPACE_AGE: 3600000, // 1 hour
   FILE_RESOURCES: 'resources',
 };
 

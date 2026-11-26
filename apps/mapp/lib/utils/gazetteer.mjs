@@ -165,7 +165,7 @@ function addRow(dataset, layer, row) {
     onclick=${(e) => {
       if (dataset.callback) return dataset.callback(row, dataset);
 
-      mapp.location
+      void mapp.location
         .get({
           id: row.id,
           layer,

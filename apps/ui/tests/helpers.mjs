@@ -10,7 +10,7 @@ The grocery locale has the hidden `osm` tiles layer and the `retail_points` clus
 The scratch locale has the `scratch_location` layer with editable infoj entries. Tests which update or delete a location insert their own record into the empty example.scratch_location table.
 */
 
-import { onTestFinished } from 'vitest';
+import { onTestFinished, vi } from 'vitest';
 import {
   addLayers,
   createMapview,
@@ -22,9 +22,21 @@ export {
   addLayers,
   changeEnd,
   createMapview,
+  createPolygon,
+  drawPolygon,
   getLocale,
   getRecord,
   newLocation,
+  panTo,
+  renameLocation,
+  render,
+  resetTable,
+  scratchPolygonLayer,
+  tableRows,
+  themeColours,
+  themeStyles,
+  themeValues,
+  trashLocation,
 } from '../../mapp/tests/helpers.mjs';
 
 // Lidl Walworth Road in the grocery locale view.
@@ -213,4 +225,64 @@ Returns the infoj entry of a location for a field.
 */
 export function entry(location, field) {
   return location.infoj.find((entry) => entry.field === field);
+}
+
+/**
+@function mapTarget
+
+@description
+Adds a #Map element as dialog target to the document, like the default view. The element is removed when the test finishes.
+
+The close event is dispatched on each dialog in the target first. The close method of the dialog disconnects the ResizeObserver of a non-modal dialog from its target. The event is dispatched, because the close() method of a dialog element which is not open doesn't dispatch the event.
+
+@returns {HTMLElement} The #Map target element.
+*/
+export function mapTarget() {
+  const target = document.createElement('div');
+  target.id = 'Map';
+  document.body.append(target);
+
+  onTestFinished(() => {
+    for (const node of target.querySelectorAll('dialog')) {
+      node.dispatchEvent(new Event('close'));
+    }
+
+    target.remove();
+  });
+
+  return target;
+}
+
+/**
+@function mockJSONEditor
+
+@description
+Stubs the esmImport of the vanilla-jsoneditor module from esm.sh with a fake createJSONEditor method. The fake editor renders a copy of the default menu with the onRenderMenu prop, and get() and set() the content. The set method is a mock.
+
+@param {Array<Object>} defaultMenu The default menu items of the jsoneditor which are passed to the onRenderMenu prop.
+@returns {Array<Object>} The array of the fake editors.
+*/
+export function mockJSONEditor(defaultMenu) {
+  const editors = [];
+
+  const createJSONEditor = vi.fn((params) => {
+    let content = params.props.content;
+
+    const editor = {
+      menu: params.props.onRenderMenu([...defaultMenu]),
+      get: () => content,
+      set: vi.fn((c) => {
+        content = c;
+      }),
+      target: params.target,
+    };
+
+    editors.push(editor);
+
+    return editor;
+  });
+
+  vi.spyOn(mapp.utils, 'esmImport').mockResolvedValue({ createJSONEditor });
+
+  return editors;
 }

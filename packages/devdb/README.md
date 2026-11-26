@@ -31,6 +31,7 @@ A new database creates the `postgis` extension and then runs the `*.sql` files i
 | `example.features` | `002_features.sql` | A line, a polygon and points in EPSG:3857, plus a row with a null category and a row with a null geometry |
 | `example.log` | `002_features.sql` | An empty table for insert queries |
 | `example.scratch_location` | `003_scratch_location.sql` | An empty table for location create, update and delete tests, with text, integer, jsonb, json and EPSG:4326 point columns. Tests insert their own rows. |
+| `example.scratch_polygon` | `004_scratch_polygon.sql` | 4 EPSG:3857 polygons around London with distinct names, for location create and delete tests of an mvt layer with wkt_properties. Tests must delete the rows they create. |
 | `geodata.uk_glx_open_retail_points` | `100_retailpoints.sql` | 19,229 grocery stores in EPSG:4326 from the [GEOLYTIX UK Retail Points](https://geolytix.com/blog/supermarket-retail-points/) v49 (2026-09), Open Data CC0. The `geom_p_4326` points are rounded to 6 decimals. |
 | `naturalearth.countries` | `101_naturalearth_countries.sql` | 177 countries from the [Natural Earth](https://www.naturalearthdata.com/downloads/110m-cultural-vectors/110m-admin-0-countries/) 1:110m Admin 0 countries, public domain. MultiPolygons in `geom_4326` and in `geom_3857`, clipped to the EPSG:3857 latitude bounds. |
 

@@ -131,7 +131,7 @@ function update(dataview) {
     onclick=${() => {
       const toogle = dataview.toolbar.update.button.classList.toggle('active');
       if (toogle) {
-        updateDialog(dataview);
+        void updateDialog(dataview);
       } else {
         dataview.toolbar.update.dialog.close();
       }
@@ -186,21 +186,22 @@ async function updateDialog(dataview) {
   // Create a custom menu for the userLayer jsoneditor control.
   function renderUpdateMenu(items) {
     // Push button to add layer to mapview layers.
-    items.push({
-      className: 'notranslate material-symbols-outlined-important',
-      onClick: updateDataview,
-      text: 'sync',
-      title: 'Update Dataview Query',
-      type: 'button',
-    });
-
-    items.push({
-      className: 'notranslate material-symbols-outlined-important',
-      onClick: setDataview,
-      text: 'data_object',
-      title: 'Set Dataview Data',
-      type: 'button',
-    });
+    items.push(
+      {
+        className: 'notranslate material-symbols-outlined-important',
+        onClick: updateDataview,
+        text: 'sync',
+        title: 'Update Dataview Query',
+        type: 'button',
+      },
+      {
+        className: 'notranslate material-symbols-outlined-important',
+        onClick: setDataview,
+        text: 'data_object',
+        title: 'Set Dataview Data',
+        type: 'button',
+      },
+    );
 
     return items
       .filter((item) => item.text !== 'table')

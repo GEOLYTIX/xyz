@@ -35,7 +35,7 @@ export async function openDB(params, version = 3) {
     version = db.version;
   }
 
-  const OpenDBPromise = new Promise(async (resolve, reject) => {
+  const OpenDBPromise = new Promise((resolve, reject) => {
     // will create a new database if db/version doesn't exist.
     const IDBRequest = indexedDB.open(params.indexedDB, version);
 

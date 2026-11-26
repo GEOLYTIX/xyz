@@ -64,6 +64,7 @@ describe('redirect:', async () => {
       iss: 'xyz',
       aud: ['xyz'],
     });
+    expect(jwt.decode(token)).not.toHaveProperty('lookup');
     expect(cookies[1]).toEqual('TEST_APP_redirect=null; Max-Age=0; undefined');
     expect(res.statusCode).toBe(302);
     expect(res.getHeader('location')).toBe('/app/dashboard');

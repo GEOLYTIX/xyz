@@ -11,7 +11,11 @@ process.env.TESTHOST_WORKSPACE = fileURLToPath(
 
 // The module tests are *.test.mjs files. The default view tests are Playwright *.spec.mjs files, see playwright.config.mjs.
 export default defineConfig({
-  root: fileURLToPath(new URL('.', import.meta.url)),
+  // The drive letter is uppercased on Windows. The VS Code extension starts Vitest with a lowercase drive letter cwd, eg. c:\. Vite would then serve the lib modules from two urls and the test files would import another module instance than the mapp global.
+  root: fileURLToPath(new URL('.', import.meta.url)).replace(
+    /^[a-z]:/,
+    (drive) => drive.toUpperCase(),
+  ),
   // The MAPP library is imported from the mapp app in the setup.
   server: {
     fs: { allow: [repoRoot] },
@@ -40,10 +44,10 @@ export default defineConfig({
       include: ['lib/**/*.mjs'],
       // The coverage floor. Raise the thresholds with new tests. The thresholds are a point below the coverage, which differs by a few branches between runs.
       thresholds: {
-        statements: 33,
-        branches: 30,
-        functions: 32,
-        lines: 33,
+        statements: 44,
+        branches: 41,
+        functions: 45,
+        lines: 44,
       },
       // The lcov.info is for SonarQube, which resolves the source paths from the repository root.
       reporter: [

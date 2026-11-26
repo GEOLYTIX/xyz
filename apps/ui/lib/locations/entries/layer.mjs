@@ -42,7 +42,7 @@ export default function layer(entry) {
 
   entry.zIndex ??= entry.location.layer.zIndex++;
 
-  decorateLayer(entry);
+  void decorateLayer(entry);
 
   entry.panel ??= mapp.utils.html.node`<div class="entry-layer">`;
 
