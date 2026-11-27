@@ -376,6 +376,28 @@ describe('environment coverage:', () => {
     'const d = xyzEnv.WALLET[key] ?? process.env.NODE_ENV;',
   ].join('\n');
 
+  it('keeps code after comment markers inside strings, templates and regular expressions', () => {
+    const root = fixture({
+      'apps/xyz/mod/a.js': [
+        "const e = 'a//b' + xyzEnv.AFTER_SLASHES;",
+        "const f = 'apps/*'; const g = xyzEnv.AFTER_GLOB;",
+        'const h = `${{ a: 1 }.a}//${xyzEnv.IN_TEMPLATE}`; // xyzEnv.TEMPLATE_COMMENT',
+        "const r = /['/]+/.test(s) && xyzEnv.AFTER_REGEX; // xyzEnv.REGEX_COMMENT",
+        'const q = a / b / xyzEnv.AFTER_DIVISION;',
+        '/* xyzEnv.IN_BLOCK',
+        '   still a comment */ const m = xyzEnv.LAST;',
+      ].join('\n'),
+    });
+    expect([...readEnvironment(root)].sort()).toEqual([
+      'AFTER_DIVISION',
+      'AFTER_GLOB',
+      'AFTER_REGEX',
+      'AFTER_SLASHES',
+      'IN_TEMPLATE',
+      'LAST',
+    ]);
+  });
+
   it('collects variables read in code and ignores comments and platform names', () => {
     const root = fixture({
       'apps/xyz/mod/a.js': code,

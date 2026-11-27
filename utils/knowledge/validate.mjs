@@ -351,14 +351,153 @@ function sourceFiles(path) {
   return files;
 }
 
-/**
-Remove block comments, line comments and trailing line comments. A // after a
-colon or a quote, eg. in a URL, is kept.
-*/
-export const stripComments = (code) =>
-  code.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`\\])\/\/.*$/gm, '$1');
+/** A slash after one of these starts a regular expression, not a division. */
+const REGEX_PRECEDES =
+  /(?:^|[(,=:[!&|?{};+\-*%<>~^]|\b(?:return|typeof|case|do|else|in|of|void|yield|await|delete|throw|new))\s*$/;
 
-/** Collect xyzEnv and process.env names read by the XYZ API source. */
+/**
+@function stripComments
+@description
+Removes block and line comments from JavaScript source.
+
+Strings, template literals and regular expressions are copied unchanged, so a
+// or /* inside them, eg. in a URL or a glob, does not start a comment. A block
+comment is replaced by a space so that the code on either side stays apart.
+
+The source is walked once by [codeStep]{@link codeStep}, which shares a state
+object with [copyLiteral]{@link copyLiteral} and
+[copyTemplate]{@link copyTemplate}.
+@param {string} code The JavaScript source.
+@returns {string} The source without comments.
+*/
+export function stripComments(code) {
+  const state = { code, i: 0, out: '', depth: 0, substitutions: [] };
+  while (state.i < code.length) codeStep(state);
+  return state.out;
+}
+
+/**
+@function codeStep
+@description
+Consumes the comment, literal or single character of code at `state.i`.
+
+A comment is dropped. A string, regular expression or template literal is
+copied by [copyLiteral]{@link copyLiteral} or [copyTemplate]{@link copyTemplate}.
+A slash starts a regular expression when the code before it ends in an operator,
+a punctuator or a keyword such as `return`, and a division otherwise.
+
+Braces are counted so that the } which closes a `${` substitution resumes its
+template literal.
+@param {Object} state The scan state of [stripComments]{@link stripComments}.
+@property {string} state.code The JavaScript source.
+@property {number} state.i The index of the next character, advanced past the token.
+@property {string} state.out The source without comments, extended by the token.
+@property {number} state.depth The number of open braces in code.
+@property {Array<number>} state.substitutions The brace depth at which each open `${` substitution closes.
+*/
+function codeStep(state) {
+  const { code, i } = state;
+  const c = code[i];
+  const next = code[i + 1];
+  if (c === '/' && next === '/') {
+    const end = code.indexOf('\n', i);
+    state.i = end < 0 ? code.length : end;
+  } else if (c === '/' && next === '*') {
+    const end = code.indexOf('*/', i + 2);
+    state.i = end < 0 ? code.length : end + 2;
+    state.out += ' ';
+  } else if (c === "'" || c === '"') {
+    copyLiteral(state, c);
+  } else if (c === '/' && REGEX_PRECEDES.test(state.out.slice(-32))) {
+    copyLiteral(state, '/');
+  } else if (c === '`') {
+    state.out += c;
+    state.i++;
+    copyTemplate(state);
+  } else {
+    state.out += c;
+    state.i++;
+    if (c === '{') state.depth++;
+    // A } at the depth of the innermost ${ resumes its template literal.
+    if (c === '}' && state.substitutions.at(-1) === --state.depth) {
+      state.substitutions.pop();
+      copyTemplate(state);
+    }
+  }
+}
+
+/**
+@function copyLiteral
+@description
+Copies the string or regular expression literal which starts at `state.i`.
+
+The literal ends at its unescaped closing character, or at the end of the line
+for an unterminated literal. A closing slash inside a character class, eg.
+`/[/]/`, does not end a regular expression.
+@param {Object} state The scan state of [stripComments]{@link stripComments}.
+@param {string} close The closing character: a quote or a slash.
+@property {string} state.code The JavaScript source.
+@property {number} state.i The index of the opening character, advanced past the literal.
+@property {string} state.out The source without comments, extended by the literal.
+*/
+function copyLiteral(state, close) {
+  const { code, i } = state;
+  let j = i + 1;
+  let inClass = false;
+  while (j < code.length && code[j] !== '\n') {
+    const c = code[j];
+    j += c === '\\' ? 2 : 1;
+    if (c === '\\') continue;
+    if (close === '/' && (c === '[' || c === ']')) inClass = c === '[';
+    else if (c === close && !inClass) break;
+  }
+  state.out += code.slice(i, j);
+  state.i = j;
+}
+
+/**
+@function copyTemplate
+@description
+Copies a template literal from `state.i` up to its closing backtick or its next
+`${`.
+
+A `${` opens a substitution: its brace depth is pushed onto
+`state.substitutions`, and [codeStep]{@link codeStep} scans the substitution as
+code until the matching } resumes the template literal.
+@param {Object} state The scan state of [stripComments]{@link stripComments}.
+@property {string} state.code The JavaScript source.
+@property {number} state.i The index inside the template literal, advanced past the copied text.
+@property {string} state.out The source without comments, extended by the copied text.
+@property {number} state.depth The number of open braces in code, raised by a `${`.
+@property {Array<number>} state.substitutions The brace depth at which each open `${` substitution closes.
+*/
+function copyTemplate(state) {
+  const { code } = state;
+  let j = state.i;
+  while (j < code.length && code[j] !== '`' && !code.startsWith('${', j)) {
+    j += code[j] === '\\' ? 2 : 1;
+  }
+  if (code[j] === '`') j++;
+  else if (j < code.length) {
+    j += 2;
+    state.substitutions.push(state.depth++);
+  }
+  state.out += code.slice(state.i, j);
+  state.i = j;
+}
+
+/**
+@function readEnvironment
+@description
+Collects the `xyzEnv` and `process.env` names read by the XYZ API, its server
+entry, and the auth and SAML apps.
+
+Comments are removed by [stripComments]{@link stripComments} first, since they
+describe variables without reading them. Platform and test runner names, and
+the WALLET derived by processEnv, are ignored.
+@param {string} root The repository directory.
+@returns {Set<string>} The environment variable names.
+*/
 export function readEnvironment(root) {
   const names = new Set();
   const pattern =
