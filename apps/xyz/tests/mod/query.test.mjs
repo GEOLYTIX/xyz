@@ -1,5 +1,5 @@
 import { createMocks } from 'node-mocks-http';
-import { afterAll, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import { startDevDb } from '../../../../packages/devdb/index.js';
 import { mockConsole } from '../scaffold.mjs';
 
@@ -588,5 +588,470 @@ describe('Query: layer_extent', () => {
 
     expect(res.status).toBe(200);
     expect(res.data).toEqual([-19000, 6711000, -15000, 6712000]);
+  });
+});
+
+/**
+ * The location write templates are authorized by the layer config composed for the requesting user.
+ *
+ * The scratch_readonly and scratch_edit layers of example.scratch_location have a default filter for the public category. The scratch_edit layer has a draw config, deleteLocation, editable entries, and a size entry which is editable for the editor role only.
+ *
+ * The tests insert their own rows, because all test files of a run share the devdb.
+ */
+describe('Query: location write authorization', () => {
+  const table = 'example.scratch_location';
+
+  const EDITOR = { email: 'editor@example.com', roles: ['editor'] };
+
+  function write(template, layer, params = {}, body) {
+    return request({ template, layer, table, ...params }, body);
+  }
+
+  /**
+   * Inserts a public row through the scratch_edit layer and returns the id. The mapp createLocation method sends the layer.draw defaults in the body.
+   */
+  async function newRow(name) {
+    const res = await write(
+      'location_new',
+      'scratch_edit',
+      {},
+      { name, category: 'public' },
+    );
+
+    expect(res.status).toBe(200);
+
+    return res.data;
+  }
+
+  /**
+   * Inserts a row with the private category, which does not pass the default filter.
+   */
+  async function privateRow(name) {
+    return (await request({ template: 'scratch_insert_private', name })).data;
+  }
+
+  async function row(id) {
+    return (await request({ template: 'scratch_row', id })).data;
+  }
+
+  describe('location_new', () => {
+    it('inserts the editable fields and draw defaults', async () => {
+      const id = await newRow('new public');
+
+      expect(await row(id)).toMatchObject({
+        name: 'new public',
+        category: 'public',
+      });
+    });
+
+    it('returns 403 on a layer without a draw config', async () => {
+      const res = await write(
+        'location_new',
+        'scratch_readonly',
+        {},
+        { name: 'denied', category: 'public' },
+      );
+
+      expect(res.status).toBe(403);
+    });
+
+    it.each([
+      ['the layer qID', { name: 'x', id: 99 }],
+      [
+        'a draw defaults field with another value',
+        { name: 'x', category: 'private' },
+      ],
+      ['a field which is editable for another role', { name: 'x', size: 1 }],
+    ])('returns 403 for %s', async (_, body) => {
+      const res = await write('location_new', 'scratch_edit', {}, body);
+
+      expect(res.status).toBe(403);
+    });
+
+    it('inserts a field which is editable for the user role', async () => {
+      const res = await write(
+        'location_new',
+        'scratch_edit',
+        { user: EDITOR },
+        { name: 'editor new', category: 'public', size: 3 },
+      );
+
+      expect(res.status).toBe(200);
+      expect(await row(res.data)).toMatchObject({ size: 3 });
+    });
+  });
+
+  describe('location_update', () => {
+    it('updates the editable fields', async () => {
+      const id = await newRow('update me');
+
+      const res = await write(
+        'location_update',
+        'scratch_edit',
+        { id },
+        {
+          name: 'updated',
+          tag: { jsonb: { props: { tag: 'blue' } } },
+          meta: { colour: 'red' },
+        },
+      );
+
+      expect(res.status).toBe(202);
+      expect(await row(id)).toMatchObject({
+        name: 'updated',
+        props: { tag: 'blue' },
+        meta: { colour: 'red' },
+      });
+    });
+
+    it('returns 403 on a layer without editable entries', async () => {
+      const id = await newRow('read only');
+
+      const res = await write(
+        'location_update',
+        'scratch_readonly',
+        { id },
+        { name: 'tampered' },
+      );
+
+      expect(res.status).toBe(403);
+      expect((await row(id)).name).toBe('read only');
+    });
+
+    it.each([
+      ['a field which is not editable', { category: 'tampered' }],
+      ['a column which is not in the infoj', { props: { injected: true } }],
+      ['a field which is editable for another role', { size: 999 }],
+      [
+        'a jsonb value for another jsonb field',
+        { tag: { jsonb: { meta: { injected: true } } } },
+      ],
+      [
+        'a jsonb key which is not the jsonb_key of the entry',
+        { tag: { jsonb: { props: { injected: true } } } },
+      ],
+      ['a plain value for the field of a jsonb entry', { tag: 'plain' }],
+      [
+        'a jsonb value for a field which is not a jsonb entry',
+        { name: { jsonb: { props: { tag: 'x' } } } },
+      ],
+      ['the layer qID', { id: 1 }],
+    ])('returns 403 for %s', async (_, body) => {
+      const id = await newRow('update denied');
+
+      const res = await write('location_update', 'scratch_edit', { id }, body);
+
+      expect(res.status).toBe(403);
+      expect(await row(id)).toMatchObject({
+        name: 'update denied',
+        category: 'public',
+        size: null,
+        props: null,
+      });
+    });
+
+    /**
+     * The meta json field of the scratch_edit layer is only editable through the colour json_key entry. The mapp location update sends the whole meta object with the current values of the other keys.
+     */
+    describe('a json field edited through json_key entries', () => {
+      async function metaRow(name) {
+        const id = await newRow(name);
+
+        await request({
+          template: 'scratch_set_meta',
+          id,
+          meta: JSON.stringify({ colour: 'red', owner: 'alice' }),
+        });
+
+        return id;
+      }
+
+      it('merges the editable key and keeps the other keys', async () => {
+        const id = await metaRow('json merge');
+
+        const res = await write(
+          'location_update',
+          'scratch_edit',
+          { id },
+          { meta: { colour: 'blue', owner: 'alice' } },
+        );
+
+        expect(res.status).toBe(202);
+        expect((await row(id)).meta).toEqual({
+          colour: 'blue',
+          owner: 'alice',
+        });
+      });
+
+      it('does not write a key which is not editable', async () => {
+        const id = await metaRow('json owner');
+
+        const res = await write(
+          'location_update',
+          'scratch_edit',
+          { id },
+          { meta: { colour: 'green', owner: 'attacker' } },
+        );
+
+        expect(res.status).toBe(202);
+        expect((await row(id)).meta).toEqual({
+          colour: 'green',
+          owner: 'alice',
+        });
+      });
+
+      it('returns 403 for a value which would replace the json field', async () => {
+        const id = await metaRow('json null');
+
+        const res = await write(
+          'location_update',
+          'scratch_edit',
+          { id },
+          { meta: null },
+        );
+
+        expect(res.status).toBe(403);
+        expect((await row(id)).meta).toEqual({ colour: 'red', owner: 'alice' });
+      });
+    });
+
+    /**
+     * The scratch_jsonb_alias layer has an editable jsonb entry whose field is the geom column. The geom column itself is not editable. The template writes a value with coordinates as a geometry, even if the value has a jsonb property.
+     */
+    describe('a jsonb entry whose field is a table column', () => {
+      it('merges a jsonb value into the jsonb field', async () => {
+        const id = await newRow('jsonb alias');
+
+        const res = await write(
+          'location_update',
+          'scratch_jsonb_alias',
+          { id },
+          { geom: { jsonb: { props: { label: 'a' } } } },
+        );
+
+        expect(res.status).toBe(202);
+        expect(await row(id)).toMatchObject({
+          props: { label: 'a' },
+          geom: null,
+        });
+      });
+
+      it('returns 403 for a jsonb value with coordinates', async () => {
+        const id = await newRow('jsonb geometry');
+
+        const res = await write(
+          'location_update',
+          'scratch_jsonb_alias',
+          { id },
+          {
+            geom: {
+              type: 'Point',
+              coordinates: [1, 1],
+              jsonb: { props: { label: 'a' } },
+            },
+          },
+        );
+
+        expect(res.status).toBe(403);
+        expect(await row(id)).toMatchObject({ props: null, geom: null });
+      });
+    });
+
+    it('updates a field which is editable for the user role', async () => {
+      const id = await newRow('editor update');
+
+      await write(
+        'location_update',
+        'scratch_edit',
+        { id, user: EDITOR },
+        { size: 7 },
+      );
+
+      expect((await row(id)).size).toBe(7);
+    });
+
+    it('returns 403 for a table which is not a layer table', async () => {
+      // The example.log table is referenced in a dataview entry of the layer.
+      const res = await request(
+        {
+          template: 'location_update',
+          layer: 'scratch_edit',
+          table: 'example.log',
+          id: '1',
+        },
+        { name: 'tampered' },
+      );
+
+      expect(res.status).toBe(403);
+    });
+
+    it('does not update a row which fails the default filter', async () => {
+      const id = await privateRow('hidden update');
+
+      await write(
+        'location_update',
+        'scratch_edit',
+        { id },
+        { name: 'tampered' },
+      );
+
+      expect((await row(id)).name).toBe('hidden update');
+    });
+  });
+
+  describe('location_get', () => {
+    it('does not return a row which fails the default filter', async () => {
+      const id = await privateRow('hidden get');
+
+      const res = await write('location_get', 'scratch_readonly', { id });
+
+      expect(res.status).toBe(202);
+    });
+
+    it('returns a row which passes the default filter', async () => {
+      const id = await newRow('public get');
+
+      const res = await write('location_get', 'scratch_readonly', { id });
+
+      expect(res.data).toEqual({
+        id: Number(id),
+        name: 'public get',
+        category: 'public',
+        size: null,
+      });
+    });
+  });
+
+  describe('location_delete', () => {
+    it('deletes a row on a layer with deleteLocation', async () => {
+      const id = await newRow('delete me');
+
+      await write('location_delete', 'scratch_edit', { id });
+
+      expect((await request({ template: 'scratch_row', id })).status).toBe(202);
+    });
+
+    it('returns 403 on a layer without deleteLocation', async () => {
+      const id = await newRow('keep me');
+
+      const res = await write('location_delete', 'scratch_readonly', { id });
+
+      expect(res.status).toBe(403);
+      expect((await row(id)).name).toBe('keep me');
+    });
+
+    it('does not delete a row which fails the default filter', async () => {
+      const id = await privateRow('hidden delete');
+
+      await write('location_delete', 'scratch_edit', { id });
+
+      expect((await row(id)).name).toBe('hidden delete');
+    });
+  });
+
+  describe('locations_delete', () => {
+    it('returns 403 on a layer without deleteLocation', async () => {
+      const id = await newRow('bulk keep');
+
+      const res = await write('locations_delete', 'scratch_readonly');
+
+      expect(res.status).toBe(403);
+      expect((await row(id)).name).toBe('bulk keep');
+    });
+
+    it('deletes the rows which pass the filter on a layer with deleteLocation', async () => {
+      const id = await newRow('bulk delete');
+      const keep = await newRow('bulk delete keep');
+
+      // The filter restricts the delete to the row of this test. The test rows of other tests share the table.
+      await write('locations_delete', 'scratch_edit', {
+        filter: JSON.stringify({ name: { match: 'bulk delete' } }),
+      });
+
+      expect((await request({ template: 'scratch_row', id })).status).toBe(202);
+      expect((await row(keep)).name).toBe('bulk delete keep');
+    });
+  });
+
+  describe('sql_table_insert', () => {
+    function insert(layer, body, params = {}) {
+      return write('sql_table_insert', layer, params, body);
+    }
+
+    it('inserts the fields of the csv_upload config', async () => {
+      const res = await insert('scratch_edit', {
+        'name::text': ['csv insert'],
+        'category::text': ['public'],
+      });
+
+      expect(res.status).toBe(202);
+
+      const inserted = await request({
+        template: 'scratch_by_name',
+        name: 'csv insert',
+      });
+
+      expect(inserted.data).toEqual({ name: 'csv insert', category: 'public' });
+    });
+
+    it.each([
+      ['a layer without an insert config', 'scratch_readonly', {}],
+      ['a field which is not in the config fields', 'scratch_edit', {}],
+      [
+        'a table which is not the config table',
+        'scratch_edit',
+        { table: 'example.log' },
+      ],
+    ])('returns 403 for %s', async (title, layer, params) => {
+      const body = title.startsWith('a field')
+        ? { 'size::int': [1] }
+        : { 'name::text': ['csv denied'] };
+
+      const res = await insert(layer, body, params);
+
+      expect(res.status).toBe(403);
+    });
+  });
+
+  describe('LOCATION_WRITES=legacy', () => {
+    const warnings = [];
+
+    beforeAll(() => {
+      xyzEnv.LOCATION_WRITES = 'legacy';
+      vi.spyOn(console, 'warn').mockImplementation((msg) => warnings.push(msg));
+    });
+
+    afterAll(() => {
+      delete xyzEnv.LOCATION_WRITES;
+      vi.mocked(console.warn).mockRestore();
+    });
+
+    it('executes an unauthorized write and logs a warning', async () => {
+      const id = await newRow('legacy');
+
+      const res = await write(
+        'location_update',
+        'scratch_readonly',
+        { id },
+        { category: 'legacy' },
+      );
+
+      expect(res.status).toBe(202);
+      expect((await row(id)).category).toBe('legacy');
+      expect(warnings.at(-1)).toMatch(/^LOCATION_WRITES=legacy permitted/);
+    });
+
+    it('applies the default filter', async () => {
+      const id = await privateRow('legacy hidden');
+
+      await write(
+        'location_update',
+        'scratch_readonly',
+        { id },
+        { name: 'tampered' },
+      );
+
+      expect((await row(id)).name).toBe('legacy hidden');
+    });
   });
 });

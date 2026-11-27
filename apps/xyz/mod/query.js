@@ -30,6 +30,8 @@ The [SQL] query method requests a query template from the getTemplate method and
 
 The layerQuery() method must be awaited to check whether params are referenced in a role restricted JSON layer.
 
+A template with an authorize method is checked with the request params, including the request body and the layer composed for the requesting user. The location write templates are authorized by the layer config, eg. location_update requires editable infoj entries. A 403 is sent if the authorize method returns an Error. With the LOCATION_WRITES=legacy xyzEnv a warning is logged instead and the query is executed.
+
 The query method assigns and checks the dbs connection for the query template.
 
 A query string must returned from the getQueryFromTemplate() method.
@@ -103,6 +105,23 @@ export default async function query(req, res) {
     return;
   }
 
+  if (req.body) {
+    // Assign body to params to enable reserved %{body} parameter.
+    req.params.body = req.params.stringifyBody
+      ? JSON.stringify(req.body)
+      : req.body;
+  }
+
+  const denied = authorizeTemplate(req, template);
+
+  if (denied) {
+    res
+      .status(403)
+      .setHeader('Content-Type', 'text/plain')
+      .send(denied.message);
+    return;
+  }
+
   // Use layer dbs if defined, or workspace dbs, or provided dbs in the query.
   template.dbs ??= req.params.layer?.dbs || req.params.workspace.dbs;
 
@@ -166,6 +185,36 @@ export default async function query(req, res) {
   const rows = await dbs_connections[template.dbs](params);
 
   sendRows(res, template, rows);
+}
+
+/**
+@function authorizeTemplate
+
+@description
+Write templates check the request against the layer composed for the user, eg. location_update requires editable infoj entries. The authorize method of the template returns an Error if the request is not permitted.
+
+The LOCATION_WRITES=legacy xyzEnv permits writes which are not authorized by the layer config. A warning is logged for each such write.
+
+@param {req} req HTTP request.
+@param {object} template Request template.
+@property {function} [template.authorize] Returns an Error if the request params are not permitted.
+@returns {Error|undefined} The Error of a denied request.
+*/
+function authorizeTemplate(req, template) {
+  if (typeof template.authorize !== 'function') return;
+
+  const denied = template.authorize(req.params);
+
+  if (!(denied instanceof Error)) return;
+
+  if (xyzEnv.LOCATION_WRITES === 'legacy') {
+    console.warn(
+      `LOCATION_WRITES=legacy permitted an unauthorized write. ${denied.message}`,
+    );
+    return;
+  }
+
+  return denied;
 }
 
 /**
@@ -581,8 +630,6 @@ function parseRequestFilter(param, key) {
 @function getQueryFromTemplate
 
 @description
-The method will assign the body param from the request body object in a post query.
-
 The template.render method will be called to return a query string.
 
 An error will be returned if the template object does not have a template string.
@@ -609,13 +656,6 @@ An error will be returned if the substitution fails.
 @returns {string} A PostgreSQL query string.
 */
 function getQueryFromTemplate(req, template) {
-  if (req.body) {
-    // Assign body to params to enable reserved %{body} parameter.
-    req.params.body = req.params.stringifyBody
-      ? JSON.stringify(req.body)
-      : req.body;
-  }
-
   try {
     if (typeof template.render === 'function') {
       // Render template string from template.render() function.
