@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { playwright } from '@vitest/browser-playwright';
+import { loadEnv } from 'vite';
 import { defineConfig } from 'vitest/config';
 
 const repoRoot = fileURLToPath(new URL('../..', import.meta.url));
@@ -8,6 +9,9 @@ const repoRoot = fileURLToPath(new URL('../..', import.meta.url));
 process.env.TESTHOST_WORKSPACE = fileURLToPath(
   new URL('./tests/workspaces/_workspace.json', import.meta.url),
 );
+
+// The Mapbox tests need an access token. The token is read from the environment, or from one of Vite's .env files for the test mode in the repository root: .env, .env.local, .env.test and .env.test.local. The .env files are gitignored. The tests which require a token are skipped without one. The invalid-token test always runs and requests the Mapbox API.
+const env = loadEnv('test', repoRoot, 'MAPBOX_');
 
 export default defineConfig({
   // The drive letter is uppercased on Windows. The VS Code extension starts Vitest with a lowercase drive letter cwd, eg. c:\. Vite would then serve the lib modules from two urls and the test files would import another module instance than the mapp global.
@@ -18,6 +22,11 @@ export default defineConfig({
   test: {
     include: ['tests/**/*.test.mjs'],
     setupFiles: ['tests/setup.mjs'],
+    // Provided to the browser tests as inject('MAPBOX_ACCESS_TOKEN') and inject('MAPBOX_STYLE_URL').
+    provide: {
+      MAPBOX_ACCESS_TOKEN: env.MAPBOX_ACCESS_TOKEN ?? '',
+      MAPBOX_STYLE_URL: env.MAPBOX_STYLE_URL ?? '',
+    },
     // Starts the devdb and the XYZ host once for the run.
     globalSetup: ['@geolytix/xyz-testhost/globalSetup'],
     // Loading the PostGIS extension into PGlite takes a few seconds.

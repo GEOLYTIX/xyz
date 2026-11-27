@@ -30,3 +30,6 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+        env:
+          # The MAPP Mapbox API tests are skipped without a token, eg. for pull requests from forks.
+          MAPBOX_ACCESS_TOKEN: ${{ secrets.MAPBOX_ACCESS_TOKEN }}
