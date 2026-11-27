@@ -11,7 +11,7 @@ Possible log values are:
 - reqhost: Logs the host for the request.
 - workspace: Logs responses for requests made to /workspace.
 - dbs_retry: Logs the reason and backoff delay when a query is retried by the [dbs module]{@link module:/utils/dbs}, and when the retries are exhausted.
-- sql: Logs every query sent to a database, not only the query endpoint's. The log has the query and the number of its variables, with the dbs property naming the DBS_* connection or `ACL` for the [acl module]{@link module:/user/acl}. ACL queries are logged without variables and with their string literals masked, since they carry passwords, tokens, and keys. A composing host may log queries from its own connections with the sql key.
+- sql: Logs every query sent to a database, not only the query endpoint's. The log has the query and the number of its variables, with the dbs property naming the DBS_* connection or `ACL` for the [acl module]{@link module:/user/acl}. ACL queries are logged without variables and with their string literals masked, since they carry passwords, tokens, and keys. A composing host may log queries from its own connections with the sql key, unless params.log is false.
 - sql_variables: Logs the variable values of sql logs instead of their number. Variables can carry personal data, eg. user emails and the fields of a location, and should only be logged for debugging.
 
 By default the logs are only written to the stdout console.
@@ -23,6 +23,8 @@ It is possible to set the LOGGER process env to write logs to the logflare api. 
 ```
 
 Alternatively logs can be written into a table on any of the configured DBS_* connections. The dbs parameter value must match a DBS_* connection in the process env.
+
+> **Warning:** The postgresql logger is legacy and should not be used in production. Every log is written with an insert into the log table, and keys like `sql` log every query, so an instance can roughly double its database writes. Log inserts are not retried, and errors from them are written only to the console.
 
 ```
 "LOGGER": "postgresql:dbs=NEON&table=public.dev_logs"
