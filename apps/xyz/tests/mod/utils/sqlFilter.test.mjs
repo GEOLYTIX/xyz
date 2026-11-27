@@ -197,6 +197,22 @@ describe('sqlFilter', () => {
     expect(sqlfilter(filter, { params: { SQL: SQLparams } })).toEqual(expected);
   });
 
+  it('throws for a SQL string filter', () => {
+    expect(() => sqlfilter('TRUE OR TRUE', { params: { SQL: [] } })).toThrow(
+      TypeError,
+    );
+  });
+
+  it('returns a SQL string filter with the allowSQLString option', () => {
+    expect(
+      sqlfilter(
+        '"category" = \'city\'',
+        { params: { SQL: [] } },
+        { allowSQLString: true },
+      ),
+    ).toEqual('"category" = \'city\'');
+  });
+
   it('should return undefined for invalid field name', () => {
     const SQLparams = ['param1', 'param2'];
 
