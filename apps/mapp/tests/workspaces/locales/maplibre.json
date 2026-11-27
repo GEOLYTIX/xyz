@@ -1,0 +1,18 @@
+{
+  "name": "MapLibre",
+  "view": { "lat": 51, "lng": 10, "z": 6 },
+  "layers": {
+    "countries": {
+      "display": true,
+      "format": "maplibre",
+      "table": "naturalearth.countries",
+      "geom": "geom_3857",
+      "srid": "3857",
+      "qID": "id",
+      "infoj": [
+        { "title": "Name", "field": "name" },
+        { "title": "Continent", "field": "continent" }
+      ]
+    }
+  }
+}

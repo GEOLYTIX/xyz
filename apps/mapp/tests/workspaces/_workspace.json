@@ -20,6 +20,9 @@
     "countries": {
       "src": "file:apps/mapp/tests/workspaces/locales/countries.json"
     },
+    "maplibre": {
+      "src": "file:apps/mapp/tests/workspaces/locales/maplibre.json"
+    },
     "scratch": {
       "src": "file:apps/mapp/tests/workspaces/locales/scratch.json"
     }

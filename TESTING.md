@@ -29,7 +29,12 @@ The global setup from [packages/testhost](packages/testhost/README.md) starts on
 | [apps/mapp/tests/workspaces](apps/mapp/tests/workspaces/) | MAPP library tests |
 | [packages/testhost/workspaces](packages/testhost/workspaces/) | Test views and checks for bugs and features of a pull request |
 
-Tests don't use the network. Openlayers is loaded from the `ol` package, the tile layers in test workspaces are not displayed, and requests to external services are stubbed.
+Tests don't depend on the network for data. Openlayers is loaded from the `ol` package, the tile layers in test workspaces are not displayed, and requests to external services are stubbed.
+
+There are two exceptions:
+
+- **CDN imports**: libraries which MAPP loads from a CDN at runtime are tested with the CDN import, eg. the [maplibre format tests](apps/mapp/tests/layer/format/maplibre.test.mjs) import the pinned `maplibre-gl` version with `mapp.utils.esmImport` from esm.sh, as MAPP does in production. A broken CDN build of a pinned version fails the tests. Modules which only call a CDN library as a dependency of the module under test may still stub the import.
+- **Mapbox API**: the maplibre format tests request Mapbox styles and tiles with an [access token](#mapbox-access-token), and are skipped without one. The invalid-token test always requests the Mapbox API, so it needs network access to `api.mapbox.com` with or without a token, eg. for pull requests from forks.
 
 The [osm template](packages/testhost/workspaces/templates/osm.json) is the base map of all test workspaces. Each workspace adds the template as the `osm` layer of its default locale, so every locale has the `osm` layer. The layer has `display: false`, and the testview workspace overrides it with `display: true`. The [tiles format tests](apps/mapp/tests/layer/format/tiles.test.mjs) use the layer, including its `style.contextFilter`.
 
@@ -68,6 +73,22 @@ pnpm exec vitest run --reporter=verbose    # list every test with its result
 On Windows, run the MAPP tests from a directory path with an uppercase drive letter, eg. `C:\Users\...`. Vite serves a module from two urls if the working directory has a lowercase drive letter, eg. in a terminal which was opened in `c:\Users\...`. Each test file then imports another instance of a `lib` module than the `mapp` global has, and every `is assigned to mapp` test fails with values which have no visual difference.
 
 The XYZ API `test` scripts run Vitest with the environment in [varlock/vanilla.env](varlock/vanilla.env). The tests assign the `xyzEnv` properties they need, so they also pass when Vitest runs without varlock, eg. in VS Code.
+
+### Mapbox access token
+
+The Mapbox API tests need a Mapbox access token. The [MAPP vitest config](apps/mapp/vitest.config.mjs) reads the `MAPBOX_ACCESS_TOKEN` from the environment, or from one of Vite's `.env` files for the `test` mode in the repository root: `.env`, `.env.local`, `.env.test` and `.env.test.local`. A value in the environment takes precedence over the files. The `.env` files are gitignored, so the token is not committed.
+
+```bash
+# .env.local
+MAPBOX_ACCESS_TOKEN=pk.xxx
+
+# Optional, another Mapbox style instead of the default Mapbox Studio style of the tests.
+MAPBOX_STYLE_URL=mapbox://styles/{account}/{style}
+```
+
+The tests which require a token are skipped without a token. The tests with an invalid or without a token always run. The invalid-token test requests the Mapbox API and expects an `HTTP 401` or `HTTP 403`.
+
+The [Unit Tests](.github/workflows/unit_tests.yml) workflow provides the token from the `MAPBOX_ACCESS_TOKEN` repository secret. Pull requests from forks don't receive the secret and skip the tests. The [Build](.github/workflows/build.yml) and [Release](.github/workflows/release.yml) workflows don't provide the token, so a Mapbox outage or a rotated token can't block a build or a release. The Mapbox code paths are not included in the coverage report.
 
 ### Coverage
 
