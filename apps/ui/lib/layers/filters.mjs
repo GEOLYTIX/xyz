@@ -264,8 +264,8 @@ async function generateMinMax(layer, filter) {
   const queryParams = mapp.utils.queryParams({
     layer: layer,
     queryparams: {
-      table: true,
-      template: 'field_minmax',
+      table: filterTable(layer),
+      template: filter.minmax_query || 'field_minmax',
       field: filter.field,
     },
     viewport: layer.filter.viewport,
@@ -282,6 +282,17 @@ async function generateMinMax(layer, filter) {
     `${layer.mapview.host}/api/query?${paramString}`,
   );
 
+  if (
+    !response ||
+    response instanceof Error ||
+    !Array.isArray(response.minmax)
+  ) {
+    console.warn(
+      `Field minmax query did not return minmax for field ${filter.field}`,
+    );
+    return;
+  }
+
   // Assign min, max from response if not a number.
   let min = Number.isNaN(Number(filter.min)) ? response.minmax[0] : filter.min;
   let max = Number.isNaN(Number(filter.max)) ? response.minmax[1] : filter.max;
@@ -292,12 +303,16 @@ async function generateMinMax(layer, filter) {
     max = response.minmax[1];
   }
 
-  // Parse min, max as interger or float depending on type.
+  // Parse min, max as integer or float depending on type.
   // Round integer to be correct up or down.
   filter.min =
-    filter.type === 'integer' ? Math.round(min) : Number.parseFloat(min);
+    filter.type === 'integer'
+      ? Math.round(Number.parseFloat(min))
+      : Number.parseFloat(min);
   filter.max =
-    filter.type === 'integer' ? Math.round(max) : Number.parseFloat(max);
+    filter.type === 'integer'
+      ? Math.round(Number.parseFloat(max))
+      : Number.parseFloat(max);
 
   filter.min = filter.val_a < filter.min ? filter.val_a : filter.min;
   filter.max = filter.val_b > filter.max ? filter.val_b : filter.max;
