@@ -20,7 +20,7 @@ import logger from './logger.js';
 import { activeSpan, flushAfter, withSpan } from './telemetry.js';
 
 // At least one attempt is made if the RETRY_LIMIT is not a positive number.
-const RETRY_LIMIT = Number.parseInt(xyzEnv.RETRY_LIMIT) || 1;
+const RETRY_LIMIT = Math.max(Number.parseInt(xyzEnv.RETRY_LIMIT) || 1, 1);
 
 const RETRY_CODES = new Set([
   '53300', // too_many_connections

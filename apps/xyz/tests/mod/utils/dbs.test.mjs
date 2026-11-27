@@ -205,14 +205,17 @@ describe('dbs Module', () => {
       expect(client.release).toHaveBeenCalledTimes(1);
     });
 
-    it('makes a single attempt if the RETRY_LIMIT is not a positive number', async () => {
-      const dbs = await importDbs({ RETRY_LIMIT: '0' });
-      const error = pgError('53300');
-      pools[0].connect.mockResolvedValueOnce(mockClient(error));
+    it.each(['0', '-1', 'invalid'])(
+      'makes a single attempt if the RETRY_LIMIT is not a positive number (%s)',
+      async (retryLimit) => {
+        const dbs = await importDbs({ RETRY_LIMIT: retryLimit });
+        const error = pgError('53300');
+        pools[0].connect.mockResolvedValueOnce(mockClient(error));
 
-      await expect(dbs.TEST({ query: 'SELECT 1' })).resolves.toBe(error);
-      expect(pools[0].connect).toHaveBeenCalledTimes(1);
-    });
+        await expect(dbs.TEST({ query: 'SELECT 1' })).resolves.toBe(error);
+        expect(pools[0].connect).toHaveBeenCalledTimes(1);
+      },
+    );
   });
 
   describe('retry logging', () => {
