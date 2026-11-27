@@ -188,7 +188,7 @@ function clusterGeometry(F, layer) {
 @function clusterSourceChange
 
 @description
-The clusterSourceChange event method is called by changes to the cluster source. The method will map all features in cluster source to return an array of features [counts] for each feature in the cluster source. The largest features count from the array will be assigned as the cluster.max_size.
+The clusterSourceChange event method is called by changes to the cluster source. The method will loop through all features in the cluster source and assign the largest features count as the cluster.max_size. Empty cluster features are ignored. The cluster.max_size is not assigned if the cluster source has no features with a features count.
 
 @param {layer} layer The Mapp layer object.
 @property {layer-cluster} layer.cluster The vector layer cluster configuration.
@@ -201,13 +201,15 @@ function clusterSourceChange(e, layer) {
 
   if (!features.length) return;
 
-  const feature_counts = features.map((F) => {
+  let max_size = 0;
+
+  for (const F of features) {
     const features = F.get('features');
 
     // This error indicates and issue with the provided feature geometries in the layer vector source.
     if (!features.length) {
       console.error(`Empty cluster feature detected.`);
-      return;
+      continue;
     }
 
     // Set cluster feature id for highlight interaction.
@@ -225,14 +227,13 @@ function clusterSourceChange(e, layer) {
       });
     }
 
-    // Return length for calculation of max_size.
-    return features.length;
-  });
+    // Track the largest features count for cluster size styling.
+    if (features.length > max_size) max_size = features.length;
+  }
 
-  if (!feature_counts.length) return;
+  if (!max_size) return;
 
-  // Calculate max_size for cluster size styling.
-  layer.cluster.max_size = Math.max(...feature_counts);
+  layer.cluster.max_size = max_size;
 }
 
 /**
