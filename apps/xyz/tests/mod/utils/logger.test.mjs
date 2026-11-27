@@ -35,6 +35,40 @@ describe('logger Module', () => {
     });
   });
 
+  it('logs the number of sql variables without the sql_variables key', async () => {
+    const consoleLog = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const log = await importLogger({ LOGS: 'sql' });
+
+    log(
+      { dbs: 'XYZ', query: 'SELECT $1, $2', variables: [1, 'a@b.com'] },
+      'sql',
+    );
+
+    expect(consoleLog).toHaveBeenCalledWith({
+      message: { dbs: 'XYZ', query: 'SELECT $1, $2', variable_count: 2 },
+      time: expect.any(Date),
+    });
+  });
+
+  it('logs the sql variables with the sql_variables key', async () => {
+    const consoleLog = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const log = await importLogger({ LOGS: 'sql,sql_variables' });
+
+    log(
+      { dbs: 'XYZ', query: 'SELECT $1, $2', variables: [1, 'a@b.com'] },
+      'sql',
+    );
+
+    expect(consoleLog).toHaveBeenCalledWith({
+      message: {
+        dbs: 'XYZ',
+        query: 'SELECT $1, $2',
+        variables: [1, 'a@b.com'],
+      },
+      time: expect.any(Date),
+    });
+  });
+
   it('logs structured sanitized values to configured loggers', async () => {
     globalThis.fetch = vi.fn(() => Promise.resolve());
     vi.spyOn(console, 'log').mockImplementation(() => {});
@@ -80,12 +114,19 @@ describe('logger Module', () => {
 
     await vi.waitFor(() => expect(dbsQuery).toHaveBeenCalled());
 
-    const { nonblocking, query, timeout, variables } =
-      dbsQuery.mock.calls[0][0];
+    const {
+      log: logged,
+      nonblocking,
+      query,
+      timeout,
+      variables,
+    } = dbsQuery.mock.calls[0][0];
     expect(query).toContain('INSERT INTO public.logs');
     expect(variables[2]).toBe('dbs_retry');
     expect(timeout).toBe(3000);
     expect(nonblocking).toBe(true);
+    // A logged insert would log another insert with the sql key.
+    expect(logged).toBe(false);
 
     vi.doUnmock('../../../mod/utils/dbs.js');
   });
