@@ -202,9 +202,19 @@ async function layerQuery(req, res) {
     delete req.params.filter;
     delete req.params.viewport;
     return;
-  } else if (typeof req.params.layer === 'string') {
-    req.params.layer = await getLayer(req.params);
   }
+
+  // The request params middleware may parse a layer param as boolean or array.
+  // The layer must be a key string to be checked by the getLayer method.
+  if (typeof req.params.layer !== 'string') {
+    res
+      .status(400)
+      .setHeader('Content-Type', 'text/plain')
+      .send('The layer param must be a layer key string.');
+    return;
+  }
+
+  req.params.layer = await getLayer(req.params);
 
   // getLayer will return error on role restrictions.
   if (req.params.layer instanceof Error) {
@@ -238,14 +248,27 @@ async function layerQuery(req, res) {
   }
 
   // Defined in the layer a default filter cannot be altered by the request.
+  // The workspace layer.filter.default may be a SQL string.
   const filterDefault = req.params.layer.filter?.default
-    ? `AND ${sqlFilter(req.params.layer.filter.default, req)}`
+    ? `AND ${sqlFilter(req.params.layer.filter.default, req, { allowSQLString: true })}`
     : '';
 
   // The current filter is defined in the request params.
-  const filterCurrent = req.params.filter
-    ? `AND ${sqlFilter(JSON.parse(req.params.filter), req)}`
-    : '';
+  let filterCurrent = '';
+
+  if (req.params.filter) {
+    const filter = parseRequestFilter(req.params.filter, 'filter');
+
+    if (filter instanceof Error) {
+      res
+        .status(400)
+        .setHeader('Content-Type', 'text/plain')
+        .send(filter.message);
+      return;
+    }
+
+    filterCurrent = `AND ${sqlFilter(filter, req)}`;
+  }
 
   // Create filter condition for SQL query.
   req.params.filter = `${filterDefault} ${filterCurrent}`;
@@ -519,6 +542,42 @@ async function infojMap(req, res) {
 }
 
 /**
+@function parseRequestFilter
+
+@description
+The method parses a filter or sqlFilter request param as JSON.
+
+A request filter must be a filter object or an array of filter objects. Any other value, eg. a JSON string which would be returned as a raw SQL condition by the sqlFilter module, will return an error.
+
+@param {string} param The request param value.
+@param {string} key The request param key for the error message.
+@returns {Object|Array|Error} The parsed filter or an error.
+*/
+function parseRequestFilter(param, key) {
+  let filter;
+
+  try {
+    filter = JSON.parse(param);
+  } catch {
+    return new Error(`The ${key} param must be valid JSON.`);
+  }
+
+  const isFilterObject = (obj) =>
+    obj !== null && typeof obj === 'object' && !Array.isArray(obj);
+
+  if (
+    isFilterObject(filter) ||
+    (Array.isArray(filter) && filter.every(isFilterObject))
+  ) {
+    return filter;
+  }
+
+  return new Error(
+    `The ${key} param must be a filter object or an array of filter objects.`,
+  );
+}
+
+/**
 @function getQueryFromTemplate
 
 @description
@@ -568,9 +627,13 @@ function getQueryFromTemplate(req, template) {
       return new Error('Unable to parse template string.');
     }
 
-    if (req.params.sqlFilter) {
+    if (req.params.sqlFilter && req.params.filter == null) {
       // The sqlFilter must not override the filter set by the layer query.
-      req.params.filter ??= `AND ${sqlFilter(JSON.parse(req.params.sqlFilter), req)}`;
+      const filter = parseRequestFilter(req.params.sqlFilter, 'sqlFilter');
+
+      if (filter instanceof Error) throw filter;
+
+      req.params.filter = `AND ${sqlFilter(filter, req)}`;
     }
 
     // Returns -1 if ${filter} not found in template

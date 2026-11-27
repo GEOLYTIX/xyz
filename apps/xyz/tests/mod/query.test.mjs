@@ -348,6 +348,41 @@ describe('Query: layer queries', () => {
       { layer: 'locations', fields: 'password' },
       400,
     ],
+    [
+      'a filter param which is a SQL string',
+      { layer: 'locations', filter: JSON.stringify('TRUE OR TRUE') },
+      400,
+    ],
+    [
+      'a filter param which is an array with a SQL string',
+      { layer: 'locations', filter: JSON.stringify(['TRUE OR TRUE']) },
+      400,
+    ],
+    [
+      'a filter param which is not valid JSON',
+      { layer: 'locations', filter: 'TRUE OR TRUE' },
+      400,
+    ],
+    [
+      'a layer param which is parsed as boolean by the request params middleware',
+      { layer: true },
+      400,
+    ],
+    [
+      'a layer param which is parsed as array by the request params middleware',
+      { layer: ['locations'] },
+      400,
+    ],
+    [
+      'a layer_template param which is parsed as boolean by the request params middleware',
+      { layer_template: true },
+      400,
+    ],
+    [
+      'a filter param which is parsed as boolean by the request params middleware',
+      { layer: 'locations', filter: true },
+      400,
+    ],
   ])('rejects %s', async (_, params, status) => {
     const res = await request({
       template: 'wkt',
@@ -388,6 +423,25 @@ describe('Query: parameter substitution', () => {
         template: 'filter_query',
         sqlFilter: JSON.stringify({ id: { eq: 'one' } }),
       },
+    ],
+    [
+      'a sqlFilter which is a SQL string',
+      { template: 'filter_query', sqlFilter: JSON.stringify('TRUE OR TRUE') },
+    ],
+    [
+      'a sqlFilter which is an array with a SQL string',
+      {
+        template: 'filter_query',
+        sqlFilter: JSON.stringify([{ category: { match: 'office' } }, 'TRUE']),
+      },
+    ],
+    [
+      'a sqlFilter which is not valid JSON',
+      { template: 'filter_query', sqlFilter: 'TRUE OR TRUE' },
+    ],
+    [
+      'a sqlFilter which is parsed as boolean by the request params middleware',
+      { template: 'filter_query', sqlFilter: true },
     ],
   ])('returns 400 for %s', async (_, params) => {
     expect((await request(params)).status).toBe(400);
