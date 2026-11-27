@@ -692,6 +692,109 @@ describe('ui/layers/filters', () => {
 
       expect(filter).toMatchObject({ max: 2e9, min: 0 });
     });
+
+    it('returns early without modifying filter when query fails with an Error', async () => {
+      const layer = await countriesLayer();
+
+      vi.spyOn(mapp.utils, 'xhr').mockResolvedValue(new Error('failed'));
+
+      const filter = { field: 'pop_est', type: 'integer' };
+
+      await filters.generateMinMax(layer, filter);
+
+      expect(filter.min).toBeUndefined();
+      expect(filter.max).toBeUndefined();
+    });
+
+    it('returns early when query response is null or minmax is not an array', async () => {
+      const layer = await countriesLayer();
+
+      for (const response of [null, {}, { minmax: 'x' }]) {
+        vi.spyOn(mapp.utils, 'xhr').mockResolvedValue(response);
+
+        const filter = { field: 'pop_est', type: 'numeric' };
+
+        await filters.generateMinMax(layer, filter);
+
+        expect(filter.min).toBeUndefined();
+        expect(filter.max).toBeUndefined();
+      }
+    });
+
+    it('sets min and max to NaN for an integer filter when minmax values are null', async () => {
+      const layer = await countriesLayer();
+
+      vi.spyOn(mapp.utils, 'xhr').mockResolvedValue({
+        minmax: [null, null],
+      });
+
+      const filter = { field: 'pop_est', type: 'integer' };
+
+      await filters.generateMinMax(layer, filter);
+
+      expect(filter.min).toBeNaN();
+      expect(filter.max).toBeNaN();
+    });
+
+    it('queries the fallback table when current zoom level table is null', async () => {
+      const layer = await countriesLayer();
+
+      layer.tableCurrent = () => null;
+      layer.tables = { 0: null, 5: 'ne_10m_admin_0_countries' };
+
+      const xhr = vi
+        .spyOn(mapp.utils, 'xhr')
+        .mockResolvedValue({ minmax: [10, 20] });
+
+      const filter = { field: 'pop_est', type: 'integer' };
+
+      await filters.generateMinMax(layer, filter);
+
+      expect(xhr).toHaveBeenCalledWith(
+        expect.stringContaining('table=ne_10m_admin_0_countries'),
+      );
+      expect(filter).toMatchObject({ max: 20, min: 10 });
+    });
+
+    it('queries the field_minmax template by default', async () => {
+      const layer = await countriesLayer();
+
+      const xhr = vi
+        .spyOn(mapp.utils, 'xhr')
+        .mockResolvedValue({ minmax: [10, 20] });
+
+      const filter = { field: 'pop_est', type: 'integer' };
+
+      await filters.generateMinMax(layer, filter);
+
+      expect(xhr).toHaveBeenCalledWith(
+        expect.stringContaining('template=field_minmax'),
+      );
+    });
+
+    it('queries the minmax_query template when configured', async () => {
+      const layer = await countriesLayer();
+
+      const xhr = vi
+        .spyOn(mapp.utils, 'xhr')
+        .mockResolvedValue({ minmax: [10, 20] });
+
+      const filter = {
+        field: 'pop_est',
+        minmax_query: 'custom_minmax',
+        type: 'integer',
+      };
+
+      await filters.generateMinMax(layer, filter);
+
+      expect(xhr).toHaveBeenCalledWith(
+        expect.stringContaining('template=custom_minmax'),
+      );
+      expect(xhr).not.toHaveBeenCalledWith(
+        expect.stringContaining('template=field_minmax'),
+      );
+      expect(filter).toMatchObject({ max: 20, min: 10 });
+    });
   });
 
   describe('numeric and integer', () => {
@@ -824,23 +927,36 @@ describe('ui/layers/filters', () => {
       expect(node.textContent).toBe(mapp.dictionary.no_data_filter);
     });
 
-    // The failed field_minmax query throws a TypeError in generateMinMax.
+    // The failed field_minmax query returns a no data message.
     // https://github.com/GEOLYTIX/xyz/issues/3102
-    it.fails(
-      'returns a no data message for a failed min max query',
-      async () => {
-        const layer = await countriesLayer();
+    it('returns a no data message for a failed min max query', async () => {
+      const layer = await countriesLayer();
 
-        vi.spyOn(mapp.utils, 'xhr').mockResolvedValue(new Error('failed'));
+      vi.spyOn(mapp.utils, 'xhr').mockResolvedValue(new Error('failed'));
 
-        const node = await filters.integer(layer, {
-          field: 'pop_est',
-          type: 'integer',
-        });
+      const node = await filters.integer(layer, {
+        field: 'pop_est',
+        type: 'integer',
+      });
 
-        expect(node.textContent).toBe(mapp.dictionary.no_data_filter);
-      },
-    );
+      expect(node.textContent).toBe(mapp.dictionary.no_data_filter);
+    });
+
+    it('returns a no data message for an integer filter on an all-null field', async () => {
+      const layer = await countriesLayer();
+
+      vi.spyOn(mapp.utils, 'xhr').mockResolvedValue({
+        minmax: [null, null],
+      });
+
+      const node = await filters.integer(layer, {
+        field: 'pop_est',
+        type: 'integer',
+      });
+
+      expect(node.textContent).toBe(mapp.dictionary.no_data_filter);
+      expect(layer.filter.current.pop_est).toBeUndefined();
+    });
 
     // The filter_numeric method assigns the min, max, slider and histogram to a copy of the filter.
     // https://github.com/GEOLYTIX/xyz/issues/3137
