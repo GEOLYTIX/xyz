@@ -80,15 +80,17 @@ function addValues(val, type) {
 @description
 The sqlfilter method is used to convert the filter object into a SQL query string.
 If the filter is an array, the filter will be conditional OR.
-If the filter is a string, the filter will be returned as is.
+A string filter is a raw SQL condition and will only be returned as is with the allowSQLString option. The option must only be set for a filter defined in the workspace, eg. the layer.filter.default. A filter from the request must never be a string.
 
-@param {Object} filter
-@param {Array} params
+@param {Object|Array|string} filter
+@param {req} req HTTP request.
+@param {Object} [options]
+@property {boolean} [options.allowSQLString] Return a string filter as is.
 @returns {string} SQL query string
 */
 export default sqlfilter;
 
-function sqlfilter(filter, req) {
+function sqlfilter(filter, req, options = {}) {
   //Check to see that params is an array and that the values of the params are of valid type.
   if (!Array.isArray(req.params.SQL)) {
     throw new TypeError(
@@ -98,7 +100,11 @@ function sqlfilter(filter, req) {
 
   SQLparams = req.params.SQL;
 
-  if (typeof filter === 'string') return filter;
+  if (typeof filter === 'string') {
+    if (options.allowSQLString === true) return filter;
+
+    throw new TypeError('A SQL string filter is not allowed.');
+  }
 
   // Filter in an array will be conditional OR
   if (Array.isArray(filter)) {

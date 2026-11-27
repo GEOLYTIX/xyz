@@ -1,4 +1,7 @@
-import location_update from '@geolytix/xyz-app/mod/workspace/templates/location_update.js';
+import location_update, {
+  jsonMergeKeys,
+  updateValue,
+} from '@geolytix/xyz-app/mod/workspace/templates/location_update.js';
 import { describe, expect, it } from 'vitest';
 
 const layer = {
@@ -24,7 +27,7 @@ describe('location_update', () => {
     const _ = params({ name: "O'Brien's", size: 4, valid: true, list: [1] });
 
     expect(sql(location_update(_))).toBe(
-      'UPDATE example.scratch SET name = %{body_name},size = %{body_size},valid = %{body_valid},list = %{body_list} WHERE id = %{id};',
+      'UPDATE example.scratch SET name = %{body_name},size = %{body_size},valid = %{body_valid},list = %{body_list} WHERE id = %{id} ${filter};',
     );
 
     // String values are not escaped. The substitution passes the value as query param.
@@ -36,7 +39,7 @@ describe('location_update', () => {
 
   it('sets a field to null', () => {
     expect(sql(location_update(params({ name: null })))).toBe(
-      'UPDATE example.scratch SET name = null WHERE id = %{id};',
+      'UPDATE example.scratch SET name = null WHERE id = %{id} ${filter};',
     );
   });
 
@@ -46,7 +49,7 @@ describe('location_update', () => {
     const _ = params({ geom: geometry });
 
     expect(sql(location_update(_))).toBe(
-      'UPDATE example.scratch SET geom = ST_SetSRID(ST_MakeValid(ST_GeomFromGeoJSON(%{body_geom})),4326) WHERE id = %{id};',
+      'UPDATE example.scratch SET geom = ST_SetSRID(ST_MakeValid(ST_GeomFromGeoJSON(%{body_geom})),4326) WHERE id = %{id} ${filter};',
     );
 
     expect(_.body_geom).toBe(JSON.stringify(geometry));
@@ -58,7 +61,7 @@ describe('location_update', () => {
     const _ = params({ tag: value });
 
     expect(sql(location_update(_))).toBe(
-      "UPDATE example.scratch SET props = coalesce(props::jsonb,'{}'::jsonb) || %{body_tag}::jsonb WHERE id = %{id};",
+      "UPDATE example.scratch SET props = coalesce(props::jsonb,'{}'::jsonb) || %{body_tag}::jsonb WHERE id = %{id} ${filter};",
     );
 
     expect(_.body_tag).toBe(JSON.stringify({ tag: `a"b'c` }));
@@ -75,7 +78,7 @@ describe('location_update', () => {
     const _ = params({ table: 'other' });
 
     expect(sql(location_update(_))).toBe(
-      'UPDATE example.scratch SET table = %{body_table} WHERE id = %{id};',
+      'UPDATE example.scratch SET table = %{body_table} WHERE id = %{id} ${filter};',
     );
     expect(_.table).toBe('example.scratch');
   });
@@ -102,4 +105,76 @@ describe('location_update', () => {
       );
     },
   );
+});
+
+describe('updateValue', () => {
+  it.each([
+    [null, 'null'],
+    [{ type: 'Point', coordinates: [0, 0] }, 'geometry'],
+    // A value with coordinates is written as a geometry, also with a jsonb property.
+    [{ coordinates: [0, 0], jsonb: { props: { label: 'a' } } }, 'geometry'],
+    [{ jsonb: { props: { label: 'a' } } }, 'jsonb'],
+    [{ colour: 'red' }, 'json'],
+    [{ jsonb: 'not an object' }, 'json'],
+    ['text', 'value'],
+    [1, 'value'],
+    [false, 'value'],
+    [['a', 'b'], 'value'],
+  ])('classifies %j as %s', (value, type) => {
+    expect(updateValue(value)).toBe(type);
+  });
+});
+
+describe('json fields edited through json_key entries', () => {
+  const colour = {
+    field: 'colour',
+    json_field: 'meta',
+    json_key: 'colour',
+    edit: true,
+  };
+
+  const jsonLayer = (...infoj) => ({ ...layer, infoj });
+
+  it('merges only the editable json keys', () => {
+    // The mapp location update sends the whole object with the current values of the other keys.
+    const _ = {
+      ...params({ meta: { colour: 'red', owner: 'attacker' } }),
+      layer: jsonLayer(colour, { field: 'meta', type: 'json' }),
+    };
+
+    expect(sql(location_update(_))).toBe(
+      "UPDATE example.scratch SET meta = coalesce(meta::jsonb,'{}'::jsonb) || %{body_meta}::jsonb WHERE id = %{id} ${filter};",
+    );
+
+    expect(JSON.parse(_.body_meta)).toEqual({ colour: 'red' });
+  });
+
+  it('replaces a json field with an editable entry of its own', () => {
+    const _ = {
+      ...params({ meta: { colour: 'red', owner: 'b' } }),
+      layer: jsonLayer(colour, { field: 'meta', type: 'json', edit: true }),
+    };
+
+    expect(sql(location_update(_))).toBe(
+      'UPDATE example.scratch SET meta = %{body_meta} WHERE id = %{id} ${filter};',
+    );
+
+    expect(JSON.parse(_.body_meta)).toEqual({ colour: 'red', owner: 'b' });
+  });
+
+  it('returns the editable json keys by json field', () => {
+    const size = { ...colour, field: 'size', json_key: 'size' };
+    const readonly = {
+      ...colour,
+      field: 'owner',
+      json_key: 'owner',
+      edit: false,
+    };
+
+    expect(jsonMergeKeys(jsonLayer(colour, size, readonly))).toEqual(
+      new Map([['meta', new Set(['colour', 'size'])]]),
+    );
+
+    expect(jsonMergeKeys({ key: 'no infoj' })).toEqual(new Map());
+  });
 });
