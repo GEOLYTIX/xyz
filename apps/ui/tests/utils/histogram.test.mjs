@@ -1,5 +1,5 @@
-import { describe, expect, it, onTestFinished, vi } from 'vitest';
-import { groceryMapview } from '../helpers.mjs';
+import { describe, expect, it, onTestFinished } from 'vitest';
+import { captureRequests, groceryMapview } from '../helpers.mjs';
 
 const { histogram } = mapp.ui.utils;
 
@@ -199,7 +199,7 @@ describe('ui/utils/histogram', () => {
 
     onTestFinished(() => target.remove());
 
-    const xhr = vi.spyOn(mapp.utils, 'xhr');
+    const requests = captureRequests();
 
     const dataview = await mapp.ui.Dataview({
       dataview: 'histogram',
@@ -210,11 +210,13 @@ describe('ui/utils/histogram', () => {
 
     await dataview.show();
 
-    await vi.waitFor(() => expect(dataview.data).toBeInstanceOf(Array), {
-      timeout: 10000,
-    });
+    // The dataview update method sets the data from the response of the histogram query.
+    const data = await requests.response('histogram');
 
-    expect(xhr.mock.calls[0][0]).toContain('template=histogram');
+    expect(data).toBeInstanceOf(Array);
+    expect(dataview.data).toBe(data);
+
+    expect(requests.calls[0].args[0]).toContain('template=histogram');
 
     // The 3 buckets between the 2nd and 98th percentile and the 2 edge buckets.
     expect(buckets(dataview).map((el) => el.dataset.bucket)).toEqual([

@@ -7,7 +7,7 @@ The applyFilter method reloads the layer with a 500ms debounce, and the updatePa
 */
 
 import { expect, onTestFinished, vi } from 'vitest';
-import { layersListview, localeMapview } from '../helpers.mjs';
+import { capturePromises, layersListview, localeMapview } from '../helpers.mjs';
 
 // The min and max pop_est values of the naturalearth.countries seed rows.
 export const POP_MIN = 140;
@@ -164,19 +164,28 @@ export function selectFilter(layer, field) {
 @description
 Selects the filter for a field in the filter panel dropdown and waits for the filter card.
 
+The dropdown callback creates the card with the content from the filter type method, eg. the filter_in method which queries the distinct values. The callback promise is not returned by the dropdown. The helper waits for the promise of the filter type method instead, which includes any query of the filter. The card is created synchronously after the content has resolved.
+
 @param {layer} layer A layer with a filter panel.
 @param {string} field The filter field.
 @returns {Promise<Object>} The filter with the card.
 */
 export async function addFilterCard(layer, field) {
-  const filter = selectFilter(layer, field);
+  const type = layer.filter.list.find((filter) => filter.field === field).type;
 
-  // The distinct values query of an in filter can take a few seconds.
-  await expect
-    .poll(() => filter.card, { timeout: 5000 })
-    .toBeInstanceOf(HTMLElement);
+  const content = capturePromises(mapp.ui.layers.filters, type);
 
-  return filter;
+  try {
+    const filter = selectFilter(layer, field);
+
+    await content.next();
+
+    expect(filter.card).toBeInstanceOf(HTMLElement);
+
+    return filter;
+  } finally {
+    content.restore();
+  }
 }
 
 /**
