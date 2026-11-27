@@ -3,6 +3,8 @@
 
 The location_new layer query returns the serial id for a new location record inserted into the table property.
 
+The body keys are authorized by the authorizeNew method of the _locationAccess module before the template is rendered.
+
 The keys of the POST body are the field names. A key may only contain letters, numbers and underscores.
 
 The values of the POST body are substituted as query params. The params are assigned with a `body_` prefix, so a body key can't overwrite a param of the template, eg. the table.

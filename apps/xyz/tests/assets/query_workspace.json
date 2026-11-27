@@ -104,6 +104,19 @@
     "name_upper": {
       "field": "upper(name)"
     },
+    "scratch_insert_private": {
+      "template": "INSERT INTO example.scratch_location (name, category) VALUES (%{name}, 'private') RETURNING id::varchar AS id",
+      "value_only": true
+    },
+    "scratch_by_name": {
+      "template": "SELECT name, category FROM example.scratch_location WHERE name = %{name}"
+    },
+    "scratch_set_meta": {
+      "template": "UPDATE example.scratch_location SET meta = %{meta}::json WHERE id = %{id}::int"
+    },
+    "scratch_row": {
+      "template": "SELECT id, name, category, size, props, meta, ST_AsText(geom) AS geom FROM example.scratch_location WHERE id = %{id}::int"
+    },
     "template_layer": {
       "table": "example.locations",
       "qID": "id",
@@ -155,6 +168,69 @@
         "geom": "geom",
         "srid": 3857,
         "infoj": [{ "field": "name" }, { "field": "category" }]
+      },
+      "scratch_readonly": {
+        "table": "example.scratch_location",
+        "qID": "id",
+        "geom": "geom",
+        "srid": 4326,
+        "filter": { "default": { "category": { "match": "public" } } },
+        "infoj": [
+          { "field": "name" },
+          { "field": "category" },
+          { "field": "size" }
+        ]
+      },
+      "scratch_edit": {
+        "table": "example.scratch_location",
+        "qID": "id",
+        "geom": "geom",
+        "srid": 4326,
+        "filter": { "default": { "category": { "match": "public" } } },
+        "draw": { "point": { "defaults": { "category": "public" } } },
+        "deleteLocation": true,
+        "csv_upload": {
+          "query": "sql_table_insert",
+          "queryparams": { "table": "example.scratch_location" },
+          "fields": { "name": "text", "category": "text" }
+        },
+        "infoj": [
+          { "field": "name", "edit": true },
+          { "field": "category" },
+          { "field": "size", "roles": { "editor": { "edit": true } } },
+          {
+            "field": "tag",
+            "fieldfx": "props->>'tag'",
+            "jsonb_field": "props",
+            "jsonb_key": "tag",
+            "edit": true
+          },
+          { "field": "meta", "type": "json" },
+          {
+            "field": "colour",
+            "fieldfx": "meta->>'colour'",
+            "json_field": "meta",
+            "json_key": "colour",
+            "edit": true
+          },
+          { "field": "log", "type": "dataview", "table": "example.log" }
+        ]
+      },
+      "scratch_jsonb_alias": {
+        "table": "example.scratch_location",
+        "qID": "id",
+        "geom": "geom",
+        "srid": 4326,
+        "filter": { "default": { "category": { "match": "public" } } },
+        "infoj": [
+          {
+            "field": "geom",
+            "fieldfx": "props->>'label'",
+            "jsonb_field": "props",
+            "jsonb_key": "label",
+            "edit": true
+          }
+        ]
       }
     }
   },

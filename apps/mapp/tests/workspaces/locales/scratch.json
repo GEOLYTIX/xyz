@@ -9,6 +9,8 @@
       "qID": "id",
       "geom": "geom",
       "srid": "4326",
+      "draw": { "hidden": true },
+      "deleteLocation": true,
       "style": {
         "default": {
           "icon": { "type": "dot", "fillColor": "#999" }
@@ -71,6 +73,8 @@
       "qID": "id",
       "geom": "geom_3857",
       "srid": "3857",
+      "draw": { "hidden": true },
+      "deleteLocation": true,
       "wkt_properties": true,
       "style": {
         "default": {

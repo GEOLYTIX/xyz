@@ -3,6 +3,10 @@
 
 The locations_delete layer query deletes multiple records in a layer table which pass the provided viewport and/or SQL filter.
 
+The template is authorized like location_delete. The layer requires deleteLocation.
+
+The layer filter is applied like in the location_delete template. Only records which pass the layer.filter.default and the request filter are deleted. A record which the layer does not show is never deleted.
+
 @module /workspace/templates/locations_delete
 */
 export default (_) => {

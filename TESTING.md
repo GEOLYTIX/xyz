@@ -159,6 +159,7 @@ These conventions apply to all suites:
 - Assert specific values, eg. a style colour, a feature count, a status code or a request param. Avoid snapshots of whole objects.
 - Add seed files for new test data rather than changing existing seed rows, which tests depend on.
 - Tests which write to the database use the empty `example.scratch_location` table. Each test inserts its own record, because all test files of a run share the devdb, and asserts only on its own records.
+- The API authorizes location writes by the layer config. The scratch layers have a hidden `draw` config for `location_new`, `deleteLocation` for `location_delete`, and `edit` on the entries a test updates. A layer config assigned in the browser, eg. `layer.draw = {...}`, is not sent to the API.
 - A test for a known bug is written for the correct behaviour and marked with `it.fails()`, with a link to the issue. The test fails once the bug is fixed, and the `.fails` must be removed with the fix.
 - Suppress expected console output and assert on it where the message is the behaviour.
 

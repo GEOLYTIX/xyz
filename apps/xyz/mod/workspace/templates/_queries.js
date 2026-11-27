@@ -6,6 +6,12 @@ The queries module imports core query templates and assigns access properties.
 @module /workspace/templates/queries
 */
 
+import {
+  authorizeDelete,
+  authorizeInsert,
+  authorizeNew,
+  authorizeUpdate,
+} from './_locationAccess.js';
 // Import all templates and renders
 import cluster from './cluster.js';
 import clusterHex from './cluster_hex.js';
@@ -103,6 +109,7 @@ export default {
   },
   location_delete: {
     layer: true,
+    authorize: authorizeDelete,
     render: locationDelete,
   },
   location_get: {
@@ -111,15 +118,18 @@ export default {
   },
   location_new: {
     layer: true,
+    authorize: authorizeNew,
     render: locationNew,
     value_only: true,
   },
   location_update: {
     layer: true,
+    authorize: authorizeUpdate,
     render: locationUpdate,
   },
   locations_delete: {
     layer: true,
+    authorize: authorizeDelete,
     render: locationsDelete,
   },
   location_field_value: {
@@ -139,6 +149,7 @@ export default {
   },
   sql_table_insert: {
     layer: true,
+    authorize: authorizeInsert,
     render: sql_table_insert,
   },
   st_distance_ab: {
