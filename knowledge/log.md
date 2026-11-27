@@ -1,5 +1,13 @@
 # Knowledge changes
 
+## 2026-11-27
+
+- [Access control](environment/access-control.md) documents
+  `LOCATION_WRITES=legacy` and the layer config which authorizes location
+  writes since v5.1.0.
+- [Logging](environment/logging.md) documents the `sql` and `sql_variables`
+  keys and that the PostgreSQL logger is legacy.
+
 ## 2026-11-26
 
 - [SAML](environment/saml.md) follows v5.0.10: the clock skew defaults to

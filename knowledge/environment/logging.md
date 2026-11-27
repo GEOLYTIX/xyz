@@ -12,9 +12,11 @@ sources:
     x-xyz-revision: 3fc379b7ada42dff57f19e9f28694868e5a17cac
   - resource: ../../apps/xyz/mod/utils/logger.js
   - resource: ../../apps/xyz/mod/utils/dbs.js
+  - resource: ../../apps/xyz/mod/user/acl.js
   - resource: ../../apps/xyz/mod/provider/getSrc.js
   - resource: ../../apps/xyz/mod/utils/resend.js
   - resource: ../../apps/xyz/tests/mod/utils/logger.test.mjs
+  - resource: ../../apps/xyz/tests/mod/utils/dbs.test.mjs
 ---
 # Logging
 
@@ -29,7 +31,9 @@ LOGS=query,reqhost,workspace
 | Key | Logs |
 |---|---|
 | `query_params` | Request parameters of the query API. |
-| `query` | The SQL of a query. |
+| `query` | The SQL built by the query API. |
+| `sql` | Every query sent to a database, see below. |
+| `sql_variables` | The variable values of `sql` logs. |
 | `reqhost` | The host built for absolute URLs. |
 | `workspace` | When the workspace has been cached. |
 | `fetch` | Status and URL of an `https:` src request. |
@@ -44,8 +48,19 @@ The v4 keys `req`, `req-url`,
 emitted. Logged values have carriage returns and line feeds replaced, so a
 message is one line.
 
-The `query`, `query_params` and `mailer_body` keys can write user data and
-email content to the logs. Enable them for debugging, not permanently.
+The `query`, `query_params`, `sql_variables` and `mailer_body` keys can write
+user data and email content to the logs. Enable them for debugging, not
+permanently.
+
+## sql
+
+`LOGS=sql` logs every query of the dbs module once, before the first attempt,
+with its `dbs` connection id, query, statement `timeout` and
+`variable_count`. With `sql_variables` set as well, the variable values are
+logged instead of their number. ACL queries are logged with `dbs: 'ACL'`,
+without variables and with their string literals replaced by `'***'`, since
+they carry password hashes, tokens and API keys. The inserts of the
+PostgreSQL `LOGGER` are not logged.
 
 ## LOGGER
 
@@ -81,3 +96,7 @@ CREATE TABLE public.xyz_logs (
 `process` is a random id per server process, `datetime` is in Unix seconds and
 `message` holds the first line of an error. Inserts are not awaited and are
 not retried, and the connection must be allowed to insert into the table.
+
+The PostgreSQL logger is legacy and should not be used in production. Every
+log is an insert, and with `LOGS=sql` an instance can roughly double its
+database writes.

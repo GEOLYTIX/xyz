@@ -1,11 +1,11 @@
 ---
 type: Environment Variable
 title: Access control list
-description: PRIVATE or PUBLIC connects the user ACL and turns on authentication; AUTH_PATH and LEGACY_ROLES change login and role checks.
+description: PRIVATE or PUBLIC connects the user ACL and turns on authentication; AUTH_PATH and LEGACY_ROLES change login and role checks; LOCATION_WRITES=legacy permits location writes without a layer config.
 resource: ../../apps/xyz/mod/user/acl.js
 tags: [xyz, environment, security, auth, acl, roles]
 status: draft
-x-xyz-variables: [PRIVATE, PUBLIC, AUTH_PATH, LEGACY_ROLES]
+x-xyz-variables: [PRIVATE, PUBLIC, AUTH_PATH, LEGACY_ROLES, LOCATION_WRITES]
 sources:
   - id: wiki
     resource: https://github.com/GEOLYTIX/xyz/wiki/Process-Environment/3fc379b7ada42dff57f19e9f28694868e5a17cac
@@ -17,10 +17,14 @@ sources:
   - resource: ../../apps/xyz/mod/view.js
   - resource: ../../apps/xyz/mod/workspace/scopes.js
   - resource: ../../apps/xyz/mod/utils/processEnv.js
+  - resource: ../../apps/xyz/mod/query.js
+  - resource: ../../apps/xyz/mod/workspace/templates/_locationAccess.js
+  - resource: ../../apps/xyz/mod/workspace/templates/location_update.js
   - resource: ../../apps/saml/README.md
   - resource: ../../apps/xyz/tests/mod/user/acl.test.mjs
   - resource: ../../apps/xyz/tests/mod/utils/processEnv.test.mjs
   - resource: ../../apps/xyz/tests/mod/workspace/getLayer.test.mjs
+  - resource: ../../apps/xyz/tests/mod/workspace/templates/_locationAccess.test.mjs
 ---
 # Access control list
 
@@ -30,6 +34,7 @@ sources:
 | `PUBLIC` | none | ACL connection; login is optional. |
 | `AUTH_PATH` | none | Path of the login provider, eg. `/saml`. |
 | `LEGACY_ROLES` | none | Enables the legacy role check. |
+| `LOCATION_WRITES` | none | `legacy` permits location writes which the layer config does not allow. |
 
 ## ACL connection
 
@@ -86,3 +91,30 @@ It is a temporary provision for deployments migrating to the v5 scopes.
 
 Any non-empty value enables it, including `false`. Unset the variable to
 disable it.
+
+## LOCATION_WRITES
+
+Since v5.1.0 the location write queries are authorized by the layer config,
+composed for the requesting user. Config nested in a layer `roles` object
+only applies to users with that role, so roles can grant writes separately
+from read access.
+
+| Query | Permitted by |
+|---|---|
+| `location_new` | `layer.draw` |
+| `location_update` | `infoj` entries with `edit` |
+| `location_delete`, `locations_delete` | `layer.deleteLocation` or `layer.edit.delete` |
+| `sql_table_insert` | a `csv_upload`, `csvupload` or `sqlinsert` config for the table |
+
+A write must target `layer.table` or one of the `layer.tables`. A write which
+the layer config does not allow gets a `403`.
+
+`LOCATION_WRITES=legacy` executes such writes as before v5.1.0 and logs a
+warning for each one. It is a temporary provision for plugins which write
+without a layer config; add the layer config and unset the variable. Any
+other value is ignored.
+
+The legacy mode still applies the layer `filter.default`. It does not restore
+replacing a json field which is only editable through `json_key` entries:
+`location_update` merges only the editable keys and drops the others without
+a warning.
