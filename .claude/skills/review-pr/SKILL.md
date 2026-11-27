@@ -93,6 +93,18 @@ Check touched functions and modules against DOCUMENTATION.md:
 
 Flag a new exported function with no JSDoc, and a changed signature whose `@param` list no longer matches. A missing `@description` on an otherwise documented function is worth a note rather than a blocking finding.
 
+## Check Knowledge
+
+The `knowledge/` bundle documents behaviour, configuration and constraints that JSDoc does not. Concepts link their implementation in `resource` and their tests and related modules in `sources`. Run `pnpm knowledge:changed --base origin/<base>` to list the concepts whose linked modules the change touches; `pnpm knowledge:find <path>` looks up a single module.
+
+Compare the concept diff with the code diff, concept by concept:
+
+- A changed `resource` without a change to its concept fails CI unless the pull request carries the `knowledge-unaffected` label. Read the concept against the new code: if a statement no longer holds, the label is wrong and that is a `[Blocking]` finding; name the concept and the statement. If every statement still holds, say so in one line.
+- A changed `sources` module only warns. Read the concept's statements which cite it in footnotes; one that no longer holds is a `[Consider]` finding.
+- A concept which changed: check that its new statements match the code diff, rather than describing what the change was meant to do. A concept updated in a pull request whose code does not support the update is a `[Blocking]` finding.
+- A new environment variable read in `apps/xyz` needs a concept which lists it in `x-xyz-variables`. Run `pnpm knowledge:check`: it fails on variables without a concept and on broken source links, eg. after a file was moved or renamed.
+- A change to `knowledge/` itself follows [the authoring workflow](../../../knowledge/workflows/authoring.md). Check its claims against the code it links, and that nothing claims a verification which did not happen.
+
 ## Report Format
 
 Write to the terminal in Markdown, using this shape:
@@ -125,6 +137,7 @@ What is wrong, why it matters, and what would resolve it.
 | Scope | <modules justified against the issue, or "no readable issue — judged against the description"> |
 | Tests and coverage | <suite result, whether it ran or replayed from cache, coverage on touched files> |
 | Documentation | <conformance summary> |
+| Knowledge | <concepts touched or affected, `pnpm knowledge:check` and `pnpm knowledge:changed` results, or "no concept covers the touched modules"> |
 ```
 
 Keep every row even when a check did not apply, and say which of the three it was: examined and clean, not applicable to this change, or not completed and why. A reader scanning the table needs to tell those apart, and a missing row reads as an oversight.

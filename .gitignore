@@ -35,8 +35,6 @@ coverage
 test-results
 playwright-report
 
-docs/*
-
 **/*.pem
 *.crt
 
@@ -46,3 +44,10 @@ docs/*
 .traces/
 
 .claude/settings.local.json
+
+# The combined workspace of the knowledge examples
+utils/knowledge/examples/workspace.generated.json
+
+# The VitePress build of the knowledge portal
+utils/knowledge/site/.vitepress/cache/
+utils/knowledge/site/.vitepress/dist/

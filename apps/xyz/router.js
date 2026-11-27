@@ -80,14 +80,6 @@ function createRouter(middleWare = []) {
     },
   };
 
-  const docsDir = resolve(xyzEnv.XYZ_CWD || process.cwd(), 'docs');
-  router.use(
-    `${xyzEnv.DIR}/docs`,
-    express.static(docsDir, {
-      extensions: ['html'],
-    }),
-  );
-
   router.use(`${xyzEnv.DIR}/public`, express.static(publicDir, staticOptions));
   router.use(xyzEnv.DIR, express.static(publicDir, staticOptions));
 

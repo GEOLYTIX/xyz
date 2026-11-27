@@ -28,11 +28,12 @@ catalog:
   "@vitest/browser-playwright": 4.1.10
   "@vitest/coverage-v8": 4.1.10
   bcrypt: ^6.0.0
-  clean-jsdoc-theme: ^4.3.2
   cookie-parser: ^1.4.5
   express: 5.2.0
   express-rate-limit: ^7.5.1
   jsonwebtoken: ^9.0.2
+  markdown-it: 14.3.0
+  markdown-it-footnote: 4.0.0
   node-mocks-http: ^1.17.2
   ol: 10.8.0
   pg: ~8.15.1
@@ -44,8 +45,10 @@ catalog:
   vt-pbf: 3.1.3
   varlock: 1.25.0
   vite: 8.0.16
+  vitepress: 1.6.4
   vitest: 4.1.10
   xml-crypto: ^6.1.2
+  yaml: 2.9.1
 minimumReleaseAgeExclude:
   - '@varlock/google-secret-manager-plugin'
   - varlock

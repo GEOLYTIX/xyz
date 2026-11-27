@@ -125,8 +125,7 @@
           "field": "geom_3857",
           "fieldfx": "ST_asGeoJSON(geom_3857)",
           "type": "geometry",
-          "display": true,
-          "draw": { "geometry": true }
+          "display": true
         }
       ],
       "wkt_properties": true,

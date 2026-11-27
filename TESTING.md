@@ -60,6 +60,8 @@ Run a suite:
 | `pnpm test:xyz` | XYZ API |
 | `pnpm test:mapp` | MAPP library |
 | `pnpm test:ui` | MAPP.UI library |
+| `pnpm knowledge:test` | Knowledge bundle checker, not part of `pnpm test` |
+| `pnpm knowledge:examples` | The JSON workspace examples of the knowledge concepts, served by the testhost with the devdb |
 
 Run a single file or the tests matching a name from the package directory:
 
@@ -145,6 +147,8 @@ The MAPP and MAPP.UI coverage thresholds apply to coverage runs in the extension
 The [Unit Tests](.github/workflows/unit_tests.yml) workflow runs `pnpm test`, which includes the MAPP.UI module and default view tests, for pushes and pull requests to the `main`, `major`, `minor` and `patch` branches.
 
 The [Build](.github/workflows/build.yml) workflow runs the XYZ API, MAPP library and MAPP.UI library coverage for the SonarQube analysis. The coverage runs fail below the coverage thresholds.
+
+The [Knowledge check](.github/workflows/knowledge-check.yml) workflow runs `pnpm knowledge:test`, `pnpm knowledge:check` and `pnpm knowledge:examples`. The [Knowledge freshness](.github/workflows/knowledge-freshness.yml) workflow checks with `pnpm knowledge:changed` that a pull request updates the concepts of the modules it changes; only this workflow runs again when the `knowledge-unaffected` label changes. See [knowledge checks](knowledge/workflows/checks.md).
 
 ## Writing tests
 

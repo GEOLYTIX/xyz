@@ -1,0 +1,76 @@
+{
+  "dbs": "DEVDB",
+  "locale": {
+    "layers": {
+      "osm": {
+        "template": "osm",
+        "display": true
+      }
+    }
+  },
+  "locales": {
+    "scratch_edit": {
+      "name": "Scratch locations",
+      "view": { "lat": 51.5, "lng": -0.1, "z": 10 },
+      "layers": {
+        "scratch_location": {
+          "name": "Scratch locations",
+          "display": true,
+          "format": "wkt",
+          "table": "example.scratch_location",
+          "qID": "id",
+          "geom": "geom",
+          "srid": "4326",
+          "draw": {
+            "point": true
+          },
+          "deleteLocation": true,
+          "style": {
+            "default": {
+              "icon": { "type": "dot", "fillColor": "#999" }
+            },
+            "highlight": {
+              "scale": 1.3
+            }
+          },
+          "infoj": [
+            { "type": "key" },
+            {
+              "title": "Name",
+              "field": "name",
+              "type": "text",
+              "edit": true
+            },
+            {
+              "title": "Category",
+              "field": "category",
+              "type": "text",
+              "edit": {
+                "options": ["shop", "office", "depot"]
+              }
+            },
+            {
+              "title": "Size",
+              "field": "size",
+              "type": "integer",
+              "edit": true
+            },
+            {
+              "title": "Geometry",
+              "field": "geom",
+              "fieldfx": "ST_AsGeoJSON(geom)",
+              "type": "geometry",
+              "display": true,
+              "edit": true
+            }
+          ]
+        }
+      }
+    }
+  },
+  "templates": {
+    "osm": {
+      "src": "file:packages/testhost/workspaces/templates/osm.json"
+    }
+  }
+}

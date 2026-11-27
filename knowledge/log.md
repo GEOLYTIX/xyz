@@ -1,0 +1,204 @@
+# Knowledge changes
+
+## 2026-11-27
+
+- [Access control](environment/access-control.md) documents
+  `LOCATION_WRITES=legacy` and the layer config which authorizes location
+  writes since v5.1.0.
+- [Logging](environment/logging.md) documents the `sql` and `sql_variables`
+  keys and that the PostgreSQL logger is legacy.
+
+## 2026-11-26
+
+- [SAML](environment/saml.md) follows v5.0.10: the clock skew defaults to
+  `60000` and cannot disable the assertion checks, certificates are read and
+  shipped from `apps/saml`, the configuration is checked on startup, logout
+  verifies the cookie and answers IdP LogoutRequests, and cookie renewal keeps
+  every NameID claim. [Deploy to Vercel](deployment/vercel.md) lists the SAML
+  certificate paths and [access control](environment/access-control.md) notes
+  the ACL pool error listener.
+- Optional keys accept `null` in both workspace schemas, as XYZ treats it as
+  unset; required keys and layers or locales of a map do not. The checker
+  validates the combined example workspace, unfiltered twins included.
+- [Authoring](workflows/authoring.md), [about](about.md),
+  [templates](workspace/templates.md) and [knowledge checks](workflows/checks.md)
+  state that the schemas check a workspace before template composition, that
+  `formats` and `requires` are advisory, and that the examples are API smoke
+  tests.
+- The [portal](decisions/documentation-publishing.md) is deployed by the
+  release workflow from the release tag, and manual runs resolve their ref to
+  a commit. The knowledge check builds the portal on pull requests.
+- `pnpm knowledge:changed` compares the concepts at the merge base with the
+  branch, and fails when deleting a concept or its `resource` leaves an
+  existing module without a concept; see [knowledge checks](workflows/checks.md).
+
+## 2026-11-25
+
+- [Plugin authoring](plugins/authoring.md) and [dataviews](workspace/dataviews.md)
+  link the public GEOLYTIX/mapp plugins directory.
+- Added [fine-grained authorization](security/fine-grained-authorization.md):
+  the workspace as the single place which decides, through roles and template
+  scopes, what each user may see and do across all data sources.
+- [Monorepo](architecture/monorepo.md) describes which package owns which
+  runtime, optional and development dependencies; the root README no longer
+  lists them.
+- Recorded the [agent baseline](workflows/agent-baseline.md): seven tasks run
+  on `minor` without the bundle, with their prompts and outputs.
+- Wiki `sources` link the snapshot revision of each page, since the page URLs
+  now show the generated stubs.
+- Documented the remaining keys used in the test workspaces: drawing button
+  `label`s, `icon_scaling.icon` and `clusterScale`, and `multi_filter.target`.
+  `style.label.declutter` is read by no code, and `entry.draw.geometry` names
+  no drawing method, so the geometry entry's draw loop skips it. Both were
+  removed from the test workspaces; the scratch locale lost its whole
+  `entry.draw` object, which the geometry entry does read.
+- The checker fails on malformed `x-xyz-variables`, `requires` keys without
+  an owner and unknown layer `formats`, and checks the workspace schema when
+  other checks fail. The rules moved to [knowledge checks](workflows/checks.md).
+- `x-xyz-keys` entries take `description`, `enum` and `deprecated`, generated
+  into the workspace schema. `layer.format` lists the registry formats.
+- `pnpm knowledge:changed` fails a pull request which changes a concept's
+  `resource` without the concept; the `knowledge-unaffected` label turns it
+  into a warning. `review-pr` compares the concept and code diffs.
+- Added the [actor convention](decisions/actor-convention.md): `verified` is a
+  maintainer's content review, and `status: stable` requires one.
+- Reviewed the pull requests merged into `minor` since the bundle started
+  against their concepts. Only #3084 changed documented behaviour:
+  `locale.layer_order` sorts unlisted layers to the end, drawn on top. The
+  tests added by #3087, #3126, #3127, #3128, #3136, #3146, #3147, #3079,
+  #3082, #3069 and #3129, and the mapview draw, modify and snap interactions,
+  are linked from the concepts they cover.
+- `x-xyz-keys` entries take `pattern`, `minimum`, `maximum`, `required` and
+  `open`. `pnpm knowledge:schema` also generates
+  [workspace.strict.schema.json](workspace/workspace.strict.schema.json), the
+  contract for generated workspaces: documented objects are closed and
+  required keys enforced, except in objects which merge a template. Concept
+  examples are checked against it.
+- Compared the concepts with a hand-written workspace schema for XYZ v4.23.4
+  and added the keys and constraints v5 code confirms: format requirements
+  (`srid`, `qID`, `table`, `URI`, `apiKey`), theme and icon types, entry and
+  filter types, filter panel options, icon keys, style panel keys, opacity
+  and coordinate ranges, MVT's string `srid`, and the locale plugin options.
+  Its deployment rules, such as hex colours and required breaks, were left
+  out. New concepts: [tile formats](workspace/layer/tile-formats.md),
+  [layer features](workspace/layer/features.md),
+  [entry filters](workspace/layer/filter-entries.md),
+  [icons](workspace/layer/style/icons.md),
+  [theme categories](workspace/layer/style/theme-categories.md) and
+  [plugin options](workspace/locale/plugin-options.md).
+- Keys which select a method from a registry plugins extend (`layer.format`,
+  `layer.featureFormat`, theme, icon, entry and filter types, theme
+  `distribution`) list their core values as `examples`, not `enum`, so
+  workspaces with plugin values pass the schemas. Added
+  [extending and overriding MAPP](plugins/extension-points.md): the registries,
+  replacing and wrapping methods, and when an assignment takes effect.
+- The zoom scaling pitfall links #3154.
+- The [actor convention](decisions/actor-convention.md) records no `process:`
+  events: `verified` is maintainer review only, and
+  `process:knowledge-examples` is reserved for the example runs.
+- The databases, JWT claims and agent baseline concepts link the issues
+  opened for their gaps: #3155, #3156 and the generation pilot #3157.
+- Removed the comparisons with the retired Wiki from the concepts ("the Wiki
+  said …", "Corrections to the Wiki" sections); concepts state what the code
+  does now. The Wiki revisions stay in `sources` as provenance.
+- Reordered [architecture](architecture/index.md): monorepo, the XYZ API,
+  MAPP with the npm package nested under it, then MAPP.UI. The MAPP concept
+  covers MAPP only. Indented index items nest in the portal sidebar.
+- Moved the plugin guides into a [plugins](plugins/index.md) section:
+  [authoring](plugins/authoring.md) (formerly MAPP plugins) and
+  [extension points](plugins/extension-points.md) (formerly extending and
+  overriding MAPP). The Wiki Plugins stub links the new page.
+
+## 2026-11-24
+
+- The VitePress knowledge portal is the published documentation, deployed to
+  GitHub Pages by `deploy-docs.yml` on release and manually with a ref. It
+  replaces the JSDoc API reference site; `clean-jsdoc-theme`, the JSDoc
+  configurations, `pnpm generate-docs` and the `/docs` route are removed.
+  JSDoc comments stay in the source.
+- `pnpm knowledge:wiki` reduces the Wiki to stubs: Home, an Open Knowledge
+  Format page from [about this bundle](about.md), and a stub per former page
+  from the [migration inventory](workflows/wiki-migration.md).
+- Replaced the Wiki publishing decision with
+  [documentation publishing](decisions/documentation-publishing.md).
+
+## 2026-11-20
+
+- Added a VitePress portal prototype which renders the bundle, for comparison
+  with the generated Wiki: `pnpm knowledge:site:dev` and
+  `pnpm knowledge:site:build`. Its configuration lives in
+  `utils/knowledge/site/`, outside the bundle.
+
+## 2026-11-19
+
+- Migrated the remaining Wiki pages and root documents: security (practices,
+  accounts, authentication, authorization), every remaining environment
+  variable, deployment (local development, Codespaces, Vercel, Neon, Node
+  hosts, release builds, npm publishing), architecture (XYZ API, MAPP.UI,
+  monorepo, the npm package), development guides, views, plugins and
+  terminology. SETUP.md and DEPLOYMENT.md are pointers to the bundle.
+- Environment variables read in code without a concept now fail the check.
+- Generated a JSON Schema of workspaces from `x-xyz-keys`, linked by the new
+  `ref` field and a `theme` root. The check fails on an outdated schema and on
+  examples with wrong types or undocumented keys, and warns on undocumented
+  keys in the test workspaces. Added the layer drawing concept and the keys
+  the test workspaces showed missing.
+- Added the workspace frame and locale key groups: workspace and locales
+  (rewritten from the locales sample), templates, roles, locale view,
+  gazetteer and locale plugins. Corrected Wiki claims: role objects merge on
+  the server and a role filter must set `filter.default`, negated roles are
+  not evaluated, and array merging replaces or appends whole arrays.
+- Examples may define named `locales`, merged into their `locale` as the XYZ
+  API does; the example test also runs gazetteer searches.
+- Added the dataviews concept: layer and location dataviews, the core Json
+  renderer, the tabulator and chartjs plugins, query params flags, map change
+  reloads and toolbars. The example test runs each layer dataview query.
+- Added the location key groups: infoj, entry display, entry types and
+  editing. The example test also opens a location of each layer with infoj,
+  which runs its fields and fieldfx against the devdb.
+- Added the layer style key groups: feature styles and icons, themes, and
+  labels and hovers. Format-specific style keys moved to the formats concept.
+  Corrected the data source concept: `params.fields` is generated, extra
+  columns go in `params.default_fields`.
+- Added the layer core key groups: display and view (including `viewConfig`),
+  data source (tables, zoom ranges, params), formats and cluster. Corrected
+  Wiki claims: `mvt_cache` is disabled, `panelOrder` moved to `viewConfig`,
+  and `tiles` always needs `URI`.
+- Added the bundle overview: OKF, the bundle layout, and developing and
+  creating workspaces through agents.
+- Workspace concepts own their keys in `x-xyz-keys` and end with an executable
+  JSON example. Added the layer filter and filter expression concepts as the
+  first key groups.
+- The checker validates `x-xyz-keys`, fails on a key owned twice and on
+  examples which are not JSON, and warns on oversized concepts, Workspace Key
+  concepts without an example and Feature concepts missing their headings.
+  `pnpm knowledge:find` looks concepts up by key, variable, module or word.
+- Recorded the release scope: the whole migration ships in one PR with v5.1;
+  content details are patched after the release.
+- Recorded the first Wiki generation: archive the hand-written Wiki, generate
+  from the PR branch for review, and remove the archive before merge.
+
+## 2026-11-18
+
+- Moved the bundle to OKF v0.3: root `title` and `description`, extension keys
+  renamed to `x-xyz-variables` and `x-xyz-revision`, and the checker accepts
+  only `okf_version: "0.3"`. It also checks the v0.3 path fields and warns on
+  `stale_after` values which are not RFC 3339.
+- Added Server and Databases environment concepts; environment concepts are
+  grouped by feature rather than one per variable.
+- Recorded the Wiki publishing decision: generated on release, and manually
+  between releases to publish corrections.
+
+## 2026-11-17
+
+- Added TRUSTED_RETURN_HOSTS, session token claim and telemetry environment concepts.
+- The checker warns on undocumented environment variables and on concepts missing
+  from their directory index, fails on unprefixed path-like resources and on a
+  root index without okf_version, and its tests run on Vitest.
+- Removed the undocumented `configuration` metadata from the locales concept.
+
+## 2026-11-16
+
+- Established the OKF v0.2 bundle, authoring rules and local validation.
+- Adapted selected content from three Wiki pages against the current minor branch.
+- Added agent navigation and source links; content remains draft for review.

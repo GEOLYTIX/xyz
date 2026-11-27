@@ -17,19 +17,19 @@
   "files": {
     "includes": [
       "**",
-      "!**/docs/**/*",
       "!**/public/js/**/*",
       "!**/public/css/mapp.css",
       "!**/public/css/mapp.css",
       "!**/public/css/ui.css",
       "!package.json",
-      "!jsdoc_mapp.json",
-      "!jsdoc_xyz.json",
-      "!jsdoc_test.json",
+      "!knowledge/workspace/workspace.schema.json",
+      "!knowledge/workspace/workspace.strict.schema.json",
       "!coverage",
       "!.zed",
       "!**/.vscode",
-      "!.turbo"
+      "!.turbo",
+      "!**/.vitepress/cache",
+      "!**/.vitepress/dist"
     ]
   },
   "formatter": {

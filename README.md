@@ -10,93 +10,55 @@
 [![OSGeo Community Project](https://www.osgeo.org/wp-content/themes/roots/assets/img/badge-community-project.png)](https://www.osgeo.org/projects/xyz-mapp/)
 
 ## Turbo Monorepo
-With the release of v5 this repository will be structured as monorepo which provides shared dependencies for several apps. Server apps can be provided to expand the XYZ API routes. Apps may also provide custom authentication layers.
+Since v5 this repository is structured as a Turbo monorepo which provides shared dependencies for several apps. Server apps can be provided to expand the XYZ API routes. Apps may also provide custom authentication layers.
 
 ## XYZ
 
-The pattern for the Node.js **domain and service layer** are that of a RESTful API which provides secure gateways for spatial data sources and 3rd party service providers.
+**XYZ** is the Node.js **domain and service layer**: an [Express](https://expressjs.com) API which provides secure gateways to spatial data sources and 3rd party service providers.
 
-The domain layer handles API routing, rewrites, and resource caching.
+The domain layer routes API requests, serves the application views and the bundled client libraries, and caches the workspace.
 
-The service layer manages authentication and transaction script. URL parameter (and payloads) from the application control layer (mapp) are assigned to query templates and passed to the data source (service) layer. The response being parsed and returned to the (mapp) presentation layer.
+The service layer authenticates users and runs query templates. Requests from the MAPP client never carry SQL. They name a query template and send parameters, which are assigned to the template and passed to the data source layer. The rows are returned to the client.
 
-The data source (service) layer is build on the non blocking [node-postgres](https://github.com/brianc/node-postgres) library to allow access to PostGIS extended relational Postgres databases.
+The data source layer uses the non-blocking [node-postgres](https://github.com/brianc/node-postgres) library to query PostGIS-enabled PostgreSQL databases. Each `DBS_*` connection in the environment is a separate data source. Signers and providers give access to cloud resources such as S3 and Cloudfront.
 
-Postgres being able to handle object records allows for the Access Control Lists (ACL) to be stored as Postgres tables.
+User accounts and their roles are stored in an Access Control List (ACL) table in PostgreSQL. Host apps can extend XYZ with their own routes or login providers, eg. SAML, without forking the repository.
+
+See [XYZ API](./knowledge/architecture/xyz-api.md) in the knowledge bundle.
+
+## Workspace
+
+The workspace ties XYZ and MAPP together. It is a JSON document that declares the locales, layers, query templates, location entries, themes and editing features of an instance. Locales and layers are built from templates, and their data may be held in different databases or systems.
+
+The workspace is also where access is controlled. The XYZ API composes the workspace separately for each user. Roles and template scopes decide which locales, layers and templates are merged for that user. Role filters restrict rows. Roles on location entries restrict fields. Role-specific configuration adds themes, entries or editing for some users only. Anything a user's roles do not allow is removed on the server before the response is sent. MAPP only receives the objects the user may access, and can only run their query templates.
+
+Fine-grained authorization is therefore defined once, in the workspace, for all connected data sources. See [fine-grained authorization](./knowledge/security/fine-grained-authorization.md) in the knowledge bundle.
 
 ## MAPP
 
-**Application control and presentation layers** are provided as ES6 javscript libraries. **MAPP** utilizes the openlayers map engine for mapviews and provides an interface to the XYZ API. The library abstracts away the complexities of handling spatial data objects such as layers and locations.
+**Application control and presentation layers** are provided as JavaScript ES module libraries.
 
-**MAPP.UI** contains utilities to build engaging user interfaces around mapviews. The application views can be dashboards made up of multiple data views such as maps, tables, lists, or graphs.
+**MAPP** uses [OpenLayers](https://openlayers.org) for mapviews and provides an interface to the XYZ API. The library hides the complexities of handling spatial data objects such as layers and locations. A view can create several mapviews.
 
-The MAPP library can be extended at runtime by dynamically importing [mapp plugins](https://github.com/GEOLYTIX/mapp/tree/main/plugins) which may use third party modules.
+**MAPP.UI** builds user interfaces around mapviews. Application views can be dashboards made up of multiple data views such as maps, tables, lists or charts.
 
-A bundled MAPP library is provided in the public directory. It is not required to deploy library files and bundle the v5 MAPP library in the XYZ server runtime.
+Plugins extend or replace MAPP methods at runtime, without forking the repository. A locale loads them by dynamic import, and they can bring their own third party modules, eg. [Tabulator](https://github.com/olifolkerd/tabulator) or [Chart.js](https://github.com/chartjs/Chart.js). Shared plugins are published in [GEOLYTIX/mapp/plugins](https://github.com/GEOLYTIX/mapp/tree/main/plugins); see [plugins](./knowledge/plugins/index.md) in the knowledge bundle.
+
+XYZ serves the MAPP and MAPP.UI bundles from `public/js/lib`. The bundles are built with Vite. They are committed to `main` and the release tags only, so a release can be deployed without a build. Sites outside XYZ can use the [@geolytix/mapp](./knowledge/architecture/mapp-package.md) npm package.
 
 ## Documentation
 
-Please refer to the [wiki pages](https://github.com/GEOLYTIX/xyz/wiki) for detailed interface references.
+The apps and their dependencies are described in the [monorepo](./knowledge/architecture/monorepo.md) concept.
 
-For repository setup and local development, see [SETUP.md](./SETUP.md).
+The [knowledge portal](https://geolytix.github.io/xyz/) documents architecture, environment variables, workspace configuration, views, security and deployment. It is built from the [knowledge bundle](./knowledge/index.md) in this repository; see [DOCUMENTATION.md](./DOCUMENTATION.md).
+
+For repository setup and local development, see [local development](./knowledge/deployment/local-development.md) in the knowledge bundle.
 
 For creating a versioned GitHub release, see [RELEASING.md](./RELEASING.md).
 
 For Vercel and self-hosted deployment workflows, see [DEPLOYMENT.md](./DEPLOYMENT.md).
 
 For environment validation, vanilla Varlock examples, and frozen Vercel deployments, see [varlock/README.md](./varlock/README.md).
-
-## Version History
-
-**v1** was build with [Leaflet](https://github.com/Leaflet/Leaflet) as the map render for the client library.
-
-The Mapp library changed the map render to [Openlayers](https://github.com/openlayers/openlayers) in **v2**.
-
-The XYZ API was rebuild to run as serverless functions in **v3**.
-
-**v4** is a complete rewrite of the client libraries. All user interface utilities have been taken out of the mapp library and have been compiled as mapp.ui library.
-
-The mapp library is now able to instantiate multiple mapviews.
-
-Polymorphism is applied to extend or modify object types and methods through plugins without the need to fork the repository.
-
-Dynamic module imports reduce the need to bundle 3rd party libraries such as [Tabulator](https://github.com/olifolkerd/tabulator) and [Chart.js](https://github.com/chartjs/Chart.js).
-
-**v5** is a restructure as a Turbo monorepo with individual apps. Vite is now used for testing and to build the mapp library and associated style sheets.
-
-## XYZ Dependencies
-
-**Node.js v22+** is required for importing ESM modules.
-
-[brcypt](https://github.com/kelektiv/node.bcrypt.js) - A library to help you hash passwords.
-
-[jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) - A Node implementation of JSON Web Token.
-
-[Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
-
-[Varlock](https://varlock.dev) - Schema-validated environment configuration. Vanilla examples live in `examples/varlock`; see `VARLOCK.md`.
-
-### Optional dependencies
-
-[aws-sdk](https://github.com/aws/aws-sdk-js-v3) - Several modules are required in order to access resources on cloudfront or S3.
-
-[node-saml](https://github.com/node-saml/node-saml) - A SAML 2.0 authentication provider for Node.js.
-
-[resend](https://github.com/resend/resend-node) - Node.js library for the Resend API.
-
-### Development dependencies
-
-Following development dependencies are required to build the library and run a local instance of the XYZ host.
-
-[Vite](https://vite.dev) - The build tool which bundles the MAPP client libraries and CSS assets.
-
-[µhtml](https://github.com/WebReflection/uhtml) - A micro HTML/SVG render which is bundled as utils into the MAPP library.
-
-[biomejs](https://biomejs.dev/) - A tool for identifying, formatting and reporting on patterns found in ECMAScript/JavaScript code.
-
-## Mapp Dependencies
-
-[Openlayers](https://github.com/openlayers/openlayers) - High-performance web mapping engine.
 
 ## License
 

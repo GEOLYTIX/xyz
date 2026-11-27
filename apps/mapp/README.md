@@ -54,7 +54,7 @@ The import has side effects. It parses the URL hooks of the page and assigns the
 
 A page on another origin than the XYZ instance needs:
 
-- **CORS**: the XYZ API doesn't set CORS headers. Serve the page and the XYZ instance from the same origin, eg. behind a reverse proxy, or add the CORS headers in front of the XYZ instance.
+- **CORS**: the XYZ API only sets CORS headers for the origins listed in its `CORS_ORIGINS` environment variable. Credentials are never allowed, so cross-origin requests are anonymous unless they send a token. Otherwise serve the page and the XYZ instance from the same origin, eg. behind a reverse proxy.
 - **Authentication**: the XYZ user cookie is `SameSite=Strict` by default, so the browser doesn't send it to the XYZ instance from a page on another site. Without the cookie, only public locales and layers are available.
 
 ### Content Security Policy

@@ -2,21 +2,7 @@
 
 The XYZ monorepo application is an Express router and server.
 
-JSDoc is used to documented any XYZ API module, function, and their parameter.
-
-The [clean-jsdoc-theme](https://www.npmjs.com/package/clean-jsdoc-theme) is used to build the XYZ and MAPP API reference pages which can be built and hosted local with the provided Express application script.
-
-The XYZ API modules are:
-
-### [Workspace](/xyz/module-_workspace)
-
-### [View](/xyz/module-_view)
-
-### [Query](/xyz/module-_query)
-
-### [User](/xyz/module-_user)
-
-### [Sign](/xyz/module-_sign)
+The [XYZ API architecture](../../knowledge/architecture/xyz-api.md) concept describes the router, the request flow and the API modules: workspace, view, query, user and sign. Module functions and their parameters are documented with JSDoc in the source; see [DOCUMENTATION.md](../../DOCUMENTATION.md#jsdoc).
 
 ### Running a local XYZ server
 

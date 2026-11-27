@@ -1,0 +1,61 @@
+{
+  "description": "Agent tasks measured without and with the knowledge bundle. Each prompt is sent to a fresh agent as header + task + rules + report, with {checkout} replaced by an isolated checkout of the measured ref. See knowledge/workflows/agent-baseline.md.",
+  "header": "You are working in a checkout of the XYZ/MAPP repository at {checkout} (dependencies are installed).",
+  "rules": "Rules:\n- Work only inside that checkout. Do not read or search any other directory, in particular no other checkout of this repository.\n- Do not commit, push or open pull requests.",
+  "codeRules": "Rules:\n- Work only inside that checkout. Do not read or search any other directory, in particular no other checkout of this repository.\n- Do not commit, push or open pull requests. Leave your changes in the working tree.",
+  "report": "When you are done, reply with:\n1. What you produced and where.\n2. How you validated it: the commands you ran and their results.\n3. Every file you opened or searched, as a list of repository-relative paths.\n4. Your assumptions, and anything you are unsure about.",
+  "tasks": [
+    {
+      "id": "t1",
+      "kind": "workspace",
+      "title": "Graduated theme and labels",
+      "task": "Task: write an XYZ workspace JSON file at baseline-output/workspace.json (inside that checkout) for the local development database (the devdb package). It needs one locale with a polygon layer of the countries table from the devdb, coloured with a graduated theme on the population estimate (five classes) and labelled with the country name. The layer must load and render in the MAPP library when the XYZ API serves this workspace against the devdb.",
+      "check": "Schema-valid; the layer returns rows for all countries; graduated theme on pop_est with five categories; label on name."
+    },
+    {
+      "id": "t2",
+      "kind": "workspace",
+      "title": "Role restricted layer with a filter panel",
+      "task": "Task: write an XYZ workspace JSON file at baseline-output/workspace.json (inside that checkout) for the local development database (the devdb package). It needs one locale with a layer of the devdb countries table. Users with the role `europe` must only see countries whose continent is Europe; the XYZ API must enforce this restriction on its queries, not only the browser. Users without that role see all countries. Every user also gets a filter panel to filter the countries by continent.",
+      "check": "The europe role merges filter.default (not a bare filter); \"*\": true keeps the layer for other users; a continent entry filter."
+    },
+    {
+      "id": "t3",
+      "kind": "workspace",
+      "title": "Editable location",
+      "task": "Task: write an XYZ workspace JSON file at baseline-output/workspace.json (inside that checkout) for the local development database (the devdb package). It needs one locale with an editable point layer of the devdb scratch location table. Users can draw new points and delete locations. In the location view they can edit the name as text, the category with a dropdown of three options (shop, office, depot), the size as an integer, and redraw the point geometry.",
+      "check": "layer.draw.point, deleteLocation, text and integer entries with edit, edit.options for the dropdown, a geometry entry with edit."
+    },
+    {
+      "id": "t4",
+      "kind": "workspace",
+      "title": "Categorised theme and a viewport table dataview",
+      "task": "Task: write an XYZ workspace JSON file at baseline-output/workspace.json (inside that checkout) for the local development database (the devdb package). It needs one locale with a point layer of the devdb retail points table, styled with a categorised theme on the retailer, and a table dataview in the layer view listing the store name, retailer and town of the stores in the current map viewport.",
+      "check": "Categorized theme on retailer; a layer dataview with a table, a viewport query and the tabulator plugin loaded by the locale, so the table renders."
+    },
+    {
+      "id": "t5",
+      "kind": "lookup",
+      "title": "Deployment questions",
+      "task": "Task: answer these questions about deploying the XYZ API, in baseline-output/answers.md (inside that checkout). Cite the source file for each answer.\n\n1. Which environment variables configure the signing of the user token and the session cookie, and what applies when they are not set?\n2. When TRUSTED_RETURN_HOSTS is not set, what happens to an absolute return_to redirect after login?\n3. How is cross-origin access to the XYZ API enabled, and what format does that configuration take?\n4. Which environment variables define the database connections, and how does a layer select one?",
+      "report": "When you are done, reply with:\n1. What you produced and where.\n2. How you checked your answers.\n3. Every file you opened or searched, as a list of repository-relative paths.\n4. Your assumptions, and anything you are unsure about.",
+      "check": "Answers agree with the environment concepts: tokens and cookies, trusted return hosts, CORS, databases."
+    },
+    {
+      "id": "t6",
+      "kind": "code",
+      "title": "Negative RETRY_LIMIT",
+      "task": "Task: a negative RETRY_LIMIT environment variable makes the XYZ API's database query make no attempt at all, and the query returns undefined. Fix this so that a query is always attempted at least once, add a test which fails without the fix, and run the relevant tests. Follow the repository's conventions for code and tests.",
+      "report": "When you are done, reply with:\n1. What you changed, file by file.\n2. How you validated it: the commands you ran and their results.\n3. Every file you opened or searched, as a list of repository-relative paths.\n4. Your assumptions, and anything you are unsure about.",
+      "check": "At least one attempt for 0, negative and invalid values; a test which fails without the fix; pnpm test:xyz passes. With the bundle: the databases concept is updated."
+    },
+    {
+      "id": "t7",
+      "kind": "code",
+      "title": "jwtClaims JSDoc",
+      "task": "Task: the JSDoc of the XYZ API's JWT claims module says the JWT environment variables must be configured for the claims to be included in tokens. Check what the code actually does and correct the documentation so it describes the real behaviour, including the defaults. Follow the repository's documentation conventions. Change code only if the documentation cannot be made accurate otherwise, and say why.",
+      "report": "When you are done, reply with:\n1. What you changed, file by file.\n2. How you validated it: the commands you ran and their results.\n3. Every file you opened or searched, as a list of repository-relative paths.\n4. Your assumptions, and anything you are unsure about.",
+      "check": "The JSDoc says the claims are always included with the session/xyz/xyz defaults; no code change. With the bundle: the JWT claims concept agrees."
+    }
+  ]
+}
