@@ -42,6 +42,13 @@ function pgError(code, message = code) {
   return Object.assign(new Error(message), { code });
 }
 
+// The mocked logger keeps calls from previous tests and must be cleared.
+async function importLogger() {
+  const logger = (await import('../../../mod/utils/logger.js')).default;
+  logger.mockClear();
+  return logger;
+}
+
 describe('dbs Module', () => {
   beforeEach(() => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -216,12 +223,9 @@ describe('dbs Module', () => {
   });
 
   describe('retry logging', () => {
-    // The mocked logger keeps calls from previous tests and must be cleared.
-    async function importLogger() {
-      const logger = (await import('../../../mod/utils/logger.js')).default;
-      logger.mockClear();
-      return logger;
-    }
+    // Every query is also logged with the sql key.
+    const retryLogs = (logger) =>
+      logger.mock.calls.filter(([, key]) => key === 'dbs_retry');
 
     it('logs the reason and backoff delay for each retry', async () => {
       vi.useFakeTimers();
@@ -240,7 +244,7 @@ describe('dbs Module', () => {
       await vi.runAllTimersAsync();
       await promise;
 
-      expect(logger.mock.calls).toEqual([
+      expect(retryLogs(logger)).toEqual([
         [
           {
             attempt: 1,
@@ -277,7 +281,7 @@ describe('dbs Module', () => {
       const promise = dbs.TEST({ query: 'SELECT 1' });
 
       await vi.advanceTimersByTimeAsync(0);
-      expect(logger).toHaveBeenCalledTimes(1);
+      expect(retryLogs(logger)).toHaveLength(1);
       expect(pools[0].connect).toHaveBeenCalledTimes(1);
 
       await vi.runAllTimersAsync();
@@ -299,7 +303,7 @@ describe('dbs Module', () => {
       await vi.runAllTimersAsync();
       await promise;
 
-      expect(logger).toHaveBeenCalledTimes(2);
+      expect(retryLogs(logger)).toHaveLength(2);
       expect(logger).toHaveBeenLastCalledWith(
         {
           attempts: 2,
@@ -319,7 +323,7 @@ describe('dbs Module', () => {
 
       await dbs.TEST({ query: 'SELECT 1' });
 
-      expect(logger).not.toHaveBeenCalled();
+      expect(retryLogs(logger)).toEqual([]);
     });
 
     it('does not log a retry for nonblocking queries', async () => {
@@ -331,7 +335,7 @@ describe('dbs Module', () => {
       await dbs.TEST({ nonblocking: true, query: 'SELECT 1' });
       await vi.waitFor(() => expect(client.release).toHaveBeenCalled());
 
-      expect(logger).not.toHaveBeenCalled();
+      expect(retryLogs(logger)).toEqual([]);
     });
   });
 
@@ -451,6 +455,76 @@ describe('dbs Module', () => {
       await vi.waitFor(() => expect(console.error).toHaveBeenCalledWith(error));
       expect(pools[0].connect).toHaveBeenCalledTimes(1);
       expect(client.release).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('sql logging', () => {
+    const sqlLogs = (logger) =>
+      logger.mock.calls.filter(([, key]) => key === 'sql');
+
+    it('logs the query, variables, and statement timeout once for a retried query', async () => {
+      vi.useFakeTimers();
+      const dbs = await importDbs({
+        RETRY_LIMIT: '2',
+        STATEMENT_TIMEOUT: '1000',
+      });
+      const logger = await importLogger();
+      pools[0].connect
+        .mockResolvedValueOnce(mockClient(pgError('53300')))
+        .mockResolvedValueOnce(mockClient([{ id: 1 }]));
+
+      const promise = dbs.TEST({ query: 'SELECT $1', variables: [1] });
+      await vi.runAllTimersAsync();
+      await promise;
+
+      expect(sqlLogs(logger)).toEqual([
+        [
+          { dbs: 'TEST', query: 'SELECT $1', timeout: '1000', variables: [1] },
+          'sql',
+        ],
+      ]);
+    });
+
+    it('logs a nonblocking query', async () => {
+      const dbs = await importDbs();
+      const logger = await importLogger();
+      const client = mockClient([]);
+      pools[0].connect.mockResolvedValueOnce(client);
+
+      await dbs.TEST({
+        nonblocking: true,
+        query: 'INSERT INTO log',
+        variables: [],
+      });
+      await vi.waitFor(() => expect(client.release).toHaveBeenCalled());
+
+      expect(sqlLogs(logger)).toEqual([
+        [
+          {
+            dbs: 'TEST',
+            query: 'INSERT INTO log',
+            timeout: undefined,
+            variables: [],
+          },
+          'sql',
+        ],
+      ]);
+    });
+
+    it('does not log a query with log false', async () => {
+      const dbs = await importDbs();
+      const logger = await importLogger();
+      const client = mockClient([]);
+      pools[0].connect.mockResolvedValueOnce(client);
+
+      await dbs.TEST({
+        log: false,
+        nonblocking: true,
+        query: 'INSERT INTO log',
+      });
+      await vi.waitFor(() => expect(client.release).toHaveBeenCalled());
+
+      expect(sqlLogs(logger)).toEqual([]);
     });
   });
 });
