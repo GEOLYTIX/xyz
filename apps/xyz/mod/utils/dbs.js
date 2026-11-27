@@ -72,6 +72,8 @@ Blocking queries are passed to the executeQuery method, which retries queries th
 
 Nonblocking queries are attempted once without retry. The returned promise resolves true once the query has been sent to the database, without waiting for the query to complete. The query is sent before the caller can respond, so the database will execute the query even if a serverless process is frozen after the response. The promise resolves with the error if the client fails to connect or the statement timeout cannot be set. Errors from the query after it has been sent are logged, since the query result is not awaited.
 
+The query, statement timeout, and number of variables are logged once with the `sql` key, before the first attempt. The variable values are logged instead of their number only if the `sql_variables` key is set as well. The postgresql logger sets params.log false for its own insert, which would otherwise log another insert.
+
 The params object may be extended with additional properties. These are ignored by the clientQuery method but can be read by a dbs connection method replaced by a composing host.
 
 @this {Pool} The connection pool to use for the query.
@@ -80,12 +82,17 @@ The params object may be extended with additional properties. These are ignored 
 @property {Array} [params.variables] Parameters for the SQL query
 @property {number} [params.timeout] Statement timeout in milliseconds. Defaults to xyzEnv.STATEMENT_TIMEOUT.
 @property {boolean} [params.nonblocking] Resolve once the query is sent without waiting for the query result.
+@property {boolean} [params.log] The query is not logged with the `sql` key if false. The postgresql logger sets log false for its own inserts. A dbs connection replaced by a composing host must not call the logger for a query with log false, with any key, or each log insert would log another insert without end.
 @returns {Promise<Array|boolean|Error>} Query rows, true for a sent nonblocking query, or an error.
 */
 async function clientQuery(params) {
   const { query, variables } = params;
 
   const timeout = params.timeout ?? xyzEnv.STATEMENT_TIMEOUT;
+
+  if (params.log !== false) {
+    logger({ dbs: this.options.dbs, query, timeout, variables }, 'sql');
+  }
 
   const attributes = {
     'db.system.name': 'postgresql',
